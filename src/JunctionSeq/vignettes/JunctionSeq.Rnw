@@ -1,0 +1,789 @@
+%\VignetteIndexEntry{JunctionSeq Vignette}
+%\VignettePackage{JunctionSeq}
+%\VignetteEngine{knitr::knitr_notangle}
+
+\documentclass[12pt]{article}
+
+<<knitr, echo=FALSE, results="hide">>=
+library("knitr")
+library("Cairo")
+opts_chunk$set(tidy=FALSE,dev="CairoPNG",fig.show="hide",
+               fig.width=6.5,fig.height=5.5,fig.keep="high",
+               message=FALSE)
+@
+
+<<style, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex()
+@
+
+\usepackage[sort]{cite}
+\usepackage{framed}
+
+\usepackage{amsmath,amssymb}
+%\usepackage[top=0.75in, bottom=0.75in, left=0.75in, right=0.5in]{geometry}
+%\usepackage{graphicx}
+%\usepackage[colorlinks=true, linkcolor=blue]{hyperref}
+
+%------------------------------------------------------------
+% newcommands
+%------------------------------------------------------------
+\newcommand{\myincfigRaw}[3]{%
+  \begin{figure}[h]
+  \centering
+  \includegraphics[width=#2]{figure/#1}
+  \caption{\label{figure/#1}#3}
+  \label{#1-fig}
+  \end{figure}
+}
+
+\newcommand{\myincfig}[3]{%
+  \begin{figure}[h]
+  \centering
+  \includegraphics[width=#2]{figure/#1-1}
+  \caption{\label{figure/#1}#3}
+  \label{#1-fig}
+  \end{figure}
+}
+\newcommand{\myincfigTwo}[3]{%
+  \begin{figure}[h]
+  \centering
+  \includegraphics[width=#2]{figure/#1-1}
+  \includegraphics[width=#2]{figure/#1-2}  
+  \caption{\label{figure/#1}#3}
+  \label{#1-fig}
+  \end{figure}
+}
+\newcommand{\myincfigThree}[3]{%
+  \begin{figure}[h]
+  \centering
+  \includegraphics[width=#2]{figure/#1-1}
+  \includegraphics[width=#2]{figure/#1-2}  
+  \includegraphics[width=#2]{figure/#1-3}  
+  \caption{\label{figure/#1}#3}
+  \label{#1-fig}
+  \end{figure}
+}
+
+\title{JunctionSeq Package User Manual}
+\author{Stephen Hartley\\
+National Human Genome Research Institute\\
+National Institutes of Health}
+
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+<<setup,echo=FALSE,results="hide">>=
+options(width=80, signif=3, digits=3, prompt=" ", continue=" ")
+set.seed(0xdada)
+require("JunctionSeq")
+require("JctSeqExData")
+
+## To create bitmap versions of plots with many dots, circumventing
+##   Sweave's fig=TRUE mechanism...
+##   (pdfs are too large)
+openBitmap = function(nm, rows=1, cols=1, height = 600, width = 800, cex = 1.2) {
+  CairoPNG(paste("QoRT-", nm, ".png", sep=""), 
+       width=width*cols, height=height*rows, pointsize=14)
+  par(mfrow=c(rows, cols), cex=cex)
+}
+@ 
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+\section{Overview} \label{sec:praeludium}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+
+The JunctionSeq R package offers a powerful tool for testing differential junction usage (DJU) in next-generation, high-throughput RNA-Seq experiments. \emph{Differential junction usage} is defined (for our purposes) as differences in the usage of splice junction sites relative to overall gene expression, associated with the experimental condition(s). This differential splice junction usage is used as a proxy for detecting isoform-level differentials such as isoform switching, alternative splicing, alternative start site usage, or alternative stop site usage.
+
+JunctionSeq is \emph{not} designed to detect changes in overall gene expression. Gene-level differential expression is best detected with tools designed specifically for that purpose such as DESeq2\cite{DESeq2} or edgeR\cite{edgeR}. 
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+\section{Requirements}  \label{sec:reqs}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+
+\emph{Software:} JunctionSeq requires the QoRTs software package to produce the flattened annotation files and splice-junction count files necessary for analysis. The QoRTs software package requires R version 3.0.2 or higher, as well as java 6 or higher. JunctionSeq itself requires a number of R packages, which can be installed using the following R commands:
+
+<<installReqPacks, eval=FALSE>>=
+install.packages("statmod")
+install.packages("plotrix")
+install.packages("stringr")
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+biocLite("Biobase")
+@
+
+Additionally, multi-core execution can be enabled if and only if the BiocParallel bioconductor package is installed. This can be installed with the R commands:
+<<installReqPacks2, eval=FALSE>>=
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+biocLite("BiocParallel")
+@
+
+\emph{Hardware:} Both the JunctionSeq and QoRTs software packages will generally require at least 4 gigabytes of RAM to run. In general at least 8gb is recommended if available.
+
+\emph{Annotation:} JunctionSeq requires a transcript annotation in the form of a gtf file. If you are using a annotation guided aligner (which is STRONGLY recommended) it is likely you already have a transcript gtf file for your reference genome. We recommend you use the same annotation gtf for alignment, QC, and downstream analysis. We have found the Ensembl "Gene Sets" gtf\footnote{Which can be acquired from the \href{http://www.ensembl.org}{Ensembl website}} suitable for these purposes. However, any format that adheres to the gtf file specification\footnote{See the gtf file specification \href{http://genome.ucsc.edu/FAQ/FAQformat.html}(here)} will work.
+
+\emph{Dataset:} JunctionSeq requires aligned RNA-Seq data. Data can be paired-end or single-end, unstranded or stranded. It is strongly recommended, but not explicitly required, that the SAM/BAM files be sorted either by name or position (it does not matter which).
+
+%----------
+\subsection{Alignment} \label{sec:align}
+%----------
+
+QoRTs, which is used to generate read counts, is designed to run on paired-end or single-end next-gen RNA-Seq data. The data must first be aligned (or "mapped") to a reference genome. RNA-Star\cite{STAR}, GSNAP\cite{GSNAP}, and TopHat2\cite{TopHat2} are all popular and effective aligners for use with RNA-Seq data. The use of short-read or unspliced aligners such as BowTie, ELAND, BWA, or Novoalign is NOT recommended.
+
+%-----------------------------------------------------------
+\subsection{Recommendations}  \label{sec:recs}
+%-----------------------------------------------------------
+
+Using barcoding, it is possible to build a combined library of multiple distinct samples which can be run together on the sequencing machine and then demultiplexed afterward. In general, it is recommended that samples for a particular study be multiplexed and merged into "balanced" combined libraries, each containing equal numbers of each biological condition. If necessary, these combined libraries can be run across multiple sequencer lanes or runs to achieve the desired read depth on each sample. 
+
+This reduces "batch effects", reducing the chances of false discoveries being driven by sequencer artifacts or biases.
+
+%----------
+\section{Example Dataset} \label{sec:exdata}
+%----------
+
+To allow users to test JunctionSeq and experiment with its functionality, an example dataset is available online (ADD LINK). 
+
+The example dataset was taken from rat pineal glands. Sequence data from six samples (aka "biological replicates") are included, three harvested during the day, three at night. To reduce the file sizes to a more managable level, this dataset used only 3 out of the 6 sequencing lanes, and only the reads aligning to chromosome 14 were included. This yielded roughly 750,000 reads per sample. The example dataset, including aligned reads, QC data, example scripts, splice junction counts, and JunctionSeq results, is available online (see the JunctionSeq github page).
+
+Splice junction counts and annotation files generated from this example dataset are included in the \verb|JcnSeqExData| R package, available online (see the JunctionSeq github page), which is what will be used by this vignette. 
+
+The annotation files can be accessed with the commands:
+<<GetExampleDataDirectory>>=
+decoder.file <- system.file("extdata/annoFiles/decoder.S.bySample.txt", 
+                            package="JctSeqExData", 
+                            mustWork=TRUE);
+decoder <- read.table(decoder.file,
+                      header=T,
+                      stringsAsFactors=F);
+gff.file <- system.file(
+            "extdata/cts/withNovel.forJunctionSeq.gff.gz", 
+            package="JctSeqExData", 
+            mustWork=TRUE);
+
+print(decoder);
+@
+
+The count files can be accessed with the commands:
+<<GetCountFiles>>=
+countFiles.noNovel <- system.file(paste0("extdata/cts/",
+              decoder$sample.ID,
+              "/QC.spliceJunctionAndExonCounts.forJunctionSeq.txt.gz"), 
+              package="JctSeqExData", mustWork=TRUE);
+
+countFiles <- system.file(paste0("extdata/cts/",
+              decoder$sample.ID,
+              "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"), 
+              package="JctSeqExData", mustWork=TRUE);
+
+@
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+\section{Preparations} \label{sec:prep}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+
+Once alignment and quality control has been completed on the study dataset, the splice-junction and gene counts must be generated via QoRTs.
+
+To reduce batch effects, the RNA samples used for the example dataset were barcoded and merged together into a single combined library. This combined library was run on three HiSeq 2000 sequencer lanes. Thus, after demultiplexing each sample consisted of three "technical replicates". JunctionSeq is only designed to compare biological replicates, so QoRTs includes functions for generating counts for each technical replicate and then combining the counts across the technical replicates from each biological sample.
+
+%----------
+\subsection{Generating raw counts via QoRTs} \label{sec:qortsrun}
+%----------
+
+To generate splice junction counts, you must run QoRTs on each aligned bam file. QoRTs includes a basic function that calculates a variety of QC metrics along with gene-level and splice-junction-level counts. All these functions can be performed in a single step and a single pass through the input alignment file, greatly simplifying the analysis pipeline. 
+
+For example, to run QoRTs on the first read-group of sample \verb|S_D1| from the example dataset:
+\begin{framed} \begin{verbatim}
+java -jar /path/to/jarfile/QoRTs.jar QC \
+                   --stranded \
+                   inputData/bamFiles/SHAM1_RG1.bam \
+                   inputData/annoFiles/anno.gtf.gz \
+                   rawCts/SHAM1_RG1/
+\end{verbatim}  \end{framed}
+Note that the \verb|--stranded| option is required because this example dataset is strand-specific. Also note that QoRTs uses the original gtf annotation file, NOT the flattened gff file produced in section \ref{sec:flatAnno}. More information on this command and on the available options can be found online \href{https://dl.dropboxusercontent.com/u/103621176/QoRTs/helpDocs/jarHtml/index.html}{here}.
+
+If Quality Control is being done seperately by other software packages or collaborators, the JunctionSeq counts can be generated alone by setting the \verb|--runFunctions| option:
+\begin{framed} \begin{verbatim}
+java -jar /path/to/jarfile/QoRTs.jar QC \
+ --stranded \
+ --runFunction writeKnownSplices,writeNovelSplices,writeSpliceExon \
+ inputData/bamFiles/SHAM1_RG1.bam \
+ inputData/annoFiles/anno.gtf.gz \
+ rawCts/SHAM1_RG1/
+\end{verbatim}  \end{framed}
+This will take much less time to run, as it does not generate the full battery of quality control metrics.
+
+For more information about the quality control metrics provided by QoRTs, and how to visualize, organize, and view them, see the QoRTs github page and documentation, available online \href{http://github.com/hartleys/QoRTs}{here}.
+
+%----------
+\subsection{Merging Counts from Technical Replicates (If Needed)} \label{sec:mergeCounts}
+%----------
+
+QoRTs includes functions for merging all count data from various technical replicates. If your dataset does not include technical replicates, or if technical replicates have already been merged prior to the count-generation step then this step is unnecessary.
+
+The example dataset has three such technical replicates per sample, which were aligned separately and counted separately. For the purposes of quality control QoRTs was run separately on each of these bam files (making it easier to discern any lane or run specific artifacts that might have occurred). It is then necessary to combine the read counts from each of these bam files.
+
+QoRTs includes an automated utility for performing this merge. For the example dataset, the command would be:
+\begin{framed} \begin{verbatim}
+java -jar /path/to/jarfile/QoRTs.jar \
+                mergeAllCounts \
+                rawCts/ \
+                annoFiles/decoder.byUID.txt \
+                cts/
+\end{verbatim}  \end{framed}
+
+the rawCts and cts are the relative paths to the input and output data, respectively. The "decoder" file should be a tab-delimited text file with column titles in the first row. One of the columns must be titled "sample.ID", and one must be labelled "unique.ID". The unique.ID must be unique and refers to the specific technical replicate, the sample.ID column indicates which biological sample each technical replicate belongs to. 
+
+%----------
+\subsection{(Option 1) Including Only Annotated Splice Junction Loci)} \label{sec:flatAnno}
+%----------
+
+If you wish to only test annotated splice junctions, then a simple flat annotation file can be generated for use by JunctionSeq. This file parses the input gtf annotation and assigns unique identifiers to each feature (exon or splice junction) belonging to each gene. These identifiers will match the identifiers listed in the junction count files produced by QoRTs in the count-generation step (see Section \ref{sec:qortsrun}).
+
+\begin{framed} \begin{verbatim}
+java -jar /path/to/jarfile/QoRTs.jar makeFlatGtf \
+                   --stranded \
+                   annoFiles/anno.gtf.gz \
+                   annoFiles/JunctionSeq.flat.gff.gz
+\end{verbatim}  \end{framed}
+Note it is \emph{vitally important} that the same options and gtf annotation file are used for creating this flat gff file as were used in the count-generation step (described in Section \ref{sec:qortsrun})! If the counts are generated in stranded mode, the gff file must also be generated in stranded mode.
+
+%----------
+\subsection{(Option 2) Including Novel Splice Junction Loci} \label{sec:novelCounts}
+%----------
+
+One of the core advantages of JunctionSeq over similar tools such as DEXSeq is the ability to include novel (ie. unannotated) splice junctions. Most advanced aligners have the ability to align read-pairs to both known and unknown splice junctions. However, many of these splice junctions will only have one or two read pairs aligned across them. Many of these putative splice junctions may be artifacts caused by sequencing errors or mapping artifacts, and even if they are real JunctionSeq will not have the power to detect any differential splice junction usage across them. Therefore, it is generally desirable to first filter splice junctions by read depth.
+
+In order to properly filter by read depth, size factors are needed. These can be generated in JunctionSeq (see section ADD REFERENCE), or generated from gene-level read counts using DESeq2 or edgeR.
+
+\begin{framed} \begin{verbatim}
+java -jar /path/to/jarfile/QoRTs.jar QC \
+                mergeNovelSplices  \
+                --minCount 10 \
+                --stranded \
+                cts/ \
+                sizeFactors.GEO.txt \
+                annoFiles/anno.gtf.gz \
+                cts/
+\end{verbatim}  \end{framed}
+This utility finds all splice junctions that fall inside the bounds of any known gene. It then filters this set of splice junctions, selecting only the junction loci with mean normalized read-pair counts of greater than the assigned threshold (set to 100 read-pairs in the example above). It then gives each splice junction that passes this filter a unique identifier.
+
+This utility produces two sets of output files. First it writes a .gff file containing the unique identifiers for each annotated and novel-and-passed-filter splice locus. Secondly, for each sample it produces a merged splice junction count file listing the splice junction counts for each of these uniquely identified splice junction loci.
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+\section{Testing for differential splice junction usage} \label{sec:workflow}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+
+%----------
+\subsection{Hypothesis testing} \label{sec:DJUtest}
+%----------
+
+JunctionSeq includes a single function that loads the count data and performs a full analysis automatically. This function internally calls a number of sub-functions, and returns a JunctionSeqCountSet with analysis results, dispersions, parameter estimates, and size factor data. This function should be sufficient for most purposes.
+
+%
+<<testForDJU, results="hide", warning=FALSE>>=
+jscs <- runJunctionSeqAnalyses(sample.files = countFiles,
+                           sample.names = decoder$sample.ID, 
+                           condition=factor(decoder$group.ID),
+                           flat.gff.file = gff.file,
+                           nCores = 12
+                           );
+@
+
+%----------
+\subsubsection{Advanced Analysis Pipeline} \label{sec:DJUtestAdv}
+%----------
+
+Some advanced users may need to deviate from the standard analysis pipeline. They may want to use different size factors, apply multiple different models without having to reload the data from file each time, or use other advanced features.
+
+First you must create a "design" data frame:
+<<testStep0, results="hide", warning=FALSE>>=
+design <- data.frame(condition = factor(decoder$group.ID));
+@
+Note: the experimental condition variable MUST be named "condition".
+
+Next, the data must be loaded into a JunctionSeqCountSet:
+<<testStep1, results="hide", warning=FALSE>>=
+jscs = readJunctionSeqCounts(countfiles = countFiles,
+                             samplenames = decoder$sample.ID,
+                             design = design,
+                             flat.gff.file = gff.file
+                             );
+@
+
+Next, size factors must be created and loaded into the dataset:
+<<testStep2, results="hide", warning=FALSE>>=
+#Generate the size factors and load them into the JunctionSeqCountSet:
+jscs <- estimateSizeFactors(jscs);
+#Now print the size factors:
+print(pData(jscs)$sizeFactor);
+@
+
+Next, we generate test-specific dispersion estimates:
+<<testStep3, results="hide", warning=FALSE>>=
+jscs <- estimateJunctionSeqDispersions(jscs, nCores = 12);
+@
+
+Next, we fit these observed dispersions to a regression to create fitted dispersions:
+<<testStep4, results="hide", warning=FALSE>>=
+jscs <- fitDispersionFunction(jscs);
+@
+
+Next, we perform the hypothesis tests for differential splice junction usage:
+<<testStep5, results="hide", warning=FALSE>>=
+jscs <- testJunctionsForDJU(jscs, nCores = 12); 
+@
+
+Finally, we calculate effect sizes and parameter estimates:
+<<testStep6, results="hide", warning=FALSE>>=
+jscs <- estimateEffectSizes( jscs, nCores = 12); 
+@
+
+All this functionality simply duplicates the behavior of the runJunctionSeqAnalyses function. However, far more options are available when run in this way. See the options for each of these commands using the commands:
+<<testStepHelp, eval=FALSE>>=
+help(readJunctionSeqCounts);
+help(estimateSizeFactors);
+help(estimateJunctionSeqDispersions);
+help(fitDispersionFunction);
+help(testJunctionsForDJU);
+help(estimateEffectSizes);
+@
+
+%----------
+\subsection{Extracting test results} \label{sec:getres}
+%----------
+
+Once the differential splice junction usage analysis has been run, the results, including model fits, fold changes, p-values, and coverage estimates can all be written to file using the command:
+<<makeRes, results="hide">>=
+writeCompleteResults(jscs, 
+                     outfile.prefix="./test"
+                     );
+@
+
+This produces a series of output files. The main results files are allGenes.results.txt.gz and sigGenes.results.txt.gz. The former includes rows for all genes, whereas the latter includes only genes that have one or more statistically significant differentially used splice junction locus. The columns for both are:
+  \begin{itemize}
+    \item \emph{featureID}: The unique ID of the splice locus.
+    \item \emph{geneID}: The unique ID of the gene.
+    \item \emph{countbinID}: The sub-ID of the splice locus.
+    \item \emph{testable}: Whether the locus has sufficient coverage to test.
+    \item \emph{dispBeforeSharing}: The locus-specific dispersion estimate.
+    \item \emph{dispFitted}: The the fitted dispersion
+    \item \emph{dispersion}: The final dispersion used for the hypothesis tests.
+    \item \emph{pvalue}: The raw p-value of the test for differential splice junction usage.
+    \item \emph{padjust}: The adjusted p-value, adjusted using the BH method.
+    \item \emph{chr, start, end, strand}: The (1-based) positon of the splice junction. 
+    \item \emph{transcripts}: The list of known transcripts that contain this splice junction.
+    \item \emph{featureType}: the type of the feature (novel splice junction or known splice junction)
+    \item \emph{meanBase}: The base mean normalized coverage for the locus.
+    \item \emph{HtestCoef(A/B)}: The interaction coefficient from the alternate hypothesis model fit used in the hypothesis tests. This is generally not used for anything.
+    \item \emph{log2FC(A/B)}: The estimated log2 fold change found using the effect-size model fit. This is calculated using a different model than the model used for the hypothesis tests.
+  \end{itemize}
+
+Note: If the biological condition has more than 2 categories then there will be multiple columns for the HtestCoef and log2FC. Each group will be compared with the reference group. If the supplied condition variable is supplied as a \verb|factor| then the first "level" will be used as the reference group. 
+
+The writeCompleteResults function also writes a file: allGenes.expression.data.txt.gz. This file contains the raw counts, normalized counts, expression-level estimates by condition value (as normalized read counts), and relative expression estimates by condition value. These are the same values that are plotted in Section \ref{sec:allPlot}.
+
+Finally, this function also produces splice junction track files suitable for use with the UCSC genome browser or the IGV genome browser. These files are described in detail in Section \ref{sec:junctionTracks}. If the save.jscs parameter is set to TRUE, then it will also save a binary representation of the JunctionSeqCountSet.
+
+\pagebreak
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+\section{Visualization and Interpretation} \label{sec:vis}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+
+The interpretation of the results is almost as important as the actual analysis itself. Differential splice junction usage is an observed phenomenon, not an actual defined biological process. It can be caused by a number of underlying regulatory processes including alternative start sites, alternative end sites, transcript truncation, mRNA destabilization, alternative splicing, or mRNA editing. Depending on the quality of the transcript annotation, apparent differential splice junction usage can even be caused by simple gene-level differential expression, if (for example) a known gene and an unannotated gene overlap with one another but are independently regulated.
+
+Many of these processes can be difficult to discern, and many are practically impossible to discern or even define in an automated fashion. Therefore it is imperative that the results generated by JunctionSeq be made as easy to interpret as possible.
+
+JunctionSeq, used in conjunction with the QoRTs software package, contains a number of tools for visualizing the results and the patterns of expression observed in the dataset.
+
+%----------
+\subsection{Summary Plots} \label{sec:summaryPlots}
+%----------
+
+JunctionSeq provides functions for two basic summary plots, used to display experiment-wide results. The first is the dispersion plot, which displays the dispersion estimates (y-axis) as a function of the base mean normalized counts (x-axis). The test-specific dispersions are displayed as black dots, and the "fitted" dispersion is displayed as a red line. JunctionSeq can also produce an "MA" plot, which displays the fold change on the y-axis ("M") as a function of the overall mean normalized counts on the x-axis ("A").
+
+These plots can be generated with the command:
+<<summaryplots, results="hide", fig.width=6.5, fig.height=5.5>>=
+plotDispEsts(jscs);
+plotMA(jscs, FDR.threshold=0.05);
+@
+
+\myincfigTwo{summaryplots}{0.45\textwidth}{Summary Plots}
+
+\pagebreak
+%----------
+\subsection{Gene plots} \label{sec:allPlot}
+%----------
+
+JunctionSeq includes a simple and straightforward function that automatically generates a comprehensive battery of plots. Generally it is desired to print plots for all genes that have one or more splice junctions with statistically significant differential splice junction usage. By default, JunctionSeq uses an FDR-adjusted p-value threshold of 0.01.
+
+These plots can be generated via the command:
+<<makeAllPlots>>=
+buildAllPlots(jscs=jscs,
+              flat.gff.file=gff.file,
+              outfile.prefix = "./test",
+              use.plotting.device = "png",
+              FDR.threshold = 0.01);
+@
+This will produce 8 plots for each gene that includes differential splice junction usage. Alternatively, plots for manually-specified genes can be generated using the gene.list parameter, which overrides the FDR.threshold parameter.
+
+For each selected gene, this function will produce 8 plots, two each of four plot types:
+  \begin{itemize}
+    \item \emph{geneID-expr.png}: Estimates of average coverage depth for each biological condition. See Section \ref{sec:subplot1}.
+    \item \emph{geneID-rExpr.png}: Relative expression estimates for each biological condition (excluding gene-level differential effects). See Section \ref{sec:subplot2}.
+    \item \emph{geneID-rawCounts.png}: Raw read counts for each sample, colored by biological condition. See Section \ref{sec:subplot4}.
+    \item \emph{geneID-normCounts.png}: Normalized read counts for each sample, colored by biological condition. See Section \ref{sec:subplot3}.
+  \end{itemize}
+Two versions of each plot are generated: one in which the full annotated transcript set is plotted beneath the expression graph, and one where only the simplified composite annotation is displayed.
+
+\pagebreak
+%----------
+\subsubsection{Coverage/Expression Plots} \label{sec:subplot1}
+%----------
+
+Figure \ref{../test5-ENSRNOG00000009281-expr-fig} displays the model estimates of the mean normalized splice junction coverage depth for each biological condition (in this example: cases vs controls). Note that these values are not equal to the simple mean normalized read counts across all samples. Rather, these estimates are derived from the GLM parameter estimates (via linear contrasts).
+
+\myincfigRaw{../test5-ENSRNOG00000009281-expr}{0.85\textwidth}{Splice junction coverage by biological condition. The plot includes 2 major frames. The top frame graphs the expression levels for each tested splice junction locus. Junctions that are statisically significant are marked with vertical pink lines, and the significant p-values are displayed along the top of the plot. The bottom frame is a line drawing of the known exons for the given gene, as well as all tested splice junctions. Known junctions are drawn with solid lines, novel junctions are dashed. Additionally, statistically significant junctions are colored pink. Between the two frames a set of lines connect the junction drawing to the expression plots.}
+
+There are a few things to note about this plot: 
+
+  \begin{itemize}
+    \item The y-axis is log-transformed, except for the area between 0 and 1 which is plotted on a simple linear scale. 
+    \item In the line drawing at the bottom, the exons and introns are not drawn to a common scale. The exons are enlarged to improve readability. The rescaling is very simple: all exons are proportionately enlarged to take up 30 percent of the diagram. This can be adjusted via the "exon.rescale.factor" parameter (the default is 0.3), or turned off entirely by setting this parameter to -1.
+    \item Note that junction J007 is marked as significantly differentially used, even though it is NOT differentially expressed. This is because JunctionSeq does not test for simple differential expression. It tests for differential splice junction coverage relative to gene-wide expression. Therefore, if (as in this case) the gene as a whole is strongly differentially expressed, then a splice junction that is NOT differentially expressed is the one that is being differentially used. 
+    \item Similarly, splice junction N009 is differentially used in the opposite way: while the gene itself is somewhat differentially expressed (at a fold change of roughly 3-4x overall), this particular junction has a \emph{massive} differential, far beyond that found in the gene as a whole (at 45x fold change). Thus, it is being differentially used.
+  \end{itemize}
+
+\pagebreak
+
+Figure \ref{../test5-ENSRNOG00000009281-expr-withTx-fig} displays the same information found in Figure \ref{../test5-ENSRNOG00000009281-expr-fig}, except with all known transcripts plotted beneath the main plot.
+
+\myincfigRaw{../test5-ENSRNOG00000009281-expr-withTx}{0.65\textwidth}{Splice junction coverage by biological condition, with annotated transcripts displayed. This plot is identical to the previous, except all annotated transcripts are displayed below the standard plot.}
+
+
+\pagebreak
+%----------
+\subsubsection{Relative Expression Plots} \label{sec:subplot2}
+%----------
+
+\myincfigRaw{../test5-ENSRNOG00000009281-rExpr}{0.85\textwidth}{Relative splice junction coverage by biological condition.}
+
+Figure \ref{../test5-ENSRNOG00000009281-rExpr-fig} displays the "relative" coverage for each splice junction, relative to gene-wide expression. JunctionSeq is designed to detect differential expression even in the presence of gene-wide, multi-transcript differential expression. However it can be difficult to visually assess differential splice junction usage on differentially exprssed genes. This plot displays the coverage relative to the gene-wide expression. These estimates are derived from the GLM parameter estimates (via linear contrasts).
+
+\pagebreak
+%----------
+\subsubsection{Raw Count Plots} \label{sec:subplot4}
+%----------
+
+\myincfigRaw{../test5-ENSRNOG00000009281-rawCounts}{0.85\textwidth}{Raw counts for each sample}
+
+Figure \ref{../test5-ENSRNOG00000009281-rawCounts-fig} displays the raw (un-normalized) coverage counts for each sample over each splice junction. This is equal to the number of reads (or read-pairs, for paired-end data) that bridge each junction. Note that these counts are not normalized, and are generally not directly comparable.
+
+\pagebreak
+%----------
+\subsubsection{Normalized Count Plots} \label{sec:subplot3}
+%----------
+
+\myincfigRaw{../test5-ENSRNOG00000009281-normCounts}{0.85\textwidth}{Normalized counts for each sample}
+
+Figure \ref{../test5-ENSRNOG00000009281-normCounts-fig} displays the normalized coverage counts for each sample over each splice junction. This will be identical to the counts displayed in Section \ref{sec:subplot4} except that each read count will be normalized by the sample size factors so that the samples can be compared directly.
+
+\pagebreak
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+\subsection{Generating Genome Browser Tracks} \label{sec:browserFiles}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+
+Once potential genes of interest have been identified via JunctionSeq, it can be helpful to examine these genes manually on a genome browser (such as the UCSC genome browser or the IGV browser). This can assist in a number of ways: it can allow investigators to identify potential sources of artifacts or errors such as repetitive regions or the presence of unannotated overlapping features that may be the actual underlying source of false discoveries. To this end, the QoRTs and JunctionSeq software packages include a number of tools designed to 
+assist in generating simple and powerful browser tracks designed to aid in the interpretation of the data and results.
+
+\myincfigRaw{../figs/final}{0.95\textwidth}{An example of the browser tracks that can be generated using QoRTs and JunctionSeq. The top two "MultiWig" tracks display the mean normalized coverage for 100-base-pair windows across the genome, by biological group (DAY or NIGHT). The top track displays the coverage across the forward (genomic) strand, and the second track displays the coverage across the reverse strand. In both tracks the mean normalized coverage depth across the three NIGHT samples is displayed in blue and the mean normalized coverage depth across the three DAY samples is displayed in red. The overlap is colored black. The third track displays the mean normalized coverage across all testable splice junction loci for each biological condition. Each junction is labelled with the condition ID (DAY or NIGHT), the splice junction ID (J for annotated, N for novel), followed by the mean normalized coverage across that junction and biological condition, in parentheses. Once again, DAY samples are displayed in red and NIGHT samples are displayed in blue. The final bottom track displays the splice junctions that exhibit statistically significant differential usage. Each junction is labelled with the splice junction ID and the p-value. These images were produced by the \href{https://genome.ucsc.edu/}{UCSC genome browser}, and a browser session containing these tracks in this configuration is available online \href{https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=JunctionSeqExample_Full}{here}}
+
+Advanced tracks like those displayed in Figure \ref{../figs/final} can be used to visualize the data and can aid in determining the form of regulatory activity that underlies any apparent differential splice junction usage. The wiggle files needed to produce such tracks can be generated via QoRTs and JunctionSeq. Configuring the multi-colored "MultiWig" tracks in the UCSC browser require the use of \href{https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html}{track hubs}, the configuration of which is beyond the scope of this manual. More information on track hubs can be found \href{https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html}{on the UCSC browser documentation}.
+
+%----------
+\subsubsection{Wiggle Tracks} \label{sec:wiggleTracks}
+%----------
+
+Both IGV and the UCSC browser can display "wiggle" tracks, which can be used to display coverage depth across the genome. QoRTs includes functions for generating these wiggle files for each sample/replicate, merging across technical replicates, and computing mean normalized coverages across multiple samples for each biological condition.
+
+\myincfigRaw{../figs/SHAM1_RG1-wiggle}{0.9\textwidth}{Two "wiggle" tracks displaying the forward- and reverse-strand coverage for replicate SHAM1\_RG1. These tracks display the read-pair mean coverage depth for each 100-base-pair window across the whole genome. The reverse strand is displayed as negative values. These tracks have been loaded into the \href{https://genome.ucsc.edu/}{UCSC genome browser}, and a browser session containing these tracks in this configuration is available online \href{https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=JunctionSeqExample_SHAM1_RG1wiggle}{here}}
+
+Figure \ref{../figs/SHAM1_RG1-wiggle-fig} shows an example pair of "wiggle" files produced by QoRTs for replicate SHAM1\_RG1. QoRTs includes two ways to generate such wiggle files from a sam/bam file:
+
+The first way is to create these files at the same time as the read counts. To do this, simply add the "--chromSizes" parameter like so:
+\begin{framed} \begin{verbatim}
+java -jar /path/to/jarfile/QoRTs.jar QC \
+                   --stranded \
+                   --chromSizes inputData/annoFiles/chrom.sizes \
+                   inputData/bamFiles/SHAM1_RG1.chr14.bam \
+                   inputData/annoFiles/rn4.anno.chr14.gtf.gz \
+                   outputData/qortsData/SHAM1_RG1/
+\end{verbatim}  \end{framed}
+By default this will cause QoRTs to generate the wiggle file(s) for this sample. Note that if the --runFunctions parameter is being included, you must also include in the function list the function "makeWiggles". Note that if the data is stranded (as in the example dataset), then two wiggle files will be generated, one for each strand.
+
+Alternatively, the wiggle file(s) can be generated manually using the command:
+\begin{framed} \begin{verbatim}
+java -jar /path/to/jarfile/QoRTs.jar QC \
+                bamToWiggle \
+                --stranded \
+                --negativeReverseStrand \
+                --includeTrackDefLine \
+                inputData/bamFiles/SHAM1_RG1.chr14.bam \
+                SHAM1_RG1 \
+                inputData/annoFiles/rn4.chr14.chrom.sizes \
+                outputData/qortsData/SHAM1_RG1/QC.wiggle
+\end{verbatim}  \end{framed}
+
+If this step is performed prior to merging technical replicates (see Section \ref{sec:mergeCounts}), and if the standard file-name conventions are followed (as displayed in the examples above), then the technical-replicate wiggle files will automatically be merged along with the other count information in by the QoRTs technical replicate merge utility.
+
+\pagebreak
+%----------
+\subsubsection{Merging Wiggle Tracks} \label{sec:wiggleMerge}
+%----------
+
+\myincfigRaw{../figs/DAY-wiggle}{0.9\textwidth}{Two "wiggle" tracks displaying the forward- and reverse-strand coverage for the three "DAY" samples. These tracks display the mean normalized read-pair coverage depth for each 100-base-pair window across the whole genome. The reverse strand is displayed as negative values. These tracks have been loaded into the \href{https://genome.ucsc.edu/}{UCSC genome browser}, and a browser session containing these tracks in this configuration is available online \href{https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=JunctionSeqExample_DAYwiggle}{here}.}
+
+QoRTs can generate wiggle files containing mean normalized coverage counts across a group of samples, as shown in Figure \ref{../figs/DAY-wiggle-fig}. These can be generated using the command:
+\begin{framed} \begin{verbatim}
+java -jar /path/to/jarfile/QoRTs.jar QC \
+                mergeWig  \
+                --calcMean \
+                --trackTitle DAY_FWD \
+                --infilePrefix outputData/countTables/ \
+                --infileSuffix /QC.wiggle.fwd.wig.gz \
+                --sizeFactorFile sizeFactors.GEO.txt \
+                --sampleList SHAM1,SHAM2,SHAM3 \
+                outputData/DAY.fwd.wig.gz
+\end{verbatim}  \end{framed}
+The "--sampleList" parameter can also accept data from standard input ("-"), or a text file (which must end ".txt") containing a list of sample ID's, one on each line.
+
+%----------
+\subsubsection{Splice Junction Tracks} \label{sec:junctionTracks}
+%----------
+
+\myincfigRaw{../figs/junctions}{0.9\textwidth}{The first track displays the mean-normalized coverage for each splice junction for DAY (blue) and NIGHT (red) conditions. Each splice junction is marked with the condition ID (DAY or NIGHT), followed by the splice junction ID (J for annotated, N for novel), followed by the mean normalized read count in parentheses. The second track displays the splice junctions that display statistically-significant differential usage, along with the junction ID and the adjusted p-value in parentheses (rounded to 4 digits). This track has been loaded into the \href{https://genome.ucsc.edu/}{UCSC genome browser}, and a browser session containing these tracks in this configuration is available online \href{https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=JunctionSeqExample_BEDs}{here}.}
+
+Splice Junction Tracks are generated automatically by the \verb|writeCompleteResults| function, assuming the \verb|write.bedTracks| parameter is TRUE (the default). By default, three sets of junction tracks are generated: 
+
+  \begin{itemize}
+    \item \emph{allGenes.coverage.bed.gz}: A track that lists the mean normalized read (or read-pair) coverage for each splice junction and for each biological condition. These are not equal to the actual mean normalized counts, rather these are derived from the parameter estimates.
+    \item \emph{sigGenes.coverage.bed.gz}: This track is identical to the previous one except that only junctions belonging to genes that contain at least one statistically significant junction are included. All other genes are dropped. This makes the file much smaller and more portable while retaining the most useful information.
+    \item \emph{sigGenes.pvalues.bed.gz}: This track lists all statistically-significant splice junction loci, with the adjusted p-value listed in parentheses.
+  \end{itemize}
+
+These three files can be generated manually via the commands:
+<<makeBeds, results="hide", warning=FALSE>>=
+writeExprBedTrack("sigGenes.coverage.bed.gz", 
+                  jscs = jscs, only.with.sig.gene = FALSE);
+                  
+writeExprBedTrack("sigGenes.coverage.bed.gz", 
+                  jscs = jscs);
+                  
+writeSigBedTrack("sigGenes.pvalues.bed.gz", 
+                  jscs = jscs);
+@
+
+Individual-sample or individual-replicate junction coverage tracks can also be generated via QoRTs. See the QoRTs documentation available \href{https://github.com/hartleys/QoRTs}{online}.
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+%\section{Interpretation of the results} \label{sec:interpretation}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+%MORE INFO HERE.
+
+
+
+%-------------------------------------------------------------------
+%-------------------------------------------------------------------
+\section{Statistical Methodology} \label{sec:methods-main}
+%-------------------------------------------------------------------
+%-------------------------------------------------------------------
+
+The statistical methods are based on those described in (S. Anders et al., 2012), as implemented in the DEXSeq Bioconductor package. However these methods have been expanded, adapted, and altered in a number of ways in order to accurately and efficiently test for differential junction usage.
+
+%-------------------------------------------------------------------
+\subsection{Preliminary Definitions}  \label{sec:methods-prelimdefs}
+%-------------------------------------------------------------------
+
+For each sample \(i\) and each splice junction \(j\) we define the junction read (or read-pair) counts:
+\begin{subequations}
+\begin{align}
+k_{ji}^{\text{Jct}} &= \text{\# reads/pairs bridging junction }j\text{ in sample }i \label{eq:kJunct} \\
+&\text{and} \nonumber \\
+k_{gi}^{\text{Gene}} &= \text{\# reads/pairs covering gene }g\text{ in sample }i \label{eq:kGene}
+\end{align}
+\end{subequations}
+
+The count \(k_{gi}^{\text{Gene}}\) is calculated using the same methods already in general use for gene-level differential expression analysis (using the "union" rule). Briefly: any reads or read-pairs that cover any part of any of the exons of any one unique gene are counted towards that gene. Reads that cover the exons of multiple annotated genes or that only cover intronic regions are ignored.
+
+%-------------------------------------------------------------------
+\subsection{Model Framework} \label{sec:methods-modelFramework}
+%-------------------------------------------------------------------
+
+Each splice junction locus is fitted to a separate model. For a given splice junction j located on gene g, we define two "counting bins": \(y_1=(y_{11},y_{12},\dots,y_{1n})\) and \(y_0=(y_{01},y_{02},\dots,y_{0n})\). 
+
+Each "counting bin" is a vector of the counts for each sample \(i \in \{1,2,\dots,n\}\), defined as:
+
+\begin{subequations}
+\begin{align}
+y_{1i} &= k_{ji}^{\text{Jct}} \\
+&\text{and} \nonumber \\
+y_{0i} &= k_{gi}^{\text{Gene}} - k_{ji}^{\text{Jct}}
+\end{align}
+\end{subequations}
+
+Thus, \(y_{1i}\) is simply equal to the number of reads spanning the splice junction in sample \(i\), and \(y_{0i}\) is equal to the number of reads covering the gene but NOT spanning the splice junction.
+
+Note that while JunctionSeq generally uses methods similar to those used by DEXSeq, this framework differs from that used by DEXSeq on exon counting bins.
+
+In the framework used by DEXSeq, the counting bin count (i.e. \(k_{gi}^{\text{Gene}}\)) is compared with the sum of all other count bins on the given gene. This means that some reads may be counted more than once if they span multiple features. When reads are relatively short (as was typical when DEXSeq was designed) this effect is minimal, but it becomes less valid as reads become longer.
+
+This flaw is particularly problematic because the dispersion estimation is fitted as a function of the base mean across the model vector. If a large proportion of the reads are counted more than once then this will inflate the base mean counts and may result in an underestimate of the dispersion, resulting in inflated significance. This problem is exacerbated in genes with a large number of features in close succession, and such genes may be disproportionately disposed towards false discovery.
+
+Under our framework, no read-pair is ever counted more than once in each model.
+
+As in DEXSeq, we assume that the count \(y_{bi}\) is a realization of a negative-binomial random variable \(Y_{bi}\):
+\begin{equation}
+Y_{bi} \sim NegBin(\text{mean} = s_{i}\mu_{bi}, \text{dispersion} = \alpha_{j})
+\end{equation}
+
+Where \(\alpha_{j}\) is the dispersion parameter for the current splice junction \(j\), \(s_{i}\) is the normalization size factor for each sample \(i\), and \(\mu_{bi}\) is the mean for sample \(i\) and counting-bin \(b\). Size factors \(s_{i}\) are estimated using the "geometric" normalization method, which is the default method used by DESeq, DESeq2, DEXSeq, and CuffDiff.
+
+
+%-------------------------------------------------------------------
+\subsection{Dispersion Estimation}  \label{sec:methods-disp}
+%-------------------------------------------------------------------
+
+In many high-throughput sequencing experiments there are too few replicates to directly estimate the locus-specific dispersion term \(\alpha_j\) for each splice junction \(j\). This problem is well-characterized, and a number of different solutions have been proposed, the vast majority of which involve sharing information between loci across the genome. JunctionSeq uses the same method used by the DEXSeq package, which is described in detail elsewhere.
+
+Briefly: it has been observed that the dispersion a tends to follow the relation:
+\begin{equation}
+\alpha(\mu) = \frac{\alpha_1}{\mu} + \alpha_0
+\end{equation}
+
+The observed locus-specific dispersion estimates \(\hat{\alpha}_j\), which are estimated based on the parameter-estimation model (see Section \ref{sec:methods-est}), are regressed against the model above using a gamma-family GLM. Bins with large residuals are iteratively removed until convergence is achieved. This model fit is used produce parameter estimates \(\hat{\alpha}_0\) and \(\hat{\alpha}_1\). These are used to produce "fitted" estimates for each splice junction based on the estimated base mean \(\hat{\mu}_j\). The ANODEV hypothesis test (see Section \ref{sec:methods-htest}) uses the maximum of the fitted and locus-specific dispersion estimates. This will tend to result in an overestimate of the actual dispersion, which in turn will result in a more conservative hypothesis test. 
+
+%-------------------------------------------------------------------
+\subsection{Hypothesis Testing}  \label{sec:methods-htest}
+%-------------------------------------------------------------------
+
+"Differential junction usage" is an observed phenomenon that can arise from numerous forms of junction-specific differential regulation. 
+
+Put simply, we are attempting to test whether the fold-change for the biological condition across splice junction j is the same as the fold-change for the biological condition across the gene g as a whole. 
+
+This can occur both with and without overall gene-level differential expression. A junction that exhibits "differential usage" might be a junction that exhibits a differential on a gene that is not differentially expressed, or might have constant coverage on a gene that otherwise shows a strong differential. Similarly, a junction could be classified as differentially used if its differential exceeded that of the gene as a whole, or if the differential was in the opposite direction.
+
+In statistical terms: we are attempting to detect "interaction" between the count-bin variable B and the experimental-condition variable C. 
+Thus, two models are fitted to the mean \(\mu_{bi}\):
+\begin{subequations} \label{eq:hypoModels}
+\begin{align}
+    H_{0}: \qquad \log(\mu_{bi}) &= \beta + \beta^{B}_{b} + \beta^{S}_{i}                          \label{eq:hypoModels0} \\
+    H_{1}: \qquad \log(\mu_{bi}) &= \beta + \beta^{B}_{b} + \beta^{S}_{i} + \beta^{CB}_{\rho_{i}b} \label{eq:hypoModels1}
+\end{align}
+\end{subequations}
+Where \(\rho_{j}\) is the biological condition (eg case/control status) of sample \(j\).
+
+Note that the bin-condition interaction term (\(\beta^{CB}_{\rho_{i}b}\)) is included, but the condition main-effect term (\(\beta^{C}_{\rho{i}}\)) is absent. This term can be omitted is because JunctionSeq is not designed to detect or assess gene-level differential expression. Thus there are two components that can be treated as "noise": variation in junction-level expression and variation in gene-level expression. As proposed by Anders et. al., we use a main-effects term for the sample ID (\(\beta^{S}_{i}\)), which subsumes the condition main-effect term. This subsumes both the differential and the random variation (noise) in the gene-level expression, improving the power for detecting differential interaction between the count-bin term and the experimental-condition term.
+
+Next, an ANODEV hypothesis test is performed comparing these two models. ANODEV (Analysis of Deviance) is simply a generalization of ANOVA (Analysis of Variance) designed for use on non-normally distributed data, using maximum likelihood rather than ordinary least squares. The ANODEV analysis generates p-values for each splice junction locus, which are then adjusted for multiple testing using the Benjaminiand Hochberg "FDR" method.
+
+These models can easily be extended to include confounding variables: For confounding variable \(\tau\), define the value of \(\tau\) for each sample \(i\) as \(\tau_{i}\). Then we can define our null and alternative hypotheses:
+\begin{subequations} \label{eq:hypoModelsConfounders}
+\begin{align}
+    H_{0}: \qquad \log(\mu_{bi}) &= \beta + \beta^{B}_{b} + \beta^{S}_{i} + \beta^{TB}_{\tau_{i}b}  \label{eq:hypoModelsConfounders0} \\
+    H_{1}: \qquad \log(\mu_{bi}) &= \beta + \beta^{B}_{b} + \beta^{S}_{i} + \beta^{TB}_{\tau_{i}b} + \beta^{CB}_{\rho_{i}b} \label{eq:hypoModelsConfounders1}
+\end{align}
+\end{subequations}
+
+%-------------------------------------------------------------------
+\subsection{Estimation}  \label{sec:methods-est}
+%-------------------------------------------------------------------
+
+While the described statistical model is robust, efficient, and powerful, it cannot be used to effectively estimate the size of the differential effect or to produce informative parameter estimates.
+
+For the purposes of estimating expression and effect sizes, we create a separate set of generalized linear models. For the purposes of hypothesis testing this model would be less powerful than the model used in section \ref{sec:methods-htest}, but has the advantage of producing more intuitive and interpretable parameter estimates and fitted values. As before, we generate one set of generalized linear models per splice junction locus:
+\begin{align}
+    H_{E}: \qquad \log(\mu_{bi}) &= \beta + \beta^{B}_{b} + \beta^{C}_{\rho{i}} + \beta^{CB}_{\rho_{i}b}
+\end{align}
+
+Using linear contrasts, the parameter estimates \(\hat{\beta}\), \(\hat{\beta}^{B}_{b}\), \(\hat{\beta}^{C}_{\rho{i}}\), and \(\hat{\beta}^{CB}_{\rho_{i}b}\) can be used to calculate estimates of the effect size (fold change), as well as the mean normalized coverage over the splice junction for each condition. Additionally, the "relative" expression levels can be calculated for each condition, which indicates the expression of the splice junction, normalized relative to the overall gene-wide expression (which may be differentially expressed).
+
+This model can be extended to include confounding variables in a manner similar to how the hypothesis test models can be extended (as in Equation \ref{eq:hypoModelsConfounders}).
+\begin{align}
+    H_{E}: \qquad \log(\mu_{bi}) &= \beta + \beta^{B}_{b} + \beta^{C}_{\rho{i}} + \beta^{TB}_{\tau_{i}b} + \beta^{CB}_{\rho_{i}b}
+\end{align}
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+\bibliography{JunctionSeq}
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+\section{Session Information} \label{sec:sessioninfo}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+
+The session information records the versions of all the packages used in the generation of the present document.
+
+<<sessionInfo>>=
+sessionInfo()
+@
+
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+\section{Legal} \label{sec:legal}
+%--------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------
+
+This software package is licensed under the GNU-GPL v3. A full
+copy of the GPL v3 can be found in at inst/doc/gpl.v3.txt
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see \url{http://www.gnu.org/licenses/}.
+
+Portions of this software (and this vignette) are "United States Government Work" 
+under the terms of the United States Copyright Act.  
+It was written as part of the authors' official duties for the 
+United States Government and thus those portions cannot be 
+copyrighted.  Those portions of this software are freely 
+available to the public for use without a copyright notice.  
+Restrictions cannot be placed on its present or future use.
+
+Although all reasonable efforts have been taken to ensure the 
+accuracy and reliability of the software and data, the National 
+Human Genome Research Institute (NHGRI) and the U.S. Government 
+does not and cannot warrant the performance or results that may 
+be obtained by using this software or data.  NHGRI and the U.S. 
+Government disclaims all warranties as to performance, 
+merchantability or fitness for any particular purpose.
+
+\end{document}

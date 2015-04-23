@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: JunctionSeqCountSet object and constructors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for JunctionSeqCountSet-class {JunctionSeq}"><tr><td>JunctionSeqCountSet-class {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>JunctionSeqCountSet object and constructors</h2>
+
+<h3>Description</h3>
+
+<p>The <code>JunctionSeqCountSet</code> is a subclass of the bioconductor class <code>eSet</code>,
+designed to contain all data related to a JunctionSeq analysis.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+
+  newJunctionSeqCountSet( countData, 
+                          geneCountData, 
+                          design, 
+                          geneIDs, 
+                          countbinIDs, 
+                          featureIntervals=NULL, 
+                          transcripts=NULL)
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>countData</code></td>
+<td>
+
+<p>A matrix of junction-level count data of non-negative integer values. 
+The rows correspond to counts for each splice-junction counting bin, 
+the columns correspond to samples. Note that biological 
+replicates should each get their own column, while the 
+counts of technical replicates (i.e., several sequencing 
+runs/lanes from the same sample) should be summed up 
+into a single column.
+</p>
+</td></tr>
+<tr valign="top"><td><code>geneCountData</code></td>
+<td>
+
+<p>A matrix of gene-level count data of non-negative integer values. 
+The rows correspond to counts for each gene, 
+the columns correspond to samples. Note that biological 
+replicates should each get their own column, while the 
+counts of technical replicates (i.e., several sequencing 
+runs/lanes from the same sample) should be summed up 
+into a single column. Must have the same dimensions as countData.
+</p>
+</td></tr>
+<tr valign="top"><td><code>design</code></td>
+<td>
+
+<p>A data frame consisting of all factors to be included in the analysis.
+All columns should be factors. Each column should represent a different variable,
+each row should represent a different sample. The number of rows must equal the
+number of columns in geneCountData and countData.
+</p>
+</td></tr>
+<tr valign="top"><td><code>geneIDs</code></td>
+<td>
+
+<p>A character vector of gene indentifiers for each splice junction. The length must
+equal the number of rows in countData.
+</p>
+</td></tr>
+<tr valign="top"><td><code>countbinIDs</code></td>
+<td>
+
+<p>A character vector of splice-junction-locus indentifiers for each splice junction. The length must
+equal the number of rows in countData.
+</p>
+</td></tr>
+<tr valign="top"><td><code>featureIntervals</code></td>
+<td>
+
+<p>Optional. A data.frame with 4 columns: &quot;chr&quot;, &quot;start&quot;, &quot;end&quot;, and &quot;strand&quot;. chr and strand should 
+be character vectors or factors, start and end must be integers.  
+</p>
+</td></tr>
+<tr valign="top"><td><code>transcripts</code></td>
+<td>
+
+<p>Optional. Character vector listing the transcripts that each splice junction belongs to. Some junctions
+may belong to more than one transcripts. In this case, transcripts should be separated with the &quot;+&quot; character.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A JunctionSeqCountSet object. Additional data can be added to the 
+</p>
+<p>The constructor function above SHOULD NOT BE USED in normal operation. Instead you should use the <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code> function.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>
+</p>
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.5 <a href="00Index.html">Index</a>]</div>
+</body></html>

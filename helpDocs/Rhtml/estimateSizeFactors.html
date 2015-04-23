@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Estimate Size Factors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for estimateSizeFactors {JunctionSeq}"><tr><td>estimateSizeFactors {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>
+Estimate Size Factors
+</h2>
+
+<h3>Description</h3>
+
+<p>Estimate size factors, which are scaling factors used as &quot;offsets&quot; 
+by the statistical model to make the different samples comparable.
+This is necessary because the different samples may have been
+sequenced to slightly different depths. Additionally, the presence
+of differentially expressed genes may cause the apparent depth of
+many genes to appear different.
+</p>
+<p>This function uses the &quot;geometric&quot; size factor normalization method,
+which is identical to the one used by DESeq, DESeq2, DEXSeq, and 
+the default method used by CuffDiff.
+</p>
+<p>For most purposes this function should not be needed, but might 
+be useful to advanced users performing non-standard analyses. 
+This and all other standard analysis functions can be run 
+automatically via the <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code> 
+function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  estimateSizeFactors(jscs);
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually initially created by 
+<code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. Size factors must be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A JunctionSeqCountSet, with size factors included.
+</p>
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.5 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,5 +1,6 @@
-# JunctionSeq v0.3.5
-(Compiled Thu Apr 23 16:47:45 EDT 2015)
+# JunctionSeq: Detection of Differential Splice Junction Usage in RNA-Seq Data
+v0.3.5
+Revised Thu Apr 23 16:47:45 EDT 2015
 
 JunctionSeq is an R package designed to detect and assess 
 differential splice junction usage in High-Throughput, 
@@ -15,15 +16,14 @@ Issues, bug reports, or feature requests can be posted to the
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
 
 ##HELP AND DOCUMENTATION:
-For more information see the [JunctionSeq vignette](http://dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/doc/JunctionSeq.pdf) or the 
-[online reference documentation](http://dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/Rhtml/index.html) (or as a [pdf](http://dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/doc/JunctionSeq-reference.pdf)).
+For more information, see the [JunctionSeq vignette](doc/JunctionSeq.pdf) or the 
+[online reference documentation](Rhtml/index.html) (or as a [pdf](doc/JunctionSeq-reference.pdf)).
 
-For help with individual R functions in the R utility, use the R 
-command:
+Help is also available from within R, accessed via the command:
 
     > help(functionname);
 
-For a full listing of all help topics for the R utility, use the R 
+For a full listing of all help topics, use the R 
 command: 
 
     > help(package="JunctionSeq");
@@ -39,8 +39,6 @@ dependencies can be installed using the R commands:
     > biocLite()
     > biocLite("Biobase")
 
-The optional 
-
 JunctionSeq can be installed in R using the command:
 
     > install.packages("JunctionSeq_0.3.5.tar.gz", repos = NULL, type="source")
@@ -50,24 +48,10 @@ using the QoRTs software package, available
 [here](http://github.com/hartleys/QoRTs).
 
 ##EXAMPLE DATA:
-The example QC output can be found on the github main page, and 
+The example dataset can be found on the github main page, and can be
 installed with the command:
     
     > install.packages(JctSeqExData_0.3.5.tar.gz", repos = NULL, type="source")
-
-##HELP AND DOCUMENTATION:
-For more information, see the JunctionSeq vignette or the [JunctionSeq help 
-and documentation page](dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/index.html).
-
-For help with individual R functions in the R utility, use the R 
-command:
-
-    > help(functionname);
-
-For a full listing of all help topics for the R utility, use the R 
-command: 
-
-    > help(package="JunctionSeq");
 
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3. A full

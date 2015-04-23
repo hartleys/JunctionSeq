@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Creating result plots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for buildAllPlots {JunctionSeq}"><tr><td>buildAllPlots {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>
+Creating result plots
+</h2>
+
+<h3>Description</h3>
+
+<p>Saves a large battery of plots displaying the analysis results, for the purposes of data visualization.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  buildAllPlots(jscs,
+                outfile.prefix = "./",
+                flat.gff.data = NULL, flat.gff.file = NULL, 
+                gene.list = NULL, FDR.threshold = 0.01, 
+                use.plotting.device = "png",
+                use.vst=FALSE,use.log = TRUE, truncateBelowOne = TRUE, 
+                exon.rescale.factor = 0.3,
+                ma.plot=FALSE, variance.plot=FALSE,
+                with.TX=TRUE,without.TX=TRUE,
+                expr.plot=TRUE,normCounts.plot=TRUE,
+                rExpr.plot=TRUE,rawCounts.plot=TRUE,
+                colorRed.FDR.threshold = FDR.threshold, 
+                color=NULL,
+                plot.exon.results = FALSE, 
+                plot.splice.results = TRUE, 
+                plot.novel.splice.results = plot.splice.results,
+                plot.untestable.results = FALSE,
+                plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
+                par.cex = 1, anno.cex.text = 2, anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
+                drawCoordinates = TRUE,
+                arrows.length = 0.25,
+                base.plot.height = 22.222, base.plot.width = 22.222, 
+                base.plot.units = "in", 
+                plotting.device.params = list(pointsize = 18, res = 72), 
+                number.plots = TRUE,
+                openPlottingDeviceFunc, closePlottingDeviceFunc,
+                verbose=TRUE, 
+                ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually created by <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code>.
+</p>
+<p>Alternatively, this can be created manually by <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. 
+However in this case a number of additional steps will be necessary: 
+Dispersions and size factors must then be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>. Hypothesis tests must
+be performed by <code><a href="testJunctionsForDJU.html">testJunctionsForDJU</a></code>. Effect sizes and parameter
+estimates must be created via <code><a href="estimateEffectSizes.html">estimateEffectSizes</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>outfile.prefix</code></td>
+<td>
+<p>The prefix file path to save the images to.</p>
+</td></tr>
+<tr valign="top"><td><code>flat.gff.data</code></td>
+<td>
+
+<p>A data frame containing the annotation data. This can be extracted from a flat gff file using the <code><a href="readAnnotationData.html">readAnnotationData</a></code> function.
+If multiple plots are going to be generated it may be preferable to use this to save runtime.
+</p>
+</td></tr>
+<tr valign="top"><td><code>flat.gff.file</code></td>
+<td>
+<p>A flattened gff file containing the annotation data. Only one of flat.gff.data or flat.gff.file should be set.</p>
+</td></tr>
+<tr valign="top"><td><code>gene.list</code></td>
+<td>
+<p>Character vector. List of genes to plot. Either this variable OR FDR.threshold must be set.</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.threshold</code></td>
+<td>
+<p>If this option is used, genes will be selected for plotting based on the presence of statistically significant junctions. 
+The adjusted-p-value threshold used to determine significance. Only genes containing at least 1 significant feature will be plotted.</p>
+</td></tr>
+<tr valign="top"><td><code>use.plotting.device</code></td>
+<td>
+<p>The plotting device to use.</p>
+</td></tr>
+<tr valign="top"><td><code>use.vst</code></td>
+<td>
+<p>Logical. If TRUE, all plots will be scaled via a variance stabilizing transform.</p>
+</td></tr>
+<tr valign="top"><td><code>use.log</code></td>
+<td>
+<p>Logical. If TRUE, all plots will be log-scaled.</p>
+</td></tr>
+<tr valign="top"><td><code>truncateBelowOne</code></td>
+<td>
+<p>Logical. If TRUE, all values below 1 will be linear-scaled. If use.log is FALSE, this does nothing.</p>
+</td></tr>
+<tr valign="top"><td><code>exon.rescale.factor</code></td>
+<td>
+<p>Floating point numeric value. To improve readability the exons drawn in the coordinate annotation are rescaled by default so that they take up 30 percent of the x axis. This makes the plots easier to read, as exons are usually much smaller than introns and thus a group of clustered exons can be hard to distinguish when plotted on a simple scale. If this value is set to NA then the exons and introns will be drawn on the same linear scale.</p>
+</td></tr>
+<tr valign="top"><td><code>ma.plot</code></td>
+<td>
+<p>if TRUE, generate and save a MA plot. A MA-plot is a plot of fold change versus base mean normalized counts.</p>
+</td></tr>
+<tr valign="top"><td><code>variance.plot</code></td>
+<td>
+<p>if TRUE, generate and save a plot of the dispersion as a function of the base mean.</p>
+</td></tr>
+<tr valign="top"><td><code>with.TX</code></td>
+<td>
+<p>if TRUE, save expression plots with the full transcripts printed</p>
+</td></tr>
+<tr valign="top"><td><code>without.TX</code></td>
+<td>
+<p>if TRUE, save expression plots with only the compiled exons printed. Note that if this and with.TX.plot are both TRUE, both versions will be saved seperately.</p>
+</td></tr>
+<tr valign="top"><td><code>expr.plot</code></td>
+<td>
+<p>if TRUE, save an expression plot of the expression parameter estimates for each splice site, for each condition.</p>
+</td></tr>
+<tr valign="top"><td><code>normCounts.plot</code></td>
+<td>
+<p>if TRUE, save an expression plot of the normalized mean counts for each splice site, for each sample.</p>
+</td></tr>
+<tr valign="top"><td><code>rExpr.plot</code></td>
+<td>
+<p>if TRUE, save an expression plot of the expression parameter estimates, relative to gene-wide expression, for each splice site, for each condition.</p>
+</td></tr>
+<tr valign="top"><td><code>rawCounts.plot</code></td>
+<td>
+<p>if TRUE, save an expression plot of the raw counts for each splice site, for each sample. Note that these will never be VST-transformed, even when use.vst == TRUE.</p>
+</td></tr>
+<tr valign="top"><td><code>colorRed.FDR.threshold</code></td>
+<td>
+<p>The adjusted-p-value threshold used to determine whether a feature should be marked as &quot;significant&quot; and colored pink. By default this will be the same as the FDR.threshold.</p>
+</td></tr>
+<tr valign="top"><td><code>color</code></td>
+<td>
+<p>A vector of R colors, named for each possible value of condition. By default, it will attempt to choose reasonable colors for each condition.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.exon.results</code></td>
+<td>
+<p>Logical. If TRUE, plot results for exons. Technically speaking, JunctionSeq can be used to do DEXSeq-style analyses on exon partitions. However this functionality is for advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.splice.results</code></td>
+<td>
+<p>Logical. If TRUE, plot results for splice junctions. For advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.novel.splice.results</code></td>
+<td>
+<p>Logical. If TRUE, plot results for novel splice junctions. If false, novel splice junctions will be ignored.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.untestable.results</code></td>
+<td>
+<p>Logical. If TRUE, plots splice junctions that had coverage that was too low to be tested.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.lwd</code></td>
+<td>
+<p>the line width for the plotting lines.</p>
+</td></tr>
+<tr valign="top"><td><code>axes.lwd</code></td>
+<td>
+<p>the line width for the axes.</p>
+</td></tr>
+<tr valign="top"><td><code>anno.lwd</code></td>
+<td>
+<p>the line width for the various other annotation lines.</p>
+</td></tr>
+<tr valign="top"><td><code>par.cex</code></td>
+<td>
+
+<p>The base cex value to be passed to par() immediately before all plots are created. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>anno.cex.text</code></td>
+<td>
+
+<p>The font size multiplier for most annotation text. This will be multiplied by a factor of the par.cex value.
+More specifically: The cex value to be passed to all function calls that take <a href="../../graphics/html/par.html">graphical parameters</a>. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>anno.cex.axis</code></td>
+<td>
+
+<p>The font size multiplier for the axis text. This will be multiplied by a factor of the par.cex value.
+More specifically: The cex.axis value to be passed to all function calls that take <a href="../../graphics/html/par.html">graphical parameters</a>. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>anno.cex.main</code></td>
+<td>
+
+<p>The font size multiplier for the main title text. This will be multiplied by a factor of the par.cex value.
+More specifically: The cex.main value to be passed to all function calls that take <a href="../../graphics/html/par.html">graphical parameters</a>. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>drawCoordinates</code></td>
+<td>
+<p>Whether to label the genomic coordinates at the bottom of the plot.</p>
+</td></tr>
+<tr valign="top"><td><code>arrows.length</code></td>
+<td>
+<p>The length (in inches), of the arrows that indicate gene strandedness.</p>
+</td></tr>
+<tr valign="top"><td><code>base.plot.height</code></td>
+<td>
+<p>The base height of the standard-sized plots. The plots that include the transcript set will be 1.5x this height.</p>
+</td></tr>
+<tr valign="top"><td><code>base.plot.width</code></td>
+<td>
+<p>The width of the plots.</p>
+</td></tr>
+<tr valign="top"><td><code>base.plot.units</code></td>
+<td>
+<p>The units of measurement for the plot height and width. Default is px, or pixels.</p>
+</td></tr>
+<tr valign="top"><td><code>plotting.device.params</code></td>
+<td>
+<p>Additional parameters to be passed to the plotting device.</p>
+</td></tr>
+<tr valign="top"><td><code>number.plots</code></td>
+<td>
+<p>Whether to number each gene in the image names, based on either the order they appear in the input gene.list, or in order of ascending p-values.</p>
+</td></tr>
+<tr valign="top"><td><code>openPlottingDeviceFunc</code></td>
+<td>
+<p>An R function. This option can be used to use plotting devices other than the ones directly supported by JunctionSeq. This must be a function that must have 3 parameters: filename, heightMult, and widthMult. It should open the desired plotting device. For advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>closePlottingDeviceFunc</code></td>
+<td>
+<p>An R function. This must be used in conjunction with openPlottingDeviceFunc. For most devices, you can just use the function &quot;dev.off&quot;. For advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>if TRUE, send debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional options to pass to plotting functions, particularly graphical parameters.</p>
+</td></tr>
+</table>
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.5 <a href="00Index.html">Index</a>]</div>
+</body></html>
