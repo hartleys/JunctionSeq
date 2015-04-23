@@ -56,8 +56,7 @@ installed with the command:
     > install.packages(JctSeqExData_0.3.5.tar.gz", repos = NULL, type="source")
 
 ##LEGAL:
-This software package is licensed under the GNU-GPL v3. A full
-copy of the GPL v3 follows:
+This software package is licensed under the GNU-GPL v3:
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
