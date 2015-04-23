@@ -55,20 +55,6 @@ installed with the command:
     
     > install.packages(JctSeqExData_0.3.5.tar.gz", repos = NULL, type="source")
 
-##HELP AND DOCUMENTATION:
-For more information, see the JunctionSeq vignette or the [JunctionSeq help 
-and documentation page](dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/index.html).
-
-For help with individual R functions in the R utility, use the R 
-command:
-
-    > help(functionname);
-
-For a full listing of all help topics for the R utility, use the R 
-command: 
-
-    > help(package="JunctionSeq");
-
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3. A full
 copy of the GPL v3 follows:
