@@ -1,0 +1,19 @@
+Package: JunctionSeq
+Version: 0.3.40
+Date: 2015-06-11
+Title: JunctionSeq: A Utility for Detection of Differential Splice-Site
+        Usage in RNA-Seq data
+Authors@R: c(person("Stephen Hartley, PhD", "Developer", role = c("aut", "cre"),
+                     email = "stephen.hartley@nih.gov"))
+Author: Stephen Hartley, PhD
+Maintainer: Stephen Hartley <stephen.hartley@nih.gov>
+Depends: R (>= 3.0.2), statmod, plotrix, methods, stringr, Biobase,
+        locfit
+Suggests: MASS, Cairo, RSvgDevice, knitr
+Enhances: parallel, BiocParallel
+Description: Utility for Detection of Differential Splice-Site Usage in RNA-Seq data.
+License: file LICENSE
+VignetteBuilder: knitr
+URL: https://GitHub.com/hartleys/JunctionSeq
+BugReports: https://GitHub.com/hartleys/JunctionSeq
+Packaged: 2015-06-11 21:01:06 UTC; hartleys

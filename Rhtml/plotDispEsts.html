@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Plot Fitted and Test-wise Dispersion</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for plotDispEsts {JunctionSeq}"><tr><td>plotDispEsts {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>
+Plot Fitted and Test-wise Dispersion
+</h2>
+
+<h3>Description</h3>
+
+<p>Plots the countbin-specific estimated dispersion and the fitted dispersion curve.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  plotDispEsts(jscs, ylim, xlim, linecol = c("#ff000080","#ff990080"), 
+               xlab = "mean of normalized counts", 
+               ylab = "dispersion", 
+               miniTicks = TRUE, 
+               cex = 0.45, pch = c(1,4),
+               use.smoothScatter = FALSE, smooth.nbin = 512, nrpoints = 100, 
+               plot.exon.results = TRUE, plot.junction.results = TRUE,
+               ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually created by <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code>.
+</p>
+<p>Alternatively, this can be created manually by <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. 
+Dispersions and size factors must then be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>. Hypothesis tests must
+be performed by <code><a href="testForDiffUsage.html">testForDiffUsage</a></code>. 
+</p>
+</td></tr>
+<tr valign="top"><td><code>ylim</code></td>
+<td>
+
+<p>The plotting range for the y-axis.
+</p>
+</td></tr>
+<tr valign="top"><td><code>xlim</code></td>
+<td>
+
+<p>The plotting range for the x-axis.
+</p>
+</td></tr>
+<tr valign="top"><td><code>linecol</code></td>
+<td>
+
+<p>Character vector of length 2. The line color to use for the fit line. If the fits were performed separately for exons and junctions, the junction line will be drawn with the second color (orange, by default).
+</p>
+</td></tr>
+<tr valign="top"><td><code>xlab</code></td>
+<td>
+
+<p>The label for the x-axis.
+</p>
+</td></tr>
+<tr valign="top"><td><code>ylab</code></td>
+<td>
+
+<p>The label for the y-axis.
+</p>
+</td></tr>
+<tr valign="top"><td><code>miniTicks</code></td>
+<td>
+
+<p>Whether or not to plot smaller ticks at the tenth-decades.
+</p>
+</td></tr>
+<tr valign="top"><td><code>cex</code></td>
+<td>
+
+<p>The cex value to be passed to <code>plot</code>, determining the size of the plotted points.
+</p>
+</td></tr>
+<tr valign="top"><td><code>pch</code></td>
+<td>
+
+<p>Numeric vector of length 2. Contains the pch parameters for the exon features and the junction features. This determines the character used in plotting. By default the exons are plotted as circles, and junctions are plotted as X's.
+</p>
+</td></tr>
+<tr valign="top"><td><code>use.smoothScatter</code></td>
+<td>
+
+<p>Logical. If TRUE, features will be ploted with density shading rather than having each point plotted.
+</p>
+</td></tr>
+<tr valign="top"><td><code>smooth.nbin</code></td>
+<td>
+
+<p>The number of bins to smooth, for the density plot, if <code>use.smoothScatter</code> is TRUE.
+</p>
+</td></tr>
+<tr valign="top"><td><code>nrpoints</code></td>
+<td>
+
+<p>The number of extra points to plot, if <code>use.smoothScatter</code> is TRUE.
+</p>
+</td></tr>
+<tr valign="top"><td><code>plot.exon.results</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, plot results for exons. Technically speaking, JunctionSeq can be used to do DEXSeq-style analyses on exon partitions. However this functionality is for advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.junction.results</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, plot results for splice junctions. For advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional options to pass to plotting functions, particularly graphical parameters.</p>
+</td></tr>
+</table>
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.40 <a href="00Index.html">Index</a>]</div>
+</body></html>

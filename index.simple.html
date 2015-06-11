@@ -1,0 +1,94 @@
+<h1>JunctionSeq: Detection of Differential Splice Junction Usage in RNA-Seq Data</h1>
+
+<p>v0.3.40
+Revised Thu Jun 11 16:57:34 EDT 2015</p>
+
+<p>JunctionSeq is an R package designed to detect and assess 
+differential usage of exonic regions and/or splice junction loci in High-Throughput, 
+Next-Generation RNA-Seq datasets. 
+The methodology is similar to the methods used by the DEXSeq bioconductor package.</p>
+
+<p>Issues, bug reports, or feature requests can be posted to the 
+<a href="https://github.com/hartleys/JunctionSeq/issues">github issues page</a>.</p>
+
+<h2>HELP AND DOCUMENTATION:</h2>
+
+<p>For more information, see the <a href="doc/JunctionSeq.pdf">JunctionSeq vignette</a> or the 
+<a href="Rhtml/index.html">online reference documentation</a> (or as a <a href="doc/JunctionSeq-reference.pdf">pdf</a>).</p>
+
+<p>Help is also available from within R, accessed via the command:</p>
+
+<pre><code>&gt; help(functionname);
+</code></pre>
+
+<p>For a full listing of all available help topics, use the R 
+command: </p>
+
+<pre><code>&gt; help(package="JunctionSeq");
+</code></pre>
+
+<h2>INSTALLATION:</h2>
+
+<p>JunctionSeq is dependent on a number of other R packages. These 
+dependencies can be installed using the R commands:</p>
+
+<pre><code>&gt; install.packages("statmod")
+&gt; install.packages("plotrix")
+&gt; install.packages("stringr")
+&gt; install.packages("locfit")
+&gt; source("http://bioconductor.org/biocLite.R")
+&gt; biocLite()
+&gt; biocLite("Biobase")
+</code></pre>
+
+<p>JunctionSeq can be installed in R using the command:</p>
+
+<pre><code>&gt; install.packages("JunctionSeq_0.3.40.tar.gz", repos = NULL, type="source")
+</code></pre>
+
+<p>The splice-junction counts required by JunctionSeq can be created 
+using the QoRTs software package, available 
+<a href="http://hartleys.github.io/QoRTs/index.html">here</a>.</p>
+
+<h2>EXAMPLE DATA:</h2>
+
+<p>The example dataset can be found on the github main page, and can be
+installed with the command:</p>
+
+<pre><code>&gt; install.packages(JctSeqExData_0.3.40.tar.gz", repos = NULL, type="source")
+</code></pre>
+
+<p>It is available online on the <a href="https://github.com/hartleys/JunctionSeq/">github repository</a>.</p>
+
+<h2>LEGAL:</h2>
+
+<p>This software package is licensed under the GNU-GPL v3:</p>
+
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+
+<p>Portions of this software are "United States Government Work" 
+under the terms of the United States Copyright Act. <br />
+It was written as part of the authors' official duties for the 
+United States Government and thus those portions cannot be 
+copyrighted.  Those portions of this software are freely 
+available to the public for use without a copyright notice. <br />
+Restrictions cannot be placed on its present or future use.</p>
+
+<p>Although all reasonable efforts have been taken to ensure the 
+accuracy and reliability of the software and data, the National 
+Human Genome Research Institute (NHGRI) and the U.S. Government 
+does not and cannot warrant the performance or results that may 
+be obtained by using this software or data.  NHGRI and the U.S. 
+Government disclaims all warranties as to performance, 
+merchantability or fitness for any particular purpose.</p>
