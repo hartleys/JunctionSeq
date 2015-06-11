@@ -1,6 +1,6 @@
 # JunctionSeq: Detection of Differential Splice Junction Usage in RNA-Seq Data
-v0.3.40
-Revised Thu Jun 11 16:57:34 EDT 2015
+v0.3.41
+Revised Thu Jun 11 17:25:13 EDT 2015
 
 JunctionSeq is an R package designed to detect and assess 
 differential usage of exonic regions and/or splice junction loci in High-Throughput, 
@@ -37,7 +37,7 @@ dependencies can be installed using the R commands:
 
 JunctionSeq can be installed in R using the command:
 
-    > install.packages("JunctionSeq_0.3.40.tar.gz", repos = NULL, type="source")
+    > install.packages("JunctionSeq_0.3.41.tar.gz", repos = NULL, type="source")
 
 The splice-junction counts required by JunctionSeq can be created 
 using the QoRTs software package, available 
@@ -47,7 +47,7 @@ using the QoRTs software package, available
 The example dataset can be found on the github main page, and can be
 installed with the command:
     
-    > install.packages(JctSeqExData_0.3.40.tar.gz", repos = NULL, type="source")
+    > install.packages(JctSeqExData_0.3.41.tar.gz", repos = NULL, type="source")
 
 It is available online on the [github repository](https://github.com/hartleys/JunctionSeq/).
 
