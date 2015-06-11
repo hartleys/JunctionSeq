@@ -5,24 +5,22 @@
    Read junctionSeq count files
 }
 \description{
-   This function reads count data (usually produced by QoRTs) and 
-   compiles them into a \code{JunctionSeqCountSet}.
+   This function loads read-count data (usually produced by QoRTs) and 
+   compiles them into a \code{JunctionSeqCountSet} object.
    
-   For most purposes this function should not be needed, but might 
-   be useful to advanced users performing non-standard analyses. 
-   This and all other standard analysis functions can be run 
-   automatically via the \code{\link{runJunctionSeqAnalyses}} 
-   function.
+   This function is called internally by the \code{\link{runJunctionSeqAnalyses}} 
+   function, and thus for most purposes users should not need to call this
+   function directly. It may be useful to advanced users performing non-standard
+   analyses.
 }
 \usage{
-readJunctionSeqCounts(countfiles, 
-                      countdata,
-                      samplenames,
-                      design, 
+readJunctionSeqCounts(countfiles, countdata,
+                      samplenames, design, 
                       flat.gff.file, 
-                      use.splice.sites = TRUE, 
-                      use.novel.splice.sites = TRUE, 
-                      use.exons = FALSE, 
+                      analysis.type = c("junctionsAndExons","junctionsOnly","exonsOnly"),
+                      nCores = 1,
+                      use.exons, use.junctions, 
+                      use.novel.junctions = TRUE, 
                       verbose = TRUE)
 }
 
@@ -47,6 +45,7 @@ readJunctionSeqCounts(countfiles,
     A data frame containing the condition variable and all desired covariates. All variables should be
     factors.
   }
+
   \item{flat.gff.file}{
     Character string. The filename of the "flat" gff annotation file. Can be gzip-compressed. 
     This "flat" gff file must be produced by the QoRTs jar utility using the makeFlatGtf or 
@@ -56,15 +55,28 @@ readJunctionSeqCounts(countfiles,
     attempts to plot the results will crash unless (non-default) options are used to deactivate the 
     plotting of genomic coordinates and transcript information
   }
-  \item{use.splice.sites}{
-    FOR ADVANCED USERS ONLY: Logical value. If \code{TRUE}, splice junctions will be included in the analyses.
+  \item{analysis.type}{
+    Character string. One of "junctionsAndExons", "junctionsOnly", or "exonsOnly". This parameter determines 
+    what type of analysis is to be performed. By default JunctionSeq tests both splice junction 
+    loci and exonic regions for differential usage (a "hybrid" analysis). This parameter
+    can be used to limit analyses specifically to either splice junction loci or exonic regions.
   }
-  \item{use.novel.splice.sites}{
-    Logical value. If \code{TRUE}, splice junctions that are marked as novel in the gff annotation will be included in the analysis.
-    Note that this is does nothing if there are no novel splice junctions in the count tables. 
+  \item{nCores}{
+    The number of cores to use. Note that multicore functionality may not be available on all platforms.
   }
+
   \item{use.exons}{
-    FOR ADVANCED USERS ONLY: Logical value. If \code{TRUE}, exon segments will be included in the analyses.
+    Logical value. This is an alternate parameterization of the \code{analysis.type} parameter. 
+    If \code{TRUE}, then exonic region loci will be included in the analyses and will be tested for 
+    differential usage. If this parameter is set, then parameter \code{use.junctions} must also be set.
+  }
+  \item{use.junctions}{
+    Logical value. This is an alternate parameterization of the \code{analysis.type} parameter. 
+    If \code{TRUE}, then splice junction loci will be included in the analyses and will be tested for 
+    differential usage. If this parameter is set, then parameter \code{use.exons} must also be set.
+  }
+  \item{use.novel.junctions}{
+    Logical value. If \code{TRUE}, then novel splice junctions will not be filtered out prior to analysis.
   }
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
 }

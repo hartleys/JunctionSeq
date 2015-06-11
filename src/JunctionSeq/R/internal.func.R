@@ -552,24 +552,38 @@ fitAndArrangeCoefs <- function( ecs, geneID, frm = count ~ condition * countbin,
 ### Internal Calc Functions:
 
 
-getAllJunctionSeqCountVectors <- function( ecs,  use.alternate.method = TRUE ) {
+getAllJunctionSeqCountVectors <- function( ecs,  use.alternate.method = TRUE, nCores = 1 ) {
    stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
    gct <- ecs@geneCountData;
    
-   message("getAllJunctionSeqCountVectors: dim(counts) = ",paste(dim(counts(ecs)),  sep=",",collapse=",")   );
-   message("getAllJunctionSeqCountVectors: dim(gct) = ",paste(dim(gct),sep=",",collapse=",") );
+   myApply <- getMyApply(nCores);
+   
+   message("    getAllJunctionSeqCountVectors: dim(counts) = ",paste(dim(counts(ecs)),  sep=",",collapse=",")  , " (",date(),")" );
+   message("    getAllJunctionSeqCountVectors: dim(gct) = ",paste(dim(gct),sep=",",collapse=",") );
    
    if(use.alternate.method){
-      out <- as.matrix(t(sapply(1:nrow(fData(ecs)),function(i){
+      out.list <- myApply(1:nrow(fData(ecs)), function(i){
         geneID <- geneIDs(ecs)[i];
-        countbinID <- countbinIDs(ecs)[i];
+        #countbinID <- countbinIDs(ecs)[i];
         rowWithGeneID <- which(rownames(gct) == geneID);
         stopifnot( length(rowWithGeneID) == 1 );
         binCounts <- counts(ecs)[i,];
         geneCounts <- gct[rowWithGeneID,];
         return( c(binCounts, geneCounts - binCounts) );
-      })));
-      message("getAllJunctionSeqCountVectors: out generated. dim = ",paste(dim(out),sep=",",collapse=","));
+      });
+      message("    getAllJunctionSeqCountVectors: out.list generated. length = ",length(out.list), " (",date(),")");
+      out <- as.matrix(do.call(rbind, out.list));
+      
+      #out <- as.matrix(t(sapply(1:nrow(fData(ecs)),function(i){
+      #  geneID <- geneIDs(ecs)[i];
+      #  countbinID <- countbinIDs(ecs)[i];
+      #  rowWithGeneID <- which(rownames(gct) == geneID);
+      #  stopifnot( length(rowWithGeneID) == 1 );
+      #  binCounts <- counts(ecs)[i,];
+      #  geneCounts <- gct[rowWithGeneID,];
+      #  return( c(binCounts, geneCounts - binCounts) );
+      #})));
+      message("    getAllJunctionSeqCountVectors: out generated. dim = ",paste(dim(out),sep=",",collapse=",")," (",date(),")");
       
       rownames(out) <- rownames(fData(ecs));
       colnames(out) <- c( paste0(colnames(counts(ecs)),"_thisBin")  , paste0(colnames(counts(ecs)),"_gene")  );

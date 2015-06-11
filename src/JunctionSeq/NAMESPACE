@@ -1,4 +1,4 @@
-import(statmod, plotrix, methods, stringr, Biobase)
+import(statmod, plotrix, methods, stringr, Biobase, locfit)
 
 export(
   runJunctionSeqAnalyses,                      #             
@@ -9,7 +9,7 @@ export(
   estimateSizeFactors,
   estimateJunctionSeqDispersions,                    #
   fitDispersionFunction,
-  testJunctionsForDJU,                    #
+  testForDiffUsage,                    #
   estimateEffectSizes,
   
   readAnnotationData,                    #
@@ -20,11 +20,11 @@ export(
   plotJunctionSeqResultsForGene,                    #
   
   writeExprBedTrack,
-  writeSigBedTrack,
+  writeSigBedTrack
 
   #Depreciated:
-  generateCompleteResults,                    # 
-  generateAllExpressionEstimates                    #
+  #generateCompleteResults,                    # 
+  #generateAllExpressionEstimates                    #
 )
 exportClasses( 
   "JunctionSeqCountSet"

@@ -2,22 +2,23 @@
 \docType{methods}
 \alias{estimateEffectSizes}
 \title{
-   Estimate Effect Factors
+   Estimate Effect Sizes, parameter estimates, etc.
 }
 \description{
    This function runs fits another generalized linear model to 
    the data, this one intended for use in estimating the
-   effect sizes and expression estimates.
+   effect sizes and expression estimates for each analysis.
    
-   For most purposes this function should not be needed, but might 
-   be useful to advanced users performing non-standard analyses. 
-   This and all other standard analysis functions can be run 
-   automatically via the \code{\link{runJunctionSeqAnalyses}} 
-   function.
+   This function is called internally by the \code{\link{runJunctionSeqAnalyses}} 
+   function, and thus for most purposes users should not need to call this
+   function directly. It may be useful to advanced users performing non-standard
+   analyses.
 }
 \usage{
    estimateEffectSizes(jscs, 
         effect.formula = formula(~ condition + countbin + condition : countbin),
+        geneLevel.formula = formula(~ condition),
+        calculate.geneLevel.expression = TRUE,
         nCores=1, 
         dispColumn="dispersion",
         verbose = TRUE)}
@@ -34,6 +35,15 @@
     
     NOTE: the biological condition to be tested must be named "condition".
   }
+  \item{geneLevel.formula}{
+    For advanced users. The base formula for the model used to estimate total gene-level expression.
+    
+    NOTE: the biological condition to be tested must be named "condition".
+  }
+  \item{calculate.geneLevel.expression}{
+    Logical value. If \code{TRUE}, gene-level expression will be estimated using the same maximum-likelihood method used in other analyses. Default: \code{TRUE}.
+  }
+  
   \item{nCores}{
     The number of cores to use. Note that multicore functionality may not be available on all platforms. 
     JunctionSeq attempts to use the BiocParallell package if it can be found installed. Otherwise it will

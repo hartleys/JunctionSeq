@@ -16,7 +16,7 @@ writeCompleteResults(jscs, outfile.prefix,
                         gzip.output = TRUE,
                         FDR.threshold = 0.05,
                         save.allGenes = TRUE, save.sigGenes = TRUE,
-                        save.fit = TRUE, save.VST = TRUE,
+                        save.fit = FALSE, save.VST = FALSE,
                         save.bedTracks = TRUE,
                         save.jscs = FALSE,
                         verbose = TRUE)
@@ -30,7 +30,7 @@ writeCompleteResults(jscs, outfile.prefix,
     Dispersions and size factors must then be
     set, usually using functions \code{\link{estimateSizeFactors}} and 
     \code{\link{estimateJunctionSeqDispersions}}. Hypothesis tests must
-    be performed by \code{\link{testJunctionsForDJU}}. Effect sizes and parameter
+    be performed by \code{\link{testForDiffUsage}}. Effect sizes and parameter
     estimates must be created via \code{\link{estimateEffectSizes}}.
   }
   \item{outfile.prefix}{A string indicating the filename prefix where output files should be saved.}

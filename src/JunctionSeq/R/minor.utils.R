@@ -1,4 +1,15 @@
 
+make.progress.report.fcn <- function(maxVal, numReports, reportStringPrefix){
+  reportIndices <- pretty(c(1,maxVal), numReports);
+  return(
+    function(i){
+      if(any(i == reportIndices)){
+        message(paste0(reportStringPrefix,i," of ",maxVal,"","(",date(),")"));
+      }
+    }
+  );
+}
+
 plotting.limits <- function(){
    usr <- par("usr");
    x.log <- par("xlog");
@@ -141,6 +152,18 @@ f.na <- function(x){
   ifelse(is.na(x), F,x);
 }
 
+
+overmerge.list <- function(list.old,list.new){
+  list.out <- list.old;
+  if(length(list.new) > 0){
+    for(i in 1:length(list.new)){
+      list.out[[names(list.new)[i]]] <- list.new[[i]];
+    }
+  }
+  return(list.out);
+}
+
+
 getPlottingDeviceFunc <- function(use.plotting.device, 
                                   base.plot.height, 
                                   base.plot.width, 
@@ -168,6 +191,8 @@ getPlottingDeviceFunc <- function(use.plotting.device,
        stop("Package RSvgDevice not found! Install package RSvgDevice or use a different plotting device!");
      }
    } else if(use.plotting.device == "CairoPNG"){
+     plotting.device.params <- overmerge.list(list(pointsize = 18, res = 150), plotting.device.params);
+     
      cairo.package.found <- suppressMessages(suppressWarnings(require("Cairo")));
      if(cairo.package.found){
        plotdevfunc <- function(filename, heightMult, widthMult){
@@ -184,6 +209,8 @@ getPlottingDeviceFunc <- function(use.plotting.device,
        stop("Package Cairo not found! Install package Cairo or use a different plotting device!");
      }
    } else if(use.plotting.device == "CairoSVG"){
+     plotting.device.params <- overmerge.list(list(pointsize = 18), plotting.device.params);
+     
      cairo.package.found <- suppressMessages(suppressWarnings(require("Cairo")));
      #warning("Note: R device CairoSVG has known issues that make labels unreadable on most renderers.");
      if(cairo.package.found){
@@ -202,6 +229,7 @@ getPlottingDeviceFunc <- function(use.plotting.device,
        stop("Package Cairo not found! Install package Cairo or use a different plotting device!");
      }
    } else if(use.plotting.device == "png"){
+     plotting.device.params <- overmerge.list(list(pointsize = 18, res = 150), plotting.device.params);
      if(capabilities()[["png"]]){
        plotdevfunc <- function(filename, heightMult, widthMult){
          plotting.device.params[["height"]] <- heightMult * base.plot.height;
@@ -217,6 +245,7 @@ getPlottingDeviceFunc <- function(use.plotting.device,
        stop("png functionality disabled on this installation of R. Reinstall/recompile R with png support, or use a different plotting device!");
      }
    } else if(use.plotting.device == "tiff"){
+     plotting.device.params <- overmerge.list(list(pointsize = 18, res = 150, compression = "lzw"), plotting.device.params);
      if(capabilities()[["tiff"]]){
        plotdevfunc <- function(filename, heightMult, widthMult){
          plotting.device.params[["height"]] <- heightMult * base.plot.height;
@@ -232,7 +261,8 @@ getPlottingDeviceFunc <- function(use.plotting.device,
        stop("tiff functionality disabled on this installation of R. Reinstall/recompile R with tiff support, or use a different plotting device!");
      }
    } else if(use.plotting.device == "svg"){
-     #warning("Note: R device svg has known issues that make labels unreadable on most renderers.");
+     #message("Note: the R svg device relies on certain external software packages that have known errors on certain versions of linux.");
+     plotting.device.params <- overmerge.list(list(pointsize = 18), plotting.device.params);
      if(capabilities()[["cairo"]]){
        plotdevfunc <- function(filename, heightMult, widthMult){
          if(base.plot.units == "px"){ unitmod <- 150; } else { unitmod <- 1; }
@@ -249,6 +279,7 @@ getPlottingDeviceFunc <- function(use.plotting.device,
        stop("cairo svg functionality disabled on this installation of R. Reinstall/recompile R with svg support, or use a different plotting device!");
      }
    } else if(use.plotting.device == "cairo_ps"){
+     plotting.device.params <- overmerge.list(list(pointsize = 18), plotting.device.params);
      if(capabilities()[["cairo"]]){
        plotdevfunc <- function(filename, heightMult, widthMult){
          if(base.plot.units == "px"){ unitmod <- 150; } else { unitmod <- 1; }
@@ -270,24 +301,55 @@ getPlottingDeviceFunc <- function(use.plotting.device,
    return(list(plotdevfunc,closefunc));
 }
 
-getMyApply <- function(nCores = 1, verbose = TRUE){
+getMyApply <- function(nCores = 1, verbose = TRUE, allowWindowsMulticore = TRUE){
    if(nCores > 1){
      multicore.package.found <- suppressMessages(suppressWarnings(require("parallel")));
      BiocParallel.package.found <- suppressMessages(suppressWarnings(require("BiocParallel")));
-     
+    
+     if( Sys.info()[['sysname']] == 'Windows' ){
+       message(">>> NOTE: Microsoft windows detected. As of BiocParallel v1.2.0 and R 3.1.1, multicore forking is not supported on windows. ");
+       message("          JunctionSeq will fall-back to single-core operation if necessary.");
+     }
      if(BiocParallel.package.found) {
-       message("using package \"BiocParallel\" for parallelization. (Using ",nCores," cores)");
+       message("    [[Using package \"BiocParallel\" for parallelization. (Using ",nCores," cores)]]");
+       if( Sys.info()[['sysname']] == 'Windows' ){
+         message(">>> WARNING: attempting to use BiocParallel for multicore functionality. However: On windows machines some versions of BiocParallel appear to run very slowly and do not appear to actually use multiple cores.");
+       }
        myApply <- function(X, FUN){ BiocParallel::bplapply( X, FUN, BPPARAM = BiocParallel::MulticoreParam(workers = nCores) ) };
      } else if(multicore.package.found){
-       message("using package \"parallel\" for parallelization. (Using ",nCores," cores)");
-       myApply <- function(X, FUN){ parallel::mclapply( X, FUN, mc.cores=nCores ) };
+       if( Sys.info()[['sysname']] == 'Windows' ){
+         message(">>> WARNING: Microsoft windows detected, and package BiocParallel not found, and nCores > 1:");
+         message(">>>    Currently, multicore operation is not supported on windows without the BiocParallel package!");
+         message(">>>    Falling back to single-core operation!");
+         warning("Multicore lapply unavailable. Falling back to single-core operations.");
+         myApply <- lapply;
+       } else {
+         message("    [[Using package \"parallel\" for parallelization. (Using ",nCores," cores)]]");
+         myApply <- function(X, FUN){ parallel::mclapply( X, FUN, mc.cores=nCores ) };
+       }
      } else {
-       warning("Package parallel not found! Set parameter nCores to 1. Falling back to single-core operation!");
+       message(">>> WARNING: Neither package BiocParallel nor package parallel found, but nCores > 1.");
+       message(">>>          Paralell operations not supported without these packages!");
+       message(">>>          Falling back to single-core operation!");
+       warning("Multicore lapply unavailable. Falling back to single-core operations.");
        myApply <- lapply;
      }
    } else {
      myApply <- lapply;
    }
+   
+   myApply <- tryCatch({
+       test.run <- myApply(1:10, FUN = function(x){2 * x});
+       myApply;
+     }, error = function(e){
+       message(">>> WARNING: Attempted to run some form of multicore lapply, but it threw an error (likely due to an OS conflict).");
+       message("    Error follows: ",e);
+       message(">>> Falling back to single-core operations!");
+       warning("Multicore lapply unavailable. Falling back to single-core operations.");
+       lapply;
+     }
+   )
+   
    return(myApply);
 }
 

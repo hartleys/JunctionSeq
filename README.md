@@ -1,5 +1,5 @@
-# JunctionSeq v0.3.5
-(Compiled Thu Apr 23 16:47:45 EDT 2015)
+# JunctionSeq v0.3.41
+(Compiled Thu Jun 11 17:25:13 EDT 2015)
 
 JunctionSeq is an R package designed to detect and assess 
 differential splice junction usage in High-Throughput, 
@@ -43,7 +43,7 @@ The optional
 
 JunctionSeq can be installed in R using the command:
 
-    > install.packages("JunctionSeq_0.3.5.tar.gz", repos = NULL, type="source")
+    > install.packages("JunctionSeq_0.3.41.tar.gz", repos = NULL, type="source")
 
 The splice-junction counts required by JunctionSeq can be created 
 using the QoRTs software package, available 
@@ -53,7 +53,21 @@ using the QoRTs software package, available
 The example QC output can be found on the github main page, and 
 installed with the command:
     
-    > install.packages(JctSeqExData_0.3.5.tar.gz", repos = NULL, type="source")
+    > install.packages(JctSeqExData_0.3.41.tar.gz", repos = NULL, type="source")
+
+##HELP AND DOCUMENTATION:
+For more information, see the JunctionSeq vignette or the [JunctionSeq help 
+and documentation page](dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/index.html).
+
+For help with individual R functions in the R utility, use the R 
+command:
+
+    > help(functionname);
+
+For a full listing of all help topics for the R utility, use the R 
+command: 
+
+    > help(package="JunctionSeq");
 
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3:

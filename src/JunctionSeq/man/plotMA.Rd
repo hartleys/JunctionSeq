@@ -33,7 +33,7 @@ plotMA(jscs,
     Dispersions and size factors must then be
     set, usually using functions \code{\link{estimateSizeFactors}} and 
     \code{\link{estimateJunctionSeqDispersions}}. Hypothesis tests must
-    be performed by \code{\link{testJunctionsForDJU}}. Effect sizes and parameter
+    be performed by \code{\link{testForDiffUsage}}. Effect sizes and parameter
     estimates must be created via \code{\link{estimateEffectSizes}}.
   }
   \item{FDR.threshold}{
@@ -49,13 +49,13 @@ plotMA(jscs,
   \item{use.pch}{
     The value of pch to pass to the \code{\link{points}} call.
   }
-  \item{smooth.nbin}{
-    The number of bins to smooth, for the density plot, if use.smoothScatter is TRUE.
-  }  
-
   \item{use.smoothScatter}{
     Logical. If TRUE, non-significant genes will be ploted with density shading.
-  } 
+  }
+  \item{smooth.nbin}{
+    The number of bins to smooth, for the density plot, if \code{use.smoothScatter} is TRUE.
+  }
+
   \item{ylim}{
     The y-axis limits.
   } 
@@ -68,8 +68,6 @@ plotMA(jscs,
   \item{show.labels}{
     Logical. If TRUE, include all titles and axes labels.
   }
-  
-  
   \item{par.cex}{
     The cex value to be passed to \code{\link{par}}.
   }
