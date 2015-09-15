@@ -5,10 +5,16 @@ differential usage of exons and splice junctions in High-Throughput, Next-Genera
 The methodology is based on the methods used by the [DEXSeq](http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html) 
 bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343).
 
+The core advantage of JunctionSeq over other similar tools is that it provides a powerful automated tools for
+generating readable and interpretable plots and tables to facilitate the interpretation of the results.
+An example results report is available [exampleResults/testForDU.html](here). 
+An example set of browser tracks from this same dataset is available 
+[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTrack). 
+
 Help, documentation, and the most recent release of JunctionSeq is available on the 
 [JunctionSeq github pages](http://hartleys.github.io/JunctionSeq/index.html).
 
-**JunctionSeq is currently in an early alpha stage, and is not yet intended for general use.**
+**JunctionSeq is currently in beta, and is not yet intended for general use.**
 
 Issues, bug reports, or feature requests can be posted to the 
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
@@ -21,6 +27,10 @@ There is also a [comprehensive walkthrough](http://hartleys.github.io/JunctionSe
 the entire analysis pipeline, along with a full 
 [example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip) with 
 [example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip).
+
+An example results report is available [exampleResults/testForDU.html](here). 
+An example set of browser tracks from this same dataset is available 
+[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTrack). This example data is for **demonstration purposes only**.
 
 For help with individual R functions in the R utility, use the R 
 command:
@@ -47,7 +57,9 @@ using the QoRTs software package, available [here](http://hartleys.github.io/QoR
 The example dataset can be found on the github repository and can be 
 installed with the command:
     
-    > install.packages(JctSeqExData2_0.4.07.tar.gz", repos = NULL, type="source")
+    > install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz", 
+                      repos = NULL, 
+                      type="source")
 
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3:

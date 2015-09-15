@@ -62,6 +62,11 @@ If you encounter problems with installation, you can install manually using the 
     > biocLite("genefilter");
     > biocLite("geneplotter");
 
+    > install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz", 
+                       repos = NULL, 
+                       type="source")
+
+
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3:
 
