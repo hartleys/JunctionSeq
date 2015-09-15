@@ -25,12 +25,14 @@ analyses.
 <h3>Usage</h3>
 
 <pre>
-  estimateJunctionSeqDispersions(jscs, 
-          test.formula1 = formula(~ sample + countbin + condition : countbin), 
-          meanCountTestableThreshold=7.5, nCores=1,
-          test.aggregated.genes = FALSE,
-          use.alternate.method  = TRUE,
-          verbose = TRUE);
+estimateJunctionSeqDispersions( jscs, 
+        method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
+        test.formula1 = formula(~ sample + countbin + condition : countbin),
+        meanCountTestableThreshold="auto", nCores=1, 
+        use.multigene.aggregates = FALSE, 
+        verbose = TRUE)
+        
+
 </pre>
 
 
@@ -44,6 +46,17 @@ analyses.
 <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. Size factors must be
 set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
 <code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.GLM</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>The default is &quot;advanced&quot; or, equivalently, &quot;DESeq2-style&quot;. This uses the 
+dispersion estimation methodology used by DESeq2 and DEXSeq v1.12.0 or higher to generate the initial (feature-specific) dispersion estimates. The alternative 
+method is &quot;simpleML&quot; or, equivalently, &quot;DEXSeq-v1.8.0-style&quot;. This uses a simpler maximum-likelihood-based method used by the original DESeq and
+by DEXSeq v1.8.0 or less.
 </p>
 </td></tr>
 <tr valign="top"><td><code>test.formula1</code></td>
@@ -63,7 +76,8 @@ we do not need to model the gene-level differential expression.
 <tr valign="top"><td><code>meanCountTestableThreshold</code></td>
 <td>
 
-<p>Numeric value. Features with a total mean normalized count of less than this value will be excluded from the analyses.
+<p>&quot;auto&quot; or Numeric value. Features with a total mean normalized count of less than this value will be excluded from the analyses.
+If left as the default (&quot;auto&quot;), then the cutoff threshold will be determined automatically using the DESeq2 independent filtering method.
 </p>
 </td></tr>
 <tr valign="top"><td><code>nCores</code></td>
@@ -72,15 +86,9 @@ we do not need to model the gene-level differential expression.
 <p>The number of cores to use. Note that multicore functionality may not be available on all platforms.
 </p>
 </td></tr>
-<tr valign="top"><td><code>test.aggregated.genes</code></td>
+<tr valign="top"><td><code>use.multigene.aggregates</code></td>
 <td>
 <p>Logical value. Whether to attempt to test &quot;aggregate genes&quot; which consist of multiple genes that overlap with one another. Note that inclusion of aggregate genes may affect the false discovery rate, since by their very nature aggregate genes will often show differential splice junction usage, as the two genes will often be regulated independently.</p>
-</td></tr>
-<tr valign="top"><td><code>use.alternate.method</code></td>
-<td>
-
-<p>ADVANCED USERS ONLY: Logical value. Determines which model framework to use.
-</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
@@ -94,5 +102,5 @@ we do not need to model the gene-level differential expression.
 <p>A JunctionSeqCountSet, with dispersion results included.
 </p>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

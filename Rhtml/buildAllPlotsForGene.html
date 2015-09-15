@@ -26,34 +26,36 @@ be generated with and without the full transcript information.
 
 buildAllPlotsForGene(geneID, jscs,
                      outfile.prefix = "./", 
-                     use.plotting.device = "png", 
+                     use.plotting.device = c("png","CairoPNG","svg","tiff","cairo_ps","custom"),
+                     sequencing.type = c("paired-end","single-end"),
                      use.vst=FALSE, use.log = TRUE, truncateBelowOne = TRUE,
                      exon.rescale.factor = 0.3,
                      with.TX=TRUE,without.TX=TRUE,
                      expr.plot=TRUE,normCounts.plot=TRUE,
-                     rExpr.plot=FALSE,rawCounts.plot=FALSE,
+                     rExpr.plot=TRUE,rawCounts.plot=FALSE,
                      colorRed.FDR.threshold = 0.01, 
                      color=NULL,
-                     plot.gene.level.expression = NULL,
+                     plot.gene.level.expression = TRUE,
                      plot.exon.results, plot.junction.results, plot.novel.junction.results,
                      plot.untestable.results = FALSE,
                      plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
-                     par.cex = 1, anno.cex.text = 1,
+                     par.cex = 1, name.files.with.geneID = TRUE,
+                     anno.cex.text = 1,
                      anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
                      drawCoordinates = TRUE,
                      yAxisLabels.inExponentialForm = FALSE,
                      show.strand.arrows = 10, arrows.length = 0.125,
-                     graph.margins = c(2,3,3,2),
-                     base.plot.height = 22.222, base.plot.width = 22.222, 
+                     graph.margins = c(2, 3, 3, 3),
+                     base.plot.height = 12, base.plot.width = 12, 
                      base.plot.units = "in", 
-                     GENE.annotation.relative.height = 0.2, TX.annotation.relative.height = 0.025,
+                     GENE.annotation.relative.height = 0.2, TX.annotation.relative.height = 0.05,
                      autoscale.height.to.fit.TX.annotation = TRUE,
                      autoscale.width.to.fit.bins = 35,
                      plotting.device.params = list(),
                      condition.legend.text, include.TX.names = TRUE,
                      draw.start.end.sites = TRUE,
                      openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
-                     verbose=TRUE,  ...)
+                     verbose=TRUE, debug.mode = FALSE,  ...)
 
 </pre>
 
@@ -88,6 +90,12 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 <tr valign="top"><td><code>use.plotting.device</code></td>
 <td>
 <p>The plotting device to use.</p>
+</td></tr>
+<tr valign="top"><td><code>sequencing.type</code></td>
+<td>
+
+<p>The type of sequencing used, either &quot;paired-end&quot; or &quot;single-end&quot;. This only affects the labelling of the y-axis, and does not affect the actual plots in any way.
+</p>
 </td></tr>
 <tr valign="top"><td><code>use.vst</code></td>
 <td>
@@ -141,7 +149,7 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 <td>
 
 <p>Logical value. If <code>TRUE</code>, gene-level expression (when applicable) will be plotted beside the sub-element-specific expression in a small seperate plotting box. 
-The gene-level expression will NOT be plotted for the &quot;relative expression&quot; plots (since you can't meaningfully plot gene-level expression relative to itself).
+For the &quot;relative expression&quot; plots the simple mean normalized expression will be plotted (since it doesn't make sense to plot something relative to itself).
 </p>
 </td></tr>
 <tr valign="top"><td><code>plot.exon.results</code></td>
@@ -177,6 +185,10 @@ The gene-level expression will NOT be plotted for the &quot;relative expression&
 
 <p>The base cex value to be passed to par() immediately before all plots are created. See <code><a href="../../graphics/html/par.html">par</a></code>.
 </p>
+</td></tr>
+<tr valign="top"><td><code>name.files.with.geneID</code></td>
+<td>
+<p>Whether to use the geneID (rather than gene name) for naming the files.</p>
 </td></tr>
 <tr valign="top"><td><code>anno.cex.text</code></td>
 <td>
@@ -301,11 +313,15 @@ should be named with one of the values from <code>factor(condition)</code>, and 
 <td>
 <p>if <code>TRUE</code>, send debugging and progress messages to the console / stdout.</p>
 </td></tr>
+<tr valign="top"><td><code>debug.mode</code></td>
+<td>
+<p>if TRUE, send even more debugging and progress messages to the console / stdout.</p>
+</td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
 <p>Additional options to pass to plotting functions, particularly graphical parameters.</p>
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

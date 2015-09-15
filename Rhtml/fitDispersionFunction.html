@@ -25,10 +25,12 @@ analyses.
 <h3>Usage</h3>
 
 <pre>
-  fitDispersionFunction(jscs, fitType = c("parametric","local","mean"), 
-                        fitDispersionsForExonsAndJunctionsSeparately = TRUE, 
-                        advancedMode = TRUE,
-                        verbose = TRUE);
+fitDispersionFunction(jscs , 
+    method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
+    method.dispFit = c("parametric", "local", "mean"), 
+    method.dispFinal = c("shrink","max","fitted","noShare"),
+    fitDispersionsForExonsAndJunctionsSeparately = TRUE, 
+    verbose = TRUE)
 </pre>
 
 
@@ -44,24 +46,40 @@ set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">es
 <code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>.
 </p>
 </td></tr>
-<tr valign="top"><td><code>fitType</code></td>
+<tr valign="top"><td><code>method.GLM</code></td>
 <td>
 
-<p>Which dispersion fit method to use. Not that currently only the parametric (default) method is supported. The other methods are currently nonfunctional and will be added in future releases.
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>The default is &quot;advanced&quot; or, equivalently, &quot;DESeq2-style&quot;. This uses the 
+dispersion estimation methodology used by DESeq2 and DEXSeq v1.12.0 or higher to generate the initial (feature-specific) dispersion estimates. The alternative 
+method is &quot;simpleML&quot; or, equivalently, &quot;DEXSeq-v1.8.0-style&quot;. This uses a simpler maximum-likelihood-based method used by the original DESeq and
+by DEXSeq v1.8.0 or less.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.dispFit</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>Determines the method used to generated &quot;fitted&quot; dispersion estimates. One of &quot;parametric&quot; (the default), &quot;local&quot;, or &quot;mean&quot;. See the DESeq2 documentation for more information.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.dispFinal</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>Determines the method used to arrive at a &quot;final&quot; dispersion estimate. The default, &quot;shrink&quot; uses the maximum a posteriori estimate, combining information from both
+the fitted and feature-specific dispersion estimates. This is the method used by DESeq2 and DEXSeq v1.12.0 and above.
 </p>
 </td></tr>
 <tr valign="top"><td><code>fitDispersionsForExonsAndJunctionsSeparately</code></td>
 <td>
 
-<p>When running a &quot;hybrid&quot; analysis in which both exons and splice junctions are being tested simultaniously, this parameter
+<p>When running a &quot;junctionsAndExons&quot; type analysis in which both exons and splice junctions are being tested simultaniously, this parameter
 determines whether a single fitted dispersion model should be fitted for both exons and splice junctions, or if separate 
 fitted dispersions should be calculated for each. By default the dispersions are run separately.
-</p>
-</td></tr>
-<tr valign="top"><td><code>advancedMode</code></td>
-<td>
-
-<p>Switches between the current default method and an older variant.
 </p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
@@ -76,5 +94,5 @@ fitted dispersions should be calculated for each. By default the dispersions are
 <p>A JunctionSeqCountSet, with dispersion results included.
 </p>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

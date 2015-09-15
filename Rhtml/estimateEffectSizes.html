@@ -27,9 +27,11 @@ analyses.
 
 <pre>
    estimateEffectSizes(jscs, 
+        method.expressionEstimation = c("feature-vs-gene","feature-vs-otherFeatures"),
         effect.formula = formula(~ condition + countbin + condition : countbin),
         geneLevel.formula = formula(~ condition),
         calculate.geneLevel.expression = TRUE,
+        keep.estimation.fit = FALSE,
         nCores=1, 
         dispColumn="dispersion",
         verbose = TRUE)</pre>
@@ -45,6 +47,22 @@ analyses.
 <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. Size factors must be
 set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
 <code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.expressionEstimation</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>Determines the methodology used to generate feature expression estimates and relative fold changes. By default each feature is modeled separately. Under the default count-vector method,
+this means that the resultant relative fold changes will be a measure of the relative fold change between the feature and the gene as a whole.
+</p>
+<p>Alternatively, the &quot;feature-vs-otherFeatures&quot; method builds a large, complex model containing all features belonging to the gene. The coefficients for each feature
+are then &quot;balanced&quot; using linear contrasts weighted by the inverse of their variance. In general we have found this method to produce very similar results but 
+less efficiently and less consistently. Additionally, this alternative method &quot;multi-counts&quot; reads that cover more than one feature. This can result in over-weighting
+of exonic regions with a large number of annotated variations in a small genomic area, as each individual read or read-pair may be counted many times in the model.
+</p>
+<p>Under the default option, no read or read-pair is ever counted more than once in a given model.
 </p>
 </td></tr>
 <tr valign="top"><td><code>effect.formula</code></td>
@@ -67,6 +85,12 @@ set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">es
 <td>
 
 <p>Logical value. If <code>TRUE</code>, gene-level expression will be estimated using the same maximum-likelihood method used in other analyses. Default: <code>TRUE</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>keep.estimation.fit</code></td>
+<td>
+
+<p>Logical value. If <code>TRUE</code>, save the complete model fits for every gene. This will require a lot of memory, but may be useful for statistical diagnostics. Default: <code>FALSE</code>.
 </p>
 </td></tr>
 <tr valign="top"><td><code>nCores</code></td>
@@ -96,5 +120,5 @@ core execution.
 <p>A JunctionSeqCountSet, with effect size results included.
 </p>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

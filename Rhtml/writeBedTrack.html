@@ -31,7 +31,9 @@ Write splice junction browser tracks
                     count.digits = 1, 
                     includeGeneID = FALSE,
                     includeLocusID = TRUE,
-                    includeGroupID = TRUE)
+                    includeGroupID = TRUE,
+                    output.format = c("BED", "GTF", "GFF3"),
+                    verbose = TRUE)
 
   writeSigBedTrack(file, 
                    jscs, 
@@ -45,7 +47,9 @@ Write splice junction browser tracks
                    FDR.threshold = 0.05, 
                    pval.digits = 4, 
                    includeGeneID = FALSE,
-                   includeLocusID = TRUE)
+                   includeLocusID = TRUE,
+                   output.format = c("BED", "GTF", "GFF3"),
+                   verbose = TRUE)
 
 </pre>
 
@@ -174,7 +178,19 @@ By default JunctionSeq will attempt to automatically generate a reasonable track
 <p>Logical. If TRUE, include the ID of the group in the &quot;name&quot; field of each line.
 </p>
 </td></tr>
+<tr valign="top"><td><code>output.format</code></td>
+<td>
+
+<p>Character string. The format to use.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+
+<p>Logical. if TRUE, output debugging/progress information.
+</p>
+</td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

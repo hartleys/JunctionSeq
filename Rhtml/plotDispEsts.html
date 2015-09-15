@@ -19,14 +19,19 @@ Plot Fitted and Test-wise Dispersion
 <h3>Usage</h3>
 
 <pre>
-  plotDispEsts(jscs, ylim, xlim, linecol = c("#ff000080","#ff990080"), 
+  plotDispEsts( jscs, ylim, xlim, 
+               linecol=c("#0000FF","#FF0000"), 
+               pointcol = c("#00009980","#99000080"),
+               title.main = "Dispersion Estimates", 
                xlab = "mean of normalized counts", 
-               ylab = "dispersion", 
-               miniTicks = TRUE, 
-               cex = 0.45, pch = c(1,4),
-               use.smoothScatter = FALSE, smooth.nbin = 512, nrpoints = 100, 
-               plot.exon.results = TRUE, plot.junction.results = TRUE,
-               ...)
+               ylab = "dispersion",
+               miniTicks = TRUE,
+               pch = c(1,4),
+               par.cex = 1, points.cex = 1, text.cex = 1, lines.cex = 8,
+               use.smoothScatter = FALSE, smooth.nbin = 512, nrpoints = 100,
+               plot.exon.results = TRUE, 
+               plot.junction.results = TRUE, 
+               ... )
 </pre>
 
 
@@ -60,7 +65,19 @@ be performed by <code><a href="testForDiffUsage.html">testForDiffUsage</a></code
 <tr valign="top"><td><code>linecol</code></td>
 <td>
 
-<p>Character vector of length 2. The line color to use for the fit line. If the fits were performed separately for exons and junctions, the junction line will be drawn with the second color (orange, by default).
+<p>Character vector of length 2. The line color to use for the fit line. If the fits were performed separately for exons and junctions, the junction line will be drawn with the second color.
+</p>
+</td></tr>
+<tr valign="top"><td><code>pointcol</code></td>
+<td>
+
+<p>Character vector of length 2. The point color to use for the final dispersions. If the fits were performed separately for exons and junctions, the junction points will be drawn with the second color.
+</p>
+</td></tr>
+<tr valign="top"><td><code>title.main</code></td>
+<td>
+
+<p>The main title of the plot.
 </p>
 </td></tr>
 <tr valign="top"><td><code>xlab</code></td>
@@ -81,10 +98,28 @@ be performed by <code><a href="testForDiffUsage.html">testForDiffUsage</a></code
 <p>Whether or not to plot smaller ticks at the tenth-decades.
 </p>
 </td></tr>
-<tr valign="top"><td><code>cex</code></td>
+<tr valign="top"><td><code>par.cex</code></td>
 <td>
 
-<p>The cex value to be passed to <code>plot</code>, determining the size of the plotted points.
+<p>The base cex value to be passed to par() immediately before all plots are created. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>points.cex</code></td>
+<td>
+
+<p>The character expansion value for the plotted points.
+</p>
+</td></tr>
+<tr valign="top"><td><code>text.cex</code></td>
+<td>
+
+<p>The character expansion value for the annotation text (labels, etc).
+</p>
+</td></tr>
+<tr valign="top"><td><code>lines.cex</code></td>
+<td>
+
+<p>The character expansion value for lines. What this means seems to vary depending on the plotting device.
 </p>
 </td></tr>
 <tr valign="top"><td><code>pch</code></td>
@@ -125,5 +160,5 @@ be performed by <code><a href="testForDiffUsage.html">testForDiffUsage</a></code
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

@@ -30,6 +30,7 @@ writeCompleteResults(jscs, outfile.prefix,
                         save.fit = FALSE, save.VST = FALSE,
                         save.bedTracks = TRUE,
                         save.jscs = FALSE,
+                        bedtrack.format = c("BED", "GTF", "GFF3"),
                         verbose = TRUE)
 </pre>
 
@@ -87,6 +88,12 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 <td>
 <p>Logical. Whether to the entire <code>JunctionSeqCountSet</code> object. Default is FALSE.</p>
 </td></tr>  
+<tr valign="top"><td><code>bedtrack.format</code></td>
+<td>
+
+<p>Character string. The format to use for the browser tracks.
+</p>
+</td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
 <p>A boolean flag indicating whether or not to print progress information during execution. (Default=FALSE)</p>
@@ -99,5 +106,5 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 <p>Saves a wide variety of data from the analyses.
 </p>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

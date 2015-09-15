@@ -28,8 +28,14 @@ analyses.
 testForDiffUsage( jscs, 
           test.formula0 = formula(~ sample + countbin), 
           test.formula1 = formula(~ sample + countbin + condition : countbin),
+          method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
           dispColumn="dispersion", nCores=1, 
-          use.alternate.method = TRUE, 
+          keep.hypothesisTest.fit = FALSE,
+          meanCountTestableThreshold = "auto",
+          optimizeFilteringForAlpha = 0.01,
+          method.cooksFilter = TRUE,
+          cooksCutoff,
+          pAdjustMethod = "BH",
           verbose = TRUE)
 </pre>
 
@@ -58,6 +64,17 @@ set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">es
 <p>The formula for the alternative hypothesis. Note that the condition to be tested must be named &quot;condition&quot;.
 </p>
 </td></tr>
+<tr valign="top"><td><code>method.GLM</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>The default is &quot;advanced&quot; or, equivalently, &quot;DESeq2-style&quot;. This uses the 
+model test methodology used by DESeq2 and DEXSeq v1.12.0 or higher. The alternative 
+method is &quot;simpleML&quot; or, equivalently, &quot;DEXSeq-v1.8.0-style&quot;. This uses a simpler maximum-likelihood-based method used by the original DESeq and
+by some earlier versions of DEXSeq (v1.8.0 or less).
+</p>
+</td></tr>
 <tr valign="top"><td><code>dispColumn</code></td>
 <td>
 
@@ -73,10 +90,41 @@ attempt to fallback to the multicore package. If neither package can be found it
 core execution.
 </p>
 </td></tr>
-<tr valign="top"><td><code>use.alternate.method</code></td>
+<tr valign="top"><td><code>keep.hypothesisTest.fit</code></td>
 <td>
 
-<p>ADVANCED USERS ONLY: Logical value. Determines whether to use the JunctionSeq standard model framework, or the DEXSeq model framework.
+<p>Logical value. If <code>TRUE</code>, save both complete hypothesis test model fits for every gene. This will require a lot of memory, but may be useful for statistical diagnostics. Default: <code>FALSE</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>meanCountTestableThreshold</code></td>
+<td>
+
+<p>&quot;auto&quot; or Numeric value. Features with a total mean normalized count of less than this value will be excluded from the analyses.
+If left as the default (&quot;auto&quot;), then the cutoff threshold will be determined automatically using the DESeq2 independent filtering method.
+</p>
+</td></tr>
+<tr valign="top"><td><code> optimizeFilteringForAlpha </code></td>
+<td>
+
+<p>Numeric value between 0 and 1. If <code>meanCountTestableThreshold</code> is set to &quot;auto&quot; then this sets the adjusted-p-value threshold to optimize against.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.cooksFilter</code></td>
+<td>
+
+<p>Logical value. if <code>TRUE</code>, use the cook's filter to detect and remove outliers.
+</p>
+</td></tr>
+<tr valign="top"><td><code>cooksCutoff</code></td>
+<td>
+
+<p>The cook's cutoff threshold to use.
+</p>
+</td></tr>
+<tr valign="top"><td><code>pAdjustMethod</code></td>
+<td>
+
+<p>The p-adjustment method to use with the <code>p.adjust</code> function.
 </p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
@@ -91,5 +139,5 @@ core execution.
 <p>A JunctionSeqCountSet, with hypothesis test results included.
 </p>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html>
+		<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+		<title>JunctionSeq: Differential Usage of Exons and Splice Junctions</title>
+
+		<link rel="stylesheet" href="stylesheets/styles.css">
+		<link rel="stylesheet" href="stylesheets/pygment_trac.css">
+		<script src="javascripts/scale.fix.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+<div class="wrapper">
+
+
+<header>
+			<h1><a href="index.html">JunctionSeq</a></h1>
+			<p>Differential Usage of Exons and Splice Junctions</p>
+			<p class="view"><a href="https://github.com/hartleys/JunctionSeq">View the Project on GitHub <small>Stephen Hartley</small></a></p>
+			<ul>
+				<li><a href="https://hartleys.github.io/JunctionSeq/bin-win/JunctionSeq_0.4.07.zip">Windows <strong>Binary</strong></a></li>
+				<li><a href="https://hartleys.github.io/JunctionSeq/bin-win/JunctionSeq_0.4.07_R_x86_64-unknown-linux-gnu.tar.gz">Linux <strong>Binary</strong></a></li>
+				<li><a href="https://github.com/hartleys/JunctionSeq/releases/latest">Latest <strong>Release</strong></a></li>
+				<li><a href="https://github.com/hartleys/JunctionSeq">View On <strong>GitHub</strong></a></li>
+			</ul>
+</header>
+
+
+<section><pre><code>&gt; v0.4.07 (Revised Tue Sep 15 13:39:27 EDT 2015)
+</code></pre>
+
+<p>JunctionSeq is an R package designed to detect and assess 
+differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
+The methodology is based on the methods used by the <a href="http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html">DEXSeq</a> 
+bioconductor package, originally proposed by <a href="http://www.ncbi.nlm.nih.gov/pubmed/22722343">Anders, Reyes, and Huber</a>.</p>
+
+<p>Help, documentation, and the most recent release of JunctionSeq is available on the 
+<a href="http://hartleys.github.io/JunctionSeq/index.html">JunctionSeq github pages</a>.</p>
+
+<h1>Frequently Asked Questions</h1>
+
+<p>(work in progress)</p>
+
+</section> <h2>HELP AND DOCUMENTATION:</h2> <section>
+
+<p>For more information see the <a href="http://hartleys.github.io/JunctionSeq/helpDocs/doc/JunctionSeq.pdf">JunctionSeq vignette</a> or the 
+<a href="http://dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/Rhtml/index.html">online reference documentation</a>.</p>
+
+<p>For help with individual R functions in the R utility, use the R 
+command:</p>
+
+<pre><code>&gt; help(functionname);
+</code></pre>
+
+<p>For a full listing of all help topics for the R utility, use the R 
+command: </p>
+
+<pre><code>&gt; help(package="JunctionSeq");
+</code></pre>
+
+</section> <h2>BASIC INSTALLATION:</h2> <section>
+
+<p>JunctionSeq can be installed automatically in R using the command:</p>
+
+<pre><code>&gt; source("http://hartleys.github.io/JunctionSeq/install/JunctionSeq.install.R");
+</code></pre>
+
+<p>In order to successfully install R on windows, you must have Rtools installed.</p>
+
+</section> <h2>MANUAL INSTALLATION:</h2> <section>
+
+<p>If you encounter problems with installation, you can install manually using the commands:</p>
+
+<pre><code>&gt; install.packages("statmod")
+&gt; install.packages("plotrix")
+&gt; install.packages("stringr")
+&gt; install.packages("Rcpp")
+&gt; install.packages("RcppArmadillo")
+&gt; install.packages("ggplot")
+&gt; install.packages("locfit")
+&gt; install.packages("Hmisc")
+
+&gt; source("http://bioconductor.org/biocLite.R");
+&gt; biocLite();
+&gt; biocLite("Biobase");
+&gt; biocLite("BiocGenerics");
+&gt; biocLite("BiocParallel");
+&gt; biocLite("GenomicRanges");
+&gt; biocLite("IRanges");
+&gt; biocLite("S4Vectors");
+&gt; biocLite("genefilter");
+&gt; biocLite("geneplotter");
+</code></pre>
+
+</section> <h2>LEGAL:</h2> <section>
+
+<p>This software package is licensed under the GNU-GPL v3:</p>
+
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+
+<p>Portions of this software are "United States Government Work" 
+under the terms of the United States Copyright Act. <br />
+It was written as part of the authors' official duties for the 
+United States Government and thus those portions cannot be 
+copyrighted.  Those portions of this software are freely 
+available to the public for use without a copyright notice. <br />
+Restrictions cannot be placed on its present or future use.</p>
+
+<p>Although all reasonable efforts have been taken to ensure the 
+accuracy and reliability of the software and data, the National 
+Human Genome Research Institute (NHGRI) and the U.S. Government 
+does not and cannot warrant the performance or results that may 
+be obtained by using this software or data.  NHGRI and the U.S. 
+Government disclaims all warranties as to performance, 
+merchantability or fitness for any particular purpose.</p>
+
+</section>
+
+
+
+</div>
+
+		<footer> <small>
+		<p>Project maintained by <a href="https://github.com/hartleys/JunctionSeq">Stephen Hartley</a></p>
+		<p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a> (modified)</p>
+		</small> </footer>
+
+</body></html>

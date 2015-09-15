@@ -33,7 +33,12 @@ analyses.
 <h3>Usage</h3>
 
 <pre>
-  estimateSizeFactors(jscs);
+  estimateSizeFactors(jscs, 
+          method.sizeFactors = c("byGenes","byCountbins"), 
+          replicateDEXSeqBehavior.useRawBaseMean = FALSE, 
+          calcAltSF = TRUE, 
+          verbose = FALSE);
+  writeSizeFactors(jscs, file);
 </pre>
 
 
@@ -49,6 +54,44 @@ set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">es
 <code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>.
 </p>
 </td></tr>
+<tr valign="top"><td><code>method.sizeFactors</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>Determines the method used to calculate normalization size factors. By default JunctionSeq uses gene-level expression. As an alternative, feature-level counts can be used as
+they are in DEXSeq. In practice the difference is almost always negligible.
+</p>
+</td></tr>
+<tr valign="top"><td><code>replicateDEXSeqBehavior.useRawBaseMean</code></td>
+<td>
+
+<p>USED ONLY FOR INTERNAL TESTING! NOT INTENDED FOR ACTUAL USE! 
+</p>
+<p>This variable activates an alternative mode in which a (very minor) bug in DEXSeq v1.14.0 and earlier is replicated. If <code>TRUE</code>, the 
+baseMean and baseVar variables will be computed using raw counts rather than normalized counts. 
+This is used for internal tests in which DEXSeq functionality is replicated precisely and the results are compared against equivalent DEXSeq results.
+Without this option the results would differ slightly (generally by less than 1 hundreth of a percent). 
+</p>
+<p>USED ONLY FOR INTERNAL TESTING! NOT INTENDED FOR ACTUAL USE! 
+</p>
+</td></tr>
+<tr valign="top"><td><code>calcAltSF</code></td>
+<td>
+
+<p>Logical. Determines whether both types of size factor calculations should be generated, and placed in the <code>jscs@altSizeFactors</code> slot.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>if <code>TRUE</code>, send debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+
+<p>A file path to write the size factor table.
+</p>
+</td></tr>
 </table>
 
 
@@ -57,5 +100,5 @@ set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">es
 <p>A JunctionSeqCountSet, with size factors included.
 </p>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

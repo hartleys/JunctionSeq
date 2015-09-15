@@ -24,6 +24,7 @@ Generate a JunctionSeq expression plot.
 plotJunctionSeqResultsForGene(geneID, jscs, 
                               colorRed.FDR.threshold=0.05,
                               plot.type = "expr", 
+                              sequencing.type = c("paired-end","single-end"),
                               displayTranscripts = FALSE,
                               color = NULL, 
                               use.vst = FALSE, use.log = TRUE,truncateBelowOne = TRUE,
@@ -32,20 +33,22 @@ plotJunctionSeqResultsForGene(geneID, jscs,
                               plot.lwd = 3,axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
                               par.cex = 1, anno.cex.text = 1,
                               anno.cex.axis=anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
+                              cex.arrows = 1,
                               fit.countbin.names = TRUE,
-                              plot.gene.level.expression = NULL,
+                              plot.gene.level.expression = TRUE,
                               plot.exon.results, plot.junction.results, plot.novel.junction.results, 
                               plot.untestable.results = FALSE, draw.untestable.annotation = TRUE,
                               show.strand.arrows = 10, arrows.length = 0.125,
                               sort.features = TRUE,
                               drawCoordinates = TRUE,
                               yAxisLabels.inExponentialForm = FALSE,
-                              title.main=NULL, title.ylab=NULL,
-                              graph.margins = c(2,3,3,2),
+                              title.main, title.ylab, title.ylab.right, 
+                              graph.margins = c(2, 3.5, 3, 3),
                               GENE.annotation.relative.height = 0.2,
-                              TX.annotation.relative.height = 0.025,
+                              TX.annotation.relative.height = 0.05,
                               condition.legend.text = NULL, include.TX.names = TRUE, 
                               draw.start.end.sites = TRUE,
+                              label.chromosome = TRUE,
                               verbose=TRUE, debug.mode = FALSE,
                               ...)
 </pre>
@@ -81,6 +84,12 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 
 <p>Character string. Determines which plot to produce. Options are: &quot;expr&quot; for &quot;expression&quot;, or mean normalized read counts by experimental condition, &quot;rExpr&quot; for 
 &quot;relative&quot; expression relative to gene-level expression, &quot;normCounts&quot; for normalized read counts for each sample, and &quot;rawCounts&quot; for raw read counts for each sample.
+</p>
+</td></tr>
+<tr valign="top"><td><code>sequencing.type</code></td>
+<td>
+
+<p>The type of sequencing used, either &quot;paired-end&quot; or &quot;single-end&quot;. This only affects the labelling of the y-axis, and does not affect the actual plots in any way.
 </p>
 </td></tr>
 <tr valign="top"><td><code>displayTranscripts</code></td>
@@ -150,6 +159,13 @@ More specifically: The cex.axis value to be passed to all function calls that ta
 More specifically: The cex.main value to be passed to all function calls that take <a href="../../graphics/html/par.html">graphical parameters</a>. See <code><a href="../../graphics/html/par.html">par</a></code>.
 </p>
 </td></tr>
+<tr valign="top"><td><code>cex.arrows</code></td>
+<td>
+
+<p>The font size for the strand-direction arrows in the gene annotation region. 
+The arrows will be sized to equal the dimensions of the letter &quot;M&quot; at this font size.
+</p>
+</td></tr>
 <tr valign="top"><td><code>fit.countbin.names</code></td>
 <td>
 <p>Logical. If <code>TRUE</code>, then splice-junction-locus labels should be rescaled to fit in whatever horizontal space is available.</p>
@@ -158,7 +174,7 @@ More specifically: The cex.main value to be passed to all function calls that ta
 <td>
 
 <p>Logical value. If <code>TRUE</code>, gene-level expression (when applicable) will be plotted beside the sub-element-specific expression in a small seperate plotting box. 
-The gene-level expression will NOT be plotted for the &quot;relative expression&quot; plots (since you can't meaningfully plot gene-level expression relative to itself).
+For the &quot;relative expression&quot; plots the simple mean normalized expression will be plotted (since it doesn't make sense to plot something relative to itself).
 </p>
 </td></tr>
 <tr valign="top"><td><code>plot.exon.results</code></td>
@@ -228,7 +244,13 @@ The gene-level expression will NOT be plotted for the &quot;relative expression&
 <tr valign="top"><td><code>title.ylab</code></td>
 <td>
 
-<p>Character string. Overrides the default y-axis label.
+<p>Character string. Overrides the default y-axis label for the left y-axis.
+</p>
+</td></tr>
+<tr valign="top"><td><code>title.ylab.right</code></td>
+<td>
+
+<p>Character string. Overrides the default y-axis label for the right y-axis.
 </p>
 </td></tr>
 <tr valign="top"><td><code>condition.legend.text</code></td>
@@ -250,6 +272,12 @@ should be named with one of the values from <code>factor(condition)</code>, and 
 <p>Logical value. If <code>TRUE</code>, then transcript start/end sites will be marked on the main gene annotation.
 </p>
 </td></tr>
+<tr valign="top"><td><code>label.chromosome</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, label the chromosome in the left margin.
+</p>
+</td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>
 <p>if TRUE, send debugging and progress messages to the console / stdout.</p>
@@ -264,5 +292,5 @@ should be named with one of the values from <code>factor(condition)</code>, and 
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.3.41 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
 </body></html>

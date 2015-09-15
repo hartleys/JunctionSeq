@@ -1,55 +1,53 @@
-# JunctionSeq: Detection of Differential Splice Junction Usage in RNA-Seq Data
-v0.3.41
-Revised Thu Jun 11 17:25:13 EDT 2015
+    > v0.4.07 (Revised Tue Sep 15 13:39:27 EDT 2015)
 
 JunctionSeq is an R package designed to detect and assess 
-differential usage of exonic regions and/or splice junction loci in High-Throughput, 
-Next-Generation RNA-Seq datasets. 
-The methodology is similar to the methods used by the DEXSeq bioconductor package.
+differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
+The methodology is based on the methods used by the [DEXSeq](http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html) 
+bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343).
+
+Help, documentation, and the most recent release of JunctionSeq is available on the 
+[JunctionSeq github pages](http://hartleys.github.io/JunctionSeq/index.html).
+
+**JunctionSeq is currently in an early alpha stage, and is not yet intended for general use.**
 
 Issues, bug reports, or feature requests can be posted to the 
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
 
 ##HELP AND DOCUMENTATION:
-For more information, see the [JunctionSeq vignette](doc/JunctionSeq.pdf) or the 
-[online reference documentation](Rhtml/index.html) (or as a [pdf](doc/JunctionSeq-reference.pdf)).
+For more information see the [JunctionSeq vignette](http://hartleys.github.io/JunctionSeq/helpDocs/doc/JunctionSeq.pdf) or the 
+[online reference documentation](http://dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/Rhtml/index.html).
 
-Help is also available from within R, accessed via the command:
+There is also a [comprehensive walkthrough](http://hartleys.github.io/JunctionSeq/helpDocs/doc/example-walkthrough.pdf) of 
+the entire analysis pipeline, along with a full 
+[example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip) with 
+[example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip).
+
+For help with individual R functions in the R utility, use the R 
+command:
 
     > help(functionname);
 
-For a full listing of all available help topics, use the R 
+For a full listing of all help topics for the R utility, use the R 
 command: 
 
     > help(package="JunctionSeq");
 
 ##INSTALLATION:
-JunctionSeq is dependent on a number of other R packages. These 
-dependencies can be installed using the R commands:
 
-    > install.packages("statmod")
-    > install.packages("plotrix")
-    > install.packages("stringr")
-    > install.packages("locfit")
-    > source("http://bioconductor.org/biocLite.R")
-    > biocLite()
-    > biocLite("Biobase")
+JunctionSeq can be installed automatically in R using the command:
 
-JunctionSeq can be installed in R using the command:
+    > source("http://hartleys.github.io/JunctionSeq/install/JunctionSeq.install.R");
 
-    > install.packages("JunctionSeq_0.3.41.tar.gz", repos = NULL, type="source")
+In order to successfully install R on windows, you must have Rtools installed.
 
-The splice-junction counts required by JunctionSeq can be created 
-using the QoRTs software package, available 
-[here](http://hartleys.github.io/QoRTs/index.html).
+The splice, gene, and exon read-counts required by JunctionSeq can be created 
+using the QoRTs software package, available [here](http://hartleys.github.io/QoRTs/index.html).
 
 ##EXAMPLE DATA:
-The example dataset can be found on the github main page, and can be
+The example dataset can be found on the github repository and can be 
 installed with the command:
     
-    > install.packages(JctSeqExData_0.3.41.tar.gz", repos = NULL, type="source")
-
-It is available online on the [github repository](https://github.com/hartleys/JunctionSeq/).
+    > install.packages(JctSeqExData2_0.4.07.tar.gz", repos = NULL, type="source")
 
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3:
