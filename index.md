@@ -7,9 +7,9 @@ bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://w
 
 The core advantage of JunctionSeq over other similar tools is that it provides a powerful automated tools for
 generating readable and interpretable plots and tables to facilitate the interpretation of the results.
-An example results report is available [exampleResults/testForDU.html](here). 
+An example results report is available [here](exampleResults/testForDU.html). 
 An example set of browser tracks from this same dataset is available 
-[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTrack). 
+[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). 
 
 Help, documentation, and the most recent release of JunctionSeq is available on the 
 [JunctionSeq github pages](http://hartleys.github.io/JunctionSeq/index.html).
@@ -30,7 +30,7 @@ the entire analysis pipeline, along with a full
 
 An example results report is available [exampleResults/testForDU.html](here). 
 An example set of browser tracks from this same dataset is available 
-[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTrack). This example data is for **demonstration purposes only**.
+[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). This example data is for **demonstration purposes only**.
 
 For help with individual R functions in the R utility, use the R 
 command:
