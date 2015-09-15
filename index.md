@@ -28,9 +28,9 @@ the entire analysis pipeline, along with a full
 [example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip) with 
 [example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip).
 
-An example results report is available [exampleResults/testForDU.html](here). 
+An example results report is available [here](exampleResults/testForDU.html). 
 An example set of browser tracks from this same dataset is available 
-[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). This example data is for **demonstration purposes only**.
+[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). 
 
 For help with individual R functions in the R utility, use the R 
 command:
