@@ -19,6 +19,7 @@ writeCompleteResults(jscs, outfile.prefix,
                         save.fit = FALSE, save.VST = FALSE,
                         save.bedTracks = TRUE,
                         save.jscs = FALSE,
+                        bedtrack.format = c("BED", "GTF", "GFF3"),
                         verbose = TRUE)
 }
 \arguments{
@@ -42,6 +43,9 @@ writeCompleteResults(jscs, outfile.prefix,
   \item{save.VST}{Logical. Whether to save VST-transformed data.}
   \item{save.bedTracks}{Logical. Whether to save "bed" junction coverage tracks.}
   \item{save.jscs}{Logical. Whether to the entire \code{JunctionSeqCountSet} object. Default is FALSE.}  
+  \item{bedtrack.format}{
+    Character string. The format to use for the browser tracks.
+  }
   \item{verbose}{A boolean flag indicating whether or not to print progress information during execution. (Default=FALSE)}
 }
 \details{

@@ -94,6 +94,20 @@ generateSigExpressionEstimates <- function(ecs,nCores = 1,fitExpToVar="condition
 }
 
 
+getAllDataList <- function(ecs,es,geneID,fitExpToVar="condition"){
+   temp <- list(get.expression.data(ecs,es,geneID),   get.expression.data(ecs,es,geneID,vst.xform=FALSE),
+                 get.rexpr.data(ecs,es,geneID),   get.rexpr.data(ecs,es,geneID,vst.xform=FALSE),
+                 get.norcounts.data(ecs,geneID),  get.norcounts.data(ecs,geneID,vst.xform=FALSE),
+                 get.rawcounts.data(ecs,geneID))
+   countbinID <- as.character(row.names(temp));
+   #temp <- t(apply(temp,MAR=c(2),FUN=function(x){ as.numeric(as.character(x)) }));
+   #temp <- apply(temp,MAR=c(2),FUN=function(x){ as.numeric(as.character(x)) });
+   geneIDs <- rep(as.character(geneID),length(countbinID));
+   featureID <- paste(geneID,countbinID,sep=':');
+   out <- cbind.data.frame(featureID = featureID,geneID=geneIDs,countbinID = countbinID,temp);
+   row.names(out) <- featureID;
+   return(out);
+}
 
 getAllData <- function(ecs,es,geneID,fitExpToVar="condition"){
    temp <- cbind.data.frame(get.expression.data(ecs,es,geneID),   get.expression.data(ecs,es,geneID,vst.xform=FALSE),
@@ -531,20 +545,24 @@ getEffectsForPlotting <- function( coefs, groupingVar = "condition", averageOutE
    fittedValues
 }
 
-fitAndArrangeCoefs <- function( ecs, geneID, frm = count ~ condition * countbin, balanceFeatures = TRUE )
+fitAndArrangeCoefs <- function( ecs, geneID, frm = count ~ condition * countbin, balanceFeatures = TRUE, set.na.dispersions = NULL, tol = NULL)
 {
+   if(is.null(tol)) tol <- 1e-6
    mf <- modelFrameForGene( ecs, geneID )
+   if(! is.null(set.na.dispersions))  mf$dispersion <- ifelse(is.na(mf$dispersion), set.na.dispersions, mf$dispersion);
+   #
    if( length(levels(mf$countbin)) <= 1 )
       return( NULL )
    mm <- model.matrix( frm, mf )
-   fit <- try( glmnb.fit(mm, mf$count, dispersion=mf$dispersion, offset=log(mf$sizeFactor)), silent=TRUE)
+   fit <- try( glmnb.fit(mm, mf$count, dispersion=mf$dispersion, offset=log(mf$sizeFactor), tol = tol), silent=TRUE)
    if( is( fit, "try-error" ) )
       return( NULL )
    coefs <- arrangeCoefs( frm, mf, mm, fit )
-   if( balanceFeatures ) 
-      balanceFeatures( coefs, tapply( mf$dispersion, mf$countbin, `[`, 1 ) )
-   else
-      coefs
+   if( balanceFeatures ) {
+      return(list(fit = fit, coefs = balanceFeatures( coefs, tapply( mf$dispersion, mf$countbin, `[`, 1 ) )));
+   } else {
+      return(list(fit = fit, coefs = coefs));
+   }
 }
 
 
@@ -552,8 +570,9 @@ fitAndArrangeCoefs <- function( ecs, geneID, frm = count ~ condition * countbin,
 ### Internal Calc Functions:
 
 
-getAllJunctionSeqCountVectors <- function( ecs,  use.alternate.method = TRUE, nCores = 1 ) {
+getAllJunctionSeqCountVectors <- function( ecs, method.countVectors = c("geneLevelCounts","sumOfAllBinsForGene","sumOfAllBinsOfSameTypeForGene"), nCores = 1 ) {
    stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
+   method.countVectors <- match.arg(method.countVectors);
    gct <- ecs@geneCountData;
    
    myApply <- getMyApply(nCores);
@@ -561,14 +580,37 @@ getAllJunctionSeqCountVectors <- function( ecs,  use.alternate.method = TRUE, nC
    message("    getAllJunctionSeqCountVectors: dim(counts) = ",paste(dim(counts(ecs)),  sep=",",collapse=",")  , " (",date(),")" );
    message("    getAllJunctionSeqCountVectors: dim(gct) = ",paste(dim(gct),sep=",",collapse=",") );
    
-   if(use.alternate.method){
+   if(method.countVectors == "geneLevelCounts"){
+      
+      ##out.list <- myApply(1:nrow(fData(ecs)), function(i){
+      ##  geneID <- geneIDs(ecs)[i];
+      ##  #countbinID <- countbinIDs(ecs)[i];
+      ##  rowWithGeneID <- which(rownames(gct) == geneID);
+      ##  stopifnot( length(rowWithGeneID) == 1 );
+      ##  binCounts <- counts(ecs)[i,];
+      ##  geneCounts <- gct[rowWithGeneID,];
+      ##  return( c(binCounts, geneCounts - binCounts) );
+      ##});
+      ##message("    getAllJunctionSeqCountVectors: out.list generated. length = ",length(out.list), " (",date(),")");
+      ##out <- as.matrix(do.call(rbind, out.list));
+      featureCounts <- counts(ecs);
+      #geneCountVectors <- gct[match(geneIDs(ecs),rownames(gct)),];
+      out <- cbind(featureCounts, gct[match(geneIDs(ecs),rownames(gct)),] - featureCounts);
+      # Remove rare negative numbers, which can occur on extremely low-coverege genes that appear near other genes.
+      out <- apply(out,MARGIN=c(1,2), FUN=max, 0);
+      message("    getAllJunctionSeqCountVectors: out generated. dim = ",paste(dim(out),sep=",",collapse=",")," (",date(),")");
+      
+      rownames(out) <- rownames(fData(ecs));
+      colnames(out) <- c( paste0(colnames(counts(ecs)),"_thisBin")  , paste0(colnames(counts(ecs)),"_gene")  );
+      return(out);
+   } else if(method.countVectors == "sumOfAllBinsForGene") {
       out.list <- myApply(1:nrow(fData(ecs)), function(i){
         geneID <- geneIDs(ecs)[i];
         #countbinID <- countbinIDs(ecs)[i];
-        rowWithGeneID <- which(rownames(gct) == geneID);
-        stopifnot( length(rowWithGeneID) == 1 );
+        rowsWithGeneID <- which(geneIDs(ecs) == geneID);
+        #stopifnot( length(rowsWithGeneID) > 1 );
         binCounts <- counts(ecs)[i,];
-        geneCounts <- gct[rowWithGeneID,];
+        geneCounts <- colSums(counts(ecs)[rowsWithGeneID,, drop=FALSE]);
         return( c(binCounts, geneCounts - binCounts) );
       });
       message("    getAllJunctionSeqCountVectors: out.list generated. length = ",length(out.list), " (",date(),")");
@@ -588,8 +630,12 @@ getAllJunctionSeqCountVectors <- function( ecs,  use.alternate.method = TRUE, nC
       rownames(out) <- rownames(fData(ecs));
       colnames(out) <- c( paste0(colnames(counts(ecs)),"_thisBin")  , paste0(colnames(counts(ecs)),"_gene")  );
       return(out);
+      
+      warning("Fallback (DEXSeq-style) model framework is depreciated and no longer supported!");
+   } else if(method.countVectors == "sumOfAllBinsOfSameTypeForGene"){
+     stop("method.countVectors 'sumOfAllBinsOfSameTypeForGene' is not implemented at this time.");
    } else {
-      stop("Fallback method is depreciated and no longer supported!");
+     stop("ERROR: Impossible State: getAllJunctionSeqCountVectors method.countVectors not recognized.")
    }
 }
 
@@ -675,7 +721,7 @@ modelFrameForGene <- function( ecs, geneID, onlyTestable=FALSE) {
    modelFrame
 }
 
-testFeatureForDJU.fromRow <- function(formula1, ecs, i, modelFrame, mm0, mm1, disp, keepCoefs = ncol(mm1), use.alternate.method = TRUE){
+testFeatureForDJU.fromRow <- function(formula1, ecs, i, modelFrame, mm0, mm1, disp, keepCoefs = ncol(mm1)){
   stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
   geneID <- geneIDs(ecs)[i];
   countbinID <- countbinIDs(ecs)[i];

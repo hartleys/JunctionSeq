@@ -23,7 +23,9 @@
                     count.digits = 1, 
                     includeGeneID = FALSE,
                     includeLocusID = TRUE,
-                    includeGroupID = TRUE)
+                    includeGroupID = TRUE,
+                    output.format = c("BED", "GTF", "GFF3"),
+                    verbose = TRUE)
 
   writeSigBedTrack(file, 
                    jscs, 
@@ -37,7 +39,9 @@
                    FDR.threshold = 0.05, 
                    pval.digits = 4, 
                    includeGeneID = FALSE,
-                   includeLocusID = TRUE)
+                   includeLocusID = TRUE,
+                   output.format = c("BED", "GTF", "GFF3"),
+                   verbose = TRUE)
 
 }
 
@@ -107,5 +111,10 @@
   \item{includeGroupID}{
     Logical. If TRUE, include the ID of the group in the "name" field of each line.
   }
-
+  \item{output.format}{
+    Character string. The format to use.
+  }
+  \item{verbose}{
+    Logical. if TRUE, output debugging/progress information.
+  }
 }

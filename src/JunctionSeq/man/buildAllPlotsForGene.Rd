@@ -15,34 +15,36 @@
 
 buildAllPlotsForGene(geneID, jscs,
                      outfile.prefix = "./", 
-                     use.plotting.device = "png", 
+                     use.plotting.device = c("png","CairoPNG","svg","tiff","cairo_ps","custom"),
+                     sequencing.type = c("paired-end","single-end"),
                      use.vst=FALSE, use.log = TRUE, truncateBelowOne = TRUE,
                      exon.rescale.factor = 0.3,
                      with.TX=TRUE,without.TX=TRUE,
                      expr.plot=TRUE,normCounts.plot=TRUE,
-                     rExpr.plot=FALSE,rawCounts.plot=FALSE,
+                     rExpr.plot=TRUE,rawCounts.plot=FALSE,
                      colorRed.FDR.threshold = 0.01, 
                      color=NULL,
-                     plot.gene.level.expression = NULL,
+                     plot.gene.level.expression = TRUE,
                      plot.exon.results, plot.junction.results, plot.novel.junction.results,
                      plot.untestable.results = FALSE,
                      plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
-                     par.cex = 1, anno.cex.text = 1,
+                     par.cex = 1, name.files.with.geneID = TRUE,
+                     anno.cex.text = 1,
                      anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
                      drawCoordinates = TRUE,
                      yAxisLabels.inExponentialForm = FALSE,
                      show.strand.arrows = 10, arrows.length = 0.125,
-                     graph.margins = c(2,3,3,2),
-                     base.plot.height = 22.222, base.plot.width = 22.222, 
+                     graph.margins = c(2, 3, 3, 3),
+                     base.plot.height = 12, base.plot.width = 12, 
                      base.plot.units = "in", 
-                     GENE.annotation.relative.height = 0.2, TX.annotation.relative.height = 0.025,
+                     GENE.annotation.relative.height = 0.2, TX.annotation.relative.height = 0.05,
                      autoscale.height.to.fit.TX.annotation = TRUE,
                      autoscale.width.to.fit.bins = 35,
                      plotting.device.params = list(),
                      condition.legend.text, include.TX.names = TRUE,
                      draw.start.end.sites = TRUE,
                      openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
-                     verbose=TRUE,  ...)
+                     verbose=TRUE, debug.mode = FALSE,  ...)
 
 }
 \arguments{
@@ -64,6 +66,9 @@ buildAllPlotsForGene(geneID, jscs,
   }
 
   \item{use.plotting.device}{The plotting device to use.}
+  \item{sequencing.type}{
+    The type of sequencing used, either "paired-end" or "single-end". This only affects the labelling of the y-axis, and does not affect the actual plots in any way.
+  }
   \item{use.vst}{Logical. If \code{TRUE}, all plots will be scaled via a variance stabilizing transform.}
   \item{use.log}{Logical. If \code{TRUE}, all plots will be log-scaled.}
   \item{truncateBelowOne}{Logical. If \code{TRUE}, all values below 1 will be linear-scaled. If use.log is FALSE, this does nothing.}
@@ -81,7 +86,7 @@ buildAllPlotsForGene(geneID, jscs,
   
   \item{plot.gene.level.expression}{
     Logical value. If \code{TRUE}, gene-level expression (when applicable) will be plotted beside the sub-element-specific expression in a small seperate plotting box. 
-    The gene-level expression will NOT be plotted for the "relative expression" plots (since you can't meaningfully plot gene-level expression relative to itself).
+    For the "relative expression" plots the simple mean normalized expression will be plotted (since it doesn't make sense to plot something relative to itself).
   }
   \item{plot.exon.results}{Logical. If \code{TRUE}, plot results for exons. By default everything that was tested will be plotted.}
   \item{plot.junction.results}{Logical. If \code{TRUE}, plot results for splice junctions. By default everything that was tested will be plotted.}
@@ -94,6 +99,8 @@ buildAllPlotsForGene(geneID, jscs,
   \item{par.cex}{
      The base cex value to be passed to par() immediately before all plots are created. See \code{\link{par}}.
   }
+  \item{name.files.with.geneID}{Whether to use the geneID (rather than gene name) for naming the files.}
+
   \item{anno.cex.text}{
      The font size multiplier for most annotation text. This will be multiplied by a factor of the par.cex value.
      More specifically: The cex value to be passed to all function calls that take \link{graphical parameters}. See \code{\link{par}}.
@@ -160,5 +167,7 @@ buildAllPlotsForGene(geneID, jscs,
   \item{closePlottingDeviceFunc}{An R function. This must be used in conjunction with openPlottingDeviceFunc. For most devices, you can just use the function "dev.off". For advanced users only.}
     
   \item{verbose}{if \code{TRUE}, send debugging and progress messages to the console / stdout.}
+  \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
+  
   \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}
 }

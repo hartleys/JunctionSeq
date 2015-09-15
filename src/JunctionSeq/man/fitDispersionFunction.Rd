@@ -14,10 +14,12 @@
    analyses.
 }
 \usage{
-  fitDispersionFunction(jscs, fitType = c("parametric","local","mean"), 
-                        fitDispersionsForExonsAndJunctionsSeparately = TRUE, 
-                        advancedMode = TRUE,
-                        verbose = TRUE);
+fitDispersionFunction(jscs , 
+    method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
+    method.dispFit = c("parametric", "local", "mean"), 
+    method.dispFinal = c("shrink","max","fitted","noShare"),
+    fitDispersionsForExonsAndJunctionsSeparately = TRUE, 
+    verbose = TRUE)
 }
 \arguments{
   \item{jscs}{
@@ -26,16 +28,29 @@
     set, usually using functions \code{\link{estimateSizeFactors}} and 
     \code{\link{estimateJunctionSeqDispersions}}.
   }
-  \item{fitType}{
-    Which dispersion fit method to use. Not that currently only the parametric (default) method is supported. The other methods are currently nonfunctional and will be added in future releases.
+  \item{method.GLM}{
+    Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+    
+    The default is "advanced" or, equivalently, "DESeq2-style". This uses the 
+    dispersion estimation methodology used by DESeq2 and DEXSeq v1.12.0 or higher to generate the initial (feature-specific) dispersion estimates. The alternative 
+    method is "simpleML" or, equivalently, "DEXSeq-v1.8.0-style". This uses a simpler maximum-likelihood-based method used by the original DESeq and
+    by DEXSeq v1.8.0 or less.
+  }
+  \item{method.dispFit}{
+    Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+    
+    Determines the method used to generated "fitted" dispersion estimates. One of "parametric" (the default), "local", or "mean". See the DESeq2 documentation for more information.
+  }
+  \item{method.dispFinal}{
+    Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+
+    Determines the method used to arrive at a "final" dispersion estimate. The default, "shrink" uses the maximum a posteriori estimate, combining information from both
+    the fitted and feature-specific dispersion estimates. This is the method used by DESeq2 and DEXSeq v1.12.0 and above.
   }
   \item{fitDispersionsForExonsAndJunctionsSeparately}{
-    When running a "hybrid" analysis in which both exons and splice junctions are being tested simultaniously, this parameter
+    When running a "junctionsAndExons" type analysis in which both exons and splice junctions are being tested simultaniously, this parameter
     determines whether a single fitted dispersion model should be fitted for both exons and splice junctions, or if separate 
     fitted dispersions should be calculated for each. By default the dispersions are run separately.
-  }
-  \item{advancedMode}{
-    Switches between the current default method and an older variant.
   }
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
 }

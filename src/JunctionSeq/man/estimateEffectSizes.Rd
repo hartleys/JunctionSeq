@@ -16,9 +16,11 @@
 }
 \usage{
    estimateEffectSizes(jscs, 
+        method.expressionEstimation = c("feature-vs-gene","feature-vs-otherFeatures"),
         effect.formula = formula(~ condition + countbin + condition : countbin),
         geneLevel.formula = formula(~ condition),
         calculate.geneLevel.expression = TRUE,
+        keep.estimation.fit = FALSE,
         nCores=1, 
         dispColumn="dispersion",
         verbose = TRUE)}
@@ -30,6 +32,19 @@
     \code{\link{estimateJunctionSeqDispersions}}.
   }
   
+  \item{method.expressionEstimation}{
+    Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+
+    Determines the methodology used to generate feature expression estimates and relative fold changes. By default each feature is modeled separately. Under the default count-vector method,
+    this means that the resultant relative fold changes will be a measure of the relative fold change between the feature and the gene as a whole.
+    
+    Alternatively, the "feature-vs-otherFeatures" method builds a large, complex model containing all features belonging to the gene. The coefficients for each feature
+    are then "balanced" using linear contrasts weighted by the inverse of their variance. In general we have found this method to produce very similar results but 
+    less efficiently and less consistently. Additionally, this alternative method "multi-counts" reads that cover more than one feature. This can result in over-weighting
+    of exonic regions with a large number of annotated variations in a small genomic area, as each individual read or read-pair may be counted many times in the model.
+    
+    Under the default option, no read or read-pair is ever counted more than once in a given model.
+  }
   \item{effect.formula}{
     For advanced users. The base formula for the model used for effect size estimation.
     
@@ -42,6 +57,9 @@
   }
   \item{calculate.geneLevel.expression}{
     Logical value. If \code{TRUE}, gene-level expression will be estimated using the same maximum-likelihood method used in other analyses. Default: \code{TRUE}.
+  }
+  \item{keep.estimation.fit}{
+    Logical value. If \code{TRUE}, save the complete model fits for every gene. This will require a lot of memory, but may be useful for statistical diagnostics. Default: \code{FALSE}.
   }
   
   \item{nCores}{

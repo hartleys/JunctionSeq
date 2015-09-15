@@ -14,12 +14,14 @@
    analyses.
 }
 \usage{
-  estimateJunctionSeqDispersions(jscs, 
-          test.formula1 = formula(~ sample + countbin + condition : countbin), 
-          meanCountTestableThreshold=7.5, nCores=1,
-          test.aggregated.genes = FALSE,
-          use.alternate.method  = TRUE,
-          verbose = TRUE);
+estimateJunctionSeqDispersions( jscs, 
+        method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
+        test.formula1 = formula(~ sample + countbin + condition : countbin),
+        meanCountTestableThreshold="auto", nCores=1, 
+        use.multigene.aggregates = FALSE, 
+        verbose = TRUE)
+        
+
 }
 \arguments{
   \item{jscs}{
@@ -27,6 +29,14 @@
     \code{\link{readJunctionSeqCounts}}. Size factors must be
     set, usually using functions \code{\link{estimateSizeFactors}} and 
     \code{\link{estimateJunctionSeqDispersions}}.
+  }
+  \item{method.GLM}{
+    Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+    
+    The default is "advanced" or, equivalently, "DESeq2-style". This uses the 
+    dispersion estimation methodology used by DESeq2 and DEXSeq v1.12.0 or higher to generate the initial (feature-specific) dispersion estimates. The alternative 
+    method is "simpleML" or, equivalently, "DEXSeq-v1.8.0-style". This uses a simpler maximum-likelihood-based method used by the original DESeq and
+    by DEXSeq v1.8.0 or less.
   }
   \item{test.formula1}{
     The model formula. Note that this formula is different from the 
@@ -40,15 +50,14 @@
     "condition".
   }
   \item{meanCountTestableThreshold}{
-    Numeric value. Features with a total mean normalized count of less than this value will be excluded from the analyses.
+    "auto" or Numeric value. Features with a total mean normalized count of less than this value will be excluded from the analyses.
+    If left as the default ("auto"), then the cutoff threshold will be determined automatically using the DESeq2 independent filtering method.
   }
   \item{nCores}{
     The number of cores to use. Note that multicore functionality may not be available on all platforms.
   }
-  \item{test.aggregated.genes}{Logical value. Whether to attempt to test "aggregate genes" which consist of multiple genes that overlap with one another. Note that inclusion of aggregate genes may affect the false discovery rate, since by their very nature aggregate genes will often show differential splice junction usage, as the two genes will often be regulated independently.}
-  \item{use.alternate.method}{
-    ADVANCED USERS ONLY: Logical value. Determines which model framework to use.
-  }
+  \item{use.multigene.aggregates}{Logical value. Whether to attempt to test "aggregate genes" which consist of multiple genes that overlap with one another. Note that inclusion of aggregate genes may affect the false discovery rate, since by their very nature aggregate genes will often show differential splice junction usage, as the two genes will often be regulated independently.}
+
   \item{verbose}{A boolean flag indicating whether or not to print progress information during execution. (Default=FALSE)}
 
 }

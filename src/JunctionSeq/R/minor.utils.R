@@ -1,4 +1,31 @@
 
+simpleReportMem <- function(){
+     if(require("pryr")){
+       message("Mem used:");
+       print(pryr::mem_used());
+     }
+}
+
+
+reportMem <- function(jscs){
+     if(require("pryr")){
+       message("     Total mem_used(): ",pryr::mem_used());
+     }
+     
+     #message("     object.size(jscs): ",format(object.size(jscs),units="auto"));
+      message("     Memory Usage:");
+      message("        jscs: ", format(object.size(jscs), units="auto"));
+      message("        fData(jscs): ",format(object.size(fData(jscs)),"auto"));
+      message("        pData(jscs): ",format(object.size(pData(jscs)),"auto"));
+      
+      message("        jscs@fittedMu: ",format(object.size(jscs@fittedMu),"auto"));
+      message("        counts(jscs): ", format(object.size(counts(jscs)), units="auto"));
+      message("        jscs@geneCountData: ", format(object.size(jscs@geneCountData), units="auto"));
+      message("        jscs@countVectors: ", format(object.size(jscs@countVectors), units="auto"));      
+      message("        jscs@flatGffData: ", format(object.size(jscs@flatGffData), units="auto"));
+      message("        jscs@DESeqDataSet : ", format(object.size(jscs@DESeqDataSet), units="auto"));
+}
+
 make.progress.report.fcn <- function(maxVal, numReports, reportStringPrefix){
   reportIndices <- pretty(c(1,maxVal), numReports);
   return(
@@ -42,6 +69,11 @@ device.limits <- function(){
 
     out <- c(x.out,y.out);
     return(out);
+}
+
+#Helper function to remember what par("cxy") does:
+get.character.dim <- function(){
+  return(par("cxy"));
 }
 
 ################################
@@ -111,6 +143,15 @@ fit.vert <- function(title.text, default.cex = par("cex.ylab")){
   }
 }
 
+shrink.character.vector <- function(strs, curr.cex, max.width){
+  curr.width <- max(strwidth(strs, cex = curr.cex))
+  while(curr.width > max.width){
+    curr.cex <- curr.cex * 0.9;
+    curr.width <- max(strwidth(strs, cex = curr.cex));
+  }
+  return(curr.cex);
+}
+
 fit.character.vector <- function(strs, min.width = 0.6, max.width = 0.95, max.width.per.char = 0.15){
    curr.cex <- 1;
    return(fit.character.vector.helper(strs, curr.cex = curr.cex, min.width = min.width, max.width = max.width, max.width.per.char = max.width.per.char));
@@ -143,7 +184,24 @@ fit.character.vector.helper <- function(strs, curr.cex, min.width, max.width, ma
 ################################################
 
 
-SUPPORTED_PLOTTING_DEVICE_LIST = c("CairoPNG","png","svg","tiff","cairo_ps");
+SUPPORTED_PLOTTING_DEVICE_LIST = c("png","x11","current","CairoPNG","svg","tiff","cairo_ps");
+
+getPlottingDeviceFileExtension <- function(d = c("png","x11","current","CairoPNG","svg","tiff","cairo_ps") ){
+  use.plotting.device <- match.arg(d);
+  if(d == "png" | d == "CairoPNG"){
+    return(".png");
+  } else if(d == "x11" | d == "current"){
+    return("");
+  } else if(d == "svg"){
+    return(".svg");
+  } else if(d == "tiff"){
+    return(".tiff");
+  } else if(d == "cairo_ps"){
+    return(".ps");
+  } else {
+    return("");
+  }
+}
 
 strStartsWith <- function(s, prefix){
   substr(s,1,nchar(prefix)) == prefix;
@@ -164,32 +222,54 @@ overmerge.list <- function(list.old,list.new){
 }
 
 
-getPlottingDeviceFunc <- function(use.plotting.device, 
+getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current","CairoPNG","svg","tiff","cairo_ps"), 
                                   base.plot.height, 
                                   base.plot.width, 
                                   base.plot.units = "px", 
                                   plotting.device.params = list()){
-   
-   if(use.plotting.device == "RSvgDevice"){
-     package.found <- suppressMessages(suppressWarnings(require("RSvgDevice")));
-     warning("RSvgDevice is NOT CURRENTLY SUPPORTED. Errors will likely follow.");
-     if(package.found){
-        plotdevfunc <- function(filename, heightMult, widthMult){
-          plotting.device.params[["height"]] <- heightMult * base.plot.height;
-          plotting.device.params[["width"]] <- widthMult * base.plot.width;
-          plotting.device.params[["file"]] <- paste0(filename,".png");
-          
-          legal.params <- c("file", "height", "width", "bg", "fg", "onefile", "xmlHeader");
-          plotting.device.params <- plotting.device.params[ names(plotting.device.params) %in% legal.params ]
-          
-          do.call(devSVG,plotting.device.params);
-        }
-        closefunc <- function(){
-          dev.off();
-        }
-     } else {
-       stop("Package RSvgDevice not found! Install package RSvgDevice or use a different plotting device!");
-     }
+
+   use.plotting.device <- match.arg(use.plotting.device);
+   if(use.plotting.device == "x11"){
+       plotting.device.params <- overmerge.list(list(pointsize = 12), plotting.device.params);
+       if(base.plot.units == "px"){ unitmod <- 150; 
+       } else if(base.plot.units == "in"){ unitmod <- 1; 
+       } else { stop("the x11 device only supports inches.") }
+       
+       plotdevfunc <- function(filename, heightMult, widthMult){
+         plotting.device.params[["height"]] <- heightMult * base.plot.height / unitmod;
+         plotting.device.params[["width"]] <- widthMult * base.plot.width / unitmod;
+         do.call(x11,plotting.device.params);
+       }
+       closefunc <- function(){
+         #do nothing
+       }
+   } else if(use.plotting.device == "current"){
+       plotdevfunc <- function(filename, heightMult, widthMult){
+         #do nothing
+       }
+       closefunc <- function(){
+         #do nothing
+       }
+#   } else if(use.plotting.device == "RSvgDevice"){
+#     package.found <- suppressMessages(suppressWarnings(require("RSvgDevice")));
+#     warning("RSvgDevice is NOT CURRENTLY SUPPORTED. Errors will likely follow.");
+#     if(package.found){
+#        plotdevfunc <- function(filename, heightMult, widthMult){
+#          plotting.device.params[["height"]] <- heightMult * base.plot.height;
+#          plotting.device.params[["width"]] <- widthMult * base.plot.width;
+#          plotting.device.params[["file"]] <- paste0(filename,".png");
+#          
+#          legal.params <- c("file", "height", "width", "bg", "fg", "onefile", "xmlHeader");
+#          plotting.device.params <- plotting.device.params[ names(plotting.device.params) %in% legal.params ]
+#          
+#          do.call(RSvgDevice::devSVG,plotting.device.params);
+#        }
+#        closefunc <- function(){
+#          dev.off();
+#        }
+#     } else {
+#       stop("Package RSvgDevice not found! Install package RSvgDevice or use a different plotting device!");
+#     }
    } else if(use.plotting.device == "CairoPNG"){
      plotting.device.params <- overmerge.list(list(pointsize = 18, res = 150), plotting.device.params);
      
@@ -200,7 +280,7 @@ getPlottingDeviceFunc <- function(use.plotting.device,
          plotting.device.params[["width"]] <- widthMult * base.plot.width;
          plotting.device.params[["units"]] <- base.plot.units;
          plotting.device.params[["filename"]] <- paste0(filename,".png");
-         do.call(CairoPNG,plotting.device.params);
+         do.call(Cairo::CairoPNG,plotting.device.params);
        }
        closefunc <- function(){
          dev.off();
@@ -220,7 +300,7 @@ getPlottingDeviceFunc <- function(use.plotting.device,
          plotting.device.params[["width"]] <- widthMult * base.plot.width / unitmod;
          #plotting.device.params[["units"]] <- base.plot.units;
          plotting.device.params[["file"]] <- paste0(filename,".svg");
-         do.call(CairoSVG,plotting.device.params);
+         do.call(Cairo::CairoSVG,plotting.device.params);
        }
        closefunc <- function(){
          dev.off();
@@ -304,7 +384,8 @@ getPlottingDeviceFunc <- function(use.plotting.device,
 getMyApply <- function(nCores = 1, verbose = TRUE, allowWindowsMulticore = TRUE){
    if(nCores > 1){
      multicore.package.found <- suppressMessages(suppressWarnings(require("parallel")));
-     BiocParallel.package.found <- suppressMessages(suppressWarnings(require("BiocParallel")));
+     #The older version was "enhanced" by BiocParallel. It is now mandatory as of JunctionSeq v0.3.72.
+     BiocParallel.package.found <- TRUE; #suppressMessages(suppressWarnings(require("BiocParallel")));
     
      if( Sys.info()[['sysname']] == 'Windows' ){
        message(">>> NOTE: Microsoft windows detected. As of BiocParallel v1.2.0 and R 3.1.1, multicore forking is not supported on windows. ");

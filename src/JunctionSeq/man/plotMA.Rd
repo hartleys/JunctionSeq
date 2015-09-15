@@ -21,7 +21,7 @@ plotMA(jscs,
        show.labels = TRUE,
        par.cex = 1, points.cex = 1, text.cex = 1,
        lines.cex = 8,
-       anno.lwd = 2,
+       anno.lwd = 2, mar = c(4.1,4.1,3.1,1.1),
        miniTicks = TRUE, ...)
 }
 \arguments{
@@ -82,6 +82,9 @@ plotMA(jscs,
   }
   \item{anno.lwd}{
     The lwd value to be passed to \code{\link{lines}}, \code{\link{box}}, \code{\link{axis}}, and similar.
+  }
+  \item{mar}{
+    The margin sizes, expressed in lines. see \code{link{par}}.
   }
   \item{miniTicks}{
     Logical. If TRUE, then include "mini tick marks" on the x and y axes.

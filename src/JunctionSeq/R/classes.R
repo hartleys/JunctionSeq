@@ -3,6 +3,8 @@ setClass( "JunctionSeqCountSet",
    representation = representation(
       designColumns = "character",
       dispFitCoefs = "numeric",
+      fittedMu = "matrix",
+      dispFunctionType = "list",
       dispFunction = "function",
       dispFunctionJct  = "function",
       dispFunctionExon = "function",
@@ -10,19 +12,42 @@ setClass( "JunctionSeqCountSet",
       annotationFile = "character",
       geneCountData = "matrix",
       countVectors = "matrix",
+      altSizeFactors = "data.frame",
       plottingEstimates = "list",
       plottingEstimatesVST = "list",
       geneLevelPlottingEstimates = "list",
-      modelFitForHypothesisTest = "list",
-      modelFitForEffectSize = "list",
+      modelFitForHypothesisTest = "list", #Currently unused.
+      modelFitForEffectSize = "list", #Currently unused.
       flatGffData = "data.frame",
+      flatGffGeneData = "list",
       analysisType = "character",
+      DESeqDataSet = "DESeqDataSet",
       modelCoefficientsSample    = "list", #Currently unused.
       modelCoefficientsGene      = "list"  #Currently unused.
    ),
    prototype = prototype( new( "VersionedBiobase",
       versions = c( classVersion("eSet"), JunctionSeqCountSet = "0.0.5" ) ) )
 )
+
+#setMethod("show","JunctionSeqCountSet",
+#   function(object){
+#      cat("QoRTs_QC_Results object:\n");
+#      
+#      cat("Memory Usage:");
+#      cat("object: ", format(object.size(object), units="Mb");
+#      cat("fData(object): ",format(object.size(fData(object)),"Mb");
+#      cat("pData(object): ",format(object.size(pData(object)),"Mb");
+#      
+#      cat("object@fittedMu: ",format(object.size(object@fittedMu),"Mb");
+#      cat("counts(object): ", format(object.size(counts(object)), units="Mb");
+#      cat("object@geneCountData: ", format(object.size(object@geneCountData), units="Mb");
+#      cat("object@countVectors: ", format(object.size(object@countVectors), units="Mb");      
+#      cat("object@flatGffData: ", format(object.size(object@flatGffData), units="Mb");
+#
+#      #Add more printing stuff here?
+#   }
+#);
+
 
 #save.JunctionSeqCountSet <- function(jscs){
 #  
@@ -32,6 +57,23 @@ setClass( "JunctionSeqCountSet",
 #  
 #}
 
+makeDESeqDataSetFromJSCS <- function(jscs, test.formula1){
+  countData <- jscs@countVectors;
+  colData <- rbind.data.frame(
+                              cbind.data.frame(data.frame(sample = rownames(pData(jscs))) , pData(jscs) ),
+                              cbind.data.frame(data.frame(sample = rownames(pData(jscs))) , pData(jscs) )
+  );
+  colData$countbin <- factor(c(  rep("this",ncol(countData)/2)  ,   rep("others",ncol(countData)/2)   ), levels = c("this","others"));
+  #print("colData:");
+  #print(colData);
+  for(i in 1:ncol(colData)){
+    colData[[i]] <- factor(colData[[i]]);
+  }
+  colData <- DataFrame(colData);
+  
+  jscs@DESeqDataSet <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = test.formula1);
+  return(jscs);
+}
 
 getModelFit <- function(jscs, featureID, geneID, countbinID, modelFitType = c("fitH0","fitH1","fitEffect")){
   if(is.null(featureID)){
@@ -119,9 +161,20 @@ newJunctionSeqCountSet <- function( countData, geneCountData, design, geneIDs, c
          strand = rep( NA_character_, nrow( countData ) ) ) }
 
    featureData$testable <- rep( NA_real_, nrow( countData ) )
-   varMetadata( featureData )[ "testable", "labelDescription" ] <- "slot indicating if an feature should be considered in the test"
+   varMetadata( featureData )[ "testable", "labelDescription" ] <- "slot indicating if an feature should be considered in the test."
+   featureData$status <- rep( "TBD", nrow( countData ) )
+   
+   featureData$allZero <- rep( NA_real_, nrow( countData ) )
+   varMetadata( featureData )[ "allZero", "labelDescription" ] <- "slot indicating if the feature count is zero across all samples."
+
+      
    featureData$status <- rep( "TBD", nrow( countData ) )
    varMetadata( featureData )[ "status", "labelDescription" ] <- "Feature status (either 'OK' or the reason that the feature is untestable)."
+   
+   featureData$baseMean <- rep( NA_real_, nrow( countData ) )
+   varMetadata( featureData )[ "baseMean", "labelDescription" ] <- "Mean normalized counts across all samples."
+   featureData$baseVar <- rep( NA_real_, nrow( countData ) )
+   varMetadata( featureData )[ "baseVar", "labelDescription" ] <- "Simple variance of normalized counts across all samples."
    
    featureData$dispBeforeSharing <- rep( NA_real_, nrow( countData ) )
    varMetadata( featureData )[ "dispBeforeSharing", "labelDescription" ] <- "feature dispersion (Cox-Reid estimate)"
@@ -138,9 +191,7 @@ newJunctionSeqCountSet <- function( countData, geneCountData, design, geneIDs, c
    featureData$padjust <- rep( NA_real_, nrow( countData ) )
    varMetadata( featureData )[ "padjust", "labelDescription" ] <- "BH adjusted p-value"
    
-   featureData$status <- rep( "TBD", nrow( countData ) )
-   varMetadata( featureData )[ "status", "labelDescription" ] <- "Feature status (either 'OK' or the reason that the feature is untestable)."
-   
+
    featureIntervals <- as.data.frame( featureIntervals )
 
    # in case it was a GRanges object before, change the colname:
@@ -167,8 +218,9 @@ newJunctionSeqCountSet <- function( countData, geneCountData, design, geneIDs, c
    varMetadata( featureData )[ "strand", "labelDescription" ] <- "strand of feature"
    varMetadata( featureData )[ "transcripts", "labelDescription" ] <- "transcripts in which this feature is contained"
 
-   featureData$meanBase <- rep( NA_real_, nrow( countData ) );
-   varMetadata( featureData )[ "meanBase", "labelDescription" ] <- "The mean normalized counts across all samples.";
+   featureData$baseMean <- rep( NA_real_, nrow( countData ) );
+   varMetadata( featureData )[ "baseMean", "labelDescription" ] <- "The mean normalized counts across all samples.";
+   
 
    if( is( design, "data.frame" ) || is( design, "AnnotatedDataFrame" ) ) {
       stopifnot( nrow( design ) == ncol( countData ) )
@@ -269,6 +321,7 @@ setValidity( "JunctionSeqCountSet", function( object ) {
    TRUE
 } )
 
+
 setMethod("counts", signature(object="JunctionSeqCountSet"),
   function( object, normalized=FALSE) {
     cds <- object
@@ -282,7 +335,6 @@ setMethod("counts", signature(object="JunctionSeqCountSet"),
       }
    }
 })
-
 setReplaceMethod("counts", signature(object="JunctionSeqCountSet", value="matrix"),
   function( object, value ) {
    cds <- object
@@ -307,7 +359,6 @@ setReplaceMethod("sizeFactors",  signature(object="JunctionSeqCountSet", value="
    cds
 })
 
-
 setMethod("design", signature(object="JunctionSeqCountSet"),
    function( object, drop=TRUE, asAnnotatedDataFrame=FALSE ) {
       cds <- object
@@ -321,7 +372,6 @@ setMethod("design", signature(object="JunctionSeqCountSet"),
          rownames( ans ) <- colnames( counts(cds) )
       ans
 })
-
 setReplaceMethod("design", signature(object="JunctionSeqCountSet"),
       function( object, value ) {
       cds <- object
@@ -400,7 +450,7 @@ DEUresultTable <- function(ecs)
       dispersion=featureData(ecs)$dispersion,
       pvalue=fData(ecs)$pvalue,
       padjust=fData(ecs)$padjust,
-      meanBase=rowMeans(counts(ecs, normalized=TRUE)))
+      baseMean=rowMeans(counts(ecs, normalized=TRUE)))
 
    extracol <- regexpr("log2fold", colnames(fData(ecs)))==1
    if(any(extracol)){

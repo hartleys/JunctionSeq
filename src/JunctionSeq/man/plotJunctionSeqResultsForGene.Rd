@@ -13,6 +13,7 @@
 plotJunctionSeqResultsForGene(geneID, jscs, 
                               colorRed.FDR.threshold=0.05,
                               plot.type = "expr", 
+                              sequencing.type = c("paired-end","single-end"),
                               displayTranscripts = FALSE,
                               color = NULL, 
                               use.vst = FALSE, use.log = TRUE,truncateBelowOne = TRUE,
@@ -21,20 +22,22 @@ plotJunctionSeqResultsForGene(geneID, jscs,
                               plot.lwd = 3,axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
                               par.cex = 1, anno.cex.text = 1,
                               anno.cex.axis=anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
+                              cex.arrows = 1,
                               fit.countbin.names = TRUE,
-                              plot.gene.level.expression = NULL,
+                              plot.gene.level.expression = TRUE,
                               plot.exon.results, plot.junction.results, plot.novel.junction.results, 
                               plot.untestable.results = FALSE, draw.untestable.annotation = TRUE,
                               show.strand.arrows = 10, arrows.length = 0.125,
                               sort.features = TRUE,
                               drawCoordinates = TRUE,
                               yAxisLabels.inExponentialForm = FALSE,
-                              title.main=NULL, title.ylab=NULL,
-                              graph.margins = c(2,3,3,2),
+                              title.main, title.ylab, title.ylab.right, 
+                              graph.margins = c(2, 3.5, 3, 3),
                               GENE.annotation.relative.height = 0.2,
-                              TX.annotation.relative.height = 0.025,
+                              TX.annotation.relative.height = 0.05,
                               condition.legend.text = NULL, include.TX.names = TRUE, 
                               draw.start.end.sites = TRUE,
+                              label.chromosome = TRUE,
                               verbose=TRUE, debug.mode = FALSE,
                               ...)
 }
@@ -57,6 +60,10 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   \item{plot.type}{
     Character string. Determines which plot to produce. Options are: "expr" for "expression", or mean normalized read counts by experimental condition, "rExpr" for 
     "relative" expression relative to gene-level expression, "normCounts" for normalized read counts for each sample, and "rawCounts" for raw read counts for each sample.
+  }
+  
+  \item{sequencing.type}{
+    The type of sequencing used, either "paired-end" or "single-end". This only affects the labelling of the y-axis, and does not affect the actual plots in any way.
   }
   
   \item{displayTranscripts}{Logical. If true, then the full set of annotated transcripts will be displayed below the expression plot (to a maximum of 42 different TX).}
@@ -86,11 +93,16 @@ plotJunctionSeqResultsForGene(geneID, jscs,
      The font size multiplier for the main title text. This will be multiplied by a factor of the par.cex value.
      More specifically: The cex.main value to be passed to all function calls that take \link{graphical parameters}. See \code{\link{par}}.
   }
+  \item{cex.arrows}{
+     The font size for the strand-direction arrows in the gene annotation region. 
+     The arrows will be sized to equal the dimensions of the letter "M" at this font size.
+  }
+  
   \item{fit.countbin.names}{Logical. If \code{TRUE}, then splice-junction-locus labels should be rescaled to fit in whatever horizontal space is available.}
   
   \item{plot.gene.level.expression}{
     Logical value. If \code{TRUE}, gene-level expression (when applicable) will be plotted beside the sub-element-specific expression in a small seperate plotting box. 
-    The gene-level expression will NOT be plotted for the "relative expression" plots (since you can't meaningfully plot gene-level expression relative to itself).
+    For the "relative expression" plots the simple mean normalized expression will be plotted (since it doesn't make sense to plot something relative to itself).
   }
   \item{plot.exon.results}{Logical. If \code{TRUE}, plot results for exons. By default everything that was tested will be plotted.}
   \item{plot.junction.results}{Logical. If \code{TRUE}, plot results for splice junctions. By default everything that was tested will be plotted.}
@@ -120,7 +132,10 @@ plotJunctionSeqResultsForGene(geneID, jscs,
     Character string. Overrides the default main plot title.
   }
   \item{title.ylab}{
-    Character string. Overrides the default y-axis label.
+    Character string. Overrides the default y-axis label for the left y-axis.
+  }
+  \item{title.ylab.right}{
+    Character string. Overrides the default y-axis label for the right y-axis.
   }
   \item{condition.legend.text}{
     List or named vector of character strings. This optional parameter can be used to assign labels to each condition variable values. It should be a list or named vector with length equal to \code{factor(condition)}. Each element
@@ -132,6 +147,9 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   }
   \item{draw.start.end.sites}{
     Logical value. If \code{TRUE}, then transcript start/end sites will be marked on the main gene annotation.
+  }
+  \item{label.chromosome}{
+    Logical. If \code{TRUE}, label the chromosome in the left margin.
   }
   
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}

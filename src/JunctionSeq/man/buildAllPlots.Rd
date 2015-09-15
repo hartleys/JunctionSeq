@@ -15,17 +15,18 @@
   buildAllPlots(jscs,
                 outfile.prefix = "./",
                 gene.list = NULL, FDR.threshold = 0.01, 
-                use.plotting.device = "png",
+                use.plotting.device = c("png","CairoPNG","svg","tiff","cairo_ps","custom"),
+                sequencing.type = c("paired-end","single-end"),
                 use.vst=FALSE,use.log = TRUE, truncateBelowOne = TRUE, 
                 exon.rescale.factor = 0.3,
                 subdirectories.by.type = TRUE,
-                ma.plot=FALSE, variance.plot=FALSE,
+                ma.plot=TRUE, variance.plot=TRUE,
                 with.TX=TRUE,without.TX=TRUE,
                 expr.plot=TRUE,normCounts.plot=TRUE,
-                rExpr.plot=FALSE,rawCounts.plot=FALSE,
+                rExpr.plot=TRUE,rawCounts.plot=FALSE,
                 colorRed.FDR.threshold = FDR.threshold, 
                 color=NULL,
-                plot.gene.level.expression = NULL,
+                plot.gene.level.expression = TRUE,
                 plot.exon.results, plot.junction.results, plot.novel.junction.results,
                 plot.untestable.results = FALSE,
                 plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
@@ -33,19 +34,23 @@
                 drawCoordinates = TRUE,
                 yAxisLabels.inExponentialForm = FALSE,
                 show.strand.arrows = 10, arrows.length = 0.125,
-                graph.margins = c(2,3,3,2),
-                base.plot.height = 22.222, base.plot.width = 22.222, 
+                graph.margins = c(2, 3, 3, 3),
+                base.plot.height = 12, base.plot.width = 12, 
                 base.plot.units = "in", 
                 GENE.annotation.relative.height = 0.2,
-                TX.annotation.relative.height = 0.025,
+                TX.annotation.relative.height = 0.05,
                 autoscale.height.to.fit.TX.annotation = TRUE,
-                autoscale.width.to.fit.bins = TRUE,
+                autoscale.width.to.fit.bins = 35,
                 plotting.device.params = list(), 
-                number.plots = TRUE,
+                number.plots = FALSE,
+                name.files.with.geneID = TRUE,
                 condition.legend.text, include.TX.names = TRUE,
                 draw.start.end.sites = TRUE,
                 openPlottingDeviceFunc, closePlottingDeviceFunc,
-                verbose=TRUE, 
+                writeHTMLresults = TRUE,
+                html.cssFile, html.cssLink, html.imgFileExtension,
+                html.plot.height = 90, html.plot.height.units = "vh",
+                verbose=TRUE, debug.mode = FALSE,
                 ...)
 }
 \arguments{
@@ -68,6 +73,9 @@
   }
   
   \item{use.plotting.device}{The plotting device to use.}
+  \item{sequencing.type}{
+    The type of sequencing used, either "paired-end" or "single-end". This only affects the labelling of the y-axis, and does not affect the actual plots in any way.
+  }
   \item{use.vst}{Logical. If \code{TRUE}, all plots will be scaled via a variance stabilizing transform.}
   \item{use.log}{Logical. If \code{TRUE}, all plots will be log-scaled.}
   \item{truncateBelowOne}{Logical. If \code{TRUE}, all values below 1 will be linear-scaled. If use.log is FALSE, this does nothing.}
@@ -94,7 +102,7 @@
   
   \item{plot.gene.level.expression}{
     Logical value. If \code{TRUE}, gene-level expression (when applicable) will be plotted beside the sub-element-specific expression in a small seperate plotting box. 
-    The gene-level expression will NOT be plotted for the "relative expression" plots (since you can't meaningfully plot gene-level expression relative to itself).
+    For the "relative expression" plots the simple mean normalized expression will be plotted (since it doesn't make sense to plot something relative to itself).
   }
   \item{plot.exon.results}{Logical. If \code{TRUE}, plot results for exons. By default everything that was tested will be plotted.}
   \item{plot.junction.results}{Logical. If \code{TRUE}, plot results for splice junctions. By default everything that was tested will be plotted.}
@@ -167,6 +175,7 @@
   
   \item{plotting.device.params}{Additional parameters to be passed to the plotting device.}
   \item{number.plots}{Whether to number each gene in the image names, based on either the order they appear in the input gene.list, or in order of ascending p-values.}
+  \item{name.files.with.geneID}{Whether to use the geneID (rather than gene name) for naming the files.}
 
   \item{draw.start.end.sites}{
     Logical value. If \code{TRUE}, then transcript start/end sites will be marked on the main gene annotation.
@@ -174,8 +183,27 @@
   \item{openPlottingDeviceFunc}{An R function. This option can be used to use plotting devices other than the ones directly supported by JunctionSeq. This must be a function that must have 3 parameters: filename, heightMult, and widthMult. It should open the desired plotting device. For advanced users only.}
   \item{closePlottingDeviceFunc}{An R function. This must be used in conjunction with openPlottingDeviceFunc. For most devices, you can just use the function "dev.off". For advanced users only.}
 
+  \item{writeHTMLresults}{If TRUE, write an index html file to present the results in a navigable way.}
+  
+  \item{html.cssFile}{
+    Optional: specify a css file to use. Copies the entire contents of the supplied file into the page directory and links to it with relative links.
+  }
+  \item{html.cssLink}{
+      Optional: specify an external css file to use. This can be an absolute or relative link.
+  }
+  \item{html.imgFileExtension}{
+      The file extension of the image files. This is only needed if you are using a custom device. If you are using one of the default devices, it will autodetect the file extension.
+  }
+  \item{html.plot.height}{
+      Numeric. The base height of the plot, for the plots without TX annotation. The default is 90.
+  }
+  \item{html.plot.height.units}{
+      The units used for the \code{html.plot.height} parameter. The default is "vh", which sets the height relative to the available max height.
+  }
+
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
+  \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
   
-  
+
   \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}
 }

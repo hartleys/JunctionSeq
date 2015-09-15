@@ -15,13 +15,18 @@
 }
 \usage{
 readJunctionSeqCounts(countfiles, countdata,
-                      samplenames, design, 
-                      flat.gff.file, 
-                      analysis.type = c("junctionsAndExons","junctionsOnly","exonsOnly"),
-                      nCores = 1,
-                      use.exons, use.junctions, 
-                      use.novel.junctions = TRUE, 
-                      verbose = TRUE)
+    samplenames,  design,
+    flat.gff.file, 
+    test.formula1 = formula(~ sample + countbin + condition : countbin),
+    analysis.type = c("junctionsAndExons","junctionsOnly","exonsOnly"),
+    nCores = 1,
+    use.exons, use.junctions, 
+    use.known.junctions = TRUE, use.novel.junctions = TRUE,
+    use.multigene.aggregates = FALSE,
+    gene.names,
+    verbose = TRUE,
+    method.countVectors = c("geneLevelCounts","sumOfAllBinsForGene","sumOfAllBinsOfSameTypeForGene")
+)
 }
 
 \arguments{
@@ -55,6 +60,11 @@ readJunctionSeqCounts(countfiles, countdata,
     attempts to plot the results will crash unless (non-default) options are used to deactivate the 
     plotting of genomic coordinates and transcript information
   }
+  \item{test.formula1}{
+    For advanced users. The base formula for the alternate hypothesis model used in the hypothesis tests.
+    
+    NOTE: the biological condition to be tested must be named "condition".
+  }
   \item{analysis.type}{
     Character string. One of "junctionsAndExons", "junctionsOnly", or "exonsOnly". This parameter determines 
     what type of analysis is to be performed. By default JunctionSeq tests both splice junction 
@@ -75,10 +85,32 @@ readJunctionSeqCounts(countfiles, countdata,
     If \code{TRUE}, then splice junction loci will be included in the analyses and will be tested for 
     differential usage. If this parameter is set, then parameter \code{use.exons} must also be set.
   }
-  \item{use.novel.junctions}{
-    Logical value. If \code{TRUE}, then novel splice junctions will not be filtered out prior to analysis.
+
+  \item{use.known.junctions}{
+    Logical value. If \code{TRUE}, then known splice junctions will not be filtered out prior to analysis. Note: this is overidden if use.junctions is \code{FALSE} or if \code{analysis.type} is set to "exonsOnly".
   }
+  \item{use.novel.junctions}{
+    Logical value. If \code{TRUE}, then novel splice junctions will not be filtered out prior to analysis. Note: this is overidden if use.junctions is \code{FALSE} or if \code{analysis.type} is set to "exonsOnly".
+  }
+  
+  \item{use.multigene.aggregates}{
+    Logical value. Whether to attempt to test "aggregate genes" which consist of multiple genes that overlap with one another. Note that inclusion of aggregate genes may affect the false discovery rate, since by their very nature aggregate genes will often show differential splice junction usage, as the two genes will often be regulated independently.
+  }
+  \item{gene.names}{
+    data.frame. This optional parameter can be used to decoder the gene id's used in the actual analysis into gene symbols or gene names for general readability.
+    This must be a data.frame with two columns of character strings. The first must be the gene ID's, and the second must be the gene names (as you wish them to appear in the plots). Genes
+    are allowed to have multiple gene names, in which case they will be separated by commas.
+    The gene names will be used in the plots and figures.
+  }
+  
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
+  \item{method.countVectors}{
+    Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+
+    Determines the type of count vectors to be used in the model framework. By default JunctionSeq compares the counts for a specific feature against the counts across the rest 
+    of the gene minus the counts for the specific feature. Alternatively, the sum of all other features on the gene can be used, like in DEXSeq. The advantage to the default JunctionSeq
+    behavior is that no read or read-pair is ever counted more than once in any model. Under DEXSeq, some reads may cover many exonic segments and thus be counted repeatedly.
+  }  
 }
 \value{
   A JunctionSeqCountSet.

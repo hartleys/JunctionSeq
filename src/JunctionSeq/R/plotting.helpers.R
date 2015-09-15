@@ -260,7 +260,7 @@ makeGeneLevelAxis <- function(ylimn, geneColumn.TOP, use.vst, use.log, plot.type
 #######################
 #FUNCTION TO DRAW THE EXPRESSION PLOTS:
 #######################
-drawPlot <- function(matr, ylimn,ecs, intervals, rango, fitExpToVar, numexons, textAxis, rt, color.count, 
+drawPlot <- function(matr, ylimn,ecs, intervals, rango, fitExpToVar, numexons, textAxis, geneLevelAxisTitle = NULL, rt, color.count, 
                      colorlines,countbinIDs,use.vst, use.log,plot.type,main.title,draw.legend,color.key,
                      condition.names,p.values=NULL,draw.p.values=FALSE,plot.lwd = 1,axes.lwd = 1, 
                      anno.lwd =1, par.cex = 1, anno.cex.text = 1, anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
@@ -283,7 +283,8 @@ drawPlot <- function(matr, ylimn,ecs, intervals, rango, fitExpToVar, numexons, t
    par(cex = par.cex);
    
    #message(paste("ylimn:",ylimn));
-   plot.window(xlim=c(0, 1), ylim=ylimn);
+   plot.window(xlim=c(0, 1.04), ylim=c(ylimn[1], ylimn[2] + (abs(ylimn[2] - ylimn[1]))*0.04), xaxs = "i", yaxs="i");
+   #plot.window(xlim=c(0, 1), ylim=ylimn, xaxs = "r");
    
    if(debug.mode) message("> Step 6.2");
    makevstaxis(1/ncol(matr), ylimn, ecs,use.vst=use.vst, use.log=use.log,plot.type=plot.type, lwd = axes.lwd, par.cex = par.cex, anno.cex.text = anno.cex.text, ...)
@@ -352,7 +353,11 @@ drawPlot <- function(matr, ylimn,ecs, intervals, rango, fitExpToVar, numexons, t
    segments(intervals[rango],matr[rango,j], intervals[rango+1]-((intervals[rango+1]-intervals[rango])*0.2), matr[rango,j], col=color.count, lwd = plot.lwd,...)  #### line with the y level
    segments(intervals[rango+1]-((intervals[rango+1]-intervals[rango])*0.2), matr[rango,j], intervals[rango+1], matr[rango+1,j], col=color.count, lty="dotted", lwd =plot.lwd,...)  #### line joining the y levels
    abline(v=middle[rango], lty="dotted", col=colorlines, lwd = plot.lwd)
-   mtext(textAxis, side=2, adj=0.5, line=1.5, outer=FALSE, cex = anno.cex.text * par("cex"),...)
+   
+   text(device.limits()[1], ylimn[1] + abs(ylimn[2] - ylimn[1])*0.5, textAxis,           cex = anno.cex.text, xpd = NA, adj = c(0.5,1.1), srt = 90 , ...);
+   text(device.limits()[2], ylimn[1] + abs(ylimn[2] - ylimn[1])*0.5, geneLevelAxisTitle, cex = anno.cex.text, xpd = NA, adj = c(0.5,1.1), srt = 270 , ...);
+   #title(ylab = textAxis, cex.lab = anno.cex.text, mgp = c(2.5,1,0), ...);
+   #mtext(textAxis, side=2, adj=0.5, line=2.5, outer=FALSE, cex = anno.cex.text * par("cex"),...)
    
    if(debug.mode) message("> Step 6.6");
    
@@ -473,13 +478,17 @@ drawPlot <- function(matr, ylimn,ecs, intervals, rango, fitExpToVar, numexons, t
      # cex.countbinIDs <- anno.cex.axis;
      #adj.countbinIDs <- c(0.5,0.5);
      #tcl.countbinIDs <- -0.4
-     JS.axis(1, at=geneColumn.MID, labels="GENE", tcl =  tcl.countbinIDs,  lwd = axes.lwd, lwd.ticks = axes.lwd, cex.axis = min(anno.cex.axis, cex.countbinIDs * 1.5), srt = 0, font = 2, adj = adj.countbinIDs,...)# ,
-
+     cex.gene.tick <- min(anno.cex.axis, cex.countbinIDs * 1.5);
+     srt.gene.tick <- 0;
+     if(strwidth("GENE",cex = cex.gene.tick)/2 > abs(geneColumn.MID - junctionColumns.RIGHT) * 0.9 ){
+       cex.gene.tick <- cex.countbinIDs;
+       srt.gene.tick <- srt.countbinIDs;
+     }
+     JS.axis(1, at=geneColumn.MID, labels="GENE", tcl =  tcl.countbinIDs,  lwd = axes.lwd, lwd.ticks = axes.lwd, cex.axis = cex.gene.tick, srt = srt.gene.tick, font = 2, adj = adj.countbinIDs,...)# ,
      #axis(1, at=geneColumn.MID, labels="GENE", tcl = -0.5,  lwd = axes.lwd, lwd.ticks = axes.lwd, cex.axis = cex.countbinIDs, las = 0, mgp = c(3,0.55,0),padj=0.5, hadj=0.5,...)#
    } else {
      rect(0, par("usr")[3], par("usr")[2], par("usr")[4], xpd=NA, lwd = axes.lwd,xpd=NA,...);
    }
-   
 
    if(debug.mode) message("> Step 6.11");
    #if(draw.box){
@@ -502,25 +511,30 @@ drawPlot <- function(matr, ylimn,ecs, intervals, rango, fitExpToVar, numexons, t
 #FUNCTION TO DRAW THE GENE MODELS AND TRANSCRIPTS:
 #########################
 drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.iv = NULL, exoncol=NULL,allExon.exonCol=NULL, names, 
-                     trName, exonlty, plot.lwd = 1, anno.lwd = 1, show.strand.arrows = 0, par.cex = 1, anno.cex.text = 1, 
+                     trName, exonlty, plot.lwd = 1, anno.lwd = 1, show.strand.arrows = 0, geneStrand = ".", par.cex = 1, anno.cex.text = 1, 
                      arrows.length = 0.5,draw.untestable.annotation = TRUE,
                      draw.start.end.sites = TRUE, startSites = NULL, endSites = NULL,
+                     cex.arrows, chrom.label = "", label.chromosome = TRUE,
                      ...)
 {
    #message("drawGene cex = ",cex);
    #par(cex = par.cex);
    xpd <- NA
    plot.new()
-   plot.window(xlim=c(minx, maxx), ylim=c(0, 1))
+   plot.window(xlim=c(minx, maxx + ((maxx-minx)* 0.04)), ylim=c(0,1), xaxs = "i");
+   #plot.window(xlim=c(minx, maxx), ylim=c(0, 1))
    ymax <- par("usr")[4];
    ymin <- par("usr")[3];
    
    rect.floor <- 0.05;
    rect.ceil  <- 0.75;
-   startSite.marker.width <- 0.025;
+   startSite.marker.width <- strwidth("M",cex = anno.cex.text);
+   startSite.angle.width <- startSite.marker.width * 1/3;
+   #startSite.marker.width <- (maxx-minx) * 0.025;
    if(draw.start.end.sites){
      rect.floor <- 0.15;
      startSites.floor <- 0.05;
+     endSites.floor <- (rect.floor - startSites.floor) * (1/3) + startSites.floor;
    }
    rect.mid   <- ((rect.ceil - rect.floor)/2) + rect.floor
 
@@ -552,11 +566,11 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
    lines(c(minx,maxx),c(rect.mid,rect.mid),lty= 1, lwd = anno.lwd, ...);
    
    if(draw.start.end.sites){
-     segments(startSites, startSites.floor,startSites,rect.floor, lwd = plot.lwd / 2,xpd=NA,...);
-     segments(endSites,   startSites.floor,endSites,rect.floor, lwd = plot.lwd / 2,xpd=NA,...);
+     segments(startSites + startSite.angle.width, startSites.floor,startSites,rect.floor, lwd = plot.lwd / 2,xpd=NA,...);
+     segments(endSites   - startSite.angle.width,   endSites.floor,  endSites,  rect.floor, lwd = plot.lwd / 2,xpd=NA,...);
      
-     segments(startSites, startSites.floor,startSites + (maxx-minx) * startSite.marker.width, startSites.floor, lwd = plot.lwd / 2,xpd=xpd,...);
-     segments(endSites,   startSites.floor,endSites   - (maxx-minx) * startSite.marker.width, startSites.floor, lwd = plot.lwd / 2,xpd=xpd,...);
+     segments(startSites + startSite.angle.width, startSites.floor,  startSites + startSite.marker.width, startSites.floor, lwd = plot.lwd / 2,xpd=xpd,...);
+     segments(endSites   - startSite.angle.width,   endSites.floor,  endSites   - startSite.marker.width,   endSites.floor, lwd = plot.lwd / 2,xpd=xpd,...);
    }
    
    if(show.strand.arrows > 0){
@@ -566,14 +580,16 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
          strand <- tr.allExon$strand[1];
          
          #even.spacing <- ((1:(show.strand.arrows)) / (show.strand.arrows+1)) * (maxx - minx) + minx;
-         if(strand == "+"){
+         if(strand == "+" | geneStrand == "+"){
             #arrow.char <- ">";
             even.spacing <- ((0:(show.strand.arrows - 1)) / (show.strand.arrows)) * (maxx - minx) + minx
-            arrows( even.spacing[-(show.strand.arrows)] ,rep(rect.mid,show.strand.arrows - 1), even.spacing[-1]  , rep(rect.mid,show.strand.arrows - 1), lwd = anno.lwd, length = arrows.length);
-         } else if(strand == "-"){
+            #arrows( even.spacing[-(show.strand.arrows)] ,rep(rect.mid,show.strand.arrows - 1), even.spacing[-1]  , rep(rect.mid,show.strand.arrows - 1), lwd = anno.lwd, length = arrows.length);
+            JS.arrowChars( even.spacing[-1] ,rep(rect.mid,length(even.spacing) - 1), "right", arrow.cex = cex.arrows, lwd = anno.lwd, ...);
+         } else if(strand == "-" | geneStrand == "-"){
             #arrow.char <- "<";
             even.spacing <- ((1:(show.strand.arrows)) / (show.strand.arrows)) * (maxx - minx) + minx
-            arrows( even.spacing[-1] ,rep(rect.mid,show.strand.arrows - 1), even.spacing[-(show.strand.arrows)]  , rep(rect.mid,show.strand.arrows - 1), lwd = anno.lwd, length = arrows.length);
+            #arrows( even.spacing[-1] ,rep(rect.mid,show.strand.arrows - 1), even.spacing[-(show.strand.arrows)]  , rep(rect.mid,show.strand.arrows - 1), lwd = anno.lwd, length = arrows.length);
+            JS.arrowChars( even.spacing[-length(even.spacing)] ,rep(rect.mid,length(even.spacing) - 1), "left", arrow.cex = cex.arrows, lwd = anno.lwd, ...);
          }
          #points(even.spacing, rep(0.4,show.strand.arrows), pch = arrow.char, cex = anno.cex.text, ...);
       #}
@@ -612,8 +628,21 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
       colors.ex <- exoncol[tr$is.exon]
       segments(middle.ex, rect.ceil, middle.ex, ymax, col=colors.ex, lty = exonlty[tr$is.exon], lwd = plot.lwd, xpd = xpd,...);
    }
+   
 
 }
+JS.arrowChars <- function(xcenter, ycenter, direction, arrow.cex, lwd, ...){
+  arrow.width = strwidth(">", cex= arrow.cex);
+  arrow.height = strheight(">", cex = arrow.cex);
+  if(direction == "left"){
+    segments(xcenter,ycenter,xcenter + arrow.width,ycenter + arrow.height / 2, lwd = lwd, lend = 0, ...);
+    segments(xcenter,ycenter,xcenter + arrow.width,ycenter - arrow.height / 2, lwd = lwd, lend = 0, ...);
+  } else if(direction == "right"){
+    segments(xcenter - arrow.width,ycenter + arrow.height / 2, xcenter, ycenter, lwd = lwd, lend = 0, ...);
+    segments(xcenter - arrow.width,ycenter - arrow.height / 2, xcenter, ycenter, lwd = lwd, lend = 0, ...);
+  }
+}
+
 drawGene.noSplices <- function(minx, maxx, tr.allExon, exon.names=NULL, anno.lwd = 1, par.cex = 1, anno.cex.text = 1, ...)
 {
    #message("drawGene.noSplices cex = ",cex);
@@ -630,17 +659,17 @@ drawGene.noSplices <- function(minx, maxx, tr.allExon, exon.names=NULL, anno.lwd
 
 #drawTranscript(rel.calc.min, rel.calc.max, tr=tr, rango=1:(length(anno.data$start[rt.allExon][logicexons==1])), exoncol=NULL, names=c(), trName=trans[i], cex=0.8,sub.sig = sub.sig)external.margins = c(1,4,4,2),
 
-drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.iv = NULL, names, trName, sub.sig, anno.lwd = 1, par.cex = 1, anno.cex.text = 1, anno.cex.TX.ID = anno.cex.text * 0.5,  ...)
+drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.iv = NULL, names, trName, trStrand = ".", sub.sig, anno.lwd = 1, par.cex = 1, anno.cex.text = 1, anno.cex.TX.ID = anno.cex.text * 0.5, cex.arrows = 1, draw.strand = FALSE,  ...)
 {
    exon.height = 0.8;
    if(! is.null(trName)){
      id.ht <- strheight(trName, cex = anno.cex.TX.ID);
      if(id.ht < 0.75){
-       exon.height <- 0.94 - id.ht;
+       exon.height <- 0.75 - id.ht;
      } else {
-       exon.height <- 0.5;
+       exon.height <- 0.25;
      }
-     text(minx,ymin+0.95,labels=trName,srt=0,xpd=NA,cex= anno.cex.TX.ID, adj=c(0,1),...);
+     
      ##text(minx,0.5,labels=trName,srt=0,xpd=TRUE,cex= anno.cex.TX.ID, adj=c(0,0),...);
    }
    splice.top <- exon.height * 0.9;
@@ -724,13 +753,45 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
    
    if(nrow(tr.mergedExons) > 1){
      zr <- apply(rbind(tr.splices$start, tr.splices$end), 2, median)
-     segments(tr.splices$start, ymin+splice.mid, zr, ymin+splice.top,col=tr.splices$lineColor, lwd = anno.lwd,...)
-     segments(zr, ymin+splice.top,tr.splices$end, ymin+splice.mid,col=tr.splices$lineColor, lwd = anno.lwd,...)
+     segments(tr.splices$start, ymin+splice.mid, zr, ymin+splice.top,col=tr.splices$lineColor, lwd = anno.lwd, xpd = NA,...)
+     segments(zr, ymin+splice.top,tr.splices$end, ymin+splice.mid,col=tr.splices$lineColor, lwd = anno.lwd, xpd = NA,...)
    }
    
    TX.EXON.BORDER.COLOR <- "black";
-   rect(tr.raw$start, ymin, tr.raw$end, ymin+exon.height, col=tr$fillColor, border = "transparent", lwd = anno.lwd / 2, ...);
-   rect(tr.mergedExons$start, ymin, tr.mergedExons$end, ymin+exon.height, col="transparent", border = TX.EXON.BORDER.COLOR, lwd = anno.lwd / 2, ...);
+   rect(tr.raw$start, ymin, tr.raw$end, ymin+exon.height, col=tr$fillColor, border = "transparent", lwd = anno.lwd / 2, xpd = NA, ...);
+   rect(tr.mergedExons$start, ymin, tr.mergedExons$end, ymin+exon.height, col="transparent", border = TX.EXON.BORDER.COLOR, lwd = anno.lwd / 2, xpd = NA, ...);
+   
+   if(draw.strand){
+     arrow.width <- strwidth(">", cex= cex.arrows) / 2;
+     #message("trStrand = \"",trStrand,"\"");
+     if(trStrand == "+"){
+       #message("+!");
+       lastEnd <- tr.raw$end[length(tr.raw$end)];
+
+       polygon(c(lastEnd,lastEnd, lastEnd + arrow.width), 
+               #c(ymin + exon.height/3,ymin + exon.height * 2/3, exon.height/2 + ymin), 
+               c(ymin,ymin + exon.height, exon.height/2 + ymin), 
+               col=tr$fillColor[length(tr$fillColor)], border = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
+       #polygon(c(lastEnd,lastEnd, lastEnd + arrow.width), 
+       #        c(ymin,ymin + exon.height, exon.height/2 + ymin),
+       #        #c(ymin + exon.height/4,ymin + exon.height * 3/4, exon.height/2 + ymin), 
+       #        col=tr$fillColor[length(tr$fillColor)], border = tr$fillColor[length(tr$fillColor)], xpd = NA, lwd = anno.lwd / 2)
+       #lines(c(lastEnd,lastEnd + arrow.width), c(ymin, exon.height/2 + ymin),               col = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
+       #lines(c(lastEnd,lastEnd + arrow.width), c(ymin + exon.height, exon.height/2 + ymin), col = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
+     } else if (trStrand == "-"){
+       #message("-!");
+       firstStart <- tr.raw$start[1];
+       polygon(c(firstStart,firstStart, firstStart - arrow.width),
+               c(ymin,ymin + exon.height, exon.height/2 + ymin), 
+               col=tr$fillColor[1], border = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
+       #polygon(c(firstStart,firstStart, firstStart - arrow.width),
+       #        c(ymin,ymin + exon.height, exon.height/2 + ymin),
+       #        #c(ymin + exon.height/4,ymin + exon.height * 3/4, exon.height/2 + ymin),
+       #        col=tr$fillColor[1], border = tr$fillColor[1], xpd = NA, lwd = anno.lwd / 2)
+       #lines(c(firstStart,firstStart - arrow.width), c(ymin, exon.height/2 + ymin),               col = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
+       #lines(c(firstStart,firstStart - arrow.width), c(ymin + exon.height, exon.height/2 + ymin), col = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
+     }
+   }
    
    if(length(exon.breaks) > 0){
      segments(exon.breaks,ymin,exon.breaks,ymin+exon.height, col = "black", lwd = anno.lwd / 2, lty = 3, ...)
@@ -740,7 +801,13 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
    #segments(tr[rango,2], 0.3, zr, 0.45,col=splice.color, lwd = anno.lwd,...)
    #segments(zr, 0.45, tr[rango+1,1], 0.3,col=splice.color, lwd = anno.lwd,...)
    
-
+   id.wd <- strwidth(trName, cex = anno.cex.TX.ID);
+   id.leftX <- tr.raw$start[1];
+   if(id.leftX + id.wd > maxx){
+     id.leftX <- maxx - id.wd;
+   }
+   
+   text(id.leftX,ymin + 0.8,labels=trName,srt=0,xpd=NA,cex= anno.cex.TX.ID, adj=c(0,1),...);
 }
 #############################################
 

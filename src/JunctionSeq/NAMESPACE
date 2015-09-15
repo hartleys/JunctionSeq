@@ -1,4 +1,34 @@
-import(statmod, plotrix, methods, stringr, Biobase, locfit)
+#Base packages:
+import(methods)
+
+#CRAN packages:
+import(statmod)
+import(plotrix)
+import(stringr)
+import(Rcpp)
+import(RcppArmadillo)
+import(ggplot2)
+
+#Bioconductor packages:
+import(Biobase)
+import(BiocGenerics)
+import(BiocParallel)
+import(GenomicRanges)
+import(IRanges)
+import(S4Vectors)
+
+#CRAN function imports:
+importFrom(Hmisc,wtd.quantile)
+importFrom(locfit,locfit)
+importFrom(stats,coef)
+
+#Bioconductor function imports:
+importFrom(genefilter,filtered_p)
+importFrom(genefilter,rowVars)
+importFrom(geneplotter,plotMA)
+
+
+useDynLib(JunctionSeq)
 
 export(
   runJunctionSeqAnalyses,                      #             
@@ -18,6 +48,8 @@ export(
   plotDispEsts,                    #
   buildAllPlotsForGene,                    #
   plotJunctionSeqResultsForGene,                    #
+  
+  writeSizeFactors,
   
   writeExprBedTrack,
   writeSigBedTrack
