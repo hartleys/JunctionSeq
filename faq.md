@@ -13,8 +13,13 @@ Help, documentation, and the most recent release of JunctionSeq is available on 
 (work in progress)
 
 ##HELP AND DOCUMENTATION:
-For more information see the [JunctionSeq vignette](http://hartleys.github.io/JunctionSeq/helpDocs/doc/JunctionSeq.pdf) or the 
-[online reference documentation](http://dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/Rhtml/index.html).
+For more information see the [JunctionSeq vignette](http://hartleys.github.io/JunctionSeq/doc/JunctionSeq.pdf) or the 
+[online reference documentation](http://hartleys.github.io/JunctionSeq/Rhtml/index.html).
+
+There is also a [comprehensive walkthrough](http://hartleys.github.io/JunctionSeq/doc/example-walkthrough.pdf) of 
+the entire analysis pipeline, along with a full 
+[example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip) with 
+[example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip).
 
 For help with individual R functions in the R utility, use the R 
 command:
