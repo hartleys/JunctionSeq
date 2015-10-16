@@ -1,4 +1,4 @@
-    > v0.4.07 (Revised Tue Sep 15 13:39:27 EDT 2015)
+    > v0.4.19 (Revised Fri Oct 16 10:21:02 EDT 2015)
 
 JunctionSeq is an R package designed to detect and assess 
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -20,17 +20,18 @@ Issues, bug reports, or feature requests can be posted to the
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
 
 ##HELP AND DOCUMENTATION:
-For more information see the [JunctionSeq vignette](http://hartleys.github.io/JunctionSeq/doc/JunctionSeq.pdf) or the 
-[online reference documentation](http://hartleys.github.io/JunctionSeq/Rhtml/index.html).
 
-There is also a [comprehensive walkthrough](http://hartleys.github.io/JunctionSeq/doc/example-walkthrough.pdf) of 
-the entire analysis pipeline, along with a full 
-[example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip) with 
-[example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip).
+* [The JunctionSeq user manual](doc/JunctionSeq.pdf): An introduction to JunctionSeq. Read me first.
+* [The online reference documentation](Rhtml/index.html): The complete JunctionSeq R documentation.
+* [A comprehensive walkthrough](doc/example-walkthrough.pdf): describes the entire analysis pipeline.
+* [Example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip): used with the walkthrough so you can follow along. The [example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip) are separate (~1gb download).
+* [An example results report](exampleResults/testForDU.html): The results report generated in the example walkthrough
+* An example set of browser tracks from this same dataset is available 
+[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks).
 
-An example results report is available [here](exampleResults/testForDU.html). 
-An example set of browser tracks from this same dataset is available 
-[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). 
+Note: The example dataset is for testing and demonstration purposes only. The samples and annotation heavily modified and down-sampled 
+both to test artificial edge cases and to provide smaller and more portable testing files. 
+The results should not be taken as an indication of any biological phenomenon.
 
 For help with individual R functions in the R utility, use the R 
 command:
@@ -48,14 +49,13 @@ JunctionSeq can be installed automatically in R using the command:
 
     > source("http://hartleys.github.io/JunctionSeq/install/JunctionSeq.install.R");
 
-In order to successfully install R on windows, you must have Rtools installed.
+In order to successfully install from source on windows, you must have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed.
 
 The splice, gene, and exon read-counts required by JunctionSeq can be created 
 using the QoRTs software package, available [here](http://hartleys.github.io/QoRTs/index.html).
 
 ##EXAMPLE DATA:
-The example dataset can be found on the github repository and can be 
-installed with the command:
+Another example dataset, used in the vignette, is packaged as an R package, and can be installed with the command:
     
     > install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz", 
                       repos = NULL, 

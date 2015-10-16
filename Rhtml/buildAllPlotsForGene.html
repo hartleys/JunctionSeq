@@ -28,32 +28,36 @@ buildAllPlotsForGene(geneID, jscs,
                      outfile.prefix = "./", 
                      use.plotting.device = c("png","CairoPNG","svg","tiff","cairo_ps","custom"),
                      sequencing.type = c("paired-end","single-end"),
-                     use.vst=FALSE, use.log = TRUE, truncateBelowOne = TRUE,
+                     use.vst=FALSE, use.log = TRUE, 
                      exon.rescale.factor = 0.3,
                      with.TX=TRUE,without.TX=TRUE,
                      expr.plot=TRUE,normCounts.plot=TRUE,
                      rExpr.plot=TRUE,rawCounts.plot=FALSE,
                      colorRed.FDR.threshold = 0.01, 
-                     color=NULL,
+                     colorList=list(),
                      plot.gene.level.expression = TRUE,
                      plot.exon.results, plot.junction.results, plot.novel.junction.results,
                      plot.untestable.results = FALSE,
-                     plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
+                     plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, gene.lwd = plot.lwd / 2,
                      par.cex = 1, name.files.with.geneID = TRUE,
                      anno.cex.text = 1,
                      anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
                      drawCoordinates = TRUE,
                      yAxisLabels.inExponentialForm = FALSE,
-                     show.strand.arrows = 10, arrows.length = 0.125,
+                     show.strand.arrows = 1, 
                      graph.margins = c(2, 3, 3, 3),
                      base.plot.height = 12, base.plot.width = 12, 
                      base.plot.units = "in", 
-                     GENE.annotation.relative.height = 0.2, TX.annotation.relative.height = 0.05,
+                     GENE.annotation.relative.height = 0.1, 
+                     TX.annotation.relative.height = 0.05,
+                     CONNECTIONS.relative.height = 0.1,
+                     SPLICE.annotation.relative.height = 0.1,
+                     TX.margins = c(0.5,0.5),
                      autoscale.height.to.fit.TX.annotation = TRUE,
                      autoscale.width.to.fit.bins = 35,
                      plotting.device.params = list(),
                      condition.legend.text, include.TX.names = TRUE,
-                     draw.start.end.sites = TRUE,
+                     draw.start.end.sites = TRUE, draw.nested.SJ = TRUE,
                      openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
                      verbose=TRUE, debug.mode = FALSE,  ...)
 
@@ -105,10 +109,6 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 <td>
 <p>Logical. If <code>TRUE</code>, all plots will be log-scaled.</p>
 </td></tr>
-<tr valign="top"><td><code>truncateBelowOne</code></td>
-<td>
-<p>Logical. If <code>TRUE</code>, all values below 1 will be linear-scaled. If use.log is FALSE, this does nothing.</p>
-</td></tr>
 <tr valign="top"><td><code>exon.rescale.factor</code></td>
 <td>
 <p>Numeric. Exons will be proportionately scaled-up so that the exonic regions make up this fraction of the horizontal plotting area. If negative, exons and introns will be plotted to a common scale. </p>
@@ -141,9 +141,9 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 <td>
 <p>The adjusted-p-value threshold used to determine whether a feature should be marked as &quot;significant&quot; and colored pink. By default this will be the same as the FDR.threshold.</p>
 </td></tr>
-<tr valign="top"><td><code>color</code></td>
+<tr valign="top"><td><code>colorList</code></td>
 <td>
-<p>A vector of R colors, named for each possible value of condition. By default, it will attempt to choose reasonable colors for each condition.</p>
+<p>A named list of R colors, setting the colors used for various things. See <code><a href="plotJunctionSeqResultsForGene.html">plotJunctionSeqResultsForGene</a></code></p>
 </td></tr>
 <tr valign="top"><td><code>plot.gene.level.expression</code></td>
 <td>
@@ -179,6 +179,10 @@ For the &quot;relative expression&quot; plots the simple mean normalized express
 <tr valign="top"><td><code>anno.lwd</code></td>
 <td>
 <p>the line width for the various other annotation lines.</p>
+</td></tr>
+<tr valign="top"><td><code>gene.lwd</code></td>
+<td>
+<p>the line width used for the gene annotation lines.</p>
 </td></tr>
 <tr valign="top"><td><code>par.cex</code></td>
 <td>
@@ -221,11 +225,9 @@ More specifically: The cex.main value to be passed to all function calls that ta
 </td></tr>
 <tr valign="top"><td><code>show.strand.arrows</code></td>
 <td>
-<p>The number of strand-direction arrows to display.</p>
-</td></tr>
-<tr valign="top"><td><code>arrows.length</code></td>
-<td>
-<p>The length of the strand-direction arrows, in inches.</p>
+<p>The number of strand-direction arrows to display. If equal to <code>1</code> (the default) then the arrow will extend from the end of the gene drawing, if it is greater than <code>1</code> then arrows will be drawn
+along the gene length. If it is <code>0</code> or <code>NA</code> then arrows will not be drawn.
+</p>
 </td></tr>
 <tr valign="top"><td><code>graph.margins</code></td>
 <td>
@@ -259,6 +261,24 @@ See the withTxPlot.height.multiplier parameter, below.
 <td>
 
 <p>For all plots that draw the annotated-transcript set (when the <code>with.TX</code> parameter is <code>TRUE</code>), this sets the height of each transcript, as a fraction of the height of the main graph. By default it is 2.5 percent.
+</p>
+</td></tr>
+<tr valign="top"><td><code>CONNECTIONS.relative.height</code></td>
+<td>
+
+<p>The height of the panel that connects the plotting area to the gene annotation area, relative to the height of the plotting area. This panel has the lines that connects the counting bin columns to their actual loci on the gene. By default it is 10 percent.
+</p>
+</td></tr>
+<tr valign="top"><td><code>SPLICE.annotation.relative.height</code></td>
+<td>
+
+<p>The height of the area that shows the splice junction loci, relative to the size of the plotting area.
+</p>
+</td></tr>
+<tr valign="top"><td><code>TX.margins</code></td>
+<td>
+
+<p>A numeric vector of length 2. The size of the blank space between the gene plot and the transcript list and then beneath the transcript list, relative to the size of each transcript line.
 </p>
 </td></tr>
 <tr valign="top"><td><code>autoscale.height.to.fit.TX.annotation</code></td>
@@ -301,6 +321,14 @@ should be named with one of the values from <code>factor(condition)</code>, and 
 <p>Logical value. If <code>TRUE</code>, then transcript start/end sites will be marked on the main gene annotation.
 </p>
 </td></tr>
+<tr valign="top"><td><code>draw.nested.SJ</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, overlapping splice junctions will be drawn layered under one another. 
+This can vastly improve readability when there are a large number of overlapping splice junctions. 
+Default is <code>TRUE</code>.
+</p>
+</td></tr>
 <tr valign="top"><td><code>openPlottingDeviceFunc</code></td>
 <td>
 <p>An R function. This option can be used to use plotting devices other than the ones directly supported by JunctionSeq. This must be a function that must have 3 parameters: filename, heightMult, and widthMult. It should open the desired plotting device. For advanced users only.</p>
@@ -319,9 +347,9 @@ should be named with one of the values from <code>factor(condition)</code>, and 
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-<p>Additional options to pass to plotting functions, particularly graphical parameters.</p>
+<p>Additional options to pass to <code><a href="plotJunctionSeqResultsForGene.html">plotJunctionSeqResultsForGene</a></code>, or graphical parameters passed to plotting functions.</p>
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.07 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.19 <a href="00Index.html">Index</a>]</div>
 </body></html>

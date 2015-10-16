@@ -1,4 +1,4 @@
-    > v0.4.07 (Revised Tue Sep 15 13:39:27 EDT 2015)
+    > v0.4.19 (Revised Fri Oct 16 10:21:02 EDT 2015)
 
 JunctionSeq is an R package designed to detect and assess 
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -36,7 +36,7 @@ JunctionSeq can be installed automatically in R using the command:
 
     > source("http://hartleys.github.io/JunctionSeq/install/JunctionSeq.install.R");
 
-In order to successfully install R on windows, you must have Rtools installed.
+In order to successfully install from source on windows, you must have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed.
 
 ##MANUAL INSTALLATION:
 
@@ -66,6 +66,8 @@ If you encounter problems with installation, you can install manually using the 
                        repos = NULL, 
                        type="source")
 
+If you are installing to windows, you will also require [Rtools](https://cran.r-project.org/bin/windows/Rtools/) 
+which allows advanced packages to be installed from source-code.
 
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3:

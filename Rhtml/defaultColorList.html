@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: JunctionSeq Color Parameters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for defaultColorList {JunctionSeq}"><tr><td>defaultColorList {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>JunctionSeq Color Parameters</h2>
+
+<h3>Description</h3>
+
+<p>This data set gives default color parameters for JunctionSeq. 
+Any of these parameters can be overridden by using the <code>colorList</code> 
+parameter in <code>link{buildAllPlots}</code>, <code>link{buildAllPlotsForGene}</code>, 
+or <code>link{plotJunctionSeqResults}</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>JUNCTIONSEQ.DEFAULT.COLOR.LIST</pre>
+
+
+<h3>Format</h3>
+
+<p>A list.</p>
+
+
+<h3>Details</h3>
+
+<p>The parameter <code>colorList</code> must be a named list. Any elements with the names listed below will override the default JunctionSeq colors.
+</p>
+<p><code>SIG.FEATURE.COLOR</code> The color of vertical lines in the plotting panel, for significant features.  
+</p>
+<p><code>NOSIG.FEATURE.COLOR</code> The color of vertical lines in the plotting panel, for tested but non-significant features.  
+</p>
+<p><code>UNTESTABLE.FEATURE.COLOR</code> The color of vertical lines in the plotting panel, for untestable features. 
+</p>
+<p><code>EXCLUDED.FEATURE.COLOR</code> The color of vertical lines in the plotting panel, for features that were not part of the analysis (for example: splice junctions in an exon-based analysis). 
+</p>
+<p><code>SIG.VERTLINE.COLOR, NOSIG.VERTLINE.COLOR, UNTESTABLE.VERTLINE.COLOR</code>: The colors of the vertical dotted lines in the plotting panel.
+</p>
+<p><code>SIG.FEATURE.BORDER.COLOR, NOSIG.FEATURE.BORDER.COLOR, UNTESTABLE.FEATURE.BORDER.COLOR, EXCLUDED.FEATURE.BORDER.COLOR</code>: 
+The color for borders of features in the gene and transcript annotation.
+</p>
+<p><code>SIG.FEATURE.FILL.COLOR, NOSIG.FEATURE.FILL.COLOR, UNTESTABLE.FEATURE.FILL.COLOR, EXCLUDED.FEATURE.FILL.COLOR</code>
+The colors for exon shading in the gene and transcript annotation.
+</p>
+<p><code>PLOTTING.LINE.COLORS</code> 
+Character vector. The colors for each condition, in order. Will be shortened to the number of conditions.
+</p>
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.19 <a href="00Index.html">Index</a>]</div>
+</body></html>
