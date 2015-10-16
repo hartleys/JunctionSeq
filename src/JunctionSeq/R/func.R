@@ -292,13 +292,16 @@ writeCompleteResults <- function(jscs, outfile.prefix,
    if(save.fit) save( modelFitForHypothesisTest, file = paste0(outfile.prefix, "modelFitForHypothesisTest.RData") );
    if(save.fit) save( modelFitForEffectSize,     file = paste0(outfile.prefix, "modelFitForEffectSize.RData") );
    
+   sig.features <- which( f.na(fData(jscs)$padjust < FDR.threshold) );
+   gene.list <- unique(as.character(fData(jscs)$geneID[sig.features]));
+   
    if(save.sigGenes){
      
-     sig.features <- which( f.na(fData(jscs)$padjust < FDR.threshold) );
+     
      if(length(sig.features) == 0){
        if(verbose) message("> wcr: Zero Significant Features! (at adjusted-p-value threshold ",FDR.threshold,")");
-     } else {
-       gene.list <- unique(as.character(fData(jscs)$geneID[sig.features]));
+     } #else {
+       
        if(verbose) message("> wcr: Writing results for ", length(gene.list), " genes with 1 or more significant junctions (at adjusted-p-value threshold ", FDR.threshold,")");
      
        sig.rows <- which( as.character(fData(jscs)$geneID) %in% gene.list );
@@ -308,7 +311,7 @@ writeCompleteResults <- function(jscs, outfile.prefix,
                     write.simple.table.gz(expression.data[sig.rows,, drop=FALSE],     file=paste0(outfile.prefix,"sigGenes.expression.data.txt"),      use.gzip=gzip.output,row.names=F,col.names=T,quote=F, sep = '\t');
        if(save.VST) write.simple.table.gz(expression.data.vst[sig.rows,, drop=FALSE], file=paste0(outfile.prefix,"sigGenes.expression.data.VST.txt"),  use.gzip=gzip.output,row.names=F,col.names=T,quote=F, sep = '\t');
                     write.table.gz(fData(jscs)[sig.rows,, drop=FALSE],         file=paste0(outfile.prefix,"sigGenes.results.txt"), use.gzip=gzip.output,row.names="featureID",col.names=T,quote=F);
-     }
+     #}
    }
    
    if(save.bedTracks){
@@ -316,7 +319,7 @@ writeCompleteResults <- function(jscs, outfile.prefix,
        if(any(fData(jscs)$featureType == "splice_site" | fData(jscs)$featureType == "novel_splice_site")){
          writeExprBedTrack(paste0(outfile.prefix,"allGenes.junctionCoverage.bed.gz"), 
                          jscs = jscs, 
-                         only.with.sig.gene = FALSE, plot.exons = FALSE, plot.junctions = TRUE,
+                         plot.exons = FALSE, plot.junctions = TRUE,
                          output.format = bedtrack.format, verbose = verbose,
                          trackLine = paste0("track name='JctExprAll' description='Splice Junction Coverage Estimates, by group' itemRgb='On' visibility=3"));
        }
@@ -330,27 +333,27 @@ writeCompleteResults <- function(jscs, outfile.prefix,
      }
      if(save.sigGenes){
        sig.features <- which( f.na(fData(jscs)$padjust < FDR.threshold) );
-       if(length(sig.features) > 0){
+       #if(length(sig.features) > 0){
          if(any(fData(jscs)$featureType == "splice_site" | fData(jscs)$featureType == "novel_splice_site")){
            writeExprBedTrack(paste0(outfile.prefix,"sigGenes.junctionCoverage.bed.gz"), 
                            jscs = jscs, 
                            only.with.sig.gene = TRUE, plot.exons = FALSE, plot.junctions = TRUE,
-                           output.format = bedtrack.format, verbose = verbose,
+                           output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold,
                            trackLine = paste0("track name='JctExprAll' description='Sig genes splice Junction Coverage Estimates, by group' itemRgb='On' visibility=3"));
          }
          if(any(fData(jscs)$featureType == "exonic_part")){
            writeExprBedTrack(paste0(outfile.prefix,"sigGenes.exonCoverage.bed.gz"), 
                            jscs = jscs, 
                            only.with.sig.gene = TRUE, plot.exons = TRUE, plot.junctions = FALSE,
-                           output.format = bedtrack.format, verbose = verbose,
+                           output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold,
                            trackLine = paste0("track name='ExonExprAll' description='Sig genes exonic Region Coverage Estimates, by group' itemRgb='On' visibility=3"));
          }
          writeSigBedTrack(paste0(outfile.prefix,"sigGenes.pvalues.bed.gz"), 
                           jscs = jscs,
-                          output.format = bedtrack.format, verbose = verbose,
+                          output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold,
                           trackLine = paste0("track name='JctPvals' description='Significant Splice Junctions' useScore=1 visibility=3")
                           );
-       }
+       #}
      }
    }
    
@@ -571,6 +574,7 @@ readJunctionSeqCounts <- function(countfiles = NULL, countdata = NULL,
       #message("---> RJSC: use.exons:",use.exons);
    }
    
+   
    analysis.type <- match.arg(analysis.type);
    if(is.null(use.junctions) & is.null(use.exons)){
     if(analysis.type == "junctionsAndExons"){
@@ -736,6 +740,7 @@ readJunctionSeqCounts <- function(countfiles = NULL, countdata = NULL,
       warning("Warning: flat gff annotation not set (via parameter flat.gff.file)! While technically optional, running without the annotation data may make interpretation of the data difficult. Much of the plotting functionality will not work!");
       jscs <- newJunctionSeqCountSet(countData=dcounts, design=design, geneIDs=genesrle, countbinIDs=exons);
    }
+   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.countVectors = method.countVectors);
    
    jscs@analysisType <- analysis.type;
    featureChar <- substr(fData(jscs)$countbinID,1,1);
@@ -847,14 +852,21 @@ readGeneInfo <- function(flat.gff.file){
      aggregates <- aggregates[which(aggregates$class == "aggregate_gene"),]
      
      attrSimple <- gsub("\"|=|;", "", aggregates$attr);
-     gene_id <- sub(".*gene_id\\s(\\S+).*", "\\1", attrSimple)
-     transcripts <- gsub(".*tx_set\\s(\\S+).*", "\\1", attrSimple)
-     part_number <- gsub(".*num\\s(\\S+).*", "\\1", attrSimple)
-     tx_strands <- gsub(".*tx_strands\\s(\\S+).*", "\\1", attrSimple)
-     aggregateGeneStrand <- gsub(".*aggregateGeneStrand\\s(\\S+).*", "\\1", attrSimple)
-     
-     out <- data.frame(geneID = gene_id,aggregateGeneStrand = aggregateGeneStrand, tx_set = transcripts, num = part_number, tx_strands = tx_strands, stringsAsFactors=F);
-     
+     attrCells <- strsplit(attrSimple,"\\s");
+     #Backwards compatibility with older versions of QoRTs:
+     if( ! grepl(".*tx_set\\s\\S+.*",attrSimple[[1]])){
+       gene_id <- sub(".*gene_id\\s(\\S+).*", "\\1", attrSimple);
+       part_number <- gsub(".*num\\s(\\S+).*", "\\1", attrSimple)
+       out <- data.frame(geneID = gene_id,num = part_number, stringsAsFactors=F);
+     } else {
+       gene_id <- sub(".*gene_id\\s(\\S+).*", "\\1", attrSimple)
+       transcripts <- gsub(".*tx_set\\s(\\S+).*", "\\1", attrSimple)
+       part_number <- gsub(".*num\\s(\\S+).*", "\\1", attrSimple)
+       tx_strands <- gsub(".*tx_strands\\s(\\S+).*", "\\1", attrSimple)
+       aggregateGeneStrand <- gsub(".*aggregateGeneStrand\\s(\\S+).*", "\\1", attrSimple)
+
+       out <- data.frame(geneID = gene_id,aggregateGeneStrand = aggregateGeneStrand, tx_set = transcripts, num = part_number, tx_strands = tx_strands, stringsAsFactors=F);
+     }
      #attrCells <- strsplit(aggregates$attr,";",fixed=TRUE);
      #attrCells <- lapply(attrCells, function(c){ gsub("^\\s+|\\s+$" ,"", gsub("\"|=|;", "", c)) })
      
@@ -877,6 +889,7 @@ readGeneInfo <- function(flat.gff.file){
      #colnames(out)[colnames(out) == "gene_id"] <- "geneID";
      
      return(out);
+
 }
 
 ##############################################################################################################################################################################################################################
@@ -891,10 +904,14 @@ getColCt <- function(geneID, merged.data,
     plot.exon.results <- any( merged.data$featureType == "exonic_part" );
   }
   if(is.null(plot.junction.results)){
-    plot.junction.results <- any( merged.data$featureType == "splice_site" );
+    plot.junction.results <- any( merged.data$featureType == "splice_site" | merged.data$featureType == "novel_splice_site" );
   }
   if(is.null(plot.novel.junction.results)){
-    plot.novel.junction.results <- any( merged.data$featureType == "novel_splice_site" );
+        if(plot.junction.results){
+          plot.novel.junction.results <- any( merged.data$featureType == "novel_splice_site" );
+        } else {
+          plot.novel.junction.results <- FALSE;
+        }
   }
   
   rt <- merged.data$geneID == geneID;

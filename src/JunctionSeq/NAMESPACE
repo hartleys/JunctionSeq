@@ -52,8 +52,10 @@ export(
   writeSizeFactors,
   
   writeExprBedTrack,
-  writeSigBedTrack
-
+  writeSigBedTrack,
+  
+  JUNCTIONSEQ.DEFAULT.COLOR.LIST
+  
   #Depreciated:
   #generateCompleteResults,                    # 
   #generateAllExpressionEstimates                    #

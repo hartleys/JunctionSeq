@@ -1,6 +1,6 @@
 Package: JunctionSeq
-Version: 0.4.07
-Date: 2015-09-15
+Version: 0.4.19
+Date: 2015-10-16
 Title: JunctionSeq: A Utility for Detection of Differential Splice-Site Usage in RNA-Seq data
 Authors@R: c(person("Stephen Hartley, PhD", "Developer", role = c("aut", "cre"),
                      email = "stephen.hartley@nih.gov"))

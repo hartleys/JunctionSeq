@@ -12,7 +12,7 @@ plotMA(jscs,
        FDR.threshold = 0.05, 
        fc.name = NULL,
        fc.thresh = 1,
-       use.pch = 19,
+       use.pch = 20,
        smooth.nbin = 256, 
        ylim = c( 1 / 1000,1000),
        use.smoothScatter = TRUE,
@@ -22,7 +22,9 @@ plotMA(jscs,
        par.cex = 1, points.cex = 1, text.cex = 1,
        lines.cex = 8,
        anno.lwd = 2, mar = c(4.1,4.1,3.1,1.1),
-       miniTicks = TRUE, ...)
+       miniTicks = TRUE, 
+       verbose = TRUE, debug.mode = FALSE,
+       ...)
 }
 \arguments{
   \item{jscs}{
@@ -89,6 +91,9 @@ plotMA(jscs,
   \item{miniTicks}{
     Logical. If TRUE, then include "mini tick marks" on the x and y axes.
   }
+  
+  \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
+  \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
   
   \item{...}{
     Additional graphical parameters.

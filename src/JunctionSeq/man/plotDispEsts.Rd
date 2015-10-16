@@ -12,14 +12,18 @@
                linecol=c("#0000FF","#FF0000"), 
                pointcol = c("#00009980","#99000080"),
                title.main = "Dispersion Estimates", 
-               xlab = "mean of normalized counts", 
-               ylab = "dispersion",
+               xlab = "Mean Normalized Coverage", 
+               ylab = "Dispersion",
                miniTicks = TRUE,
-               pch = c(1,4),
+               pch.MLE = 46, pch.MAP = 1, lwd.fitted = 2,
                par.cex = 1, points.cex = 1, text.cex = 1, lines.cex = 8,
                use.smoothScatter = FALSE, smooth.nbin = 512, nrpoints = 100,
                plot.exon.results = TRUE, 
                plot.junction.results = TRUE, 
+               anno.lwd = 2,
+               mar = c(4.1,4.1,3.1,1.1),
+               show.legends = TRUE,
+               verbose = TRUE, debug.mode = FALSE,
                ... )
 }
 
@@ -70,9 +74,17 @@
     The character expansion value for lines. What this means seems to vary depending on the plotting device.
   }
   
-  \item{pch}{
-    Numeric vector of length 2. Contains the pch parameters for the exon features and the junction features. This determines the character used in plotting. By default the exons are plotted as circles, and junctions are plotted as X's.
+  \item{pch.MLE}{
+    Numeric. The pch code for the MLE (ie single-feature) dispersion estimate. The default is a small point.
   }
+  \item{pch.MAP}{
+    Numeric. The pch code for the MAP (ie. final) dispersion estimate. The default is a circle.
+  }
+  \item{lwd.fitted}{
+    Numeric. The width of the dispersion fit line(s).
+  }
+  
+  
   \item{use.smoothScatter}{
     Logical. If TRUE, features will be ploted with density shading rather than having each point plotted.
   }
@@ -84,6 +96,21 @@
   }
   \item{plot.exon.results}{Logical. If \code{TRUE}, plot results for exons. Technically speaking, JunctionSeq can be used to do DEXSeq-style analyses on exon partitions. However this functionality is for advanced users only.}
   \item{plot.junction.results}{Logical. If \code{TRUE}, plot results for splice junctions. For advanced users only.}
+  
+  \item{anno.lwd}{
+    The lwd value to be passed to \code{\link{lines}}, \code{\link{box}}, \code{\link{axis}}, and similar.
+  }
+  \item{mar}{
+    The margin sizes, expressed in lines. see \code{link{par}}.
+  }
+  
+  \item{show.legends}{
+    Logical. If \code{TRUE}, display legends.
+  }
+  
+  \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
+  \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
+  
   \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}
 
 }

@@ -109,6 +109,8 @@ differentials may not result in strong observed differentials in the individual 
 
 JunctionSeq is \emph{not} designed to detect changes in overall gene expression. Gene-level differential expression is best detected with tools designed specifically for that purpose such as DESeq2\cite{DESeq2} or edgeR\cite{edgeR}.
 
+The core advantage to JunctionSeq is that it provides powerful and comprehensive automated visualization tools designed to assist in the interpretation of the results. JunctionSeq produces an array of intuitive expression plots along with genome-wide browser tracks for use with IGV or the UCSC genome browser.
+
 Additional help and documentation is \href{http://hartleys.github.io/JunctionSeq/index.html}{available online}. There is also a \href{http://hartleys.github.io/JunctionSeq/doc/example-walkthrough.pdf}{comprehensive walkthrough} of 
 the entire analysis pipeline, along with a full \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip}{example dataset} with 
 \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip}{example bam files}.
@@ -150,12 +152,14 @@ biocLite("S4Vectors");
 biocLite("genefilter");
 biocLite("geneplotter");
 
-install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",repos=NULL, type = "source");
+install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",
+                 repos = NULL, 
+                 type = "source");
 @
 
 \emph{Generating splice junction counts:} The easiest way to generate the counts for JunctionSeq is via the QoRTs software package. The QoRTs software package requires R version 3.0.2 or higher, as well as (64-bit) java 6 or higher. QoRTs can be found online \href{http://hartleys.github.io/QoRTs/index.html}{here}.
 
-\emph{Hardware:} Both the JunctionSeq and QoRTs software packages will generally require at least 2-4 gigabytes of RAM to run. In general at least 4gb is recommended when available.
+\emph{Hardware:} Both the JunctionSeq and QoRTs software packages will generally require at least 2-10 gigabytes of RAM to run. In general at least 4gb is recommended when available for the QoRTs runs, and at least 10gb for the JunctionSeq runs. R multicore functionality usually involves duplicating the R environment, so memory usage may be higher if multicore options are used.
 
 \emph{Annotation:} JunctionSeq requires a transcript annotation in the form of a gtf file. If you are using a annotation guided aligner (which is STRONGLY recommended) it is likely you already have a transcript gtf file for your reference genome. We recommend you use the same annotation gtf for alignment, QC, and downstream analysis. We have found the Ensembl "Gene Sets" gtf\footnote{Which can be acquired from the \href{http://www.ensembl.org}{Ensembl website}} suitable for these purposes. However, any format that adheres to the gtf file specification\footnote{See the gtf file specification \href{http://genome.ucsc.edu/FAQ/FAQformat.html}{here}} will work.
 
@@ -309,7 +313,7 @@ Once size factors have been generated, novel splice junctions can be selected an
 \begin{framed}  \small \begin{verbatim}
 java -jar /path/to/jarfile/QoRTs.jar QC \
                 mergeNovelSplices  \
-                --minCount 10 \
+                --minCount 6 \
                 --stranded \
                 cts/ \
                 sizeFactors.GEO.txt \
@@ -318,7 +322,7 @@ java -jar /path/to/jarfile/QoRTs.jar QC \
 \end{verbatim}  \end{framed}
 Note: The file sizeFactors.GEO.txt contains two columns, "sample.ID" and "size.factor".
 
-This utility finds all splice junctions that fall inside the bounds of any known gene. It then filters this set of splice junctions, selecting only the junction loci with mean normalized read-pair counts of greater than the assigned threshold (set to 10 read-pairs in the example above). It then gives each splice junction that passes this filter a unique identifier.
+This utility finds all splice junctions that fall inside the bounds of any known gene. It then filters this set of splice junctions, selecting only the junction loci with mean normalized read-pair counts of greater than the assigned threshold (set to 6 read-pairs in the example above). It then gives each splice junction that passes this filter a unique identifier.
 
 This utility produces two sets of output files. First it writes a .gff file containing the unique identifiers for each annotated and novel-and-passed-filter splice locus. Secondly, for each sample it produces a count file that includes these additional splice junctions (along with the original counts as well).
 
@@ -484,6 +488,31 @@ Many of these processes can be difficult to discern and differentiate. Therefore
 
 JunctionSeq, especially when used in conjunction with the QoRTs software package, contains a number of tools for visualizing the results and the patterns of expression observed in the dataset.
 
+A comprehensive battery of plots, along with a set of html files for easy navigation, can be generated with the command:
+<<makeAllPlots>>=
+buildAllPlots(jscs=jscs,
+              outfile.prefix = "./plots/",
+              use.plotting.device = "png",
+              FDR.threshold = 0.01
+              );
+@
+This produces a number of sub-directories, and includes analysis-wide summary plots along with plots for every gene with one or more statistically significant exons or splice junctions. Alternatively, plots for a manually-specified gene list can be generated using the \texttt{gene.list} parameter. Other parameters include:
+
+{
+\small
+  \begin{itemize} 
+    \item \texttt{colorRed.FDR.threshold}: The adjusted-p-value threshold to use to determine when features should be colored as significant.
+    \item \texttt{plot.gene.level.expression}: If \texttt{FALSE}, do not include the gene-level expression plot on the right side.
+    \item \texttt{sequencing.type}: "paired-end" or "single-end". This option is purely cosmetic, and simply determines whether the y-axes will be labelled as "read-pairs" or "reads".
+    \item \texttt{par.cex, anno.cex.text, anno.cex.axis, anno.cex.main}: The character expansions for various purposes. \texttt{par.cex} determines the cex value passed to \texttt{par}, which expands all other text, margins, etc. The other three parameters determine the size of text for the various labels.
+    \item \texttt{plot.lwd, axes.lwd, anno.lwd, gene.lwd}: Line width variables for various lines.
+    \item \texttt{base.plot.height, base.plot.width, base.plot.units}: The "base" width and height for all plots. Plots with transcripts drawn will be expanded vertically to fit the transcripts, plots with a large number of exons or junctions will be likewise be expanded horizontally. This functionality can be deactivated by setting \texttt{autoscale.height.to.fit.TX.annotation} to FALSE and \texttt{autoscale.width.to.fit.bins} to \texttt{Inf}.
+    \texttt{html.compare.results.list}: If you have multiple studies that you want to directly compare, you can use this parameter to allow cross-linking between analyses from the html navigation pages. The results from each analysis must be placed in the same parent directory, and this parameter must be set to a named list of subdirectory names, corresponding to the \texttt{outfile.prefix} for each run of \texttt{buildAllPlots}. In general you should also set the \texttt{gene.list} parameter, or else cross-links will fail if a gene is significant in one analysis but not the other. This parameter can also be used to cross-link different runs of \texttt{buildAllPlots} on the same dataset, to easily compare different parameter settings. 
+  \end{itemize}
+}
+
+
+\pagebreak
 %----------
 \subsection{Summary Plots} \label{sec:summaryPlots}
 %----------
@@ -503,19 +532,9 @@ plotMA(jscs, FDR.threshold=0.05);
 \subsection{Gene plots} \label{sec:allPlot}
 %----------
 
-JunctionSeq includes a simple and straightforward function that automatically generates a comprehensive battery of plots. Generally it is desired to print plots for all genes that have one or more splice junctions with statistically significant differential splice junction usage. By default, JunctionSeq uses an FDR-adjusted p-value threshold of 0.01.
+Generally it is desired to print plots for all genes that have one or more splice junctions with statistically significant differential splice junction usage. By default, JunctionSeq uses an FDR-adjusted p-value threshold of 0.01.
 
-These plots can be generated via the command:
-<<makeAllPlots>>=
-buildAllPlots(jscs=jscs,
-              outfile.prefix = "./plots/",
-              use.plotting.device = "png",
-              FDR.threshold = 0.01
-              );
-@
-This will produce 4 subdirectories in the "plots" directory. Each sub-directory will contain 1 figure for each gene that contains one or more exons or junctions that achieves genome-wide statistical significance. Alternatively, plots for manually-specified genes can be generated using the gene.list parameter, which overrides the FDR.threshold parameter.
-
-For each selected gene, this function will yield 4 plots:
+For each selected gene, the \texttt{buildAllPlots} function will yield 6 plots:
 {
 \small
   \begin{itemize} 
@@ -523,8 +542,12 @@ For each selected gene, this function will yield 4 plots:
     \item \emph{geneID-expr-withTx.png}: as above, but with the transcript annotation displayed.
     \item \emph{geneID-normCounts.png}: Normalized read counts for each sample, colored by biological condition. See Section \ref{sec:subplot3}.
     \item \emph{geneID-normCounts-withTx.png}: as above, but with the transcript annotation displayed.
+    \item \emph{geneID-rExpr.png}: Expression levels relative to the overall gene-level expression. See Section \ref{sec:subplot2}.
+    \item \emph{geneID-rExpr-withTx.png}: as above, but with the transcript annotation displayed.    
   \end{itemize}
 }
+
+JunctionSeq will also generate an html index file for easy browsing of these output files.
 
 \pagebreak
 %----------
@@ -539,7 +562,7 @@ There are a few things to note about this plot:
 
   \begin{itemize}
     \item The y-axis is log-transformed, except for the area between 0 and 1 which is plotted on a simple linear scale. 
-    \item In the line drawing at the bottom, the exons and introns are not drawn to a common scale. The exons are enlarged to improve readability. The rescaling is very simple: all exons are proportionately enlarged to take up 30 percent of the diagram. This can be adjusted via the "exon.rescale.factor" parameter (the default is 0.3), or turned off entirely by setting this parameter to -1.
+    \item In the line drawing at the bottom, the exons and introns are not drawn to a common scale. The exons are enlarged to improve readability. Each exon or intron is  rescaled proportionately to the square-root of their width, then the exons are scaled up to take up 30 percent of the horizontal space. This can be adjusted via the "exon.rescale.factor" parameter (the default is 0.3), or turned off entirely by setting this parameter to -1. The proportionality function can also be changed using the \texttt{exonRescaleFunction} parameter. For mammalian genomes at least, we have found square-root-proportional function to be a good trade-off between making sure that features are distinct while still being able to visually identify which features are larger or smaller.
     \item Note that junction J007 is marked as significantly differentially used, even though it is NOT differentially expressed. This is because JunctionSeq does not test for simple differential expression. It tests for differential splice junction coverage relative to gene-wide expression. Therefore, if (as in this case) the gene as a whole is strongly differentially expressed, then a splice junction that is NOT differentially expressed is the one that is being differentially used. 
     \item Similarly, splice junction N009 is differentially used in the opposite way: while the gene itself is somewhat differentially expressed (at a fold change of roughly 3-4x overall), this particular junction has a \emph{massive} differential, far beyond that found in the gene as a whole (at 45x fold change). Thus, it is being differentially used.
   \end{itemize}
@@ -558,6 +581,17 @@ Figure \ref{../plots/exprTX/ENSRNOG00000009281-expr-withTx-fig} displays the sam
 \myincfigRaw{../plots/normCounts/ENSRNOG00000009281-normCounts}{0.85\textwidth}{\footnotesize Normalized counts for each sample}
 
 Figure \ref{../plots/normCounts/ENSRNOG00000009281-normCounts-fig} displays the normalized coverage counts for each sample over each splice junction or exonic region. This will be identical to the counts displayed in Section \ref{sec:subplot4} except that each read count will be normalized by the sample size factors so that the samples can be compared directly.
+
+\pagebreak
+%----------
+\subsubsection{Relative Expression Plots} \label{sec:subplot2}
+%----------
+
+\myincfigRaw{../plots/rExpr/ENSRNOG00000009281-rExpr}{0.85\textwidth}{\footnotesize Relative splice junction coverage by biological condition.}
+
+Figure \ref{../plots/rExpr/ENSRNOG00000009281-rExpr-fig} displays the "relative" coverage for each splice junction or exonic region, \emph{relative} to gene-wide expression (which is itself plotted in the right panel).
+
+JunctionSeq is designed to detect differential expression even in the presence of gene-wide, multi-transcript differential expression. However it can be difficult to visually assess differential usage on differentially exprssed genes. This plot displays the coverage relative to the gene-wide expression. These estimates are derived from the GLM parameter estimates (via linear contrasts). The reported "fold changes" are ratios of these relative expression estimates.
 
 \pagebreak
 %--------------------------------------------------------------------------------
@@ -658,36 +692,102 @@ Individual-sample or individual-replicate junction coverage tracks can also be g
 %--------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------
 
-Two additional sets of minor optional plots which may be useful to some users can be added using the command:
+%----------
+\subsubsection{Raw Count Plots} \label{sec:subplot4}
+%----------
+
+Raw expression plots can be added using the command:
 <<makeAllPlots2>>=
 buildAllPlots(jscs=jscs,
               outfile.prefix = "./plots/",
               use.plotting.device = "png",
               FDR.threshold = 0.01,
               expr.plot = FALSE, normCounts.plot = FALSE,
-              rExpr.plot = TRUE, rawCounts.plot = TRUE
+              rExpr.plot = FALSE, rawCounts.plot = TRUE
               );
 @
 
-\pagebreak
-%----------
-\subsubsection{Relative Expression Plots} \label{sec:subplot2}
-%----------
-
-\myincfigRaw{../plots/rExpr/ENSRNOG00000009281-rExpr}{0.85\textwidth}{\footnotesize Relative splice junction coverage by biological condition.}
-
-Figure \ref{../plots/rExpr/ENSRNOG00000009281-rExpr-fig} displays the "relative" coverage for each splice junction or exonic region, relative to gene-wide expression. Note that, by default, this plot is NOT generated by \verb|buildAllPlots|.  Generation of these plots must be turned on by adding the parameter: "\verb|rExpr.plot=TRUE|".
-
-JunctionSeq is designed to detect differential expression even in the presence of gene-wide, multi-transcript differential expression. However it can be difficult to visually assess differential usage on differentially exprssed genes. This plot displays the coverage relative to the gene-wide expression. These estimates are derived from the GLM parameter estimates (via linear contrasts).
-
-\pagebreak
-%----------
-\subsubsection{Raw Count Plots} \label{sec:subplot4}
-%----------
-
-\myincfigRaw{../plots/rawCounts/ENSRNOG00000009281-rawCounts}{0.85\textwidth}{\footnotesize Raw counts for each sample}
+\myincfigRaw{../plots/rawCounts/ENSRNOG00000009281-rawCounts}{0.5\textwidth}{\footnotesize Raw counts for each sample}
 
 Figure \ref{../plots/rawCounts/ENSRNOG00000009281-rawCounts-fig} displays the raw (un-normalized) coverage counts for each sample over each splice junction or exonic region. This is equal to the number of reads (or read-pairs, for paired-end data) that bridge each junction. Note that these counts are not normalized, and are generally not directly comparable. Note that by default this plot is NOT generated by \verb|buildAllPlots|. Generation of these plots must be turned on by adding the parameter: "\verb|rawCounts.plot=TRUE|".
+
+\pagebreak
+%----------
+\subsubsection{Additional Optional Parameters} \label{sec:subplot6}
+%----------
+
+By setting the \texttt{plot.exon.results} and \texttt{plot.junction.results} parameters to \texttt{FALSE}, we can exclude exons or junctions from the plots, respectively. There are numerous other options that can be used to generate plots either individually or in groups. 
+
+\noindent Just a few examples:
+<<makeAllPlots3, eval=FALSE>>=
+#Make a battery of exon-only plots for one gene only:
+buildAllPlotsForGene(jscs=jscs, geneID = "ENSRNOG00000009281",
+              outfile.prefix = "./plots/",
+              use.plotting.device = "png",
+              colorRed.FDR.threshold = 0.01, 
+             #Limit plotting to exons only:
+              plot.junction.results = FALSE,
+             #Change the fill color of significant exons:
+              colorList = list(SIG.FEATURE.FILL.COLOR = "red"),
+              );
+
+#Make a set of Junction-Only Plots for a specific list of interesting genes:
+buildAllPlots(jscs=jscs,
+              gene.list = c("ENSRNOG00000009281"),
+              outfile.prefix = "./plotsJCT/",
+              use.plotting.device = "png",
+              FDR.threshold = 0.01, 
+             #Do not graph exonic regions:
+              plot.exon.results = FALSE,
+              );
+@
+<<makeAllPlots3BG, echo=FALSE, results="hide">>=
+#NOTE: This is a version of the above script with additional options to 
+#      reduce execution time:
+buildAllPlotsForGene(jscs=jscs, geneID = "ENSRNOG00000009281",
+              outfile.prefix = "./plots/",
+              use.plotting.device = "png",
+              colorRed.FDR.threshold = 0.01, 
+             #Limit plotting to exons only:
+              plot.junction.results = FALSE,
+             #Change the fill color of significant exons:
+              colorList = list(SIG.FEATURE.FILL.COLOR = "red"),
+             #NOTE: The following options reduce the generation of
+             #      extra plots not actually needed for this manual:
+              expr.plot = TRUE, normCounts.plot = FALSE,
+              rExpr.plot = FALSE, rawCounts.plot = FALSE,
+              without.TX = FALSE
+              );
+
+#Junction-Only Plots:
+buildAllPlots(jscs=jscs,
+              gene.list = c("ENSRNOG00000009281"),
+              outfile.prefix = "./plotsJCT/",
+              use.plotting.device = "png",
+              FDR.threshold = 0.01, plot.exon.results = FALSE,
+              #NOTE: The following options reduce the generation of
+              #      extra plots not actually needed for this manual:
+              expr.plot = TRUE, normCounts.plot = FALSE,
+              rExpr.plot = FALSE, rawCounts.plot = FALSE,
+              ma.plot = FALSE,  variance.plot = FALSE,
+              without.TX = FALSE,
+              );
+@
+
+See Figure \ref{../plots/ENSRNOG00000009281-expr-withTx-fig} and Figure \ref{../plotsJCT/exprTX/ENSRNOG00000009281-expr-withTx-fig}.
+
+For more information, use the help documentation:
+<<getPlotHelpDocs, eval=FALSE>>=
+help(buildAllPlots);
+help(buildAllPlotsForGene);
+help(plotJunctionSeqResultsForGene);
+@
+
+\pagebreak
+
+\myincfigRaw{../plots/ENSRNOG00000009281-expr-withTx}{0.85\textwidth}{\footnotesize Exon expression plots. Note the altered fill color of the significant exon.}
+
+\myincfigRaw{../plotsJCT/exprTX/ENSRNOG00000009281-expr-withTx}{0.85\textwidth}{\footnotesize Splice Junction expression plots.}
 
 %--------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------
@@ -697,7 +797,7 @@ Figure \ref{../plots/rawCounts/ENSRNOG00000009281-rawCounts-fig} displays the ra
 %MORE INFO HERE.
 
 
-
+\pagebreak
 %-------------------------------------------------------------------
 %-------------------------------------------------------------------
 \section{Statistical Methodology} \label{sec:methods-main}
@@ -871,24 +971,40 @@ output that would be produced by DEXSeq on the given dataset.
 
 <<DEXReplicate, eval=FALSE>>=
 jscs.DEX <- runJunctionSeqAnalyses(sample.files = countFiles,
-                             sample.names = decoder$sample.ID,
-                             condition = factor(decoder$group.ID),
-                             flat.gff.file = gff.file, 
-                             nCores = 6,
-                             analysis.type = "exonsOnly",
-                             method.countVectors = "sumOfAllBinsForGene",
-                             method.sizeFactors = "byCountbins",
-                             method.expressionEstimation = "feature-vs-otherFeatures",
-                             meanCountTestableThreshold = "auto",
-                             use.multigene.aggregates = TRUE,
-                             method.cooksFilter = TRUE,
-                             optimizeFilteringForAlpha = 0.1,
-#The following option reproduces a (very minor) bug in DEXSeq v1.12.1:
-                             replicateDEXSeqBehavior.useRawBaseMean = TRUE
-                             );
+                  sample.names = decoder$sample.ID,
+                  condition = factor(decoder$group.ID),
+                  flat.gff.file = gff.file, 
+                  nCores = 6,
+                  analysis.type = "exonsOnly",
+                  method.countVectors = "sumOfAllBinsForGene",
+                  method.sizeFactors = "byCountbins",
+                  method.expressionEstimation = "feature-vs-otherFeatures",
+                  meanCountTestableThreshold = "auto",
+                  use.multigene.aggregates = TRUE,
+                  method.cooksFilter = TRUE,
+                  optimizeFilteringForAlpha = 0.1,
+#The following option reproduces a (very minor) bug in DEXSeq v1.12.1 
+#  This bug was fixed in subsequent versions of DEXSeq.
+#  Included only for replicability. NOT FOR GENERAL USE!
+                 replicateDEXSeqBehavior.useRawBaseMean = TRUE
+                 );
 @
 
-This will precisely reproduce the exact analyses that would be generated by the following DEXSeq commands in DEXSeq v1.12.1:
+Output files and plotting can be generated using the normal syntax. 
+<<DEXReplicateRes, eval=FALSE>>=
+writeCompleteResults(jscs.DEX, 
+                     outfile.prefix="./testDEX",
+                     save.jscs = TRUE
+                     );
+buildAllPlots(jscs=jscs.DEX,
+              outfile.prefix = "./plotsDEX/",
+              use.plotting.device = "png",
+              FDR.threshold = 0.01
+              );
+@
+Note that these will be formatted and organized in the JunctionSeq style, including the numerous improvements to the plots, along with the browser tracks designed for use with IGC or the UCSC genome browser.
+
+Using the above method, we can precisely reproduce the exact analyses that would be generated by the following commands in DEXSeq v1.12.1:
 <<DEXRun, eval=FALSE>>=
 library("DEXSeq");
 countFiles.dexseq <- system.file(paste0("extdata/cts/",

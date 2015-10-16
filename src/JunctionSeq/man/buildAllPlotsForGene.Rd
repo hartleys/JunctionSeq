@@ -17,32 +17,36 @@ buildAllPlotsForGene(geneID, jscs,
                      outfile.prefix = "./", 
                      use.plotting.device = c("png","CairoPNG","svg","tiff","cairo_ps","custom"),
                      sequencing.type = c("paired-end","single-end"),
-                     use.vst=FALSE, use.log = TRUE, truncateBelowOne = TRUE,
+                     use.vst=FALSE, use.log = TRUE, 
                      exon.rescale.factor = 0.3,
                      with.TX=TRUE,without.TX=TRUE,
                      expr.plot=TRUE,normCounts.plot=TRUE,
                      rExpr.plot=TRUE,rawCounts.plot=FALSE,
                      colorRed.FDR.threshold = 0.01, 
-                     color=NULL,
+                     colorList=list(),
                      plot.gene.level.expression = TRUE,
                      plot.exon.results, plot.junction.results, plot.novel.junction.results,
                      plot.untestable.results = FALSE,
-                     plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
+                     plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, gene.lwd = plot.lwd / 2,
                      par.cex = 1, name.files.with.geneID = TRUE,
                      anno.cex.text = 1,
                      anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
                      drawCoordinates = TRUE,
                      yAxisLabels.inExponentialForm = FALSE,
-                     show.strand.arrows = 10, arrows.length = 0.125,
+                     show.strand.arrows = 1, 
                      graph.margins = c(2, 3, 3, 3),
                      base.plot.height = 12, base.plot.width = 12, 
                      base.plot.units = "in", 
-                     GENE.annotation.relative.height = 0.2, TX.annotation.relative.height = 0.05,
+                     GENE.annotation.relative.height = 0.1, 
+                     TX.annotation.relative.height = 0.05,
+                     CONNECTIONS.relative.height = 0.1,
+                     SPLICE.annotation.relative.height = 0.1,
+                     TX.margins = c(0.5,0.5),
                      autoscale.height.to.fit.TX.annotation = TRUE,
                      autoscale.width.to.fit.bins = 35,
                      plotting.device.params = list(),
                      condition.legend.text, include.TX.names = TRUE,
-                     draw.start.end.sites = TRUE,
+                     draw.start.end.sites = TRUE, draw.nested.SJ = TRUE,
                      openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
                      verbose=TRUE, debug.mode = FALSE,  ...)
 
@@ -71,7 +75,6 @@ buildAllPlotsForGene(geneID, jscs,
   }
   \item{use.vst}{Logical. If \code{TRUE}, all plots will be scaled via a variance stabilizing transform.}
   \item{use.log}{Logical. If \code{TRUE}, all plots will be log-scaled.}
-  \item{truncateBelowOne}{Logical. If \code{TRUE}, all values below 1 will be linear-scaled. If use.log is FALSE, this does nothing.}
   \item{exon.rescale.factor}{Numeric. Exons will be proportionately scaled-up so that the exonic regions make up this fraction of the horizontal plotting area. If negative, exons and introns will be plotted to a common scale. }
   
   \item{with.TX}{if \code{TRUE}, save expression plots with the full transcripts printed}
@@ -82,7 +85,7 @@ buildAllPlotsForGene(geneID, jscs,
   \item{rawCounts.plot}{if \code{TRUE}, save an expression plot of the raw counts for each splice site, for each sample. Note that these will never be VST-transformed, even when use.vst == TRUE.}
   
   \item{colorRed.FDR.threshold}{The adjusted-p-value threshold used to determine whether a feature should be marked as "significant" and colored pink. By default this will be the same as the FDR.threshold.}
-  \item{color}{A vector of R colors, named for each possible value of condition. By default, it will attempt to choose reasonable colors for each condition.}
+  \item{colorList}{A named list of R colors, setting the colors used for various things. See \code{\link{plotJunctionSeqResultsForGene}}}
   
   \item{plot.gene.level.expression}{
     Logical value. If \code{TRUE}, gene-level expression (when applicable) will be plotted beside the sub-element-specific expression in a small seperate plotting box. 
@@ -96,6 +99,7 @@ buildAllPlotsForGene(geneID, jscs,
   \item{plot.lwd}{the line width for the plotting lines.}
   \item{axes.lwd}{the line width for the axes.}
   \item{anno.lwd}{the line width for the various other annotation lines.}
+  \item{gene.lwd}{the line width used for the gene annotation lines.}
   \item{par.cex}{
      The base cex value to be passed to par() immediately before all plots are created. See \code{\link{par}}.
   }
@@ -116,8 +120,9 @@ buildAllPlotsForGene(geneID, jscs,
   \item{drawCoordinates}{Whether to label the genomic coordinates at the bottom of the plot.}
   \item{yAxisLabels.inExponentialForm}{Logical. If \code{TRUE}, then the y-axis will be labelled in exponential form.}
 
-  \item{show.strand.arrows}{The number of strand-direction arrows to display.}
-  \item{arrows.length}{The length of the strand-direction arrows, in inches.}
+  \item{show.strand.arrows}{The number of strand-direction arrows to display. If equal to \code{1} (the default) then the arrow will extend from the end of the gene drawing, if it is greater than \code{1} then arrows will be drawn
+    along the gene length. If it is \code{0} or \code{NA} then arrows will not be drawn.
+  }
   
   \item{graph.margins}{
     Numeric vector of length 4. These margins values used (as if for par("mar")) for the main graph. The lower part of the plot uses the same left and right margins. 
@@ -136,6 +141,16 @@ buildAllPlotsForGene(geneID, jscs,
   \item{TX.annotation.relative.height}{
     For all plots that draw the annotated-transcript set (when the \code{with.TX} parameter is \code{TRUE}), this sets the height of each transcript, as a fraction of the height of the main graph. By default it is 2.5 percent.
   }
+  \item{CONNECTIONS.relative.height}{
+    The height of the panel that connects the plotting area to the gene annotation area, relative to the height of the plotting area. This panel has the lines that connects the counting bin columns to their actual loci on the gene. By default it is 10 percent.
+  }
+  \item{SPLICE.annotation.relative.height}{
+    The height of the area that shows the splice junction loci, relative to the size of the plotting area.
+  }
+  \item{TX.margins}{
+    A numeric vector of length 2. The size of the blank space between the gene plot and the transcript list and then beneath the transcript list, relative to the size of each transcript line.
+  }
+  
   \item{autoscale.height.to.fit.TX.annotation}{
     Plots that include the full transcript annotation generally need to have a larger height in order to maintain readability. By default, 
     all plots that include transcripts will be expanded vertically by the height of the additional transcripts. This maintains the same appearance and
@@ -162,12 +177,19 @@ buildAllPlotsForGene(geneID, jscs,
   \item{draw.start.end.sites}{
     Logical value. If \code{TRUE}, then transcript start/end sites will be marked on the main gene annotation.
   }
-
+  
+  \item{draw.nested.SJ}{
+    Logical. If \code{TRUE}, overlapping splice junctions will be drawn layered under one another. 
+    This can vastly improve readability when there are a large number of overlapping splice junctions. 
+    Default is \code{TRUE}.
+  }
+  
   \item{openPlottingDeviceFunc}{An R function. This option can be used to use plotting devices other than the ones directly supported by JunctionSeq. This must be a function that must have 3 parameters: filename, heightMult, and widthMult. It should open the desired plotting device. For advanced users only.}
   \item{closePlottingDeviceFunc}{An R function. This must be used in conjunction with openPlottingDeviceFunc. For most devices, you can just use the function "dev.off". For advanced users only.}
     
   \item{verbose}{if \code{TRUE}, send debugging and progress messages to the console / stdout.}
   \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
   
-  \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}
+  \item{...}{Additional options to pass to \code{\link{plotJunctionSeqResultsForGene}}, or graphical parameters passed to plotting functions.}
+  
 }

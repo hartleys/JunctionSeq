@@ -1,6 +1,5 @@
 
 
-
 ##########################################################################
 ##########################################################################
 ##########################################################################
@@ -13,18 +12,21 @@ plotDispEsts <- function( jscs, ylim, xlim,
   linecol=c("#0000FF","#FF0000"), pointcol = c("#00009980","#99000080"),
   title.main = "Dispersion Estimates", xlab = "Mean Normalized Coverage", ylab = "Dispersion",
   miniTicks = TRUE,
-  pch = c(1,4),
+  pch.MLE = 46, pch.MAP = 1,
+  lwd.fitted = 2,
   par.cex = 1, points.cex = 1, text.cex = 1,lines.cex = 8,
   use.smoothScatter = FALSE, smooth.nbin = 512, nrpoints = 100,
   plot.exon.results = TRUE, 
   plot.junction.results = TRUE, 
   anno.lwd = 2,
   mar = c(4.1,4.1,3.1,1.1),
+  show.legends = TRUE,
+  verbose = TRUE, debug.mode = FALSE,
   ... )
 {
   
     px = rowMeans( counts( jscs, normalized=TRUE ) );
-    pch <- ifelse(fData(jscs)$featureType == "exonic_part", pch[1], pch[2]);
+    #pch <- ifelse(fData(jscs)$featureType == "exonic_part", pch[1], pch[2]);
     pchColor <- ifelse(fData(jscs)$featureType == "exonic_part", pointcol[1], pointcol[2]);
 
     sel <- rep(TRUE, length(px));
@@ -51,8 +53,8 @@ plotDispEsts <- function( jscs, ylim, xlim,
     xmin <- ((min(px, na.rm=TRUE)));
     xmax <- ((max(px, na.rm=TRUE)));
 
-    message("abundance ranges from ",xmin, " to ",xmax);
-    message("dispersion ranges from ",ymin, " to ",ymax);
+    if(verbose) message("     abundance ranges from ",xmin, " to ",xmax);
+    if(verbose) message("     dispersion ranges from ",ymin, " to ",ymax);
     
     xmin <- max(xmin,1);
     ymin <- quantile(py, 0.025,na.rm=TRUE);
@@ -63,7 +65,7 @@ plotDispEsts <- function( jscs, ylim, xlim,
     if(missing(xlim)){
        xlim <- c(xmin,xmax);
     }
-    message("Plotting dispersions from ",ymin, " to ",ymax);
+    if(verbose) message("     Plotting dispersions from ",ymin, " to ",ymax);
     ylim <- log10(ylim);
     xlim <- log10(xlim);
 
@@ -93,12 +95,12 @@ plotDispEsts <- function( jscs, ylim, xlim,
     } else {
       if( jscs@dispFunctionType[["finalDispersionMethod"]] == "shrink"){
         plot(log10(px),log10(py),
-                       xlim = xlim, ylim=ylim,xlab="",ylab="",axes=F, xaxs="i", yaxs="i", pch = ".", cex = points.cex, col = pchColor,
+                       xlim = xlim, ylim=ylim,xlab="",ylab="",axes=F, xaxs="i", yaxs="i", pch = pch.MLE, cex = points.cex, col = pchColor,
                        ...);
-        points(log10(px),log10(pyFitted), pch = pch[1], cex = points.cex/2, col = pchColor, ...);
+        points(log10(px),log10(pyFitted), pch = pch.MAP, cex = points.cex/2, col = pchColor, ...);
       } else {
         plot(log10(px),log10(py),
-                     xlim = xlim, ylim=ylim,xlab="",ylab="",axes=F, xaxs="i", yaxs="i", pch = pch, cex = points.cex, ...);
+                     xlim = xlim, ylim=ylim,xlab="",ylab="",axes=F, xaxs="i", yaxs="i", pch = pch.MAP, cex = points.cex, ...);
       }
     }
 
@@ -107,18 +109,35 @@ plotDispEsts <- function( jscs, ylim, xlim,
     if(miniTicks) axis(1, at = ticks.at, labels = FALSE, tcl = -0.25, lwd = anno.lwd, lwd.ticks = anno.lwd / 2,  ...);
     axis(2, at = decade.at, labels = decade.labels, tcl = -0.5, las = 1, lwd = anno.lwd, lwd.ticks = anno.lwd, ...);
     if(miniTicks) axis(2, at = ticks.at, labels = FALSE, tcl = -0.25, lwd = anno.lwd, lwd.ticks = anno.lwd / 2, ...);
+    axis(4, at = decade.at, labels = FALSE, tcl = -0.5, las = 1, lwd = anno.lwd, lwd.ticks = anno.lwd, ...);
+    if(miniTicks) axis(4, at = ticks.at, labels = FALSE, tcl = -0.25, lwd = anno.lwd, lwd.ticks = anno.lwd / 2, ...);
+    
+    if(show.legends){
+      if(jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]]){
+           #Exon / Junction Labels (only if both exons and junctions are found and tested:
+           legend("bottomright",legend=c("Exons","Junctions"),text.col=linecol, bg="transparent", box.col="transparent")
+      }
+      legend.pt.cex <- if(pch.MLE == 46){points.cex * 5} else {points.cex}
+      if( jscs@dispFunctionType[["finalDispersionMethod"]] == "shrink"){
+         legend("topright", bg="transparent", box.col="transparent", seg.len=1, cex = text.cex,
+                  legend=c("MLE","Fitted","MAP"),
+                  lty =  c(NA,1,NA), 
+                  lwd =  c(NA,lwd.fitted,NA),
+                  pch =  c(pch.MLE,NA,pch.MAP),
+                  pt.cex = c(legend.pt.cex,NA,points.cex/2))
+      }
+    }
     
     title(main = title.main, xlab = xlab, ylab = ylab , cex.main = text.cex * 1.2, cex.lab = text.cex,...);
 
     log.xg = seq( min(decade.at), max(decade.at), length.out=200 );
     xg <- 10 ^ log.xg;
-
-
+    
     if(jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]]){
-      lines(log.xg, log10(jscs@dispFunctionExon(xg)) , col=linecol[1], lwd=anno.lwd, cex = lines.cex, ...);
-      lines(log.xg, log10(jscs@dispFunctionJct(xg)) , col=linecol[2], lwd=anno.lwd, cex = lines.cex, ...);
+      lines(log.xg, log10(jscs@dispFunctionExon(xg)) , col=linecol[1], lwd=lwd.fitted, cex = lines.cex, ...);
+      lines(log.xg, log10(jscs@dispFunctionJct(xg)) , col=linecol[2], lwd=lwd.fitted, cex = lines.cex, ...);
     } else {
-      lines(log.xg, log10(jscs@dispFunction(xg)) , col=linecol[1], lwd=anno.lwd, cex = lines.cex, ...);
+      lines(log.xg, log10(jscs@dispFunction(xg)) , col=linecol[1], lwd=lwd.fitted, cex = lines.cex, ...);
     }
 }
 
@@ -146,7 +165,7 @@ plotMA <- function(jscs,
                            FDR.threshold = 0.05, 
                            fc.name = NULL,
                            fc.thresh = 1,
-                           use.pch = 19,
+                           use.pch = 20,
                            smooth.nbin = 256, 
                            ylim = c( 1 / 1000,1000),
                            use.smoothScatter = TRUE,
@@ -157,7 +176,9 @@ plotMA <- function(jscs,
                            lines.cex = 8,
                            anno.lwd = 2,
                            mar = c(4.1,4.1,3.1,1.1),
-                           miniTicks = TRUE, ...){
+                           miniTicks = TRUE, 
+                            verbose = TRUE, debug.mode = FALSE,
+                            ...){
 
   sig.thresh <- FDR.threshold;
   color.orange <- "red";
@@ -241,8 +262,9 @@ plotMA <- function(jscs,
     plot(log10(X[! is.sig]),limited.log2fc[! is.sig], col= point.color[! is.sig], pch= point.pch[! is.sig],cex= points.cex,
                  xlim = xlim,ylim=ylim.exp,xlab="",ylab="",axes=F, ...);
   }
+  points(log10(X[is.over & (is.sig)]),limited.log2fc[is.over & (is.sig)], col= point.color[is.over & (is.sig)],pch= point.pch[is.over & (is.sig)],cex= points.cex,  ...);
+  points(log10(X[(is.sig & !is.over)]),limited.log2fc[(is.sig & !is.over)], col= point.color[(is.sig & !is.over)],pch= point.pch[(is.sig & !is.over)],cex= points.cex/2, ...);
   
-  points(log10(X[is.sig]),limited.log2fc[is.sig], col= point.color[is.sig],pch= point.pch[is.sig],cex= points.cex/2, ...);
   abline(h=0,col=rgb(255,0,0,100,maxColorValue=255), lwd = anno.lwd, cex = lines.cex)
 
   box(lwd = anno.lwd);
@@ -311,8 +333,10 @@ plotMA <- function(jscs,
         abline(h=-log2(fc.thresh),col="gray",lty=markerlines.lty, lwd = anno.lwd, cex = lines.cex);
       }
     }
-    text(par("usr")[2],ylim.exp[2],paste0(sig.count.plus,  " higher in ",lvls[1]," (FC > ",fc.thresh,")"), cex = text.cex, adj = c(1.1, 1.5),...);
-    text(par("usr")[2],ylim.exp[1],paste0(sig.count.minus, " higher in ",lvls[2]," (FC < ",fc.thresh,")"), cex = text.cex, adj = c(1.1,-0.5),...);
+    fc.label.1 <- if(fc.thresh == 1){ "" } else { paste0(" (FC > ",fc.thresh,")" )}
+    fc.label.2 <- if(fc.thresh == 1){ "" } else { paste0(" (FC < ",fc.thresh,")" )}
+    text(par("usr")[2],ylim.exp[2],paste0(sig.count.plus,  " higher in ",lvls[1],fc.label.1), cex = text.cex, adj = c(1.1, 1.5),...);
+    text(par("usr")[2],ylim.exp[1],paste0(sig.count.minus, " higher in ",lvls[2],fc.label.2), cex = text.cex, adj = c(1.1,-0.5),...);
   }
   
   if(show.labels){

@@ -15,9 +15,10 @@
   buildAllPlots(jscs,
                 outfile.prefix = "./",
                 gene.list = NULL, FDR.threshold = 0.01, 
+                method.selectionCriterion = c("feature-pAdjust", "genewise-pAdjust"),
                 use.plotting.device = c("png","CairoPNG","svg","tiff","cairo_ps","custom"),
                 sequencing.type = c("paired-end","single-end"),
-                use.vst=FALSE,use.log = TRUE, truncateBelowOne = TRUE, 
+                use.vst=FALSE,use.log = TRUE, 
                 exon.rescale.factor = 0.3,
                 subdirectories.by.type = TRUE,
                 ma.plot=TRUE, variance.plot=TRUE,
@@ -25,20 +26,23 @@
                 expr.plot=TRUE,normCounts.plot=TRUE,
                 rExpr.plot=TRUE,rawCounts.plot=FALSE,
                 colorRed.FDR.threshold = FDR.threshold, 
-                color=NULL,
+                colorList=list(),
                 plot.gene.level.expression = TRUE,
                 plot.exon.results, plot.junction.results, plot.novel.junction.results,
                 plot.untestable.results = FALSE,
-                plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
+                plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, gene.lwd = plot.lwd / 2,
                 par.cex = 1, anno.cex.text = 1, anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
                 drawCoordinates = TRUE,
                 yAxisLabels.inExponentialForm = FALSE,
-                show.strand.arrows = 10, arrows.length = 0.125,
+                show.strand.arrows = 1, 
                 graph.margins = c(2, 3, 3, 3),
                 base.plot.height = 12, base.plot.width = 12, 
                 base.plot.units = "in", 
-                GENE.annotation.relative.height = 0.2,
+                GENE.annotation.relative.height = 0.1,
                 TX.annotation.relative.height = 0.05,
+                CONNECTIONS.relative.height = 0.1,
+                SPLICE.annotation.relative.height = 0.1,
+                TX.margins = c(0.5,0.5),
                 autoscale.height.to.fit.TX.annotation = TRUE,
                 autoscale.width.to.fit.bins = 35,
                 plotting.device.params = list(), 
@@ -50,6 +54,7 @@
                 writeHTMLresults = TRUE,
                 html.cssFile, html.cssLink, html.imgFileExtension,
                 html.plot.height = 90, html.plot.height.units = "vh",
+                html.compare.results.list = NULL,
                 verbose=TRUE, debug.mode = FALSE,
                 ...)
 }
@@ -71,6 +76,10 @@
   \item{FDR.threshold}{If this option is used, genes will be selected for plotting based on the presence of statistically significant junctions. 
         The adjusted-p-value threshold used to determine significance. Only genes containing at least 1 significant feature will be plotted.
   }
+  \item{method.selectionCriterion}{
+    Determines the method used to select genes for plotting. If set to "feature-pAdjust", genes will be selected if one or more features show significance.
+    If "genewise-pAdjust" is used, gene-wise adjusted p-values will be generated and genes will be filtered on that basis.
+  }
   
   \item{use.plotting.device}{The plotting device to use.}
   \item{sequencing.type}{
@@ -78,12 +87,17 @@
   }
   \item{use.vst}{Logical. If \code{TRUE}, all plots will be scaled via a variance stabilizing transform.}
   \item{use.log}{Logical. If \code{TRUE}, all plots will be log-scaled.}
-  \item{truncateBelowOne}{Logical. If \code{TRUE}, all values below 1 will be linear-scaled. If use.log is FALSE, this does nothing.}
   \item{exon.rescale.factor}{
-    Floating point numeric value. To improve readability the exons drawn in the coordinate annotation are rescaled by default so that they take up 30 percent of the x axis. This makes the plots easier to read, as exons are usually much smaller than introns and thus a group of clustered exons can be hard to distinguish when plotted on a simple scale. If this value is set to NA then the exons and introns will be drawn on the same linear scale.
+    Floating point numeric value. To improve readability the exons drawn in 
+    the coordinate annotation are rescaled by default so that they take up 
+    30 percent of the x axis. This makes the plots easier to read, as 
+    exons are usually much smaller than introns and thus a group of 
+    clustered exons can be hard to distinguish when plotted on a simple 
+    scale. If this value is set to NA or a value not between 0 and 1 inclusive, 
+    then the exons and introns will be drawn on the same scale.
+    Note that this function can also take the \code{exonRescaleFunction} parameter, which is
+    passed to \code{\link{plotJunctionSeqResultsForGene}}.
   }
-
-
   \item{subdirectories.by.type}{
     Logical value. If \code{TRUE}, then subdirectories will be created in the outfile.prefix directory, containing each plot type.
   }
@@ -98,7 +112,7 @@
   \item{rawCounts.plot}{if TRUE, save an expression plot of the raw counts for each splice site, for each sample. Note that these will never be VST-transformed, even when use.vst == TRUE.}
   
   \item{colorRed.FDR.threshold}{The adjusted-p-value threshold used to determine whether a feature should be marked as "significant" and colored pink. By default this will be the same as the FDR.threshold.}
-  \item{color}{A vector of R colors, named for each possible value of condition. By default, it will attempt to choose reasonable colors for each condition.}
+  \item{colorList}{A named list of R colors, setting the colors used for various things. See \code{\link{plotJunctionSeqResultsForGene}}}
   
   \item{plot.gene.level.expression}{
     Logical value. If \code{TRUE}, gene-level expression (when applicable) will be plotted beside the sub-element-specific expression in a small seperate plotting box. 
@@ -107,11 +121,15 @@
   \item{plot.exon.results}{Logical. If \code{TRUE}, plot results for exons. By default everything that was tested will be plotted.}
   \item{plot.junction.results}{Logical. If \code{TRUE}, plot results for splice junctions. By default everything that was tested will be plotted.}
   \item{plot.novel.junction.results}{Logical. If \code{TRUE}, plot results for novel splice junctions. If false, novel splice junctions will be ignored. By default everything that was tested will be plotted.}
-  \item{plot.untestable.results}{Logical. If \code{TRUE}, plots splice junctions that had coverage that was too low to be tested.}
+  \item{plot.untestable.results}{
+    Logical. If \code{TRUE}, plots splice junctions that had coverage that was too low to be tested. 
+    Note that, in general, only normCounts and rawCounts plots will have non-\code{NA} values for untestable counting bins.
+  }
   
-  \item{plot.lwd}{the line width for the plotting lines.}
-  \item{axes.lwd}{the line width for the axes.}
-  \item{anno.lwd}{the line width for the various other annotation lines.}
+  \item{plot.lwd}{The line width for the plotting lines.}
+  \item{axes.lwd}{The line width for the axes.}
+  \item{anno.lwd}{The line width for the various other annotation lines.}
+  \item{gene.lwd}{The line width used for the gene annotation lines. The default is half the standard line width.}
   \item{par.cex}{
      The base cex value to be passed to par() immediately before all plots are created. See \code{\link{par}}.
   }
@@ -130,8 +148,9 @@
   \item{drawCoordinates}{Whether to label the genomic coordinates at the bottom of the plot.}
   \item{yAxisLabels.inExponentialForm}{Logical. If \code{TRUE}, then the y-axis will be labelled in exponential form.}
 
-  \item{show.strand.arrows}{The number of strand-direction arrows to display.}
-  \item{arrows.length}{The length of the strand-direction arrows, in inches.}
+  \item{show.strand.arrows}{The number of strand-direction arrows to display. If equal to \code{1} (the default) then the arrow will extend from the end of the gene drawing, if it is greater than \code{1} then arrows will be drawn
+    along the gene length. If it is \code{0} or \code{NA} then arrows will not be drawn.
+  }
 
   \item{graph.margins}{
     Numeric vector of length 4. These margins values used (as if for par("mar")) for the main graph. The lower part of the plot uses the same left and right margins. 
@@ -152,17 +171,32 @@
   \item{TX.annotation.relative.height}{
     For all plots that draw the annotated-transcript set (when the \code{with.TX} parameter is \code{TRUE}), this sets the height of each transcript, as a fraction of the height of the main graph. By default it is 2.5 percent.
   }
+  \item{CONNECTIONS.relative.height}{
+    The height of the panel that connects the plotting area to the gene annotation area, relative to the height of the plotting area. This panel has the lines that connects the counting bin columns to their actual loci on the gene. By default it is 10 percent.
+  }
+  \item{SPLICE.annotation.relative.height}{
+    The height of the area that shows the splice junction loci, relative to the size of the plotting area.
+  }
+  \item{TX.margins}{
+    A numeric vector of length 2. The size of the blank space between the gene plot and the transcript list and then beneath the transcript list, relative to the size of each transcript line.
+  }
   
   \item{autoscale.height.to.fit.TX.annotation}{
-    Plots that include the full transcript annotation generally need to have a larger height in order to maintain readability. By default, 
-    all plots that include transcripts will be expanded vertically by the height of the additional transcripts. This maintains the same appearance and
-    aspect ratio of the main graph, but also means that the height of the plot will differ between genes.
-    This parameter can be used to override that behavior if a specific figure size is desired. If \code{TRUE}, the \code{base.plot.height} will be used
-    as the height of the plot, regardless of how many transcripts are included.
+    Logical. Plots that include the full transcript annotation generally need to have a larger height in order to maintain readability. 
+    If \code{TRUE}) (the default),
+    all plots that include transcripts will be expanded vertically to fit the additional transcripts. This maintains the same appearance and
+    aspect ratio of the main graph area, but means that the height of the plot will differ between genes when TX are included.
+    This parameter can be used to override that behavior if a specific figure size is desired. 
+    If \code{FALSE}, then the height of the entire 
+    output image will always be equal to \code{base.plot.height}.
   }
   \item{autoscale.width.to.fit.bins}{
-    Integer value. JunctionSeq will automatically go to great lengths to autofit the data in a readable way. By default, any plots that have more than 35 plotting columns
-    will be widened linearly to fit the excess columns. This parameter can be used to change that value, or turn it off entirely by setting this parameter to \code{NA}.
+    Integer value. JunctionSeq will automatically go to great lengths to autofit 
+    the data in a readable way. By default, any plots that have more than 35 
+    plotting columns
+    will be widened linearly to fit the excess columns. This parameter can be 
+    used to change that value, or turn it off entirely by setting this 
+    parameter to \code{NA}.
   }
   \item{condition.legend.text}{
     List or named vector of character strings. This optional parameter can be used to assign labels to each condition variable values. It should be a list or named vector with length equal to \code{factor(condition)}. Each element
@@ -174,7 +208,11 @@
   }
   
   \item{plotting.device.params}{Additional parameters to be passed to the plotting device.}
-  \item{number.plots}{Whether to number each gene in the image names, based on either the order they appear in the input gene.list, or in order of ascending p-values.}
+  \item{number.plots}{
+     Whether to number each gene in the image names, based on either 
+     the order they appear in the input gene.list, or in order of 
+     ascending p-values. 
+  }
   \item{name.files.with.geneID}{Whether to use the geneID (rather than gene name) for naming the files.}
 
   \item{draw.start.end.sites}{
@@ -200,10 +238,19 @@
   \item{html.plot.height.units}{
       The units used for the \code{html.plot.height} parameter. The default is "vh", which sets the height relative to the available max height.
   }
-
+  \item{html.compare.results.list}{
+      Named list of character strings. (Advanced) Optional parameter that allows you to cross-link multiple analyses for easy navigation 
+      between analysis for specific genes of interest.
+      In order to create such cross-linking, you will need to run \code{builtAllPlots} separately for each analysis. 
+      The \code{outfile.prefix} for each
+      run must be a sub-directory of the same parent directory. The \code{html.compare.results.list} must be a named list of these subdirectories.
+      \code{names(html.compare.results.list)} must be the title of each analysis as you want it to appear in the navigation links.
+      Note: This parameter is incompatible with the \code{number.plots} option.
+  }
+  
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
   \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
   
 
-  \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}
+  \item{...}{Additional options to pass to \code{\link{buildAllPlotsForGene}}, \code{\link{plotJunctionSeqResultsForGene}}, or graphical parameters passed to plotting functions.}
 }

@@ -12,33 +12,39 @@
 \usage{
 plotJunctionSeqResultsForGene(geneID, jscs, 
                               colorRed.FDR.threshold=0.05,
-                              plot.type = "expr", 
+                              plot.type = c("expr","normCounts","rExpr","rawCounts"), 
                               sequencing.type = c("paired-end","single-end"),
                               displayTranscripts = FALSE,
-                              color = NULL, 
-                              use.vst = FALSE, use.log = TRUE,truncateBelowOne = TRUE,
-                              exon.rescale.factor = 0.3,
+                              colorList = list(), 
+                              use.vst = FALSE, use.log = TRUE,
+                              exon.rescale.factor = 0.3, exonRescaleFunction = c("sqrt","log","linear","34root"),
                               label.p.vals = TRUE, 
-                              plot.lwd = 3,axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
+                              plot.lwd = 3,axes.lwd = plot.lwd, anno.lwd = plot.lwd, gene.lwd = plot.lwd / 2,
                               par.cex = 1, anno.cex.text = 1,
                               anno.cex.axis=anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
-                              cex.arrows = 1,
-                              fit.countbin.names = TRUE,
+                              cex.arrows = "auto",
+                              fit.countbin.names = TRUE, fit.genomic.axis = TRUE, fit.labels = TRUE,
                               plot.gene.level.expression = TRUE,
                               plot.exon.results, plot.junction.results, plot.novel.junction.results, 
                               plot.untestable.results = FALSE, draw.untestable.annotation = TRUE,
-                              show.strand.arrows = 10, arrows.length = 0.125,
+                              show.strand.arrows = 1, 
                               sort.features = TRUE,
                               drawCoordinates = TRUE,
                               yAxisLabels.inExponentialForm = FALSE,
                               title.main, title.ylab, title.ylab.right, 
-                              graph.margins = c(2, 3.5, 3, 3),
-                              GENE.annotation.relative.height = 0.2,
+                              graph.margins = c(2, 3, 3, 3),
+                              GENE.annotation.relative.height = 0.1,
                               TX.annotation.relative.height = 0.05,
+                              CONNECTIONS.relative.height = 0.1,
+                              SPLICE.annotation.relative.height = 0.1,
+                              TX.margins = c(0.5,0.5),
                               condition.legend.text = NULL, include.TX.names = TRUE, 
                               draw.start.end.sites = TRUE,
                               label.chromosome = TRUE,
+                              splice.junction.drawing.style = c("hyperbola","ellipse","triangular","line"),
+                              draw.nested.SJ = TRUE, merge.exon.parts = TRUE,
                               verbose=TRUE, debug.mode = FALSE,
+                              INTERNAL.VARS = list(),
                               ...)
 }
 \arguments{
@@ -67,20 +73,26 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   }
   
   \item{displayTranscripts}{Logical. If true, then the full set of annotated transcripts will be displayed below the expression plot (to a maximum of 42 different TX).}
-  \item{color}{A vector of R colors, named for each possible value of condition. By default, it will attempt to choose reasonable colors for each condition.}
+  \item{colorList}{A named list of R colors, setting the colors used for various things. See \code{link{junctionSeqColors}} for more information.}
 
   \item{use.vst}{Logical. If TRUE, all plots will be scaled via a variance stabilizing transform.}
   \item{use.log}{Logical. If TRUE, all plots will be log-scaled.}
-  \item{truncateBelowOne}{Logical. If TRUE, all values between 0 and 1 will be drawn with a linear scale. If use.log is FALSE, this does nothing.}
   \item{exon.rescale.factor}{Numeric. Exons will be proportionately scaled-up so that the exonic regions make up this fraction of the horizontal plotting area. If negative, exons and introns will be plotted to a common scale. }
+  \item{exonRescaleFunction}{
+  Character string. Exonic and intronic regions will be rescaled to be proportional to this transformation of their span. By default the square-root function is used, which shrinks long features and extends short features so that
+  they are all still readable and destinguishable against one another. This default option seems to behave well on mammalian genomes. This parameter does nothing if \code{exon.rescale.factor} is negative.
+  }
+  
   \item{label.p.vals}{Logical. If \code{TRUE}, then statistically significant p-values will be labelled.}
 
   \item{plot.lwd}{the line width for the plotting lines.}
   \item{axes.lwd}{the line width for the axes.}
   \item{anno.lwd}{the line width for the various other annotation lines.}
+  \item{gene.lwd}{the line width used for the gene annotation lines.}
   \item{par.cex}{
      The base cex value to be passed to par() immediately before all plots are created. See \code{\link{par}}.
   }
+  
   \item{anno.cex.text}{
      The font size multiplier for most annotation text. This will be multiplied by a factor of the par.cex value.
      More specifically: The cex value to be passed to all function calls that take \link{graphical parameters}. See \code{\link{par}}.
@@ -99,7 +111,9 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   }
   
   \item{fit.countbin.names}{Logical. If \code{TRUE}, then splice-junction-locus labels should be rescaled to fit in whatever horizontal space is available.}
-  
+  \item{fit.genomic.axis}{Logical. If \code{TRUE}, then the genomic coordinate labels will be auto-scaled down to fit, if needed.}
+  \item{fit.labels}{Logical. If \code{TRUE}, then y-axis labels will be auto-scaled down to fit, if needed. Note this only applies to the text labels, not the numeric scales.}
+
   \item{plot.gene.level.expression}{
     Logical value. If \code{TRUE}, gene-level expression (when applicable) will be plotted beside the sub-element-specific expression in a small seperate plotting box. 
     For the "relative expression" plots the simple mean normalized expression will be plotted (since it doesn't make sense to plot something relative to itself).
@@ -110,8 +124,9 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   \item{plot.untestable.results}{Logical. If TRUE, plots the expression of splice junctions that had coverage that was too low to be tested.}
   \item{draw.untestable.annotation}{Logical. If TRUE, draws the annotation for splice junctions that had coverage that was too low to be tested.}
 
-  \item{show.strand.arrows}{The number of strand-direction arrows to display.}
-  \item{arrows.length}{The length of the strand-direction arrows, in inches.}
+  \item{show.strand.arrows}{The number of strand-direction arrows to display. If equal to \code{1} (the default) then the arrow will extend from the end of the gene drawing, if it is greater than \code{1} then arrows will be drawn
+    along the gene length. If it is \code{0} or \code{NA} then arrows will not be drawn.
+  }
 
   \item{sort.features}{Logical. If \code{TRUE}, sort features by genomic position.}
 
@@ -127,7 +142,15 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   \item{TX.annotation.relative.height}{
     For all plots that draw the annotated-transcript set (when the \code{with.TX} parameter is \code{TRUE}), this sets the height of each transcript, as a fraction of the height of the main graph. By default it is 2.5 percent.
   }
-  
+  \item{CONNECTIONS.relative.height}{
+    The height of the panel that connects the plotting area to the gene annotation area, relative to the height of the plotting area. This panel has the lines that connects the counting bin columns to their actual loci on the gene. By default it is 10 percent.
+  }
+  \item{SPLICE.annotation.relative.height}{
+    The height of the area that shows the splice junction loci, relative to the size of the plotting area.
+  }
+  \item{TX.margins}{
+    A numeric vector of length 2. The size of the blank space between the gene plot and the transcript list and then beneath the transcript list, relative to the size of each transcript line.
+  }
   \item{title.main}{
     Character string. Overrides the default main plot title.
   }
@@ -143,16 +166,36 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   }
   
   \item{include.TX.names}{
-    Logical value. If \code{TRUE}, then for the plots that include the annotated transcript, the transcript names will be listed. The labels will be drawn at half the size of \code{anno.cex.text}.
+    Logical value. If \code{TRUE}, then for the plots that include the annotated transcript, 
+    the transcript names will be listed. The labels will be drawn at half the size 
+    of \code{anno.cex.text}.
   }
   \item{draw.start.end.sites}{
     Logical value. If \code{TRUE}, then transcript start/end sites will be marked on the main gene annotation.
   }
   \item{label.chromosome}{
-    Logical. If \code{TRUE}, label the chromosome in the left margin.
+    Logical. If \code{TRUE}, label the chromosome in the left margin. 
+    If the text is too long it will be auto-fitted into the available margin.
+  }
+  \item{splice.junction.drawing.style}{
+    The visual style of the splice junctions drawn on the gene annotation. 
+    The default uses paired hyperbolas with the ends straightened out. 
+    A number of other styles are available.
+  }
+  \item{draw.nested.SJ}{
+    Logical. If \code{TRUE}, overlapping splice junctions will be drawn layered under one another. 
+    This can vastly improve readability when there are a large number of overlapping splice junctions. 
+    Default is \code{TRUE}.
+  }
+  \item{merge.exon.parts}{
+    Logical. If \code{TRUE}, in the gene annotation plot merge connected exon-fragments and delineate them with dotted lines.
   }
   
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
   \item{debug.mode}{Logical. If \code{TRUE}, print additional debugging information during execution.}
+  \item{INTERNAL.VARS}{
+    NOT FOR GENERAL USE. Intended only for use by JunctionSeq itself. DO NOT USE.
+  }
+
   \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}
 }

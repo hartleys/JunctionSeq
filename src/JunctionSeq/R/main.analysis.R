@@ -15,6 +15,8 @@ estimateSizeFactors <- function( jscs , method.sizeFactors = c("byGenes","byCoun
    counts.byGenes <- jscs@geneCountData;
    counts.byCountbins <- counts(jscs);
    
+   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.sizeFactors = method.sizeFactors);
+   
    sizeFactors.byGenes <- estimateSizeFactorsForMatrix(counts.byGenes);
    sizeFactors.byCountbins <- estimateSizeFactorsForMatrix(counts.byCountbins);
    
@@ -63,6 +65,11 @@ fitDispersionFunction <- function(jscs ,
    method.GLM <- match.arg(method.GLM);
    method.dispFit <- match.arg(method.dispFit);
    method.dispFinal <- match.arg(method.dispFinal);
+   
+   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM = method.GLM);
+   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.dispFit = method.dispFit);
+   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.dispFinal = method.dispFinal);
+   
      if(method.dispFinal != "noShare"){
        jscs <- fitDispersionFunction_advancedMode(jscs, fitType = method.dispFit, verbose = verbose, finalDispersionMethod = method.dispFinal, fitDispersionsForExonsAndJunctionsSeparately = fitDispersionsForExonsAndJunctionsSeparately);
      } else {
@@ -97,6 +104,9 @@ estimateEffectSizes <- function(jscs,
   fitExpToVar <- "condition";
   varlist <- rownames(attr(terms(effect.formula), "factors"));
   covarlist <- varlist[ ! varlist %in% c(fitExpToVar, "countbin") ]
+    
+  jscs@formulas[["effect.formula"]] <- effect.formula;
+  attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.expressionEstimation = method.expressionEstimation);
   
   myApply <- getMyApply(nCores);
   
@@ -232,7 +242,17 @@ estimateEffectSizes <- function(jscs,
                                     relExprEstimate = relExprEstimate, 
                                     normCounts = normCounts);
   if(calculate.geneLevel.expression){
-    message(paste0("-------> estimateEffectSizes: Estimating gene-level expression."));
+    if(verbose) message(paste0("-------> estimateEffectSizes: Estimating gene-level expression."));
+    
+    #if(method.expressionEstimation != "feature-vs-gene"){
+    #  if(verbose) message(paste0("---------> estimateEffectSizes: Re-setting gene-level counts to equal the sum of all bins. (",date(),")"));
+    #  gcd <- do.call(rbind.data.frame, lapply(1:nrow(jscs@geneCountData), function(i){
+    #    
+    #  }));
+    #  jscs@geneCountData <- 
+    #  if(verbose) message(paste0("---------> (done) (",date(),")"));
+    #}
+    
     modelFrame <- cbind(
                sample = sampleNames(jscs),
                design(jscs, drop=FALSE),
@@ -286,6 +306,16 @@ estimateEffectSizes <- function(jscs,
   }
   en <- colnames(jscs@plottingEstimates[["exprEstimate"]])
   fData(jscs)[,en] <- jscs@plottingEstimates[["exprEstimate"]][,en];
+  
+  tryCatch({
+      if(verbose) message("-------> estimateEffectSizes: Starting gene-wise p-adjust. (",date(),")");
+      genewise.sig <- JS.perGeneQValue(pvals = fData(jscs)$pvalue, wTest = fData(jscs)$testable, fData(jscs)$geneID);
+      fData(jscs)$geneWisePadj <- sapply(as.character(fData(jscs)$geneID), function(g){ if(any(g == names(genewise.sig))){ genewise.sig[[g]]; } else { NA;} });
+      if(verbose) message("-------> estimateEffectSizes: Finished gene-wise p-adjust. (",date(),")");
+  }, error = function(e){
+    message("WARNING: Failed gene-level padjust.");
+    print(e);
+  })
   
   return(jscs);
 }
@@ -474,6 +504,8 @@ estimateJunctionSeqDispersions <- function( jscs,
    fData(jscs)$status <- rep("OK",nrow(fData(jscs)));
    #fData(jscs)$baseMean <- rowMeans(  );
    
+   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM = method.GLM);
+   
    testable <- ! fData(jscs)$allZero;
    fData(jscs)$status[! testable] <- "ALL_ZERO";
    if(meanCountTestableThreshold != "auto"){
@@ -607,6 +639,8 @@ testForDiffUsage <- function( jscs,
                                 pAdjustMethod = "BH",
                                 verbose = TRUE){
   method.GLM <- match.arg(method.GLM);
+  attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM = method.GLM);
+  
   keep.debug.model.data <- TRUE;
   stopifnot( inherits( jscs, "JunctionSeqCountSet" ) )
    if( all( is.na( sizeFactors( jscs )))) {
@@ -796,7 +830,7 @@ testForDiffUsage <- function( jscs,
       #}
 
       #fData(jscs)[names(pvals), "pvalue"] <- pvals;
-
+      
       return(jscs);
     }
 }
@@ -814,6 +848,8 @@ get.filtered.padjust <- function(jscs, optimizeFilteringForAlpha = 0.01,
                                  verbose = verbose){
         modelFrame <- constructModelFrame( jscs )
         mm <- rmDepCols( model.matrix( formula(jscs@formulas[["formulaDispersion"]]), modelFrame ) );
+        
+        attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.cooksFilter = method.cooksFilter);
         
         testable <- fData(jscs)$testable;
         baseMean <- fData(jscs)$baseMean;

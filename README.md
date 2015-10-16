@@ -1,5 +1,5 @@
 # JunctionSeq
-    > v0.4.07 (Revised Tue Sep 15 13:39:27 EDT 2015)
+    > v0.4.19 (Revised Fri Oct 16 10:21:02 EDT 2015)
 
 JunctionSeq is an R package designed to detect and assess 
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -7,45 +7,10 @@ The methodology is based on the methods used by the [DEXSeq](http://www.biocondu
 bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343).
 
 Help, documentation, and the most recent release of JunctionSeq is available on the 
-[JunctionSeq github pages](http://hartleys.github.io/JunctionSeq/index.html).
+[**JunctionSeq github page**](http://hartleys.github.io/JunctionSeq/index.html).
 
 Issues, bug reports, or feature requests can be posted to the 
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
-
-##HELP AND DOCUMENTATION:
-For more information see the [JunctionSeq vignette](http://hartleys.github.io/JunctionSeq/helpDocs/doc/JunctionSeq.pdf) or the 
-[online reference documentation](http://dl.dropboxusercontent.com/u/103621176/JunctionSeq/helpDocs/Rhtml/index.html).
-
-There is also a [comprehensive walkthrough](http://hartleys.github.io/JunctionSeq/helpDocs/doc/example-walkthrough.pdf) of 
-the entire analysis pipeline, along with a full 
-[example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip) with 
-[example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip).
-
-For help with individual R functions in the R utility, use the R 
-command:
-
-    > help(functionname);
-
-For a full listing of all help topics for the R utility, use the R 
-command: 
-
-    > help(package="JunctionSeq");
-
-##INSTALLATION:
-JunctionSeq can be installed automatically in R using the command:
-
-    > source("http://hartleys.github.io/JunctionSeq/install/JunctionSeq.install.R");
-
-In order to successfully install R on windows, you must have Rtools installed.
-
-The splice, gene, and exon read-counts required by JunctionSeq can be created 
-using the QoRTs software package, available [here](http://hartleys.github.io/QoRTs/index.html).
-
-##EXAMPLE DATA:
-The example dataset can be found on the github repository, and can be 
-installed with the command:
-    
-    > install.packages(JctSeqExData2_0.4.07.tar.gz", repos = NULL, type="source")
 
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3:
