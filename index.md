@@ -11,11 +11,6 @@ An example results report is available [here](exampleResults/testForDU.html).
 An example set of browser tracks from this same dataset is available 
 [here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). 
 
-Help, documentation, and the most recent release of JunctionSeq is available on the 
-[JunctionSeq github pages](http://hartleys.github.io/JunctionSeq/index.html).
-
-**JunctionSeq is currently in beta, and is not yet intended for general use.**
-
 Issues, bug reports, or feature requests can be posted to the 
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
 
@@ -28,6 +23,7 @@ Issues, bug reports, or feature requests can be posted to the
 * [An example results report](exampleResults/testForDU.html): The results report generated in the example walkthrough
 * An example set of browser tracks from this same dataset is available 
 [here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks).
+* [Frequently Asked Questions](faq.html): If you still have questions, check here.
 
 Note: The example dataset is for testing and demonstration purposes only. The samples and annotation heavily modified and down-sampled 
 both to test artificial edge cases and to provide smaller and more portable testing files. 
