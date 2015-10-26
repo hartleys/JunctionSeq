@@ -20,7 +20,7 @@ Issues, bug reports, or feature requests can be posted to the
 * [The online reference documentation](Rhtml/index.html): The complete JunctionSeq R documentation.
 * [A comprehensive walkthrough](doc/example-walkthrough.pdf): describes the entire analysis pipeline.
 * [Example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip): used with the walkthrough so you can follow along. The [example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip) are separate (~1gb download).
-* [An example results report](results/testForDU.html): An example of the plots and html files produced by JunctionSeq (created using the example dataset).
+* [An example results report](exampleResults/testForDU.html): An example of the plots and html files produced by JunctionSeq (created using the example dataset).
 * An example set of browser tracks from this same dataset is available 
 [here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). The trackhub used to generate this session can be found [here](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/trackHub/index.html)
 * [Frequently Asked Questions](faq.html): If you still have questions, check here.
