@@ -59,7 +59,9 @@ buildAllPlotsForGene(geneID, jscs,
                      condition.legend.text, include.TX.names = TRUE,
                      draw.start.end.sites = TRUE, draw.nested.SJ = TRUE,
                      openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
-                     verbose=TRUE, debug.mode = FALSE,  ...)
+                     verbose=TRUE, debug.mode = FALSE,
+                     INTERNAL.VARS=list(),
+                     ...)
 
 </pre>
 
@@ -345,11 +347,19 @@ Default is <code>TRUE</code>.
 <td>
 <p>if TRUE, send even more debugging and progress messages to the console / stdout.</p>
 </td></tr>
+<tr valign="top"><td><code>INTERNAL.VARS</code></td>
+<td>
+
+<p>NOT FOR GENERAL USE. Intended only for use by JunctionSeq itself, internally. This is used 
+for passing pre-generated data (when generating many similar plots, for example), and 
+for internally-generated parameters. DO NOT USE.
+</p>
+</td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
 <p>Additional options to pass to <code><a href="plotJunctionSeqResultsForGene.html">plotJunctionSeqResultsForGene</a></code>, or graphical parameters passed to plotting functions.</p>
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.19 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.23 <a href="00Index.html">Index</a>]</div>
 </body></html>

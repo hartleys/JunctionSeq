@@ -67,6 +67,7 @@ Don't be daunted: the default parameters are probably fine for most purposes.
                 html.plot.height = 90, html.plot.height.units = "vh",
                 html.compare.results.list = NULL,
                 verbose=TRUE, debug.mode = FALSE,
+                INTERNAL.VARS = list(),
                 ...)
 </pre>
 
@@ -442,11 +443,19 @@ Note: This parameter is incompatible with the <code>number.plots</code> option.
 <td>
 <p>if TRUE, send even more debugging and progress messages to the console / stdout.</p>
 </td></tr>
+<tr valign="top"><td><code>INTERNAL.VARS</code></td>
+<td>
+
+<p>NOT FOR GENERAL USE. Intended only for use by JunctionSeq itself, internally. This is used 
+for passing pre-generated data (when generating many similar plots, for example), and 
+for internally-generated parameters. DO NOT USE.
+</p>
+</td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
 <p>Additional options to pass to <code><a href="buildAllPlotsForGene.html">buildAllPlotsForGene</a></code>, <code><a href="plotJunctionSeqResultsForGene.html">plotJunctionSeqResultsForGene</a></code>, or graphical parameters passed to plotting functions.</p>
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.19 <a href="00Index.html">Index</a>]</div>
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.23 <a href="00Index.html">Index</a>]</div>
 </body></html>
