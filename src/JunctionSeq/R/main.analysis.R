@@ -3,8 +3,11 @@
 ######### 
 ##############################################################################################################################################################################################################################
 
+estimateSizeFactors <- function(...){
+  estimateJunctionSeqSizeFactors(...);
+}
 
-estimateSizeFactors <- function( jscs , method.sizeFactors = c("byGenes","byCountbins"), replicateDEXSeqBehavior.useRawBaseMean = FALSE, calcAltSF = TRUE, verbose = FALSE){
+estimateJunctionSeqSizeFactors <- function( jscs , method.sizeFactors = c("byGenes","byCountbins"), replicateDEXSeqBehavior.useRawBaseMean = FALSE, calcAltSF = TRUE, verbose = FALSE){
    #Updated version, uses gene-level counts rather than sub-feature counts:
    #  This is preferred, since using the sub-feature counts in the normalization
    #  effectively over-weights genes with numerous annotated sub-features.
@@ -54,8 +57,11 @@ estimateSizeFactors <- function( jscs , method.sizeFactors = c("byGenes","byCoun
 ##############################################################################################################################################################################################################################
 ######### 
 ##############################################################################################################################################################################################################################
+fitDispersionFunction <- function(...){
+   fitJunctionSeqDispersionFunction(...);
+}
 
-fitDispersionFunction <- function(jscs , 
+fitJunctionSeqDispersionFunction <- function(jscs , 
                                   method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
                                   method.dispFit = c("parametric", "local", "mean"), 
                                   method.dispFinal = c("shrink","max","fitted","noShare"),

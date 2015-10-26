@@ -70,6 +70,7 @@ JunctionSeqHTML <- function(jscs,
                             number.plots = NULL,
                             css.file = NULL, css.link = NULL,
                             compare.analysis.list = NULL,
+                            INTERNAL.VARS = INTERNAL.VARS,
                             verbose = TRUE, debug.mode = FALSE){
    
    html.fixed.dim <- match.arg(html.fixed.dim);

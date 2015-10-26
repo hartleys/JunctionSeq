@@ -43,6 +43,7 @@ buildAllPlots <- function(jscs,
                           html.plot.height = 90, html.plot.height.units = "vh",
                           html.compare.results.list = NULL,
                           verbose=TRUE, debug.mode = FALSE,
+                          INTERNAL.VARS = list(),
                           ...){
   condition <- jscs@phenoData$condition;
   flat.gff.data <- jscs@flatGffData;
@@ -195,7 +196,8 @@ buildAllPlots <- function(jscs,
                             autoscale.width.to.fit.bins = autoscale.width.to.fit.bins,
                             number.plots = geneNum.strings,
                             css.file = html.cssFile, css.link = html.cssLink,
-                            compare.analysis.list = html.compare.results.list, verbose = verbose, debug.mode = debug.mode);
+                            compare.analysis.list = html.compare.results.list, verbose = verbose, debug.mode = debug.mode,
+                            INTERNAL.VARS = INTERNAL.VARS);
      if(verbose) message("> buildAllPlots: Finished writing HTML results index.");
     }
     
@@ -261,6 +263,7 @@ buildAllPlots <- function(jscs,
                             condition.legend.text = condition.legend.text, include.TX.names = include.TX.names, draw.start.end.sites=draw.start.end.sites,
                             verbose=verbose, debug.mode = debug.mode,
                             sequencing.type=sequencing.type,
+                            INTERNAL.VARS = INTERNAL.VARS,
                             ...);
 
       geneNum <- geneNum + 1;
@@ -315,7 +318,9 @@ buildAllPlotsForGene <- function(geneID,jscs,
                           condition.legend.text = NULL, include.TX.names = TRUE, draw.start.end.sites = TRUE,
                           draw.nested.SJ = TRUE,
                           openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
-                          verbose=TRUE, debug.mode = FALSE,  ...){
+                          verbose=TRUE, debug.mode = FALSE, 
+                          INTERNAL.VARS = list(),
+                          ...){
     message(paste("starting buildAllPlotsForGene() for geneID:",geneID));
     condition <- jscs@phenoData$condition
     flat.gff.data <- jscs@flatGffData;
@@ -360,7 +365,7 @@ buildAllPlotsForGene <- function(geneID,jscs,
     } else if(use.plotting.device == "custom"){
       stop("Fatal error: custom plotting device is selected, but openPlottingDeviceFunc or closePlottingDeviceFunc is not set.");
     }
-    INTERNAL.VARS <- list();
+    #INTERNAL.VARS <- list();
     
     if(draw.nested.SJ){
       rt.allJunction <- which(jscs@flatGffData$gene_id == geneID & (jscs@flatGffData$featureType != "exonic_part"));

@@ -373,7 +373,7 @@ estimateUnsharedDispersions <- function(object,
 
 
 adapted.estimateDispersionsMAP <- function( jscs, useRows, #dispFn, 
-                                    test.formula1 = formula(~ sample + countbin + condition : countbin),
+                                    test.formula1 = formula(jscs@formulas[["formulaDispersion"]]),
                                     outlierSD = 2, dispPriorVar, minDisp = 1e-08, 
                                     kappa_0 = 1, dispTol = 1e-06, maxit = 100, modelMatrix, verbose = TRUE) {
     stopifnot(length(outlierSD) == 1)

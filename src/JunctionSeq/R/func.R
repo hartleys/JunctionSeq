@@ -150,7 +150,7 @@ runJunctionSeqAnalyses <- function(sample.files, sample.names, condition,
   if(debug.mode) reportMem(jscs);
   if(verbose) { message(paste0("> rJSA: Estimating Size Factors..."," ",date(),".")) }
   
-  jscs <- estimateSizeFactors(jscs, method.sizeFactors = method.sizeFactors, replicateDEXSeqBehavior.useRawBaseMean = replicateDEXSeqBehavior.useRawBaseMean, verbose = verbose);
+  jscs <- estimateJunctionSeqSizeFactors(jscs, method.sizeFactors = method.sizeFactors, replicateDEXSeqBehavior.useRawBaseMean = replicateDEXSeqBehavior.useRawBaseMean, verbose = verbose);
     if(verbose) { message(paste0("> rJSA: Size Factors Done. Size Factors are:","."))
                   message(paste0("> rJSA: ",paste0(names(sizeFactors(jscs)),collapse=",")))
                   message(paste0("> rJSA: ",paste0(sizeFactors(jscs),collapse=",")) )
@@ -173,7 +173,7 @@ runJunctionSeqAnalyses <- function(sample.files, sample.names, condition,
     if(verbose) { message(paste0("> rJSA: Dispersions estimated."," ",date(),".")) }
     if(debug.mode) reportMem(jscs);
     if(verbose) { message(paste0("> rJSA: Fitting Dispersion Fcn..."," ",date(),".")) }
-  jscs <- fitDispersionFunction(jscs, 
+  jscs <- fitJunctionSeqDispersionFunction(jscs, 
                                 method.GLM = method.GLM,
                                 method.dispFinal = method.dispFinal,
                                 verbose = verbose, 

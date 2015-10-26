@@ -194,7 +194,9 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
   \item{debug.mode}{Logical. If \code{TRUE}, print additional debugging information during execution.}
   \item{INTERNAL.VARS}{
-    NOT FOR GENERAL USE. Intended only for use by JunctionSeq itself. DO NOT USE.
+    NOT FOR GENERAL USE. Intended only for use by JunctionSeq itself, internally. This is used 
+    for passing pre-generated data (when generating many similar plots, for example), and 
+    for internally-generated parameters. DO NOT USE.
   }
 
   \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}

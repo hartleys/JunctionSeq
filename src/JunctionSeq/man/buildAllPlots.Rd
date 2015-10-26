@@ -56,6 +56,7 @@
                 html.plot.height = 90, html.plot.height.units = "vh",
                 html.compare.results.list = NULL,
                 verbose=TRUE, debug.mode = FALSE,
+                INTERNAL.VARS = list(),
                 ...)
 }
 \arguments{
@@ -251,6 +252,11 @@
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
   \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
   
+  \item{INTERNAL.VARS}{
+    NOT FOR GENERAL USE. Intended only for use by JunctionSeq itself, internally. This is used 
+    for passing pre-generated data (when generating many similar plots, for example), and 
+    for internally-generated parameters. DO NOT USE.
+  }
 
   \item{...}{Additional options to pass to \code{\link{buildAllPlotsForGene}}, \code{\link{plotJunctionSeqResultsForGene}}, or graphical parameters passed to plotting functions.}
 }

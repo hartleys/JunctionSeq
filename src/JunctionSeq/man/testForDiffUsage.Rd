@@ -32,7 +32,7 @@ testForDiffUsage( jscs,
   \item{jscs}{
     A \code{JunctionSeqCountSet}. Usually initially created by 
     \code{\link{readJunctionSeqCounts}}. Dispersions and size factors must be
-    set, usually using functions \code{\link{estimateSizeFactors}} and 
+    set, usually using functions \code{\link{estimateJunctionSeqSizeFactors}} and 
     \code{\link{estimateJunctionSeqDispersions}}.
   }
   \item{test.formula0}{

@@ -5,7 +5,7 @@
    Generate a MA-Plot
 }
 \description{
-    TODO
+    Generates an MA-plot, which graphs the fold change versus the mean normalized expression. Statistically significant features are colored red.
 }
 \usage{
 plotMA(jscs, 

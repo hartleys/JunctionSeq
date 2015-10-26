@@ -48,7 +48,9 @@ buildAllPlotsForGene(geneID, jscs,
                      condition.legend.text, include.TX.names = TRUE,
                      draw.start.end.sites = TRUE, draw.nested.SJ = TRUE,
                      openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
-                     verbose=TRUE, debug.mode = FALSE,  ...)
+                     verbose=TRUE, debug.mode = FALSE,
+                     INTERNAL.VARS=list(),
+                     ...)
 
 }
 \arguments{
@@ -189,6 +191,12 @@ buildAllPlotsForGene(geneID, jscs,
     
   \item{verbose}{if \code{TRUE}, send debugging and progress messages to the console / stdout.}
   \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
+  
+  \item{INTERNAL.VARS}{
+    NOT FOR GENERAL USE. Intended only for use by JunctionSeq itself, internally. This is used 
+    for passing pre-generated data (when generating many similar plots, for example), and 
+    for internally-generated parameters. DO NOT USE.
+  }
   
   \item{...}{Additional options to pass to \code{\link{plotJunctionSeqResultsForGene}}, or graphical parameters passed to plotting functions.}
   

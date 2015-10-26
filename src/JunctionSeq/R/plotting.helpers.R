@@ -1378,6 +1378,40 @@ drawHalfLoops <- function(dir = c("down","up","left","right"), x0,x1,y0,y1,sampl
 #
 # Future functionality (WIP): "bracket" style.
 # 
+DRAWHALFLOOP.DEFAULT.HYPERBOLA.STYLEFACTOR <- c(8,8, 0.7);
+DRAWHALFLOOP.DEFAULT.HYPERBOLA.SAMPLECT <- 100;
+
+DRAWHALFLOOP.DEFAULT.HYPERBOLA.X  <- {
+      maxRawX <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.STYLEFACTOR[1];
+      maxRawY <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.STYLEFACTOR[2];
+      curvePct <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.STYLEFACTOR[3];
+      minRawX <- 1 / maxRawY;
+      sampleCt <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.SAMPLECT;
+      minRawX <- 1 / maxRawY;
+      X.raw <- ((1:sampleCt) / sampleCt) * (maxRawX - minRawX) + minRawX;
+      X <- c(X.raw, X.raw + max(X.raw) - min(X.raw));
+      X <- c(min(X), X, max(X));
+      X <- X / abs(min(X) - max(X));
+      X <- X - min(X);
+      X[2] <- X[1];
+      X[length(X)-1] <- X[length(X)];  
+      X;
+};
+DRAWHALFLOOP.DEFAULT.HYPERBOLA.Y  <- {
+      maxRawX <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.STYLEFACTOR[1];
+      maxRawY <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.STYLEFACTOR[2];
+      curvePct <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.STYLEFACTOR[3];
+      sampleCt <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.SAMPLECT;
+      minRawX <- 1 / maxRawY;
+      X.raw <- ((1:sampleCt) / sampleCt) * (maxRawX - minRawX) + minRawX;
+      Y.raw <- 1 / X.raw;
+      Y.raw <- c(max(Y.raw) * (1 / curvePct), Y.raw);
+      Y.raw <- max(Y.raw) - Y.raw;
+      Y <- c(Y.raw, rev(Y.raw));
+      Y <- Y / abs(min(Y) - max(Y));
+      Y <- Y - min(Y);
+      Y;
+};
 
 drawHalfLoop <- function(dir = c("down","up","left","right"), x0,x1,y0,y1, sampleCt = NULL, style = c("hyperbola","ellipse","triangular","line"), styleFactor = NULL, ...){
   dir <- match.arg(dir);
@@ -1406,56 +1440,45 @@ drawHalfLoop <- function(dir = c("down","up","left","right"), x0,x1,y0,y1, sampl
       stop(paste0("Half-loop direction: \"",dir,"\" not supported for style \"",style,"\"."));
     }
   } else if(style == "hyperbola"){
-    if(is.null(styleFactor)){
-      styleFactor <- c(8,8, 0.7);
+    if(missing(styleFactor) & missing(sampleCt)){
+      X <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.X;
+      Y <- DRAWHALFLOOP.DEFAULT.HYPERBOLA.Y;
+    } else {
+      if(is.null(styleFactor)){
+        styleFactor <- c(8,8, 0.7);
+      }
+      if(is.null(sampleCt)){
+        sampleCt <- 100;
+      }
+      maxRawX <- styleFactor[1];
+      maxRawY <- styleFactor[2];
+      curvePct <- styleFactor[3];
+      minRawX <- 1 / maxRawY;
+      X.raw <- ((1:sampleCt) / sampleCt) * (maxRawX - minRawX) + minRawX;
+      #X.raw <- ((1:sampleCt) / sampleCt) * styleFactor;
+      Y.raw <- 1 / X.raw;
+      Y.raw <- c(max(Y.raw) * (1 / curvePct), Y.raw);
+      Y.raw <- max(Y.raw) - Y.raw;
+      X <- c(X.raw, X.raw + max(X.raw) - min(X.raw));
+      X <- c(min(X), X, max(X));
+      X <- X / abs(min(X) - max(X));
+      X <- X - min(X);
+      Y <- c(Y.raw, rev(Y.raw));
+      Y <- Y / abs(min(Y) - max(Y));
+      Y <- Y - min(Y);
+      X[2] <- X[1];
+      X[length(X)-1] <- X[length(X)];      
     }
-    if(is.null(sampleCt)){
-      sampleCt <- 100;
-    }
+
     if(dir == "down"){
-      maxRawX <- styleFactor[1];
-      maxRawY <- styleFactor[2];
-      curvePct <- styleFactor[3];
-      minRawX <- 1 / maxRawY;
-      X.raw <- ((1:sampleCt) / sampleCt) * (maxRawX - minRawX) + minRawX;
-      #X.raw <- ((1:sampleCt) / sampleCt) * styleFactor;
-      Y.raw <- 1 / X.raw;
-      Y.raw <- c(max(Y.raw) * (1 / curvePct), Y.raw);
-      Y.raw <- max(Y.raw) - Y.raw;
-      X <- c(X.raw, X.raw + max(X.raw) - min(X.raw));
-      X <- c(min(X), X, max(X));
-      X <- X / abs(min(X) - max(X));
-      X <- X - min(X);
       X <- X * abs(x1-x0) + x0;
-      Y <- c(Y.raw, rev(Y.raw));
-      Y <- Y / abs(min(Y) - max(Y));
-      Y <- Y - min(Y);
       Y <- Y * abs(y1-y0) + y0;
-      X[2] <- X[1];
-      X[length(X)-1] <- X[length(X)];
       #advlines(x, y, col, lty, lwd, secondary = FALSE, secondary.col = col, secondary.alpha = 100, secondary.lty = 1, secondary.lwd = lwd / 2, ...)
-      advlines(X,Y, secondary = TRUE, ...);
+      #advlines(X,Y, secondary = TRUE, ...);
+      lines(X,Y, ...);
     } else if(dir == "up"){
-      maxRawX <- styleFactor[1];
-      maxRawY <- styleFactor[2];
-      curvePct <- styleFactor[3];
-      minRawX <- 1 / maxRawY;
-      X.raw <- ((1:sampleCt) / sampleCt) * (maxRawX - minRawX) + minRawX;
-      #X.raw <- ((1:sampleCt) / sampleCt) * styleFactor;
-      Y.raw <- 1 / X.raw;
-      Y.raw <- c(max(Y.raw) * (1 / curvePct), Y.raw);
-      Y.raw <- max(Y.raw) - Y.raw;
-      X <- c(X.raw, X.raw + max(X.raw) - min(X.raw));
-      X <- c(min(X), X, max(X));
-      X <- X / abs(min(X) - max(X));
-      X <- X - min(X);
       X <- X * abs(x1-x0) + x0;
-      Y <- c(Y.raw, rev(Y.raw));
-      Y <- Y / abs(min(Y) - max(Y));
-      Y <- Y - min(Y);
       Y <- Y * abs(y1-y0) + y0;
-      X[2] <- X[1];
-      X[length(X)-1] <- X[length(X)];
       Y <- y1 - Y + y0;
       lines(X,Y, ...);
     } else{

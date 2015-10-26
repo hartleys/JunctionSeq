@@ -8,8 +8,8 @@
    This function runs a complete analysis from start to finish. 
    It internally calls functions \code{\link{readAnnotationData}}, 
    \code{\link{readJunctionSeqCounts}},
-   \code{\link{estimateSizeFactors}}, \code{\link{estimateJunctionSeqDispersions}}, 
-   \code{\link{fitDispersionFunction}}, \code{\link{testForDiffUsage}}, and 
+   \code{\link{estimateJunctionSeqSizeFactors}}, \code{\link{estimateJunctionSeqDispersions}}, 
+   \code{\link{fitJunctionSeqDispersionFunction}}, \code{\link{testForDiffUsage}}, and 
    \code{\link{estimateEffectSizes}}.
 }
 \usage{

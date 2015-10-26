@@ -8,8 +8,8 @@
 \description{
   This data set gives default color parameters for JunctionSeq. 
   Any of these parameters can be overridden by using the \code{colorList} 
-  parameter in \code{link{buildAllPlots}}, \code{link{buildAllPlotsForGene}}, 
-  or \code{link{plotJunctionSeqResults}}.
+  parameter in \code{\link{buildAllPlots}}, \code{\link{buildAllPlotsForGene}}, 
+  or \code{\link{plotJunctionSeqResultsForGene}}.
 }
 \usage{JUNCTIONSEQ.DEFAULT.COLOR.LIST}
 \format{A list.}

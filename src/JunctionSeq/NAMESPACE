@@ -35,12 +35,14 @@ export(
   writeCompleteResults,                    #
   buildAllPlots,                    #
   
-  readJunctionSeqCounts,                    #
+  readJunctionSeqCounts,             #
   estimateSizeFactors,
   estimateJunctionSeqDispersions,                    #
   fitDispersionFunction,
   testForDiffUsage,                    #
   estimateEffectSizes,
+  estimateJunctionSeqSizeFactors,
+  fitJunctionSeqDispersionFunction,
   
   readAnnotationData,                    #
   
