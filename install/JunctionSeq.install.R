@@ -2,27 +2,27 @@
 message("Installing dependencies...");
 
 message("Installing CRAN package dependencies... ",date());
-install.packages("statmod")
-install.packages("plotrix")
-install.packages("stringr")
-install.packages("Rcpp")
-install.packages("RcppArmadillo")
-install.packages("ggplot")
-install.packages("locfit")
-install.packages("Hmisc")
+if(! require("statmod")) install.packages("statmod")
+if(! require("plotrix")) install.packages("plotrix")
+if(! require("stringr")) install.packages("stringr")
+if(! require("Rcpp")) install.packages("Rcpp")
+if(! require("RcppArmadillo")) install.packages("RcppArmadillo")
+if(! require("ggplot")) install.packages("ggplot")
+if(! require("locfit")) install.packages("locfit")
+if(! require("Hmisc")) install.packages("Hmisc")
 message("Done installing CRAN package dependencies. ",date());
 
 message("Installing Bioconductor package dependencies... ",date());
 source("http://bioconductor.org/biocLite.R");
 biocLite();
-biocLite("Biobase");
-biocLite("BiocGenerics");
-biocLite("BiocParallel");
-biocLite("GenomicRanges");
-biocLite("IRanges");
-biocLite("S4Vectors");
-biocLite("genefilter");
-biocLite("geneplotter");
+if(! require("Biobase")) biocLite("Biobase");
+if(! require("BiocGenerics")) biocLite("BiocGenerics");
+if(! require("BiocParallel")) biocLite("BiocParallel");
+if(! require("GenomicRanges")) biocLite("GenomicRanges");
+if(! require("IRanges")) biocLite("IRanges");
+if(! require("S4Vectors")) biocLite("S4Vectors");
+if(! require("genefilter")) biocLite("genefilter");
+if(! require("geneplotter")) biocLite("geneplotter");
 message("Done installing Bioconductor package dependencies. ",date());
 
 message("Done installing package dependencies. ",date());
