@@ -46,29 +46,30 @@ command: </p>
 
 <h2>MANUAL INSTALLATION:</h2>
 
-<p>If you encounter problems with installation, you can install manually using the commands:</p>
+<p>If you encounter problems with installation, you can install manually using the R commands:</p>
 
-<pre><code>&gt; install.packages("statmod")
-&gt; install.packages("plotrix")
-&gt; install.packages("stringr")
-&gt; install.packages("Rcpp")
-&gt; install.packages("RcppArmadillo")
-&gt; install.packages("ggplot")
-&gt; install.packages("locfit")
-&gt; install.packages("Hmisc")
-
-&gt; source("http://bioconductor.org/biocLite.R");
-&gt; biocLite();
-&gt; biocLite("Biobase");
-&gt; biocLite("BiocGenerics");
-&gt; biocLite("BiocParallel");
-&gt; biocLite("GenomicRanges");
-&gt; biocLite("IRanges");
-&gt; biocLite("S4Vectors");
-&gt; biocLite("genefilter");
-&gt; biocLite("geneplotter");
-
-&gt; install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz", 
+<pre><code>#Install CRAN packages:
+install.packages("statmod")
+install.packages("plotrix")
+install.packages("stringr")
+install.packages("Rcpp")
+install.packages("RcppArmadillo")
+install.packages("ggplot")
+install.packages("locfit")
+install.packages("Hmisc")
+#Install Bioconductor packages:
+source("http://bioconductor.org/biocLite.R");
+biocLite();
+biocLite("Biobase");
+biocLite("BiocGenerics");
+biocLite("BiocParallel");
+biocLite("GenomicRanges");
+biocLite("IRanges");
+biocLite("S4Vectors");
+biocLite("genefilter");
+biocLite("geneplotter");
+#Install JunctionSeq:
+install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz", 
                    repos = NULL, 
                    type="source")
 </code></pre>

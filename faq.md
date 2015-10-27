@@ -40,29 +40,30 @@ In order to successfully install from source on windows, you must have [Rtools](
 
 ##MANUAL INSTALLATION:
 
-If you encounter problems with installation, you can install manually using the commands:
+If you encounter problems with installation, you can install manually using the R commands:
 
-    > install.packages("statmod")
-    > install.packages("plotrix")
-    > install.packages("stringr")
-    > install.packages("Rcpp")
-    > install.packages("RcppArmadillo")
-    > install.packages("ggplot")
-    > install.packages("locfit")
-    > install.packages("Hmisc")
-
-    > source("http://bioconductor.org/biocLite.R");
-    > biocLite();
-    > biocLite("Biobase");
-    > biocLite("BiocGenerics");
-    > biocLite("BiocParallel");
-    > biocLite("GenomicRanges");
-    > biocLite("IRanges");
-    > biocLite("S4Vectors");
-    > biocLite("genefilter");
-    > biocLite("geneplotter");
-
-    > install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz", 
+    #Install CRAN packages:
+    install.packages("statmod")
+    install.packages("plotrix")
+    install.packages("stringr")
+    install.packages("Rcpp")
+    install.packages("RcppArmadillo")
+    install.packages("ggplot")
+    install.packages("locfit")
+    install.packages("Hmisc")
+    #Install Bioconductor packages:
+    source("http://bioconductor.org/biocLite.R");
+    biocLite();
+    biocLite("Biobase");
+    biocLite("BiocGenerics");
+    biocLite("BiocParallel");
+    biocLite("GenomicRanges");
+    biocLite("IRanges");
+    biocLite("S4Vectors");
+    biocLite("genefilter");
+    biocLite("geneplotter");
+    #Install JunctionSeq:
+    install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz", 
                        repos = NULL, 
                        type="source")
 

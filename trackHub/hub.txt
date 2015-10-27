@@ -1,5 +1,0 @@
-hub QoRTs_Pipeline_Example_Hub_v0.2.8
-shortLabel QoRTs_Pipeline_Example_Hub_v0.2.8
-longLabel QoRTs_Pipeline_Example_Hub_v0.2.8
-genomesFile genomes.txt
-email stephen.hartley

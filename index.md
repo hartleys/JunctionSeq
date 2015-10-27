@@ -1,31 +1,31 @@
     > v0.4.23 (Revised Fri Oct 23 11:42:17 EDT 2015)
 
-JunctionSeq is an R package designed to detect and assess 
+JunctionSeq is an R package for detection and visualization of  
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
-The methodology is based on the methods used by the [DEXSeq](http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html) 
+The methodology is heavily based on the [DEXSeq](http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html) 
 bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343).
 
 The core advantage of JunctionSeq over other similar tools is that it provides a powerful automated tools for
 generating readable and interpretable plots and tables to facilitate the interpretation of the results.
-An example results report is available [here](exampleResults/testForDU.html). 
+An example results report is available [here](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/exampleResults/testForDU.html). 
 An example set of browser tracks from this same dataset is available 
-[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). 
+[here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks), which uses [this trackhub](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/trackHub/index.html).
 
 Issues, bug reports, or feature requests can be posted to the 
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
 
 ##HELP AND DOCUMENTATION:
 
-* [The JunctionSeq user manual](doc/JunctionSeq.pdf): An introduction to JunctionSeq. Read me first.
+* [The JunctionSeq user manual](doc/JunctionSeq.pdf): An introduction to differential usage analysis with JunctionSeq.
 * [The online reference documentation](Rhtml/index.html): The complete JunctionSeq R documentation.
-* [A comprehensive walkthrough](doc/example-walkthrough.pdf): describes the entire analysis pipeline.
+* [A comprehensive walkthrough](doc/example-walkthrough.pdf): describes the entire analysis pipeline from aligned reads through analysis. This includes analysis with other tools such as DESeq2, edgeR, and DEXSeq, as well as the creation of plots and browser tracks.
 * [Example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip): used with the walkthrough so you can follow along. The [example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip) are separate (~1gb download).
-* [An example results report](exampleResults/testForDU.html): An example of the plots and html files produced by JunctionSeq (created using the example dataset).
+* [An example results report](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/exampleResults/testForDU.html): An example of the plots and html files produced by JunctionSeq (created using the example dataset).
 * An example set of browser tracks from this same dataset is available 
 [here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). The trackhub used to generate this session can be found [here](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/trackHub/index.html)
 * [Frequently Asked Questions](faq.html): If you still have questions, check here.
 
-Note: The example dataset and results are for testing and demonstration purposes only. The samples and annotation have been heavily modified and down-sampled 
+Note: *The example dataset and results are for testing and demonstration purposes only.* The samples and annotation have been heavily modified and down-sampled 
 both to test artificial edge cases and to provide smaller and more portable testing files. 
 The results should not be taken as an indication of any biological phenomenon.
 
