@@ -71,11 +71,11 @@
     If left as the default ("auto"), then the cutoff threshold will be determined automatically using the DESeq2 independent filtering method.
   }
   \item{nCores}{
-    The number of cores to use. Note that multicore functionality may not be available on all platforms. 
-    JunctionSeq attempts to use the BiocParallell package if it can be found installed. Otherwise it will
-    attempt to fallback to the multicore package. If neither package can be found it will fallback to single
-    core execution.
-  }  
+    Either an integer or a BiocParallelParam object. 
+    Either way, this determines The number of cores to use. Note that multicore functionality may not be available on all platforms. 
+    If parallel execution is not available then JunctionSeq will automatically fallback to single-core execution. See the BiocParallel
+    package for more information.
+  }
   \item{use.covars}{
     Optional: for advanced users. A data frame containing covariate factors. The names must be included in the model formulas.
   }
@@ -205,4 +205,29 @@
     
     USED ONLY FOR INTERNAL TESTING! NOT INTENDED FOR ACTUAL USE! 
   }
+}
+
+\examples{
+\dontrun{
+########################################
+#Set up example data:
+decoder.file <- system.file("extdata/annoFiles/decoder.bySample.txt",package="JctSeqExData2");
+decoder <- read.table(decoder.file,
+                      header=T,
+                      stringsAsFactors=F);
+gff.file <- system.file("extdata/cts/withNovel.forJunctionSeq.gff.gz",package="JctSeqExData2");
+countFiles <- system.file(paste0("extdata/cts/",
+                 decoder$sample.ID,
+                 "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"),
+                 package="JctSeqExData2");
+########################################
+
+jscs <- runJunctionSeqAnalyses(sample.files = countFiles,
+           sample.names = decoder$sample.ID,
+           condition=factor(decoder$group.ID),
+           flat.gff.file = gff.file,
+           analysis.type = "junctionsAndExons"
+);
+
+}
 }

@@ -31,7 +31,7 @@ buildAllPlots <- function(jscs,
                           base.plot.units = "in", 
                           GENE.annotation.relative.height = 0.1, TX.annotation.relative.height = 0.05, CONNECTIONS.relative.height = 0.1,
                           SPLICE.annotation.relative.height = 0.1,
-                          TX.margins = c(0.5,0.5),
+                          TX.margins = c(0,0.5),
                           autoscale.height.to.fit.TX.annotation = TRUE,
                           autoscale.width.to.fit.bins = 35,
                           plotting.device.params = list(), 
@@ -52,7 +52,10 @@ buildAllPlots <- function(jscs,
   use.plotting.device <- match.arg(use.plotting.device);
   sequencing.type <- match.arg(sequencing.type);
   
-  if(is.null(openPlottingDeviceFunc) & is.null(closePlottingDeviceFunc)){
+  if(is.null(openPlottingDeviceFunc) | is.null(closePlottingDeviceFunc)){
+    if(use.plotting.device == "custom"){
+        stop("Fatal error: custom plotting device is selected, but openPlottingDeviceFunc or closePlottingDeviceFunc is not set.");
+    }
     devFunctions <- getPlottingDeviceFunc(use.plotting.device = use.plotting.device,
                                             base.plot.height = base.plot.height,
                                             base.plot.width = base.plot.width,
@@ -60,14 +63,10 @@ buildAllPlots <- function(jscs,
                                             plotting.device.params = plotting.device.params);
     openPlottingDeviceFunc <- devFunctions[[1]];
     closePlottingDeviceFunc <- devFunctions[[2]];
-    
-    if(is.null(html.imgFileExtension)){
-      html.imgFileExtension <- getPlottingDeviceFileExtension(use.plotting.device);
-    }
-  } else if(use.plotting.device == "custom"){
-      stop("Fatal error: custom plotting device is selected, but openPlottingDeviceFunc or closePlottingDeviceFunc is not set.");
   }
-  
+  if(is.null(html.imgFileExtension)){
+    html.imgFileExtension <- getPlottingDeviceFileExtension(use.plotting.device);
+  }
   
   gtf.format <- TRUE;
   
@@ -311,7 +310,7 @@ buildAllPlotsForGene <- function(geneID,jscs,
                           base.plot.units = "in", 
                           GENE.annotation.relative.height = 0.1, TX.annotation.relative.height = 0.05, CONNECTIONS.relative.height = 0.1,
                           SPLICE.annotation.relative.height = 0.1,
-                          TX.margins = c(0.5,0.5),
+                          TX.margins = c(0,0.5),
                           autoscale.height.to.fit.TX.annotation = TRUE,
                           autoscale.width.to.fit.bins = 35,
                           plotting.device.params = list(),
@@ -332,39 +331,19 @@ buildAllPlotsForGene <- function(geneID,jscs,
       outfile.prefix <- rep(outfile.prefix, 8);
     }
     
-    #if("HIDDENPARAM_FIX_SVG_RHEL5" %in% names(plotting.device.params)){
-    #   closeDeviceFunc <- function(filename){
-    #     dev.off();
-    #     #Hack (doesn't work), attempting to workaround a flaw in one particular linux distribution where svg files are rendered incorrectly.
-    #     #svgfixfile <- system.file("extdata/FIX_SVG.pl", package="JunctionSeq", mustWork=TRUE);
-    #     #svgfixcommand <- paste("perl ",svgfixfile," ", filename, " > ", filename);
-    #     #system(svgfixcommand);
-    #   };
-    #   plotting.device.params <- plotting.device.params[- which(names(plotting.device.params) == "HIDDENPARAM_FIX_SVG_RHEL5")];
-    #} else {
-    #   closeDeviceFunc <- function(filename){
-    #     dev.off();
-    #   }
-    #}
-    #if(is.null(openPlottingDeviceFunc)){
-    #    openPlottingDeviceFunc <- getPlottingDeviceFunc(use.plotting.device = use.plotting.device,
-    #                                          base.plot.height = base.plot.height,
-    #                                          base.plot.width = base.plot.width,
-    #                                          base.plot.units = base.plot.units,
-    #                                          plotting.device.params = plotting.device.params);
-    #}
-    
-    if(is.null(openPlottingDeviceFunc) & is.null(closePlottingDeviceFunc)){
-      devFunctions <- getPlottingDeviceFunc(use.plotting.device = use.plotting.device,
-                                              base.plot.height = base.plot.height,
-                                              base.plot.width = base.plot.width,
-                                              base.plot.units = base.plot.units,
-                                              plotting.device.params = plotting.device.params);
-      openPlottingDeviceFunc <- devFunctions[[1]];
-      closePlottingDeviceFunc <- devFunctions[[2]];
-    } else if(use.plotting.device == "custom"){
-      stop("Fatal error: custom plotting device is selected, but openPlottingDeviceFunc or closePlottingDeviceFunc is not set.");
+  if(is.null(openPlottingDeviceFunc) | is.null(closePlottingDeviceFunc)){
+    if(use.plotting.device == "custom"){
+        stop("Fatal error: custom plotting device is selected, but openPlottingDeviceFunc or closePlottingDeviceFunc is not set.");
     }
+    devFunctions <- getPlottingDeviceFunc(use.plotting.device = use.plotting.device,
+                                            base.plot.height = base.plot.height,
+                                            base.plot.width = base.plot.width,
+                                            base.plot.units = base.plot.units,
+                                            plotting.device.params = plotting.device.params);
+    openPlottingDeviceFunc <- devFunctions[[1]];
+    closePlottingDeviceFunc <- devFunctions[[2]];
+  }
+  
     #INTERNAL.VARS <- list();
     
     if(draw.nested.SJ){
@@ -518,7 +497,7 @@ getAutofitTxRelativeHeight <- function(TX.ct, autoscale.height.to.fit.TX.annotat
                               TX.annotation.relative.height = 0.05, 
                               CONNECTIONS.relative.height = 0.1,
                               SPLICE.annotation.relative.height=0.1,
-                              TX.margins = c(0.5,0.5)){
+                              TX.margins = c(0,0.5)){
       
     if(autoscale.height.to.fit.TX.annotation){
       GENE.annotation.height <- GENE.annotation.relative.height * 10;
@@ -608,7 +587,7 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
                               graph.margins = c(2,3,3,3),
                               GENE.annotation.relative.height = 0.1, TX.annotation.relative.height = 0.05, CONNECTIONS.relative.height = 0.1,
                               SPLICE.annotation.relative.height = 0.1,
-                              TX.margins = c(0.5,0.5),
+                              TX.margins = c(0,0.5),
                               condition.legend.text = NULL, include.TX.names = TRUE, draw.start.end.sites = TRUE,
                               label.chromosome=TRUE, 
                               splice.junction.drawing.style = c("hyperbola","ellipse","triangular","line"),
@@ -1013,14 +992,14 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
                             col = vertline.col,
                             featureType = merged.data$featureType[rt], 
                             featureID = rownames(merged.data)[rt],
-                            stringsAsFactors=F);
+                            stringsAsFactors=FALSE);
           sub.allExon <- data.frame(start=flat.gff.data$start[rt.allExon], 
                                     end=flat.gff.data$end[rt.allExon], 
                                     chr=flat.gff.data$chrom[rt.allExon], 
                                     strand=flat.gff.data$strand[rt.allExon], 
                                     is.exon = (flat.gff.data$featureType[rt.allExon] == "exonic_part"),
                                     featureID = as.character(flat.gff.data$featureName[rt.allExon]), 
-                                    stringsAsFactors=F);
+                                    stringsAsFactors=FALSE);
           sub.allJunction <- data.frame(start=flat.gff.data$start[rt.allJunction], 
                                     end=flat.gff.data$end[rt.allJunction], 
                                     chr=flat.gff.data$chrom[rt.allJunction], 
@@ -1029,7 +1008,7 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
                                     feature.type = flat.gff.data$featureType[rt.allJunction] ,
                                     is.novel = (flat.gff.data$featureType[rt.allJunction] == "novel_splice_site"), 
                                     featureID = as.character(flat.gff.data$featureName[rt.allJunction]), 
-                                    stringsAsFactors=F);
+                                    stringsAsFactors=FALSE);
           sub.allJunction$is.plotted <- sub.allJunction$featureID %in% sub$featureID;
           
           #print(sub.allJunction);

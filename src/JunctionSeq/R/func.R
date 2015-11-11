@@ -371,7 +371,7 @@ writeSizeFactors <- function(jscs, file = NULL){
      sf <- cbind.data.frame(sf, jscs@altSizeFactors);
    }
    if(! is.null(file)){
-     write.table(sf,file = file, quote=F,row.names=F,col.names=T,sep='\t');
+     write.table(sf,file = file, quote=FALSE,row.names=FALSE,col.names=TRUE,sep='\t');
    }
    return(sf);
 }

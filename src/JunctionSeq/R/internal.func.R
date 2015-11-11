@@ -598,10 +598,13 @@ getAllJunctionSeqCountVectors <- function( ecs, method.countVectors = c("geneLev
       out <- cbind(featureCounts, gct[match(geneIDs(ecs),rownames(gct)),] - featureCounts);
       # Remove rare negative numbers, which can occur on extremely low-coverege genes that appear near other genes.
       out <- apply(out,MARGIN=c(1,2), FUN=max, 0);
+      out <- as.matrix(out);
+      mode(out) <- "integer";
       message("    getAllJunctionSeqCountVectors: out generated. dim = ",paste(dim(out),sep=",",collapse=",")," (",date(),")");
       
       rownames(out) <- rownames(fData(ecs));
       colnames(out) <- c( paste0(colnames(counts(ecs)),"_thisBin")  , paste0(colnames(counts(ecs)),"_gene")  );
+      
       return(out);
    } else if(method.countVectors == "sumOfAllBinsForGene") {
       out.list <- myApply(1:nrow(fData(ecs)), function(i){
@@ -615,6 +618,7 @@ getAllJunctionSeqCountVectors <- function( ecs, method.countVectors = c("geneLev
       });
       message("    getAllJunctionSeqCountVectors: out.list generated. length = ",length(out.list), " (",date(),")");
       out <- as.matrix(do.call(rbind, out.list));
+      mode(out) <- "integer";
       
       #out <- as.matrix(t(sapply(1:nrow(fData(ecs)),function(i){
       #  geneID <- geneIDs(ecs)[i];
@@ -638,36 +642,6 @@ getAllJunctionSeqCountVectors <- function( ecs, method.countVectors = c("geneLev
      stop("ERROR: Impossible State: getAllJunctionSeqCountVectors method.countVectors not recognized.")
    }
 }
-
-#getJunctionSeqCountVector <- function( ecs, geneID, countbinID, use.alternate.method = TRUE ) {
-#   stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
-#   gct <- ecs@geneCountData;
-#   
-#   if(! geneID %in% rownames(gct))                stop("FATAL ERROR: getJunctionSeqCountVector: geneID ",geneID," not found in gct");
-#   if(! geneID %in% geneIDs(ecs))                 stop("FATAL ERROR: getJunctionSeqCountVector: geneID ",geneID," not found in ecs");
-#   
-#   if(use.alternate.method){
-#      rowWithcountbinID <- which(geneIDs(ecs) == geneID & countbinIDs(ecs) == countbinID);
-#      stopifnot(length(rowWithcountbinID) == 1);
-#      
-#      rowWithGeneID <- which(rownames(gct) == geneID);
-#      stopifnot( length(rowWithGeneID) == 1 );
-#      
-#      binCounts <- counts(ecs)[rowWithcountbinID,];
-#      geneCounts <- gct[rowWithGeneID,];
-#      
-#      return( c(binCounts, geneCounts - binCounts) );
-#   } else {
-#      rowsWithGeneID <- which(geneIDs(ecs) == geneID);
-#      rowWithcountbinID <- which(countbinIDs(ecs)[rowsWithGeneID] == countbinID);
-#      
-#      stopifnot( length(rowWithcountbinID) == 1 );
-#      
-#      ctfg <- counts(ecs)[rowsWithGeneID,];
-#      
-#      return(c( ctfg[rowWithcountbinID,], colSums( ctfg[ -rowWithcountbinID, , drop=FALSE ] ) ));
-#   }
-#}
 
 modelFrameForGene.v2 <- function( ecs, geneID, onlyTestable=FALSE) {
    stopifnot( is( ecs, "JunctionSeqCountSet") )
@@ -693,8 +667,6 @@ modelFrameForGene.v2 <- function( ecs, geneID, onlyTestable=FALSE) {
    attr( modelFrame, "geneID" ) <- geneID
    modelFrame
 }
-
-
 
 modelFrameForGene <- function( ecs, geneID, onlyTestable=FALSE) {
    stopifnot( is( ecs, "JunctionSeqCountSet") )
@@ -745,29 +717,6 @@ testFeatureForDJU.fromRow <- function(formula1, ecs, i, modelFrame, mm0, mm1, di
                                            geneID = geneID, countbinID = countbinID));
 }
 
-
-#testFeatureForDJU <- function(formula1, ecs, geneID, countbinID, modelFrame, mm0, mm1, disp, keepCoefs = ncol(mm1), use.alternate.method = TRUE){
-#  stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
-#  stopifnot( any(geneIDs(ecs) %in% geneID & countbinIDs(ecs) %in% countbinID ) )
-#  stopifnot( !is.na(disp) )
-#  if( all( is.na( sizeFactors( ecs )) ) ){
-#    stop("Please calculate size factors first\n")
-#  }
-#  countVector <- getJunctionSeqCountVector( ecs, geneID, countbinID , use.alternate.method = use.alternate.method);
-#  #countVector <- ecs@countVectors[i,];
-#  conditionLevels <- levels(modelFrame[["condition"]]);
-#  
-#  if(is.na(disp)){
-#     warning("Dispersion is NA!");
-#     return(list(coefficient = rep(NA,length(keepCoefs)), logFC = rep(NA, length(conditionLevels) - 1),pval = NA, disp = NA, countVector = countVector, fit = list(fitH0 = NA, fitH1 = NA) ));
-#  }
-#  
-#  return(testFeatureForDJU.fromCountVector(formula1 = formula1, mm0 = mm0,mm1 = mm1,disp = disp, keepCoefs = keepCoefs, modelFrame = modelFrame, countVector = countVector, 
-#                                           geneID = geneID, countbinID = countbinID));
-#}
-
-
-
 testFeatureForDJU.fromCountVector <- function(formula1, mm0,mm1,disp, keepCoefs = ncol(mm1), modelFrame,countVector, 
                                               # The remaining parameters have no effect on functionality, only impact error reporting:
                                               geneID = "", countbinID = ""){
@@ -794,23 +743,3 @@ testFeatureForDJU.fromCountVector <- function(formula1, mm0,mm1,disp, keepCoefs 
   
   return(list(coefficient = coefficient, logFC = logFC, pval = pval, disp = disp, countVector = countVector, fit = list(fitH0 = fit0, fitH1 = fit1) ));
 }
-
-
-#testFeatureForDJU_OLDVERSION <- function(ecs, gct, geneID, countbinID, modelFrame, mm0, mm1, disp, use.alternate.method = TRUE){
-#  stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
-#  stopifnot( any(geneIDs(ecs) %in% geneID & countbinIDs(ecs) %in% countbinID ) )
-#  stopifnot( !is.na(disp) )
-#  if( all( is.na( sizeFactors( ecs )) ) ){
-#    stop("Please calculate size factors first\n")
-#  }
-#  count <- getJunctionSeqCountVector( ecs, gcs, geneID, countbinID , use.alternate.method = use.alternate.method);
-#  
-#  fit0 <- glmnb.fit( mm0,  count, dispersion = disp, offset = log( modelFrame$sizeFactor ) );
-#  fit1 <- glmnb.fit( mm1, count, dispersion = disp, offset = log( modelFrame$sizeFactor ) );
-#
-#  coefficient <- fit1$coefficients[length(fit1$coefficients)]
-#  
-#  pval <- pchisq( deviance( fit0 ) - deviance( fit1 ), ncol( mm1 ) - ncol( mm0 ), lower.tail=FALSE )
-#  
-#  return(list(coefficient, pval));
-#}

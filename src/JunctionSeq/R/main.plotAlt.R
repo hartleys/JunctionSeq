@@ -305,17 +305,17 @@ plotMA <- function(jscs,
   if(miniTicks ) axis(1,at=miniTicks.x,labels=FALSE, lwd = anno.lwd / 2, lwd.ticks = anno.lwd / 2, tcl = -0.25, cex.axis = text.cex);
   if(label.axes[2]){
     axis(2,at=log10.at,labels=log10.expression.label,las=1, lwd = anno.lwd, lwd.ticks = anno.lwd, cex.axis = text.cex);
-    if(miniTicks ) axis(2,at = miniTicks.pts, labels = F, lwd = anno.lwd/2, lwd.ticks = anno.lwd / 2, tcl = -0.25)
+    if(miniTicks ) axis(2,at = miniTicks.pts, labels = FALSE, lwd = anno.lwd/2, lwd.ticks = anno.lwd / 2, tcl = -0.25)
   } else {
     axis(2,at=log10.at,labels=FALSE,las=1, lwd = anno.lwd, lwd.ticks = anno.lwd, tcl = -0.25, cex.axis = text.cex);
-    if(miniTicks ) axis(2,at = miniTicks.pts, labels = F, lwd = anno.lwd/2, lwd.ticks = anno.lwd / 2, tcl = -0.2)
+    if(miniTicks ) axis(2,at = miniTicks.pts, labels = FALSE, lwd = anno.lwd/2, lwd.ticks = anno.lwd / 2, tcl = -0.2)
   }
   if(label.axes[4]){
     axis(4,at=log10.at,labels=log10.expression.label,las=1, lwd = anno.lwd, lwd.ticks = anno.lwd, cex.axis = text.cex);
-    if(miniTicks ) axis(4,at = miniTicks.pts, labels = F, lwd = anno.lwd/2, lwd.ticks = anno.lwd / 2, tcl = -0.25)
+    if(miniTicks ) axis(4,at = miniTicks.pts, labels = FALSE, lwd = anno.lwd/2, lwd.ticks = anno.lwd / 2, tcl = -0.25)
   } else {
     axis(4,at=log10.at,labels=FALSE,las=1, lwd = anno.lwd, lwd.ticks = anno.lwd, tcl = -0.25, cex.axis = text.cex);
-    if(miniTicks ) axis(4,at = miniTicks.pts, labels = F, lwd = anno.lwd/2, lwd.ticks = anno.lwd / 2, tcl = -0.2) 
+    if(miniTicks ) axis(4,at = miniTicks.pts, labels = FALSE, lwd = anno.lwd/2, lwd.ticks = anno.lwd / 2, tcl = -0.2) 
   }
 
   box(lwd=anno.lwd,cex=lines.cex);

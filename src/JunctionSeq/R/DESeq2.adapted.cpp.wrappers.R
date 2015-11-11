@@ -2,7 +2,7 @@
 #
 # We unfortunetely could not use the functions directly because they relied on the internal structure of the
 #   deseq data objects, which are different in JunctionSeq.
-# Additionally, many of the DESeq2 and DEXSeq commands have been changed several times in the 
+# Additionally, many of the DESeq2 and DEXSeq internal data structures have changed several times in the 
 #   past few releases, breaking any code that calls these functions internally. Thus, for consistency
 #   they are copied over here in static form.
 #

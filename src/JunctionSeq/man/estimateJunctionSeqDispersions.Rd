@@ -54,7 +54,10 @@ estimateJunctionSeqDispersions( jscs,
     If left as the default ("auto"), then the cutoff threshold will be determined automatically using the DESeq2 independent filtering method.
   }
   \item{nCores}{
-    The number of cores to use. Note that multicore functionality may not be available on all platforms.
+    Either an integer or a BiocParallelParam object. 
+    Either way, this determines The number of cores to use. Note that multicore functionality may not be available on all platforms. 
+    If parallel execution is not available then JunctionSeq will automatically fallback to single-core execution. See the BiocParallel
+    package for more information.
   }
   \item{use.multigene.aggregates}{Logical value. Whether to attempt to test "aggregate genes" which consist of multiple genes that overlap with one another. Note that inclusion of aggregate genes may affect the false discovery rate, since by their very nature aggregate genes will often show differential splice junction usage, as the two genes will often be regulated independently.}
 
@@ -63,4 +66,42 @@ estimateJunctionSeqDispersions( jscs,
 }
 \value{
   A JunctionSeqCountSet, with dispersion results included.
+}
+
+\examples{
+\dontrun{
+########################################
+#Set up example data:
+decoder.file <- system.file("extdata/annoFiles/decoder.bySample.txt",package="JctSeqExData2");
+decoder <- read.table(decoder.file,
+                      header=T,
+                      stringsAsFactors=F);
+gff.file <- system.file("extdata/cts/withNovel.forJunctionSeq.gff.gz",package="JctSeqExData2");
+countFiles <- system.file(paste0("extdata/cts/",
+                 decoder$sample.ID,
+                 "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"),
+                 package="JctSeqExData2");
+########################################
+#Advanced Analysis:
+
+#Make a "design" dataframe:
+design <- data.frame(condition = factor(decoder$group.ID));
+#Read the QoRTs counts.
+jscs = readJunctionSeqCounts(countfiles = countFiles,
+           samplenames = decoder$sample.ID,
+           design = design,
+           flat.gff.file = gff.file
+);
+#Generate the size factors and load them into the JunctionSeqCountSet:
+jscs <- estimateJunctionSeqSizeFactors(jscs);
+#Estimate feature-specific dispersions:
+jscs <- estimateJunctionSeqDispersions(jscs);
+#Fit dispersion function and estimate MAP dispersion:
+jscs <- fitJunctionSeqDispersionFunction(jscs);
+#Test for differential usage:
+jscs <- testForDiffUsage(jscs);
+#Estimate effect sizes and expression estimates:
+jscs <- estimateEffectSizes( jscs);
+
+}
 }

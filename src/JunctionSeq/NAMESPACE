@@ -7,7 +7,7 @@ import(plotrix)
 import(stringr)
 import(Rcpp)
 import(RcppArmadillo)
-import(ggplot2)
+#import(ggplot2)
 
 #Bioconductor packages:
 import(Biobase)
@@ -36,9 +36,7 @@ export(
   buildAllPlots,                    #
   
   readJunctionSeqCounts,             #
-  estimateSizeFactors,
   estimateJunctionSeqDispersions,                    #
-  fitDispersionFunction,
   testForDiffUsage,                    #
   estimateEffectSizes,
   estimateJunctionSeqSizeFactors,
@@ -59,6 +57,8 @@ export(
   JUNCTIONSEQ.DEFAULT.COLOR.LIST
   
   #Depreciated:
+  #fitDispersionFunction,
+  #estimateSizeFactors, 
   #generateCompleteResults,                    # 
   #generateAllExpressionEstimates                    #
 )

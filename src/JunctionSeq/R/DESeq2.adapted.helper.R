@@ -2,7 +2,7 @@
 #
 # We unfortunetely could not use the functions directly because they relied on the internal structure of the
 #   deseq data objects, which are different in JunctionSeq.
-# Additionally, many of the DESeq2 and DEXSeq commands have been changed several times in the 
+# Additionally, many of the DESeq2 and DEXSeq internal data structures have changed several times in the 
 #   past few releases, breaking any code that calls these functions internally. Thus, for consistency
 #   they are copied over here in static form.
 #
@@ -81,101 +81,101 @@ collapseReplicates <- function(object, groupby, run, renameCols=TRUE) {
   collapsed
 }
 
-#' FPKM: fragments per kilobase per million mapped fragments
-#'
-#' The following function returns fragment counts normalized
-#' per kilobase of feature length per million mapped fragments
-#' (by default using a robust estimate of the library size,
-#' as in \code{\link{estimateSizeFactors}}).
-#'
-#' The length of the features (e.g. genes) is calculated one of two ways:
-#' if there is a matrix named "avgTxLength" in \code{assays(dds)}, this will take precedence in the
-#' length normalization. Otherwise, feature length is calculated 
-#' from the \code{rowRanges} of the dds object,
-#' if a column \code{basepairs} is not present in \code{mcols(dds)}.
-#' The calculated length is the number of basepairs in the union of all \code{GRanges}
-#' assigned to a given row of \code{object}, e.g., 
-#' the union of all basepairs of exons of a given gene.
-#'
-#' Note that, when the read/fragment counting has inter-feature dependencies, a strict
-#' normalization would not incorporate the basepairs of a feature which
-#' overlap another feature. This inter-feature dependence is not taken into
-#' consideration in the internal union basepair calculation.
-#'
-#' @param object a \code{DESeqDataSet}
-#' @param robust whether to use size factors to normalize
-#' rather than taking the column sums of the raw counts,
-#' using the \code{\link{fpm}} function.
-#'
-#' @return a matrix which is normalized per kilobase of the
-#' union of basepairs in the \code{GRangesList} or \code{GRanges}
-#' of the mcols(object), and per million of mapped fragments,
-#' either using the robust median ratio method (robust=TRUE, default)
-#' or using raw counts (robust=FALSE).
-#' Defining a column \code{mcols(object)$basepairs} takes
-#' precedence over internal calculation of the kilobases for each row.
-#'
-#' @examples
-#'
-#' # create a matrix with 1 million counts for the
-#' # 2nd and 3rd column, the 1st and 4th have
-#' # half and double the counts, respectively.
-#' m <- matrix(1e6 * rep(c(.125, .25, .25, .5), each=4),
-#'             ncol=4, dimnames=list(1:4,1:4))
-#' mode(m) <- "integer"
-#' se <- SummarizedExperiment(m, colData=DataFrame(sample=1:4))
-#' dds <- DESeqDataSet(se, ~ 1)
-#' 
-#' # create 4 GRanges with lengths: 1, 1, 2, 2.5 Kb
-#' gr1 <- GRanges("chr1",IRanges(1,1000))
-#' gr2 <- GRanges("chr1",IRanges(c(1,501),c(500,1000)))
-#' gr3 <- GRanges("chr1",IRanges(c(1,1001),c(1000,2000)))
-#' gr4 <- GRanges("chr1",IRanges(c(1,1001,2001),c(500,3000,3000)))
-#' rowRanges(dds) <- GRangesList(gr1,gr2,gr3,gr4)
-#' 
-#' # the raw counts
-#' counts(dds)
-#' 
-#' # the FPKM values
-#' fpkm(dds)
-#' 
-#' # held constant per 1 million fragments
-#' counts(dds) <- counts(dds) * 2L
-#' round(fpkm(dds))
-#' 
-#' @seealso \code{\link{fpm}}
-#'
-#' @docType methods
-#' @name fpkm
-#' @rdname fpkm
-#' 
-#' @export
-fpkm <- function(object, robust=TRUE) {
-  fpm <- fpm(object, robust=robust)
-  if ("avgTxLength" %in% assayNames(object)) {
-    return(1e3 * fpm / assays(object)[["avgTxLength"]])
-  }
-  if (is.null(mcols(object)$basepairs)) {
-    if (class(rowRanges(object)) == "GRangesList") {
-      ubp <- DataFrame(basepairs = sum(width(reduce(rowRanges(object)))))
-    } else if (class(rowRanges(object)) == "GRanges") {
-      ubp <- DataFrame(basepairs = width(rowRanges(object)))
-    }
-    if (all(ubp$basepairs == 0)) {
-      stop("rowRanges(object) has all ranges of zero width.
-the user should instead supply a column, mcols(object)$basepairs,
-which will be used to produce FPKM values")
-    }
-    if (is.null(mcols(mcols(object)))) {
-      mcols(object) <- ubp
-    } else {
-      mcols(ubp) <- DataFrame(type="intermediate",
-                              description="count of basepairs in the union of all ranges")
-      mcols(object) <- cbind(mcols(object), ubp)
-    }
-  }
-  1e3 * sweep(fpm, 1, mcols(object)$basepairs, "/")
-}
+##' FPKM: fragments per kilobase per million mapped fragments
+##'
+##' The following function returns fragment counts normalized
+##' per kilobase of feature length per million mapped fragments
+##' (by default using a robust estimate of the library size,
+##' as in \code{\link{estimateSizeFactors}}).
+##'
+##' The length of the features (e.g. genes) is calculated one of two ways:
+##' if there is a matrix named "avgTxLength" in \code{assays(dds)}, this will take precedence in the
+##' length normalization. Otherwise, feature length is calculated 
+##' from the \code{rowRanges} of the dds object,
+##' if a column \code{basepairs} is not present in \code{mcols(dds)}.
+##' The calculated length is the number of basepairs in the union of all \code{GRanges}
+##' assigned to a given row of \code{object}, e.g., 
+##' the union of all basepairs of exons of a given gene.
+##'
+##' Note that, when the read/fragment counting has inter-feature dependencies, a strict
+##' normalization would not incorporate the basepairs of a feature which
+##' overlap another feature. This inter-feature dependence is not taken into
+##' consideration in the internal union basepair calculation.
+##'
+##' @param object a \code{DESeqDataSet}
+##' @param robust whether to use size factors to normalize
+##' rather than taking the column sums of the raw counts,
+##' using the \code{\link{fpm}} function.
+##'
+##' @return a matrix which is normalized per kilobase of the
+##' union of basepairs in the \code{GRangesList} or \code{GRanges}
+##' of the mcols(object), and per million of mapped fragments,
+##' either using the robust median ratio method (robust=TRUE, default)
+##' or using raw counts (robust=FALSE).
+##' Defining a column \code{mcols(object)$basepairs} takes
+##' precedence over internal calculation of the kilobases for each row.
+##'
+##' @examples
+##'
+##' # create a matrix with 1 million counts for the
+##' # 2nd and 3rd column, the 1st and 4th have
+##' # half and double the counts, respectively.
+##' m <- matrix(1e6 * rep(c(.125, .25, .25, .5), each=4),
+##'             ncol=4, dimnames=list(1:4,1:4))
+##' mode(m) <- "integer"
+##' se <- SummarizedExperiment(m, colData=DataFrame(sample=1:4))
+##' dds <- DESeqDataSet(se, ~ 1)
+##' 
+##' # create 4 GRanges with lengths: 1, 1, 2, 2.5 Kb
+##' gr1 <- GRanges("chr1",IRanges(1,1000))
+##' gr2 <- GRanges("chr1",IRanges(c(1,501),c(500,1000)))
+##' gr3 <- GRanges("chr1",IRanges(c(1,1001),c(1000,2000)))
+##' gr4 <- GRanges("chr1",IRanges(c(1,1001,2001),c(500,3000,3000)))
+##' rowRanges(dds) <- GRangesList(gr1,gr2,gr3,gr4)
+##' 
+##' # the raw counts
+##' counts(dds)
+##' 
+##' # the FPKM values
+##' fpkm(dds)
+##' 
+##' # held constant per 1 million fragments
+##' counts(dds) <- counts(dds) * 2L
+##' round(fpkm(dds))
+##' 
+##' @seealso \code{\link{fpm}}
+##'
+##' @docType methods
+##' @name fpkm
+##' @rdname fpkm
+##' 
+##' @export
+#fpkm <- function(object, robust=TRUE) {
+#  fpm <- fpm(object, robust=robust)
+#  if ("avgTxLength" %in% assayNames(object)) {
+#    return(1e3 * fpm / assays(object)[["avgTxLength"]])
+#  }
+#  if (is.null(mcols(object)$basepairs)) {
+#    if (class(rowRanges(object)) == "GRangesList") {
+#      ubp <- DataFrame(basepairs = sum(width(reduce(rowRanges(object)))))
+#    } else if (class(rowRanges(object)) == "GRanges") {
+#      ubp <- DataFrame(basepairs = width(rowRanges(object)))
+#    }
+#    if (all(ubp$basepairs == 0)) {
+#      stop("rowRanges(object) has all ranges of zero width.
+#the user should instead supply a column, mcols(object)$basepairs,
+#which will be used to produce FPKM values")
+#    }
+#    if (is.null(mcols(mcols(object)))) {
+#      mcols(object) <- ubp
+#    } else {
+#      mcols(ubp) <- DataFrame(type="intermediate",
+#                              description="count of basepairs in the union of all ranges")
+#      mcols(object) <- cbind(mcols(object), ubp)
+#    }
+#  }
+#  1e3 * sweep(fpm, 1, mcols(object)$basepairs, "/")
+#}
 
 #' FPM: fragments per million mapped fragments
 #'

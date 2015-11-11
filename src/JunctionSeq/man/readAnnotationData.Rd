@@ -18,3 +18,14 @@
     mergeNovelSplices functions (depending on whether inclusion of novel splice junctions is desired).
   }
 }
+
+
+\examples{
+gff.file <- system.file("extdata/cts/withNovel.forJunctionSeq.gff.gz",package="JctSeqExData2");
+
+#Parse the GFF file:
+annoData <- readAnnotationData(gff.file);
+head(annoData);
+}
+
+

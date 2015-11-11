@@ -42,7 +42,7 @@
                 TX.annotation.relative.height = 0.05,
                 CONNECTIONS.relative.height = 0.1,
                 SPLICE.annotation.relative.height = 0.1,
-                TX.margins = c(0.5,0.5),
+                TX.margins = c(0,0.5),
                 autoscale.height.to.fit.TX.annotation = TRUE,
                 autoscale.width.to.fit.bins = 35,
                 plotting.device.params = list(), 
@@ -259,4 +259,38 @@
   }
 
   \item{...}{Additional options to pass to \code{\link{buildAllPlotsForGene}}, \code{\link{plotJunctionSeqResultsForGene}}, or graphical parameters passed to plotting functions.}
+}
+
+\examples{
+
+data(exampleDataSet,package="JctSeqExData2");
+buildAllPlots(jscs);
+
+\dontrun{
+########################################
+#Set up example data:
+decoder.file <- system.file("extdata/annoFiles/decoder.bySample.txt",package="JctSeqExData2");
+decoder <- read.table(decoder.file,
+                      header=T,
+                      stringsAsFactors=F);
+gff.file <- system.file("extdata/cts/withNovel.forJunctionSeq.gff.gz",package="JctSeqExData2");
+countFiles <- system.file(paste0("extdata/cts/",
+                 decoder$sample.ID,
+                 "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"),
+                 package="JctSeqExData2");
+########################################
+#Run example analysis:
+jscs <- runJunctionSeqAnalyses(sample.files = countFiles,
+           sample.names = decoder$sample.ID,
+           condition=factor(decoder$group.ID),
+           flat.gff.file = gff.file,
+           analysis.type = "junctionsAndExons"
+);
+########################################
+
+#Generate all plots and the html index
+#   Save them as pngs to the current directory:
+buildAllPlots(jscs);
+
+}
 }

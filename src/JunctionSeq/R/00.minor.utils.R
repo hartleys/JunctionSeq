@@ -1,6 +1,6 @@
 
 simpleReportMem <- function(){
-     if(require("pryr")){
+     if(requireNamespace("pryr", quietly=TRUE)){
        message("Mem used:");
        print(pryr::mem_used());
      }
@@ -14,7 +14,7 @@ advlines <- function(x, y, col = "black", lty = 1, lwd = 1, secondary = FALSE, s
 }
 
 reportMem <- function(jscs){
-     if(require("pryr")){
+     if(requireNamespace("pryr", quietly=TRUE)){
        message("     Total mem_used(): ",pryr::mem_used());
      }
      
@@ -247,7 +247,7 @@ strStartsWith <- function(s, prefix){
   substr(s,1,nchar(prefix)) == prefix;
 }
 f.na <- function(x){
-  ifelse(is.na(x), F,x);
+  ifelse(is.na(x), FALSE,x);
 }
 
 
@@ -313,7 +313,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
    } else if(use.plotting.device == "CairoPNG"){
      plotting.device.params <- overmerge.list(list(pointsize = 18, res = 150), plotting.device.params);
      
-     cairo.package.found <- suppressMessages(suppressWarnings(require("Cairo")));
+     cairo.package.found <- requireNamespace("Cairo", quietly=TRUE)
      if(cairo.package.found){
        plotdevfunc <- function(filename, heightMult, widthMult){
          plotting.device.params[["height"]] <- heightMult * base.plot.height;
@@ -331,7 +331,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
    } else if(use.plotting.device == "CairoSVG"){
      plotting.device.params <- overmerge.list(list(pointsize = 18), plotting.device.params);
      
-     cairo.package.found <- suppressMessages(suppressWarnings(require("Cairo")));
+     cairo.package.found <- requireNamespace("Cairo", quietly=TRUE)
      #warning("Note: R device CairoSVG has known issues that make labels unreadable on most renderers.");
      if(cairo.package.found){
        plotdevfunc <- function(filename, heightMult, widthMult){
@@ -421,55 +421,64 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
    return(list(plotdevfunc,closefunc));
 }
 
-getMyApply <- function(nCores = 1, verbose = TRUE, allowWindowsMulticore = TRUE){
-   if(nCores > 1){
-     multicore.package.found <- suppressMessages(suppressWarnings(require("parallel")));
+getMyApply <- function(nCores = 1, verbose = TRUE, allowWindowsMulticore = TRUE, testCapability = TRUE){
+   if(! is.numeric(nCores)){
+     if(is(nCores, "BiocParallelParam")){
+       myApply <- function(X, FUN){ BiocParallel::bplapply( X, FUN, BPPARAM = nCores ) };
+     } else {
+       stop("Fatal Error: nCores must be either an integer or a BiocParallelParam object");
+     }
+   } else if(nCores > 1){
+     #multicore.package.found <- suppressMessages(suppressWarnings(require("parallel")));
      #The older version was "enhanced" by BiocParallel. It is now mandatory as of JunctionSeq v0.3.72.
-     BiocParallel.package.found <- TRUE; #suppressMessages(suppressWarnings(require("BiocParallel")));
+     #BiocParallel.package.found <- TRUE; #suppressMessages(suppressWarnings(require("BiocParallel")));
     
      if( Sys.info()[['sysname']] == 'Windows' ){
-       message(">>> NOTE: Microsoft windows detected. As of BiocParallel v1.2.0 and R 3.1.1, multicore forking is not supported on windows. ");
+       message(">>> NOTE: Microsoft windows detected. As of BiocParallel v1.2.0 and R 3.1.1, simple multicore forking is not supported on windows. ");
        message("          JunctionSeq will fall-back to single-core operation if necessary.");
-     }
-     if(BiocParallel.package.found) {
+     } 
+     
+     #if(BiocParallel.package.found) {
        message("    [[Using package \"BiocParallel\" for parallelization. (Using ",nCores," cores)]]");
        if( Sys.info()[['sysname']] == 'Windows' ){
          message(">>> WARNING: attempting to use BiocParallel for multicore functionality. However: On windows machines some versions of BiocParallel appear to run very slowly and do not appear to actually use multiple cores.");
        }
        myApply <- function(X, FUN){ BiocParallel::bplapply( X, FUN, BPPARAM = BiocParallel::MulticoreParam(workers = nCores) ) };
-     } else if(multicore.package.found){
-       if( Sys.info()[['sysname']] == 'Windows' ){
-         message(">>> WARNING: Microsoft windows detected, and package BiocParallel not found, and nCores > 1:");
-         message(">>>    Currently, multicore operation is not supported on windows without the BiocParallel package!");
-         message(">>>    Falling back to single-core operation!");
-         warning("Multicore lapply unavailable. Falling back to single-core operations.");
-         myApply <- lapply;
-       } else {
-         message("    [[Using package \"parallel\" for parallelization. (Using ",nCores," cores)]]");
-         myApply <- function(X, FUN){ parallel::mclapply( X, FUN, mc.cores=nCores ) };
-       }
-     } else {
-       message(">>> WARNING: Neither package BiocParallel nor package parallel found, but nCores > 1.");
-       message(">>>          Paralell operations not supported without these packages!");
-       message(">>>          Falling back to single-core operation!");
-       warning("Multicore lapply unavailable. Falling back to single-core operations.");
-       myApply <- lapply;
-     }
+     #} else if(multicore.package.found){
+     #  if( Sys.info()[['sysname']] == 'Windows' ){
+     #    message(">>> WARNING: Microsoft windows detected, and package BiocParallel not found, and nCores > 1:");
+     #    message(">>>    Currently, multicore operation is not supported on windows without the BiocParallel package!");
+     #    message(">>>    Falling back to single-core operation!");
+     #    warning("Multicore lapply unavailable. Falling back to single-core operations.");
+     #    myApply <- lapply;
+     #  } else {
+     #    message("    [[Using package \"parallel\" for parallelization. (Using ",nCores," cores)]]");
+     #    myApply <- function(X, FUN){ parallel::mclapply( X, FUN, mc.cores=nCores ) };
+     #  }
+     #} else {
+     #  message(">>> WARNING: Neither package BiocParallel nor package parallel found, but nCores > 1.");
+     #  message(">>>          Paralell operations not supported without these packages!");
+     #  message(">>>          Falling back to single-core operation!");
+     #  warning("Multicore lapply unavailable. Falling back to single-core operations.");
+     #  myApply <- lapply;
+     #}
    } else {
      myApply <- lapply;
    }
    
-   myApply <- tryCatch({
-       test.run <- myApply(1:10, FUN = function(x){2 * x});
-       myApply;
-     }, error = function(e){
-       message(">>> WARNING: Attempted to run some form of multicore lapply, but it threw an error (likely due to an OS conflict).");
-       message("    Error follows: ",e);
-       message(">>> Falling back to single-core operations!");
-       warning("Multicore lapply unavailable. Falling back to single-core operations.");
-       lapply;
-     }
-   )
+   if(testCapability){
+     myApply <- tryCatch({
+         test.run <- myApply(1:10, FUN = function(x){2 * x});
+         myApply;
+       }, error = function(e){
+         message(">>> WARNING: Attempted to run some form of multicore lapply, but it threw an error (likely due to an OS conflict).");
+         message("    Error follows: ",e);
+         message(">>> Falling back to single-core operations!");
+         warning("Multicore lapply unavailable. Falling back to single-core operations.");
+         lapply;
+       }
+     )
+   }
    
    return(myApply);
 }

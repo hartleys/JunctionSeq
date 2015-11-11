@@ -115,3 +115,32 @@ readJunctionSeqCounts(countfiles, countdata,
 \value{
   A JunctionSeqCountSet.
 }
+
+
+\examples{
+\dontrun{
+########################################
+#Set up example data:
+decoder.file <- system.file("extdata/annoFiles/decoder.bySample.txt",package="JctSeqExData2");
+decoder <- read.table(decoder.file,
+                      header=T,
+                      stringsAsFactors=F);
+gff.file <- system.file("extdata/cts/withNovel.forJunctionSeq.gff.gz",package="JctSeqExData2");
+countFiles <- system.file(paste0("extdata/cts/",
+                 decoder$sample.ID,
+                 "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"),
+                 package="JctSeqExData2");
+########################################
+#Advanced Analysis:
+
+#Make a "design" dataframe:
+design <- data.frame(condition = factor(decoder$group.ID));
+#Read the QoRTs counts.
+jscs = readJunctionSeqCounts(countfiles = countFiles,
+           samplenames = decoder$sample.ID,
+           design = design,
+           flat.gff.file = gff.file
+);
+
+}
+}

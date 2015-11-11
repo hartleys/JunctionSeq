@@ -288,7 +288,7 @@ drawPlot <- function(matr, ylimn,ecs, intervals, rango, fitExpToVar, numexons, t
      #str.ht <- strheight("X",units="figure",
      #plot.area.yaxs <- 1 - (par("plt")[1] + par("plt")[4])
      #spare.yaxs.margin <- 
-     #TODO: add autofit. For now just hard-code it:
+     #TODO? add autofit? For now just hard-code it:
      spare.yaxs.margin <- (abs(ylimn[2] - ylimn[1])) * 0.08;
      spare.yaxs.margin <- (abs(ylimn[2] - ylimn[1]))*0.04;
    
@@ -672,7 +672,7 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
    }
    #message("RESCALE:"); print(tr.allExon);
    
-   
+   lines(c(minx,maxx),c(rect.mid,rect.mid),lty= 1, lwd = centerLine.lwd, xpd = xpd, ...);
    if(merge.exon.parts & nrow(tr.allExon) > 1 & any(tr.allExon$start %in% tr.allExon$end) ){
      #merge adjacent exonic parts:
      tr.mergedExon <- data.frame(start = tr.allExon$start[1], end = tr.allExon$end[1]);
@@ -693,7 +693,6 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
    } else {
      rect(tr.allExon$start, rect.floor, tr.allExon$end, rect.ceil, lty = 1, lwd = geneRect.lwd ,col=tr.allExon$fillColor, xpd = xpd,...)
    }
-   lines(c(minx,maxx),c(rect.mid,rect.mid),lty= 1, lwd = centerLine.lwd, xpd = xpd, ...);
    
    if(draw.start.end.sites){
      segments(startSites + startSite.angle.width, startSites.floor,startSites,rect.floor, lwd = startSiteMarks.lwd,xpd=NA,...);
@@ -704,9 +703,6 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
    }
    
    if(show.strand.arrows > 0){
-      #if(is.null(strand)){
-      #   message("Warning: Cannot draw strand arrows, strandedness is NULL! Skipping.");
-      #} else {
          strand <- tr.allExon$strand[1];
          
          if(cex.arrows == "auto"){
@@ -727,7 +723,6 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
              lines(c(par("usr")[1],arrow.X),c(rect.mid, rect.mid), lwd = arrows.lwd, xpd = NA, ...);
              JS.arrowChars( arrow.X , rect.mid, "left", arrow.cex = cex.arrows, lwd = arrows.lwd, xpd = NA, ...);
            }
-           
          } else {
            arrow.X <-((1:(show.strand.arrows - 1)) / (show.strand.arrows)) * (maxx - minx) + minx
            if(strand == "+" | geneStrand == "+"){
@@ -736,40 +731,15 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
               JS.arrowChars( arrow.X ,rep(rect.mid,length(arrow.X) - 1), "left", arrow.cex = cex.arrows, lwd = arrows.lwd, ...);
            }
          }
-         
-         
-         #even.spacing <- ((1:(show.strand.arrows)) / (show.strand.arrows+1)) * (maxx - minx) + minx;
-
-         #points(even.spacing, rep(0.4,show.strand.arrows), pch = arrow.char, cex = anno.cex.text, ...);
-      #}
    }
-
-#   if(draw.untestable.annotation){
-#      tr.splice <- tr.allJunction[, ];
-#      start.splice <- tr.splice$start
-#      end.splice <- tr.splice$end
-#      middle.splice <- apply(rbind(start.splice, end.splice), 2, median)
-#      colors.splice <- exoncol[! tr$is.exon]
-#      segments(start.splice, 0.75, middle.splice, ymax, col=colors.splice, lty = exonlty[! tr$is.exon], lwd = plot.lwd,xpd=FALSE,...);
-#      segments(middle.splice, ymax, end.splice, 0.75, col=colors.splice, lty = exonlty[! tr$is.exon], lwd = plot.lwd,xpd=FALSE,...);
-#   }
-
-   #if(any( ! tr$is.exon)){
    if(nrow(tr.allJunction) > 0){
       tr.splice <- tr.allJunction;
-      #if(! draw.untestable.annotation){
-      #  tr.splice <- tr.splice[(! tr.splice$is.testable) & (tr.splice$is.untestable),];
-      #  message("############ REMOVING UNTESTED JCT!")
-      #}
-      #tr.splice <- tr
       start.splice <- tr.splice$start
       end.splice <- tr.splice$end
       middle.splice <- apply(rbind(start.splice, end.splice), 2, median)
-      #colors.splice <- exoncol[! tr$is.exon]
       if(draw.nested.SJ){
         if(is.null(INTERNAL.VARS[["SJ.ceiling"]])){
           tr.splice$span <- tr.splice$end - tr.splice$start;
-          #print(tr.splice);
           nh <- get.nested.heights(as.data.frame(tr.splice), splice.floor, splice.ceil);
           SJ.ceiling <- nh[["SJ.ceiling"]]
         } else {
@@ -801,7 +771,6 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
 
       }
     }
-   #}
 
    if( any(tr$is.exon) & draw.exon.lines){
       tr.ex <- tr[tr$is.exon, , drop = FALSE]
@@ -840,7 +809,6 @@ drawGene.noSplices <- function(minx, maxx, tr.allExon, exon.names=NULL, anno.lwd
    }
 }
 
-#drawTranscript(rel.calc.min, rel.calc.max, tr=tr, rango=1:(length(anno.data$start[rt.allExon][logicexons==1])), exoncol=NULL, names=c(), trName=trans[i], cex=0.8,sub.sig = sub.sig)external.margins = c(1,4,4,2),
 
 drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.iv = NULL, names, trName, trStrand = ".", sub.sig, anno.lwd = 1, par.cex = 1, anno.cex.text = 1, anno.cex.TX.ID = anno.cex.text * 0.5, cex.arrows = 1, draw.strand = FALSE,  ...)
 {
@@ -854,24 +822,12 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
      } else {
        exon.height <- 0.25;
      }
-     
-     ##text(minx,0.5,labels=trName,srt=0,xpd=TRUE,cex= anno.cex.TX.ID, adj=c(0,0),...);
    }
    splice.top <- exon.height * 0.9;
    splice.mid <- splice.top / 2;
    #Change? Splice junctions are now plotted at straight lines in TX annotation?
-   #splice.top <- splice.mid;
-   
-   #exoncol
-   #message("drawTranscript cex = ",cex);
-   #plot.new()
-   #par(cex = par.cex, mar=c(0, external.margins[2], anno.cex.TX.ID, external.margins[4]));
-   ##par(cex = par.cex, mar=c(0, external.margins[2], 0, external.margins[4]));
-   #plot.window(xlim=c(minx, maxx), ylim=c(0, 1),...)
-   
-   #Remove adjacent exons:
+   #        Note to dev: No, leave it as-is. It looks better this way.
    tr.raw <- tr;
-   #print(tr.raw);
    
    is.adjacent <- tr$start[-1] == tr$end[-length(tr$end)];
    tr.mergedExons <- data.frame(start = tr.raw$start[1], end = tr.raw$end[1]);
@@ -893,10 +849,9 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
      tr.splices <- data.frame(start = tr.mergedExons$end[-nrow(tr.mergedExons)], end = tr.mergedExons$start[-1]);
      tr.splices$lineColor <- rep("#DDDDDD",nrow(tr.splices));
      for(i in 1:nrow(tr.splices)){
-        #color.sig <- color.sig | (is.non.na & sub.sig$start[i] == t.splices[,1] & sub.sig$end[i] == t.splices[,2]);
         matched.jct <- which(tr.allJunction$start == tr.splices$start[i] & tr.allJunction$end == tr.splices$end[i] );
         if(length(matched.jct) != 1){
-          message("WARNNG: unmatched junction (len=",length(matched.jct),") (Jct #",i,")!\n","[",tr.splices$start[i],",",tr.splices$end[i],"]");
+          warning("WARNING: unmatched junction (len=",length(matched.jct),") (Jct #",i,")!\n","[",tr.splices$start[i],",",tr.splices$end[i],"]");
           print("####tr.splices:");
           print(tr.splices);
           print("####tr.allJunctions:");
@@ -931,13 +886,6 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
      }
    }
    
-   #print("TR.RAW:");
-   #print(tr.raw);
-   #print("TR.MERGEDEXONS:");
-   #print(tr.mergedExons);
-   #}
-   #splice.color <- ifelse(color.sig,"#F219ED","black");
-   
    if(nrow(tr.mergedExons) > 1){
      zr <- apply(rbind(tr.splices$start, tr.splices$end), 2, median)
      segments(tr.splices$start, ymin+splice.mid, zr, ymin+splice.top,col=tr.splices$lineColor, lwd = anno.lwd, xpd = NA,...)
@@ -950,8 +898,6 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
    
    if(draw.strand){
      arrow.width <- convertHeightToWidth(exon.height) / 2;
-     #strwidth(">", cex= cex.arrows) / 2;
-     #message("trStrand = \"",trStrand,"\"");
      if(is.null(trStrand)){
        #Do Nothing
      } else if(trStrand == "+"){
@@ -959,37 +905,20 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
        lastEnd <- tr.raw$end[length(tr.raw$end)];
 
        polygon(c(lastEnd,lastEnd, lastEnd + arrow.width), 
-               #c(ymin + exon.height/3,ymin + exon.height * 2/3, exon.height/2 + ymin), 
                c(ymin,ymin + exon.height, exon.height/2 + ymin), 
                col=tr$fillColor[length(tr$fillColor)], border = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
-       #polygon(c(lastEnd,lastEnd, lastEnd + arrow.width), 
-       #        c(ymin,ymin + exon.height, exon.height/2 + ymin),
-       #        #c(ymin + exon.height/4,ymin + exon.height * 3/4, exon.height/2 + ymin), 
-       #        col=tr$fillColor[length(tr$fillColor)], border = tr$fillColor[length(tr$fillColor)], xpd = NA, lwd = anno.lwd / 2)
-       #lines(c(lastEnd,lastEnd + arrow.width), c(ymin, exon.height/2 + ymin),               col = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
-       #lines(c(lastEnd,lastEnd + arrow.width), c(ymin + exon.height, exon.height/2 + ymin), col = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
      } else if (trStrand == "-"){
        #message("-!");
        firstStart <- tr.raw$start[1];
        polygon(c(firstStart,firstStart, firstStart - arrow.width),
                c(ymin,ymin + exon.height, exon.height/2 + ymin), 
                col=tr$fillColor[1], border = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
-       #polygon(c(firstStart,firstStart, firstStart - arrow.width),
-       #        c(ymin,ymin + exon.height, exon.height/2 + ymin),
-       #        #c(ymin + exon.height/4,ymin + exon.height * 3/4, exon.height/2 + ymin),
-       #        col=tr$fillColor[1], border = tr$fillColor[1], xpd = NA, lwd = anno.lwd / 2)
-       #lines(c(firstStart,firstStart - arrow.width), c(ymin, exon.height/2 + ymin),               col = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
-       #lines(c(firstStart,firstStart - arrow.width), c(ymin + exon.height, exon.height/2 + ymin), col = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
      }
    }
    
    if(length(exon.breaks) > 0){
      segments(exon.breaks,ymin,exon.breaks,ymin+exon.height, col = "black", lwd = anno.lwd / 2, lty = 3, ...)
    }
-   #rect(tr[rango,1], 0.1, tr[rango,2], 0.5, col=exoncol, lwd = anno.lwd / 2)
-   #zr <- apply(rbind(tr[rango, 2], tr[rango+1, 1]), 2, median)
-   #segments(tr[rango,2], 0.3, zr, 0.45,col=splice.color, lwd = anno.lwd,...)
-   #segments(zr, 0.45, tr[rango+1,1], 0.3,col=splice.color, lwd = anno.lwd,...)
    
    id.wd <- strwidth(trName, cex = anno.cex.TX.ID);
    id.leftX <- tr.raw$start[1];
@@ -1039,21 +968,12 @@ generate.interval.scale <- function(gene.features, exon.fraction, rescaleFunctio
   exon.iv$span <- exon.iv$end - exon.iv$start;
   intr.iv$span <- intr.iv$end - intr.iv$start;
   
-  #intr.iv <- intr.iv[intr.iv$span > 0,,drop=FALSE];
   #print("intr.iv:");
   #print(intr.iv);
   
   if((nrow(intr.iv) > 0) && sum(intr.iv$span) > 0 ){
     exon.iv$type <- "E";
     intr.iv$type <- "I";
-    #if(logRescale){
-    #  exon.iv$normSpan <- exon.fraction * log(exon.iv$span) / sum(log(exon.iv$span));
-    #  intr.iv$normSpan <- (1 - exon.fraction) * log(intr.iv$span) / sum(log(intr.iv$span));
-    #} else {
-    #  exon.iv$normSpan <- exon.fraction * exon.iv$span / sum(exon.iv$span);
-    #  intr.iv$normSpan <- (1 - exon.fraction) * intr.iv$span / sum(intr.iv$span);
-    #}
-    #resFunc
     exon.iv$normSpan <- exon.fraction * resFunc(exon.iv$span) / sum(resFunc(exon.iv$span));
     intr.iv$normSpan <- (1 - exon.fraction) * resFunc(intr.iv$span) / sum(resFunc(intr.iv$span));
     
@@ -1086,76 +1006,6 @@ generate.interval.scale <- function(gene.features, exon.fraction, rescaleFunctio
   }
 }
 
- # #Remove adjacent exons? REMOVED.
- # #exon.iv <- exon.iv.raw[1,];
- # #if(nrow(exon.iv.raw) > 1){
- # #  for(i in 2:nrow(exon.iv.raw)){
- # #    if(exon.iv$end[nrow(exon.iv)] == exon.iv.raw$start[i]){
- # #      exon.iv$end[nrow(exon.iv)] = exon.iv.raw$end[i];
- # #    } else {
- # #      exon.iv <- rbind(exon.iv, exon.iv.raw[i,]);
- # #    }
- # #  }
- # #}
- # exon.iv <- exon.iv.raw;
- # 
- # intr.iv <- data.frame(start = exon.iv$end[-nrow(exon.iv)], end = exon.iv$start[-1]);
- # if(max(exon.iv$end) < MAX){
- #   intr.iv <- rbind.data.frame(intr.iv,data.frame(start = max(exon.iv$end), end = MAX));
- # }
- # if(min(exon.iv$start) > MIN){
- #   intr.iv <- rbind.data.frame(data.frame(start = MIN, end = min(exon.iv$start)),intr.iv);
- # }
- # exon.iv$span <- exon.iv$end - exon.iv$start;
- # intr.iv$span <- intr.iv$end - intr.iv$start;
- # 
- # #intr.iv <- intr.iv[intr.iv$span > 0,,drop=FALSE];
- # #print("intr.iv:");
- # #print(intr.iv);
- # 
- # if((nrow(intr.iv) > 0) && sum(intr.iv$span) > 0 ){
- #   exon.iv$type <- "E";
- #   intr.iv$type <- "I";
- #   #if(logRescale){
- #   #  exon.iv$normSpan <- exon.fraction * log(exon.iv$span) / sum(log(exon.iv$span));
- #   #  intr.iv$normSpan <- (1 - exon.fraction) * log(intr.iv$span) / sum(log(intr.iv$span));
- #   #} else {
- #   #  exon.iv$normSpan <- exon.fraction * exon.iv$span / sum(exon.iv$span);
- #   #  intr.iv$normSpan <- (1 - exon.fraction) * intr.iv$span / sum(intr.iv$span);
- #   #}
- #   #resFunc
- #   exon.iv$normSpan <- exon.fraction * resFunc(exon.iv$span) / sum(resFunc(exon.iv$span));
- #   intr.iv$normSpan <- (1 - exon.fraction) * resFunc(intr.iv$span) / sum(resFunc(intr.iv$span));
- #   
- #   #alternate intron and exon:
- #   idx <- order(c(1:nrow(exon.iv),1:nrow(intr.iv)))
- #   iv <- rbind(exon.iv, intr.iv)[idx,, drop = FALSE];
- #   cumulativeSum <- cumsum(iv$normSpan);
- #   
- #   iv$rescale.start <- c(0,cumulativeSum[-length(cumulativeSum)]);
- #   iv$rescale.end <- cumulativeSum;
- #   iv$normSpan <- iv$rescale.end - iv$rescale.start;
- #   iv$simple.normSpan <- iv$span / sum(iv$span);
- #   iv$simple.rescale.start <- (iv$start - MIN) / SPAN;
- #   iv$simple.rescale.end   <- (iv$end - MIN) / SPAN;
- #   return(iv);
- # } else { #Catch special case: the entire gene is exonic:
- #   exon.iv$type <- "E";
- #   exon.iv$normSpan <- 1 * resFunc(exon.iv$span) / sum(resFunc(exon.iv$span));
- #   
- #   iv <- exon.iv;
- #   cumulativeSum <- cumsum(iv$normSpan);
- #   iv$rescale.start <- c(0,cumulativeSum[-length(cumulativeSum)]);
- #   iv$rescale.end <- cumulativeSum;
- #   iv$normSpan <- iv$rescale.end - iv$rescale.start;
- #   iv$simple.normSpan <- iv$span / sum(iv$span);
- #   iv$simple.rescale.start <- (iv$start - MIN) / SPAN;
- #   iv$simple.rescale.end   <- (iv$end - MIN) / SPAN;
- #   return(iv);
- # }
-#}
-
-
 rescale.coords <- function(x, rescale.iv){
   sapply(x, FUN=function(y){
     idy <- which(y >= rescale.iv$start & y <= rescale.iv$end)[1];
@@ -1165,7 +1015,6 @@ rescale.coords <- function(x, rescale.iv){
 }
 
 #############################################
-
 #Expansion of axis.break from the plotrix package
 # adds the ability to modify additional graphical parameters, and fixes a bug where
 # this function globally overrides certain graphical parameters via par().
@@ -1296,26 +1145,6 @@ qorts.axis.break <- function (axis = 1, breakpos = NULL, pos = NA, bgcol = "whit
     #par(xpd = FALSE)
 }
 
-#axis(1, at=geneColumn.MID, labels="GENE", tcl = -0.5,  lwd = axes.lwd, lwd.ticks = axes.lwd, cex.axis = cex.countbinIDs, las = 0, mgp = c(3,0.55,0),padj=0.5, hadj=0.5,...)#
-#INCOMPLETE:
-JS.axis.old <- function(side, at, labels = at, tcl = -0.5, lwd = 1, lwd.ticks = 1, cex.axis = 1, srt = 0, mgp = c(3,1,0), line = NA, pos = NA, adj = c(0.5,1.1), font = 1, ...){
-  #axis(side, at, labels = FALSE, tcl = tcl, lwd = lwd, lwd.ticks = lwd.ticks, cex.axis = cex.axis, mgp = mgp, line = line, pos = pos, ...);
-  
-  if(side == 1){
-    axis.height <- par("usr")[3];
-    axis.tick.floor <- axis.height + (tcl * (2 * par("cxy")[2]));
-    segments(at, axis.tick.floor,at, axis.height, lwd = lwd.ticks, cex = cex.axis, xpd = NA, ...);
-    
-    axis.label.height <- axis.height - (mgp[2] * (2 * par("cxy")[2]));
-    
-    text(x = at, y = axis.label.height, labels = labels, cex = cex.axis, adj = adj, srt = srt, xpd = NA, font = font,...);
-    axis.floor <- axis.label.height - max(strheight(labels, cex = cex.axis))
-    
-    #message("Axis range: [",axis.label.height,",",axis.floor,"]");
-    
-    return(axis.floor);
-  }
-}
 JS.axis <- function(side, at, labels = at, tcl = -0.5, lwd = 1, lwd.ticks = 1, cex.axis = 1, srt = 0, line = NA, pos = NA, adj = c(0.5,1.1), font = 1, ...){
   #axis(side, at, labels = FALSE, tcl = tcl, lwd = lwd, lwd.ticks = lwd.ticks, cex.axis = cex.axis, mgp = mgp, line = line, pos = pos, ...);
   
@@ -1334,11 +1163,6 @@ JS.axis <- function(side, at, labels = at, tcl = -0.5, lwd = 1, lwd.ticks = 1, c
     
     return(axis.floor);
   }
-}
-
-
-autofit.strings <- function(xlim, y, at, labels, start.cex, buffer.char = "m", min.horiz.cex = 1, ...){
-  
 }
 
 drawHalfLoops <- function(dir = c("down","up","left","right"), x0,x1,y0,y1,sampleCt = 100, col = "black", lwd = 1, lty = 1, style = c("hyperbola","ellipse","triangular","line"), ...){
@@ -1500,8 +1324,6 @@ drawHalfLoop <- function(dir = c("down","up","left","right"), x0,x1,y0,y1, sampl
     } else {
       stop(paste0("Half-loop direction: \"",dir,"\" not supported for style \"",style,"\"."));
     }
-    
-    #stop(paste0("Half-loop style: \"",style,"\" not (yet) implemented."));
   } else if(style == "line"){
     if(dir == "down"){
       lines(c(x0,x1),c(y0,y0),...)
@@ -1604,12 +1426,7 @@ repString <- function(s,n){
   paste0(rep(s,n),collapse="");
 }
 
-###WIP!!!!
-
-
 get.nested.heights.helper <- function(tr, currDepth = 1, debug.mode = FALSE){
-  #if(currDepth > 5) stop();
-
   if(debug.mode) message(repString("|",currDepth),"^^^^");
   if(debug.mode) message(repString("|",currDepth),"[", paste0(tr$ID,collapse=","),"]");
   intersections <- lapply(1:nrow(tr), function(i){

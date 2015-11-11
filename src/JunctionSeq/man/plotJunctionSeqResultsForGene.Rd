@@ -37,7 +37,7 @@ plotJunctionSeqResultsForGene(geneID, jscs,
                               TX.annotation.relative.height = 0.05,
                               CONNECTIONS.relative.height = 0.1,
                               SPLICE.annotation.relative.height = 0.1,
-                              TX.margins = c(0.5,0.5),
+                              TX.margins = c(0,0.5),
                               condition.legend.text = NULL, include.TX.names = TRUE, 
                               draw.start.end.sites = TRUE,
                               label.chromosome = TRUE,
@@ -200,4 +200,50 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   }
 
   \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}
+}
+
+\examples{
+\dontrun{
+########################################
+#Set up example data:
+decoder.file <- system.file("extdata/annoFiles/decoder.bySample.txt",package="JctSeqExData2");
+decoder <- read.table(decoder.file,
+                      header=T,
+                      stringsAsFactors=F);
+gff.file <- system.file("extdata/cts/withNovel.forJunctionSeq.gff.gz",package="JctSeqExData2");
+countFiles <- system.file(paste0("extdata/cts/",
+                 decoder$sample.ID,
+                 "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"),
+                 package="JctSeqExData2");
+######################
+#Run example analysis:
+jscs <- runJunctionSeqAnalyses(sample.files = countFiles,
+           sample.names = decoder$sample.ID,
+           condition=factor(decoder$group.ID),
+           flat.gff.file = gff.file,
+           analysis.type = "junctionsAndExons"
+);
+########################################
+
+#Make an expression plot for a given gene:
+plotJunctionSeqResultsForGene(geneID = "ENSRNOG00000009281", jscs);
+
+#Plot normalized read counts for a given gene:
+plotJunctionSeqResultsForGene(geneID = "ENSRNOG00000009281", jscs,
+                    plot.type = "normCounts");
+
+#Plot relative expression for a given gene:
+plotJunctionSeqResultsForGene(geneID = "ENSRNOG00000009281", jscs,
+                    plot.type = "rExpr");
+
+#Plot raw read counts for a given gene:
+plotJunctionSeqResultsForGene(geneID = "ENSRNOG00000009281", jscs,
+                    plot.type = "rawCounts");
+
+#Same thing, but with isoforms shown:
+plotJunctionSeqResultsForGene(geneID = "ENSRNOG00000009281", jscs,
+                    plot.type = "rawCounts",
+                    displayTranscripts = TRUE);
+
+}
 }

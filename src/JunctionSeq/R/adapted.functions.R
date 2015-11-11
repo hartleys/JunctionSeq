@@ -296,82 +296,6 @@ estimateUnsharedDispersions <- function(object,
   return(object);
 }
 
-#DEPRECIATED!
-#estimateDispersions.JunctionSeq <- 
-#  function( object, fitType=c("parametric","local","mean"),
-#    maxit=100, quiet=FALSE, formula=design(object), BPPARAM=MulticoreParam(workers=1))
-#{
-#  if (is.null(sizeFactors(object)) & is.null(normalizationFactors(object))) {
-#    stop("first call estimateSizeFactors or provide a normalizationFactor matrix before estimateDispersions")
-#  }
-#  if (!is.null(dispersions(object))) {
-#    if (!quiet) message("you had estimated dispersions, replacing these")
-#    mcols(object) <- mcols(object)[,!(mcols(mcols(object))$type %in% c("intermediate","results"))]
-#  }
-#  stopifnot(length(maxit)==1)
-#  fitType <- match.arg(fitType, choices=c("parametric","local","mean"))
-#
-#  allVars <- all.vars(formula)
-#  if( any(!allVars %in% colnames( colData(object) )) ){
-#     notPresent <- allVars[!allVars %in% colnames( colData(object) )]
-#     notPresent <- paste(notPresent, collapse=",")
-#     stop(sprintf("the variables '%s' of the parameter 'formula' are not specified in the columns of the colData", notPresent ) )
-#  }
-#
-#  splitParts <- sort(
-#    rep(seq_len(BPPARAM$workers), 
-#    length.out=nrow(object) ) )
-#  splitObject <- split( object, splitParts )
-#
-#  modelMatrix <- rmDepCols(
-#    model.matrix(formula, as.data.frame(colData(object))))
-#  
-#  splitObject <- bplapply( splitObject, 
-#      function(x){
-#        estimateDispersionsGeneEst(x, 
-#          maxit=maxit, quiet=quiet, 
-#          modelMatrix = modelMatrix, 
-#          niter = 10)}, 
-#    BPPARAM=BPPARAM )
-#
-#  mergeObject <- do.call( rbind, splitObject )
-#  matchedNames <- match( rownames(object), rownames(mergeObject))  
-#  mcols(object) <- mcols( mergeObject )[matchedNames,]
-#  assays(object) <- assays(mergeObject[matchedNames,])
-#
-#  mcols(object)$baseMean <- mcols(object)$exonBaseMean
-#  mcols(object)$baseVar <- mcols(object)$exonBaseVar
-#  mcols(object)$allZero <- unname( rowSums( featureCounts(object)) == 0 |
-#      rowSums(counts(object, normalized = TRUE)[, colData(object)$exon == "others"]) ==0 )
-#
-#  object <- estimateDispersionsFit(object, fitType=fitType, quiet=quiet)
-#
-#  dispPriorVar <- estimateDispersionsPriorVar(object, modelMatrix=modelMatrix)
-#  
-#  splitObject <- split( object, splitParts )
-#  
-#  splitObject <- bplapply( splitObject, 
-#      function(x){
-#        estimateDispersionsMAP(x, 
-#          maxit=maxit, 
-#          quiet=quiet, 
-#          modelMatrix=modelMatrix, 
-#          dispPriorVar=dispPriorVar)
-#      }, 
-#    BPPARAM=BPPARAM )
-#
-#  mergeObject <- do.call( rbind, splitObject ) 
-#  matchedNames <- match( rownames(object), rownames(mergeObject) ) 
-#  mcols(object) <- mcols( mergeObject )[matchedNames,]
-#  mcols(object)$baseMean <- unname( rowMeans( counts(object) ) )
-#  mcols(object)$baseVar <- unname( rowVars( counts(object) ) )
-#  mcols(object)$dispersion <- pmin( mcols(object)$dispersion, ncol(object) )
-#
-#  object
-#
-#}
-
-
 adapted.estimateDispersionsMAP <- function( jscs, useRows, #dispFn, 
                                     test.formula1 = formula(jscs@formulas[["formulaDispersion"]]),
                                     outlierSD = 2, dispPriorVar, minDisp = 1e-08, 
@@ -609,26 +533,6 @@ logConditionalLikelihood <- function( disp, mm, y, muhat )
    ll - cr
 }
 
-#estimateFeatureDispersion <- function( ecs, geneID, countbinID, modelFrame, mm , use.alternate.method  = TRUE ){
-#   stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
-#   if( all( is.na( sizeFactors( ecs ) )) ){
-#     stop("Please calculate size factors before estimating dispersions\n")
-#   }
-#   
-#   count <- getJunctionSeqCountVector( ecs, geneID, countbinID , use.alternate.method)
-#   disp <- .1
-#   for( i in 1:10 ) {
-#     fit <- glmnb.fit( mm, count, dispersion = disp, offset = log( modelFrame$sizeFactor ) )
-#     olddisp <- disp
-#     disp <- exp( optimize( function(logalpha)
-#        logConditionalLikelihood( exp(logalpha), mm, count, fitted.values(fit) ), 
-#        log( c( 1e-11, 1e5 ) ), maximum=TRUE, tol=.01 )$maximum )
-#     if( abs( log(disp) - log(olddisp) ) < .03 )
-#        break
-#     }
-#  disp
-#}
-
 estimateFeatureDispersionFromRow <- function( ecs, i, modelFrame, mm , use.alternate.method  = TRUE ){
    stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
    if( all( is.na( sizeFactors( ecs ) )) ){
@@ -664,7 +568,6 @@ constructModelFrame <- function( ecs ){
   rownames(modelFrame) <- NULL
   return( modelFrame )
 }
-
 
 arrangeCoefs <- function( frm, mf, mm = model.matrix( frm, mf ), fit = NULL, insertValues = TRUE ) {
 
@@ -763,8 +666,6 @@ balanceFeatures <- function( coefs, dispersions ) {
 }         
 
 ##################################################################
-
-
 
 fitDispersionFunction_simpleMode <- function(jscs, verbose = TRUE){
      #Options(warn = 1);
@@ -1046,7 +947,6 @@ adapted.localDispersionFit <- function( means, disps, minDisp ) {
   dispFunction <- function(means) exp(predict(fit, data.frame(logMeans=log(means))))
   return(dispFunction)
 }
-
 
 fitDispersionFunctionHelper_SIMPLE <- function(means, disps,  quiet = FALSE){
    verbose <- ! quiet;

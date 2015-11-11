@@ -64,7 +64,7 @@ JunctionSeqHTML <- function(jscs,
                             html.fixed.dim = c("height","autofit","width"),
                             base.html.height = 90, base.html.height.units = "vh",
                             html.width = 90, html.width.units = "vw",
-                            GENE.annotation.relative.height = 0.2, TX.annotation.relative.height = 0.05, CONNECTIONS.relative.height = 0.1, SPLICE.annotation.relative.height = 0.1, TX.margins = c(0.5,0.5),
+                            GENE.annotation.relative.height = 0.2, TX.annotation.relative.height = 0.05, CONNECTIONS.relative.height = 0.1, SPLICE.annotation.relative.height = 0.1, TX.margins = c(0,0.5),
                             autoscale.height.to.fit.TX.annotation = TRUE,
                             autoscale.width.to.fit.bins = 35,
                             number.plots = NULL,
@@ -262,7 +262,7 @@ JunctionSeqHTML <- function(jscs,
        if(! is.null(fData(jscs)$geneWisePadj)){
          mainTable$geneWisePadj <- sapply(gene.list, function(g){
            geneRows <- which(fData(jscs)$geneID == g);
-           min( fData(jscs)$geneWisePadj[geneRows] , na.rm = T);
+           min( fData(jscs)$geneWisePadj[geneRows] , na.rm = TRUE);
          });
        }
 
@@ -1724,7 +1724,7 @@ write.junction.bed.file.GTFCONVERT <- function(file, trackLine = NULL,
                    frame = rep(".",2), group = rep(group,2));
       }
     }))
-    write.table(out.GTF, gzf, quote=F, col.names=F,row.names=F,sep='\t');
+    write.table(out.GTF, gzf, quote=FALSE, col.names=FALSE,row.names=FALSE,sep='\t');
   }
   
   close(gzf);

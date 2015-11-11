@@ -101,6 +101,34 @@ plotMA(jscs,
 }
 
 
+\examples{
+\dontrun{
+########################################
+#Set up example data:
+decoder.file <- system.file("extdata/annoFiles/decoder.bySample.txt",package="JctSeqExData2");
+decoder <- read.table(decoder.file,
+                      header=T,
+                      stringsAsFactors=F);
+gff.file <- system.file("extdata/cts/withNovel.forJunctionSeq.gff.gz",package="JctSeqExData2");
+countFiles <- system.file(paste0("extdata/cts/",
+                 decoder$sample.ID,
+                 "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"),
+                 package="JctSeqExData2");
+######################
+#Run example analysis:
+jscs <- runJunctionSeqAnalyses(sample.files = countFiles,
+           sample.names = decoder$sample.ID,
+           condition=factor(decoder$group.ID),
+           flat.gff.file = gff.file,
+           analysis.type = "junctionsAndExons"
+);
+########################################
+
+#Plot M-A:
+plotMA(jscs);
+
+}
+}
 
 
 
