@@ -6,7 +6,7 @@ JS.install <- function(...){
   message("Installing CRAN package dependencies... ",date());
   message("   This can be called directly using the function JS.install.CRAN.dependencies(...)");
   JS.install.CRAN.dependencies(...);
-  message("Done installing CRAN package dependencies. ",date())));
+  message("Done installing CRAN package dependencies. ",date());
 
   message("Installing Bioconductor package dependencies... ",date());
   message("   This can be called directly using the function JS.install.BIOC.dependencies(...)");
