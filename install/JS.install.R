@@ -16,13 +16,7 @@ JS.install <- function(...){
   message("Done installing package dependencies. ",date());
 
   message("Beginning JunctionSeq Installation... ",date());
-  if(.Platform$OS.type == "unix"){
-    message("Auto-detected unix-like system. Attempting to install from source...");
-    install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",repos=NULL, type="source");
-  } else {
-    message("Auto-detected windows system. Attempting to install from source using Rtools...");
-    install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",repos=NULL, type="source");
-  }
+  JS.install.JunctionSeq(...);
   message("Installation complete. ",date());
 
   message("Testing to see if package can be loaded... ",date());
@@ -52,4 +46,8 @@ JS.install.BIOC.dependencies <- function(...){
   if(! suppressWarnings(suppressPackageStartupMessages(require("S4Vectors")))) biocLite("S4Vectors", ...);
   if(! suppressWarnings(suppressPackageStartupMessages(require("genefilter")))) biocLite("genefilter", ...);
   if(! suppressWarnings(suppressPackageStartupMessages(require("geneplotter")))) biocLite("geneplotter", ...);
+}
+
+JS.install.JunctionSeq <- function(repos = NULL, type = "source", ...){
+  install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",repos=repos, type=type, ...);
 }
