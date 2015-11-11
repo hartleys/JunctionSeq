@@ -2,6 +2,11 @@
 <html><head><title>R: Run a JunctionSeq analysis.</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </head><body>
 
 <table width="100%" summary="page for runJunctionSeqAnalyses {JunctionSeq}"><tr><td>runJunctionSeqAnalyses {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
@@ -105,12 +110,12 @@ If left as the default (&quot;auto&quot;), then the cutoff threshold will be det
 <tr valign="top"><td><code>nCores</code></td>
 <td>
 
-<p>The number of cores to use. Note that multicore functionality may not be available on all platforms. 
-JunctionSeq attempts to use the BiocParallell package if it can be found installed. Otherwise it will
-attempt to fallback to the multicore package. If neither package can be found it will fallback to single
-core execution.
+<p>Either an integer or a BiocParallelParam object. 
+Either way, this determines The number of cores to use. Note that multicore functionality may not be available on all platforms. 
+If parallel execution is not available then JunctionSeq will automatically fallback to single-core execution. See the BiocParallel
+package for more information.
 </p>
-</td></tr>  
+</td></tr>
 <tr valign="top"><td><code>use.covars</code></td>
 <td>
 
@@ -310,5 +315,33 @@ Without this option the results would differ slightly (generally by less than 1 
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.23 <a href="00Index.html">Index</a>]</div>
+
+<h3>Examples</h3>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ########################################
+##D 
+##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
+##D            sample.names = decoder$sample.ID,
+##D            condition=factor(decoder$group.ID),
+##D            flat.gff.file = gff.file,
+##D            analysis.type = &quot;junctionsAndExons&quot;
+##D );
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.5.1 <a href="00Index.html">Index</a>]</div>
 </body></html>

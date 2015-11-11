@@ -32,8 +32,10 @@
 </header>
 
 
-<section><pre><code>&gt; v0.4.23 (Revised Fri Oct 23 11:42:17 EDT 2015)
+<section><pre><code>&gt; v0.5.1 (Revised Tue Nov 10 18:58:07 EST 2015)
 </code></pre>
+
+<h1>Frequently Asked Questions</h1>
 
 <p>JunctionSeq is an R package designed to detect and assess 
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -43,9 +45,7 @@ bioconductor package, originally proposed by <a href="http://www.ncbi.nlm.nih.go
 <p>Help, documentation, and the most recent release of JunctionSeq is available on the 
 <a href="http://hartleys.github.io/JunctionSeq/index.html">JunctionSeq github pages</a>.</p>
 
-<h1>Frequently Asked Questions</h1>
-
-<p>(work in progress)</p>
+<p>If you do not find an answer to your question here, you can email the developer at JunctionSeq-Contact (at) list.nih.gov.</p>
 
 </section> <h2>HELP AND DOCUMENTATION:</h2> <section>
 
@@ -110,6 +110,14 @@ install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATE
 
 <p>If you are installing to windows, you will also require <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> 
 which allows advanced packages to be installed from source-code.</p>
+
+</section> <h2>Reducing Memory Usage:</h2> <section>
+
+<p>JunctionSeq may use large amounts of RAM. You can reduce the memory usage considerably by reducing the number of cores used with the nCores parameter. 
+Unfortunetely, BiocParallel duplicates the entire environment whenever it runs in multicore mode, so amount of RAM required is multiplied by the number of cores in 
+use.</p>
+
+<p>The exact memory requirements will vary depending on a large number of different factors, such as genome size/complexity, number of replicates, and the number of novel splice junctions.</p>
 
 </section> <h2>LEGAL:</h2> <section>
 

@@ -1,4 +1,6 @@
-    > v0.4.23 (Revised Fri Oct 23 11:42:17 EDT 2015)
+    > v0.5.1 (Revised Tue Nov 10 18:58:07 EST 2015)
+
+#Frequently Asked Questions
 
 JunctionSeq is an R package designed to detect and assess 
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -8,9 +10,7 @@ bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://w
 Help, documentation, and the most recent release of JunctionSeq is available on the 
 [JunctionSeq github pages](http://hartleys.github.io/JunctionSeq/index.html).
 
-#Frequently Asked Questions
-
-(work in progress)
+If you do not find an answer to your question here, you can email the developer at JunctionSeq-Contact (at) list.nih.gov.
 
 ##HELP AND DOCUMENTATION:
 For more information see the [JunctionSeq vignette](http://hartleys.github.io/JunctionSeq/doc/JunctionSeq.pdf) or the 
@@ -69,6 +69,14 @@ If you encounter problems with installation, you can install manually using the 
 
 If you are installing to windows, you will also require [Rtools](https://cran.r-project.org/bin/windows/Rtools/) 
 which allows advanced packages to be installed from source-code.
+
+##Reducing Memory Usage:
+
+JunctionSeq may use large amounts of RAM. You can reduce the memory usage considerably by reducing the number of cores used with the nCores parameter. 
+Unfortunetely, BiocParallel duplicates the entire environment whenever it runs in multicore mode, so amount of RAM required is multiplied by the number of cores in 
+use.
+
+The exact memory requirements will vary depending on a large number of different factors, such as genome size/complexity, number of replicates, and the number of novel splice junctions.
 
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3:

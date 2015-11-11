@@ -2,6 +2,11 @@
 <html><head><title>R: Create and save a full battery of JunctionSeq expression...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </head><body>
 
 <table width="100%" summary="page for buildAllPlots {JunctionSeq}"><tr><td>buildAllPlots {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
@@ -53,7 +58,7 @@ Don't be daunted: the default parameters are probably fine for most purposes.
                 TX.annotation.relative.height = 0.05,
                 CONNECTIONS.relative.height = 0.1,
                 SPLICE.annotation.relative.height = 0.1,
-                TX.margins = c(0.5,0.5),
+                TX.margins = c(0,0.5),
                 autoscale.height.to.fit.TX.annotation = TRUE,
                 autoscale.width.to.fit.bins = 35,
                 plotting.device.params = list(), 
@@ -457,5 +462,157 @@ for internally-generated parameters. DO NOT USE.
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.23 <a href="00Index.html">Index</a>]</div>
+
+<h3>Examples</h3>
+
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+buildAllPlots(jscs);
+</code></pre>
+
+<pre><code>## &gt; buildAllPlots: Found 10 genes with at least one significant exon, at adjusted-p-value threshold 0.01
+## &gt; buildAllPlots: Starting plotting...
+## &gt; buildAllPlots: Generating Dispersion Plot
+##      abundance ranges from 0.153137624435869 to 5574.46374310728
+##      dispersion ranges from 2.0193799438324e-06 to 12
+##      Plotting dispersions from 2.65713569300346e-05 to 12
+## &gt; buildAllPlots: Generating MA-Plot (log2FC(CTRL/CASE))
+## &gt; buildAllPlots: Writing HTML results index.
+##    Copying default css stylesheet.
+##    Writing html index. Tue Nov 10 19:19:25 2015
+##    Writing formula data. Tue Nov 10 19:19:25 2015
+##    Writing methods data. Tue Nov 10 19:19:25 2015
+##    Writing sample data. Tue Nov 10 19:19:25 2015
+##    Writing dispersion data. Tue Nov 10 19:19:25 2015
+##    Writing summary plots. Tue Nov 10 19:19:25 2015
+##    Compiling data table. Tue Nov 10 19:19:25 2015
+##    Writing data table. Tue Nov 10 19:19:25 2015
+##    Html index complete. Tue Nov 10 19:19:25 2015
+##    Writing pages. Tue Nov 10 19:19:25 2015
+##    Finished all html files. Tue Nov 10 19:19:26 2015
+## &gt; buildAllPlots: Finished writing HTML results index.
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000003134 (1 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000003134
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000003134, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000003134, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000003134, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000003134, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000003134, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000003134, plot.type: rExpr
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000008079 (2 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: rExpr
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000009281 (3 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000009281
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000004327 (4 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000004327
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000004327, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000004327, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000004327, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000004327, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000004327, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000004327, plot.type: rExpr
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000056944 (5 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000056944
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: rExpr
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000002208 (6 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000002208
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000002208, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000002208, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000002208, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000002208, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000002208, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000002208, plot.type: rExpr
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000025695 (7 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000025695
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000025695, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000025695, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000025695, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000025695, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000025695, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000025695, plot.type: rExpr
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000019645 (8 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000019645
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000019645, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000019645, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000019645, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000019645, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000019645, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000019645, plot.type: rExpr
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000004621 (9 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000004621
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: rExpr
+## &gt; buildAllPlots: starting geneID: ENSRNOG00000002210 (10 of 10)
+## starting buildAllPlotsForGene() for geneID: ENSRNOG00000002210
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: rExpr
+## &gt; buildAllPlots: Plotting complete.
+## &gt; buildAllPlots: Plotting and data writing complete.
+</code></pre>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ########################################
+##D #Run example analysis:
+##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
+##D            sample.names = decoder$sample.ID,
+##D            condition=factor(decoder$group.ID),
+##D            flat.gff.file = gff.file,
+##D            analysis.type = &quot;junctionsAndExons&quot;
+##D );
+##D ########################################
+##D 
+##D #Generate all plots and the html index
+##D #   Save them as pngs to the current directory:
+##D buildAllPlots(jscs);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.5.1 <a href="00Index.html">Index</a>]</div>
 </body></html>

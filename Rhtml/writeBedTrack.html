@@ -2,6 +2,11 @@
 <html><head><title>R: Write splice junction browser tracks</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </head><body>
 
 <table width="100%" summary="page for writeBedTrack {JunctionSeq}"><tr><td>writeBedTrack {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
@@ -192,5 +197,46 @@ By default JunctionSeq will attempt to automatically generate a reasonable track
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.23 <a href="00Index.html">Index</a>]</div>
+
+<h3>Examples</h3>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ######################
+##D #Run example analysis:
+##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
+##D            sample.names = decoder$sample.ID,
+##D            condition=factor(decoder$group.ID),
+##D            flat.gff.file = gff.file,
+##D            analysis.type = &quot;junctionsAndExons&quot;
+##D );
+##D ########################################
+##D 
+##D #Exon coverage:
+##D writeExprBedTrack(&quot;test.exonCoverage.bed.gz&quot;, jscs, 
+##D                   plot.exons = TRUE, plot.junctions = FALSE)
+##D #Junction coverage:
+##D writeExprBedTrack(&quot;test.jctCoverage.bed.gz&quot;, jscs, 
+##D                   plot.exons = FALSE, plot.junctions = TRUE)
+##D #Both Exon and Junction coverage:
+##D writeExprBedTrack(&quot;test.featureCoverage.bed.gz&quot;, jscs)
+##D 
+##D #p-values of significant features:
+##D writeSigBedTrack(&quot;test.pvals.bed.gz&quot;, jscs)
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.5.1 <a href="00Index.html">Index</a>]</div>
 </body></html>

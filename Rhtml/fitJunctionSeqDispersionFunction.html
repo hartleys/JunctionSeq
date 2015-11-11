@@ -2,6 +2,11 @@
 <html><head><title>R: Fit Shared Dispersion Function</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </head><body>
 
 <table width="100%" summary="page for fitJunctionSeqDispersionFunction {JunctionSeq}"><tr><td>fitJunctionSeqDispersionFunction {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
@@ -31,8 +36,6 @@ fitJunctionSeqDispersionFunction(jscs,
     method.dispFinal = c("shrink","max","fitted","noShare"),
     fitDispersionsForExonsAndJunctionsSeparately = TRUE, 
     verbose = TRUE)
-
-fitDispersionFunction(...) #Equivalent but depreciated.
 </pre>
 
 
@@ -100,5 +103,46 @@ fitted dispersions should be calculated for each. By default the dispersions are
 <p>A JunctionSeqCountSet, with dispersion results included.
 </p>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.23 <a href="00Index.html">Index</a>]</div>
+
+<h3>Examples</h3>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ########################################
+##D #Advanced Analysis:
+##D 
+##D #Make a &quot;design&quot; dataframe:
+##D design &lt;- data.frame(condition = factor(decoder$group.ID));
+##D #Read the QoRTs counts.
+##D jscs = readJunctionSeqCounts(countfiles = countFiles,
+##D            samplenames = decoder$sample.ID,
+##D            design = design,
+##D            flat.gff.file = gff.file
+##D );
+##D #Generate the size factors and load them into the JunctionSeqCountSet:
+##D jscs &lt;- estimateJunctionSeqSizeFactors(jscs);
+##D #Estimate feature-specific dispersions:
+##D jscs &lt;- estimateJunctionSeqDispersions(jscs);
+##D #Fit dispersion function and estimate MAP dispersion:
+##D jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
+##D #Test for differential usage:
+##D jscs &lt;- testForDiffUsage(jscs);
+##D #Estimate effect sizes and expression estimates:
+##D jscs &lt;- estimateEffectSizes( jscs);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.5.1 <a href="00Index.html">Index</a>]</div>
 </body></html>

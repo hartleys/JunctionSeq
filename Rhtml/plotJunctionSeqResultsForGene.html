@@ -2,6 +2,11 @@
 <html><head><title>R: Generate a JunctionSeq expression plot.</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </head><body>
 
 <table width="100%" summary="page for plotJunctionSeqResultsForGene {JunctionSeq}"><tr><td>plotJunctionSeqResultsForGene {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
@@ -48,7 +53,7 @@ plotJunctionSeqResultsForGene(geneID, jscs,
                               TX.annotation.relative.height = 0.05,
                               CONNECTIONS.relative.height = 0.1,
                               SPLICE.annotation.relative.height = 0.1,
-                              TX.margins = c(0.5,0.5),
+                              TX.margins = c(0,0.5),
                               condition.legend.text = NULL, include.TX.names = TRUE, 
                               draw.start.end.sites = TRUE,
                               label.chromosome = TRUE,
@@ -362,5 +367,54 @@ for internally-generated parameters. DO NOT USE.
 </td></tr>
 </table>
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.4.23 <a href="00Index.html">Index</a>]</div>
+
+<h3>Examples</h3>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ######################
+##D #Run example analysis:
+##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
+##D            sample.names = decoder$sample.ID,
+##D            condition=factor(decoder$group.ID),
+##D            flat.gff.file = gff.file,
+##D            analysis.type = &quot;junctionsAndExons&quot;
+##D );
+##D ########################################
+##D 
+##D #Make an expression plot for a given gene:
+##D plotJunctionSeqResultsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs);
+##D 
+##D #Plot normalized read counts for a given gene:
+##D plotJunctionSeqResultsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs,
+##D                     plot.type = &quot;normCounts&quot;);
+##D 
+##D #Plot relative expression for a given gene:
+##D plotJunctionSeqResultsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs,
+##D                     plot.type = &quot;rExpr&quot;);
+##D 
+##D #Plot raw read counts for a given gene:
+##D plotJunctionSeqResultsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs,
+##D                     plot.type = &quot;rawCounts&quot;);
+##D 
+##D #Same thing, but with isoforms shown:
+##D plotJunctionSeqResultsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs,
+##D                     plot.type = &quot;rawCounts&quot;,
+##D                     displayTranscripts = TRUE);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.5.1 <a href="00Index.html">Index</a>]</div>
 </body></html>

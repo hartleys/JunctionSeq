@@ -1,4 +1,4 @@
-    > v0.4.23 (Revised Fri Oct 23 11:42:17 EDT 2015)
+    > v0.5.1 (Revised Tue Nov 10 18:58:07 EST 2015)
 
 JunctionSeq is an R package for detection and visualization of  
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -12,7 +12,7 @@ An example set of browser tracks from this same dataset is available
 [here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks), which uses [this trackhub](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/trackHub/index.html).
 
 Issues, bug reports, or feature requests can be posted to the 
-[github issues page](https://github.com/hartleys/JunctionSeq/issues). 
+[github issues page](https://github.com/hartleys/JunctionSeq/issues).
 The developers can be contacted at JunctionSeq-Contact (at) list.nih.gov.
 
 ##HELP AND DOCUMENTATION:

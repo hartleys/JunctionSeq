@@ -1,23 +1,33 @@
 Package: JunctionSeq
-Version: 0.4.23
-Date: 2015-10-23
-Title: JunctionSeq: A Utility for Detection of Differential Splice-Site
-        Usage in RNA-Seq data
+Version: 0.5.1
+Date: 2015-11-10
+Title: JunctionSeq: A Utility for Detection of Differential Exon and
+        Splice-Site Usage in RNA-Seq data
 Authors@R: c(person("Stephen Hartley, PhD", "Developer", role = c("aut", "cre"),
-                     email = "stephen.hartley@nih.gov"))
+                     email = "JunctionSeq-contact@list.nih.gov"))
 Author: Stephen Hartley, PhD
-Maintainer: Stephen Hartley <stephen.hartley@nih.gov>
-Depends: R (>= 3.1.1), methods, statmod, plotrix, stringr, Biobase,
-        locfit, Rcpp (>= 0.10.1), RcppArmadillo (>= 0.3.4.4),
-        BiocGenerics (>= 0.7.5), BiocParallel, genefilter, geneplotter,
-        ggplot2, Hmisc, S4Vectors, IRanges, GenomicRanges
+Maintainer: Stephen Hartley <JunctionSeq-contact@list.nih.gov>
+Depends: R (>= 3.1.1), methods
+Imports: statmod, plotrix, stringr, Biobase, locfit, Rcpp (>= 0.10.1),
+        RcppArmadillo (>= 0.3.4.4), BiocGenerics (>= 0.7.5),
+        BiocParallel, genefilter, geneplotter, Hmisc, S4Vectors,
+        IRanges, GenomicRanges
 Suggests: MASS, knitr, JctSeqExData2
-Enhances: parallel, RSvgDevice, Cairo, pryr
+Enhances: Cairo, pryr
 Description: Utility for Detection of Differential Exon or Splice-Junction Usage in RNA-Seq data.
 License: file LICENSE
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
 NeedsCompilation: yes
+biocViews: Sequencing, RNASeq, DifferentialExpression
 URL: http://hartleys.github.io/JunctionSeq/index.html
 BugReports: https://github.com/hartleys/JunctionSeq/issues
-Packaged: 2015-10-23 15:50:30 UTC; hartleys
+Collate: '00.minor.utils.R' 'DESeq2.adapted.AllClasses.R'
+        'DESeq2.adapted.AllGenerics.R' 'AllClasses.R'
+        'DESeq2.adapted.core.R' 'DESeq2.adapted.cpp.wrappers.R'
+        'DESeq2.adapted.expanded.R' 'DESeq2.adapted.helper.R'
+        'DESeq2.adapted.methods.R' 'DESeq2.adapted.results.R'
+        'adapted.functions.R' 'depreciated.R' 'file.output.R' 'func.R'
+        'internal.func.R' 'main.analysis.R' 'main.plotAlt.R'
+        'main.plotGenes.R' 'plotting.helpers.R'
+Packaged: 2015-11-11 00:05:52 UTC; hartleys
