@@ -1,6 +1,8 @@
 # JunctionSeq
     > v0.5.1 (Revised Tue Nov 10 18:58:07 EST 2015)
 
+WARNING: As of October 14th, 2015, this version of JunctionSeq (v0.5.1) is no longer compatible with the most recent Bioconductor release (v3.2). Some of the data structures used in Bioconductor 3.1 have been "depreciated" in a way that breaks their functionality. All future releases of JunctionSeq will require Bioconductor 3.2 or higher.
+
 [JunctionSeq](http://hartleys.github.io/JunctionSeq/index.html) is an R package designed to detect and assess 
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
 The methodology is based on the methods used by the [DEXSeq](http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html) 
