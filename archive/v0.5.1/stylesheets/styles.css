@@ -1,12 +1,12 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
 html {
-  background: #6C7989;
-  background: #6c7989 -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6c7989), color-stop(100%, #434b55)) fixed;
-  background: #6c7989 -webkit-linear-gradient(#6c7989, #434b55) fixed;
-  background: #6c7989 -moz-linear-gradient(#6c7989, #434b55) fixed;
-  background: #6c7989 -o-linear-gradient(#6c7989, #434b55) fixed;
-  background: #6c7989 -ms-linear-gradient(#6c7989, #434b55) fixed;
-  background: #6c7989 linear-gradient(#6c7989, #434b55) fixed;
+  background: #8A6D6D;
+  background: #8A6D6D -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8A6D6D), color-stop(100%, #544343)) fixed;
+  background: #8A6D6D -webkit-linear-gradient(#8A6D6D, #544343) fixed;
+  background: #8A6D6D -moz-linear-gradient(#8A6D6D, #544343) fixed;
+  background: #8A6D6D -o-linear-gradient(#8A6D6D, #544343) fixed;
+  background: #8A6D6D -ms-linear-gradient(#8A6D6D, #544343) fixed;
+  background: #8A6D6D linear-gradient(#8A6D6D, #544343) fixed;
 }
 
 body {
@@ -57,16 +57,16 @@ header {
   -ms-border-radius: 8px 8px 0 0;
   -o-border-radius: 8px 8px 0 0;
   border-radius: 8px 8px 0 0;
-  background: #C6EAFA;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ddfbfc), color-stop(100%, #c6eafa));
-  background: -webkit-linear-gradient(#ddfbfc, #c6eafa);
-  background: -moz-linear-gradient(#ddfbfc, #c6eafa);
-  background: -o-linear-gradient(#ddfbfc, #c6eafa);
-  background: -ms-linear-gradient(#ddfbfc, #c6eafa);
-  background: linear-gradient(#ddfbfc, #c6eafa);
+  background: #FBC6C6;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #FDDFDF), color-stop(100%, #FBC6C6));
+  background: -webkit-linear-gradient(#FDDFDF, #FBC6C6);
+  background: -moz-linear-gradient(#FDDFDF, #FBC6C6);
+  background: -o-linear-gradient(#FDDFDF, #FBC6C6);
+  background: -ms-linear-gradient(#FDDFDF, #FBC6C6);
+  background: linear-gradient(#FDDFDF, #FBC6C6);
   position: relative;
   padding: 15px 20px;
-  border-bottom: 1px solid #B2D2E1;
+  border-bottom: 1px solid #E1B2B2;
 }
 header h1 {
   margin: 0;
@@ -81,7 +81,7 @@ header.without-description h1 {
 }
 header p {
   margin: 0;
-  color: #61778B;
+  color: #8D6363;
   width: 400px;
   font-size: 13px;
 }
@@ -108,12 +108,12 @@ header ul {
   height: 38px;
   padding: 1px 0;
   background: #5198DF;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #77b9fb), color-stop(100%, #3782cd));
-  background: -webkit-linear-gradient(#77b9fb, #3782cd);
-  background: -moz-linear-gradient(#77b9fb, #3782cd);
-  background: -o-linear-gradient(#77b9fb, #3782cd);
-  background: -ms-linear-gradient(#77b9fb, #3782cd);
-  background: linear-gradient(#77b9fb, #3782cd);
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #FB7676), color-stop(100%, #CD3737));
+  background: -webkit-linear-gradient(#FB7676, #CD3737);
+  background: -moz-linear-gradient(#FB7676, #CD3737);
+  background: -o-linear-gradient(#FB7676, #CD3737);
+  background: -ms-linear-gradient(#FB7676, #CD3737);
+  background: linear-gradient(#FB7676, #CD3737);
   border-radius: 5px;
   -webkit-box-shadow: inset rgba(255, 255, 255, 0.45) 0 1px 0, inset rgba(0, 0, 0, 0.2) 0 -1px 0;
   -moz-box-shadow: inset rgba(255, 255, 255, 0.45) 0 1px 0, inset rgba(0, 0, 0, 0.2) 0 -1px 0;
@@ -141,7 +141,7 @@ header ul:before {
 header ul li {
   width: 79px;
   float: left;
-  border-right: 1px solid #3A7CBE;
+  border-right: 1px solid #C03C3C;
   height: 38px;
 }
 header ul li.single {
@@ -149,7 +149,7 @@ header ul li.single {
 }
 header ul li + li {
   width: 78px;
-  border-left: 1px solid #8BBEF3;
+  border-left: 1px solid #F38B8B;
 }
 header ul li + li + li {
   border-right: none;
