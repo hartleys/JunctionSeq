@@ -37,20 +37,30 @@ JS.install.CRAN.dependencies <- function(...){
 JS.install.BIOC.dependencies <- function(...){
   source("http://bioconductor.org/biocLite.R");
   biocLite();
-  if(! suppressWarnings(suppressPackageStartupMessages(require("Biobase"))))         biocLite("Biobase"              , ...);
-  if(! suppressWarnings(suppressPackageStartupMessages(require("BiocGenerics"))))    biocLite("BiocGenerics"         , ...);
-  if(! suppressWarnings(suppressPackageStartupMessages(require("BiocParallel"))))    biocLite("BiocParallel"         , ...);
-  if(! suppressWarnings(suppressPackageStartupMessages(require("GenomicRanges"))))   biocLite("GenomicRanges"        , ...);
-  if(! suppressWarnings(suppressPackageStartupMessages(require("IRanges"))))         biocLite("IRanges"              , ...);
-  if(! suppressWarnings(suppressPackageStartupMessages(require("S4Vectors"))))       biocLite("S4Vectors"            , ...);
-  if(! suppressWarnings(suppressPackageStartupMessages(require("genefilter"))))      biocLite("genefilter"           , ...);
-  if(! suppressWarnings(suppressPackageStartupMessages(require("geneplotter"))))     biocLite("geneplotter"          , ...);
-  if(! suppressWarnings(suppressPackageStartupMessages(require("geneplotter"))))     biocLite("SummarizedExperiment" , ...);
+  if(! suppressWarnings(suppressPackageStartupMessages(require("Biobase"))))              biocLite("Biobase"              , ...);
+  if(! suppressWarnings(suppressPackageStartupMessages(require("BiocGenerics"))))         biocLite("BiocGenerics"         , ...);
+  if(! suppressWarnings(suppressPackageStartupMessages(require("BiocParallel"))))         biocLite("BiocParallel"         , ...);
+  if(! suppressWarnings(suppressPackageStartupMessages(require("GenomicRanges"))))        biocLite("GenomicRanges"        , ...);
+  if(! suppressWarnings(suppressPackageStartupMessages(require("IRanges"))))              biocLite("IRanges"              , ...);
+  if(! suppressWarnings(suppressPackageStartupMessages(require("S4Vectors"))))            biocLite("S4Vectors"            , ...);
+  if(! suppressWarnings(suppressPackageStartupMessages(require("genefilter"))))           biocLite("genefilter"           , ...);
+  if(! suppressWarnings(suppressPackageStartupMessages(require("geneplotter"))))          biocLite("geneplotter"          , ...);
+  if(! suppressWarnings(suppressPackageStartupMessages(require("SummarizedExperiment")))) biocLite("SummarizedExperiment" , ...);
 }
 
 JS.install.JunctionSeq <- function(repos = NULL, type = "source", ...){
   install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",repos=repos, type=type, ...);
 }
+
+JS.install.optional <- function(...){
+  if(! suppressWarnings(suppressPackageStartupMessages(require("knitr"))))       install.packages("knitr"        , ...)
+  if(! suppressWarnings(suppressPackageStartupMessages(require("Cairo"))))       install.packages("Cairo"        , ...)
+  if(! suppressWarnings(suppressPackageStartupMessages(require("pryr"))))        install.packages("pryr"         , ...)
+  if(! suppressWarnings(suppressPackageStartupMessages(require("MASS"))))        install.packages("MASS"        , ...)
+  
+  install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz",repos=NULL, type="source", ...);
+}
+
 
 
 messsage("JunctionSeq Installation scripts loaded.");
