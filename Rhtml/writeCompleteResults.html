@@ -1,7 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>R: Produce output data files, given annotation files and DEXSeq...</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="R.css">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Produce output data files, given annotation files and DEXSeq...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
@@ -9,7 +8,7 @@
 <script>hljs.initHighlightingOnLoad();</script>
 </head><body>
 
-<table width="100%" summary="page for writeCompleteResults {JunctionSeq}"><tr><td>writeCompleteResults {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
+<table width="100%" summary="page for writeCompleteResults {JunctionSeq}"><tr><td>writeCompleteResults {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>
 Produce output data files, given annotation files and DEXSeq 
@@ -114,6 +113,27 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 
 <h3>Examples</h3>
 
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+#Write results tables and browser track files:
+writeCompleteResults(jscs, outfile.prefix = &quot;./results.&quot;);
+</code></pre>
+
+<pre><code>## &gt; STARTING writeCompleteResults (Wed Nov 11 20:24:42 2015)
+## &gt; wcr: outfile.prefix:  ./results.
+## &gt; wcr: FDR.threshold:  0.05
+## &gt; wcr: save.allGenes:  TRUE
+## &gt; wcr: save.sigGenes:  TRUE
+## &gt; wcr: save.fit:  FALSE
+## &gt; wcr: save.VST:  FALSE
+## &gt; wcr: bedtrack.format:  BED
+## &gt; wcr: Writing sizeFactors.
+## &gt; wcr: Writing results for 1044 genes.
+## &gt; wcr:     Found 14851 counting bins belonging to these genes.
+## &gt; wcr: Writing results for 16 genes with 1 or more significant junctions (at adjusted-p-value threshold 0.05)
+## &gt; wcr:     Found 659 counting bins belonging to those genes.
+## &gt; DONE writeCompleteResults (Wed Nov 11 20:24:44 2015)
+</code></pre>
+
 <pre><code class="r">## Not run: 
 ##D ########################################
 ##D #Set up example data:
@@ -143,5 +163,5 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 </code></pre>
 
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.5.1 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
 </body></html>

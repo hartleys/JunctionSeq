@@ -1,4 +1,4 @@
-    > v0.5.1 (Revised Tue Nov 10 18:58:07 EST 2015)
+    > v0.6.1 (Revised Wed Nov 11 20:04:24 EST 2015)
 
 JunctionSeq is an R package for detection and visualization of  
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -14,6 +14,9 @@ An example set of browser tracks from this same dataset is available
 Issues, bug reports, or feature requests can be posted to the 
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
 The developers can be contacted at JunctionSeq-Contact (at) list.nih.gov.
+
+Note: the current version of JunctionSeq is ONLY compatible with Bioconductor 3.2 or higher.
+For older versions of JunctionSeq compatible with Bioconductor 3.0 and 3.1, see JunctionSeq release v0.5.1.
 
 ##HELP AND DOCUMENTATION:
 
@@ -44,7 +47,8 @@ command:
 
 JunctionSeq can be installed automatically in R using the command:
 
-    > source("http://hartleys.github.io/JunctionSeq/install/JunctionSeq.install.R");
+    > source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
+    > JS.install();
 
 In order to successfully install from source on windows, you must have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed.
 

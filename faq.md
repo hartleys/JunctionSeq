@@ -1,4 +1,4 @@
-    > v0.5.1 (Revised Tue Nov 10 18:58:07 EST 2015)
+    > v0.6.1 (Revised Wed Nov 11 20:04:24 EST 2015)
 
 #Frequently Asked Questions
 
@@ -11,6 +11,9 @@ Help, documentation, and the most recent release of JunctionSeq is available on 
 [JunctionSeq github pages](http://hartleys.github.io/JunctionSeq/index.html).
 
 If you do not find an answer to your question here, you can email the developer at JunctionSeq-Contact (at) list.nih.gov.
+
+Note: the current version of JunctionSeq is ONLY compatible with Bioconductor 3.2 or higher.
+For older versions of JunctionSeq compatible with Bioconductor 3.0 and 3.1, see JunctionSeq release v0.5.1.
 
 ##HELP AND DOCUMENTATION:
 For more information see the [JunctionSeq vignette](http://hartleys.github.io/JunctionSeq/doc/JunctionSeq.pdf) or the 
@@ -34,7 +37,8 @@ command:
 ##BASIC INSTALLATION:
 JunctionSeq can be installed automatically in R using the command:
 
-    > source("http://hartleys.github.io/JunctionSeq/install/JunctionSeq.install.R");
+    > source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
+    > JS.install();
 
 In order to successfully install from source on windows, you must have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed.
 
@@ -48,9 +52,7 @@ If you encounter problems with installation, you can install manually using the 
     install.packages("stringr")
     install.packages("Rcpp")
     install.packages("RcppArmadillo")
-    install.packages("ggplot")
     install.packages("locfit")
-    install.packages("Hmisc")
     #Install Bioconductor packages:
     source("http://bioconductor.org/biocLite.R");
     biocLite();
@@ -62,6 +64,7 @@ If you encounter problems with installation, you can install manually using the 
     biocLite("S4Vectors");
     biocLite("genefilter");
     biocLite("geneplotter");
+    biocLite("SummarizedExperiment");
     #Install JunctionSeq:
     install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz", 
                        repos = NULL, 

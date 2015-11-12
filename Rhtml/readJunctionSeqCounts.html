@@ -1,7 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>R: Read junctionSeq count files</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="R.css">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read junctionSeq count files</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
@@ -9,7 +8,7 @@
 <script>hljs.initHighlightingOnLoad();</script>
 </head><body>
 
-<table width="100%" summary="page for readJunctionSeqCounts {JunctionSeq}"><tr><td>readJunctionSeqCounts {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
+<table width="100%" summary="page for readJunctionSeqCounts {JunctionSeq}"><tr><td>readJunctionSeqCounts {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>
 Read junctionSeq count files
@@ -183,33 +182,58 @@ behavior is that no read or read-pair is ever counted more than once in any mode
 
 <h3>Examples</h3>
 
-<pre><code class="r">## Not run: 
-##D ########################################
-##D #Set up example data:
-##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
-##D decoder &lt;- read.table(decoder.file,
-##D                       header=T,
-##D                       stringsAsFactors=F);
-##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
-##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
-##D                  decoder$sample.ID,
-##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-##D                  package=&quot;JctSeqExData2&quot;);
-##D ########################################
-##D #Advanced Analysis:
-##D 
-##D #Make a &quot;design&quot; dataframe:
-##D design &lt;- data.frame(condition = factor(decoder$group.ID));
-##D #Read the QoRTs counts.
-##D jscs = readJunctionSeqCounts(countfiles = countFiles,
-##D            samplenames = decoder$sample.ID,
-##D            design = design,
-##D            flat.gff.file = gff.file
-##D );
-##D 
-## End(Not run)
+<pre><code class="r">########################################
+#Set up example data:
+decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+decoder &lt;- read.table(decoder.file,
+                      header=TRUE,
+                      stringsAsFactors=FALSE);
+gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+                 decoder$sample.ID,
+                 &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+                 package=&quot;JctSeqExData2&quot;);
+########################################
+#Advanced Analysis:
+
+#Make a &quot;design&quot; dataframe:
+design &lt;- data.frame(condition = factor(decoder$group.ID));
+#Read the QoRTs counts.
+jscs = readJunctionSeqCounts(countfiles = countFiles,
+           samplenames = decoder$sample.ID,
+           design = design,
+           flat.gff.file = gff.file
+);
+</code></pre>
+
+<pre><code>## -&gt; STARTING readJunctionSeqCounts (Wed Nov 11 20:24:28 2015)
+## ---&gt; RJSC: samplenames: SAMP1,SAMP2,SAMP3,SAMP4,SAMP5,SAMP6
+## ---&gt; RJSC: flat.gff.file: /home/hartleys/R/R3.2.2/lib/JctSeqExData2/extdata/cts/withNovel.forJunctionSeq.gff.gz
+## ---&gt; RJSC: use.exons:TRUE
+## ---&gt; RJSC: use.junctions:TRUE
+## ---&gt; RJSC: use.novel.junctions:TRUE
+## ---&gt; File read complete.
+## ---&gt; Extracted counts. Found 16160 features so far.
+## ---&gt; Extracted gene-level counts. Found: 1053 genes and aggregate-genes.
+## ---&gt; Removed gene features. Found: 15107 features to be included so far.
+## ---&gt; Note: 256 counting bins are from 256 multigene aggregates (ie. overlapping genes).
+## ---&gt; Removed multigene-aggregate features. Found: 14851 features to be included so far.
+## ---&gt; Final feature count: 14851 features to be included in the analysis.
+## ---&gt; Extracted feature counts.
+## ---&gt; counts complete.
+## -----&gt; reading annotation...
+## -----&gt; formatting annotation...
+## -----&gt; initial generation...
+## -----&gt; creating jscs...
+## -----&gt; generating count vectors... (Wed Nov 11 20:24:31 2015)
+##     getAllJunctionSeqCountVectors: dim(counts) = 14851,6 (Wed Nov 11 20:24:31 2015)
+##     getAllJunctionSeqCountVectors: dim(gct) = 1053,6
+##     getAllJunctionSeqCountVectors: out generated. dim = 14851,12 (Wed Nov 11 20:24:32 2015)
+## -----&gt; count vectors generated (Wed Nov 11 20:24:32 2015)
+## -----&gt; generating DESeqDataSet... (Wed Nov 11 20:24:32 2015)
+## -----&gt; DESeqDataSet generated (Wed Nov 11 20:24:32 2015)
 </code></pre>
 
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.5.1 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
 </body></html>

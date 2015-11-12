@@ -32,7 +32,7 @@
 </header>
 
 
-<section><pre><code>&gt; v0.5.1 (Revised Tue Nov 10 18:58:07 EST 2015)
+<section><pre><code>&gt; v0.6.1 (Revised Wed Nov 11 20:04:24 EST 2015)
 </code></pre>
 
 <h1>Frequently Asked Questions</h1>
@@ -46,6 +46,9 @@ bioconductor package, originally proposed by <a href="http://www.ncbi.nlm.nih.go
 <a href="http://hartleys.github.io/JunctionSeq/index.html">JunctionSeq github pages</a>.</p>
 
 <p>If you do not find an answer to your question here, you can email the developer at JunctionSeq-Contact (at) list.nih.gov.</p>
+
+<p>Note: the current version of JunctionSeq is ONLY compatible with Bioconductor 3.2 or higher.
+For older versions of JunctionSeq compatible with Bioconductor 3.0 and 3.1, see JunctionSeq release v0.5.1.</p>
 
 </section> <h2>HELP AND DOCUMENTATION:</h2> <section>
 
@@ -73,7 +76,8 @@ command: </p>
 
 <p>JunctionSeq can be installed automatically in R using the command:</p>
 
-<pre><code>&gt; source("http://hartleys.github.io/JunctionSeq/install/JunctionSeq.install.R");
+<pre><code>&gt; source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
+&gt; JS.install();
 </code></pre>
 
 <p>In order to successfully install from source on windows, you must have <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> installed.</p>
@@ -88,9 +92,7 @@ install.packages("plotrix")
 install.packages("stringr")
 install.packages("Rcpp")
 install.packages("RcppArmadillo")
-install.packages("ggplot")
 install.packages("locfit")
-install.packages("Hmisc")
 #Install Bioconductor packages:
 source("http://bioconductor.org/biocLite.R");
 biocLite();
@@ -102,6 +104,7 @@ biocLite("IRanges");
 biocLite("S4Vectors");
 biocLite("genefilter");
 biocLite("geneplotter");
+biocLite("SummarizedExperiment");
 #Install JunctionSeq:
 install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz", 
                    repos = NULL, 

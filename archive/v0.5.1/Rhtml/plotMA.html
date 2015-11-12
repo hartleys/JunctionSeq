@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Generate a MA-Plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for plotMA {JunctionSeq}"><tr><td>plotMA {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
+
+<h2>
+Generate a MA-Plot
+</h2>
+
+<h3>Description</h3>
+
+<p>Generates an MA-plot, which graphs the fold change versus the mean normalized expression. Statistically significant features are colored red.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+plotMA(jscs, 
+       FDR.threshold = 0.05, 
+       fc.name = NULL,
+       fc.thresh = 1,
+       use.pch = 20,
+       smooth.nbin = 256, 
+       ylim = c( 1 / 1000,1000),
+       use.smoothScatter = TRUE,
+       label.counts = TRUE,
+       label.axes = c(TRUE,TRUE,FALSE,FALSE), 
+       show.labels = TRUE,
+       par.cex = 1, points.cex = 1, text.cex = 1,
+       lines.cex = 8,
+       anno.lwd = 2, mar = c(4.1,4.1,3.1,1.1),
+       miniTicks = TRUE, 
+       verbose = TRUE, debug.mode = FALSE,
+       ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually created by <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code>.
+</p>
+<p>Alternatively, this can be created manually by <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. 
+However in this case a number of additional steps will be necessary: 
+Dispersions and size factors must then be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>. Hypothesis tests must
+be performed by <code><a href="testForDiffUsage.html">testForDiffUsage</a></code>. Effect sizes and parameter
+estimates must be created via <code><a href="estimateEffectSizes.html">estimateEffectSizes</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.threshold</code></td>
+<td>
+
+<p>The FDR threshold used to color dots. Tests with an adjusted-p-value more significant than this threshold will be marked in red.
+</p>
+</td></tr>
+<tr valign="top"><td><code>fc.name</code></td>
+<td>
+
+<p>The name of the column to take from fData(jscs).
+</p>
+</td></tr>
+<tr valign="top"><td><code>fc.thresh</code></td>
+<td>
+
+<p>The fold-change threshold required to count a significant locus in the count labels. It will also draw horizontal lines at this threshold.
+</p>
+</td></tr>
+<tr valign="top"><td><code>use.pch</code></td>
+<td>
+
+<p>The value of pch to pass to the <code><a href="../../graphics/html/points.html">points</a></code> call.
+</p>
+</td></tr>
+<tr valign="top"><td><code>use.smoothScatter</code></td>
+<td>
+
+<p>Logical. If TRUE, non-significant genes will be ploted with density shading.
+</p>
+</td></tr>
+<tr valign="top"><td><code>smooth.nbin</code></td>
+<td>
+
+<p>The number of bins to smooth, for the density plot, if <code>use.smoothScatter</code> is TRUE.
+</p>
+</td></tr>
+<tr valign="top"><td><code>ylim</code></td>
+<td>
+
+<p>The y-axis limits.
+</p>
+</td></tr> 
+<tr valign="top"><td><code>label.counts</code></td>
+<td>
+
+<p>Logical. If TRUE, include labels showing the number of loci that pass both the statistical-significance and fold-change threshold in each direction.
+</p>
+</td></tr>
+<tr valign="top"><td><code>label.axes</code></td>
+<td>
+
+<p>Logical vector. Whether to label each axis. Must have length 4; each corresponds to the bottom, left, top, and right axes respectively.
+</p>
+</td></tr>  
+<tr valign="top"><td><code>show.labels</code></td>
+<td>
+
+<p>Logical. If TRUE, include all titles and axes labels.
+</p>
+</td></tr>
+<tr valign="top"><td><code>par.cex</code></td>
+<td>
+
+<p>The cex value to be passed to <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>points.cex</code></td>
+<td>
+
+<p>The cex value to be passed to <code><a href="../../graphics/html/points.html">points</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>text.cex</code></td>
+<td>
+
+<p>The cex value to be passed to <code><a href="../../graphics/html/text.html">text</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>lines.cex</code></td>
+<td>
+
+<p>The cex value to be passed to <code><a href="../../graphics/html/lines.html">lines</a></code>, <code><a href="../../graphics/html/box.html">box</a></code>, and similar.
+</p>
+</td></tr>
+<tr valign="top"><td><code>anno.lwd</code></td>
+<td>
+
+<p>The lwd value to be passed to <code><a href="../../graphics/html/lines.html">lines</a></code>, <code><a href="../../graphics/html/box.html">box</a></code>, <code><a href="../../graphics/html/axis.html">axis</a></code>, and similar.
+</p>
+</td></tr>
+<tr valign="top"><td><code>mar</code></td>
+<td>
+
+<p>The margin sizes, expressed in lines. see <code>link{par}</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>miniTicks</code></td>
+<td>
+
+<p>Logical. If TRUE, then include &quot;mini tick marks&quot; on the x and y axes.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>if TRUE, send debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>debug.mode</code></td>
+<td>
+<p>if TRUE, send even more debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+
+<p>Additional graphical parameters.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ######################
+##D #Run example analysis:
+##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
+##D            sample.names = decoder$sample.ID,
+##D            condition=factor(decoder$group.ID),
+##D            flat.gff.file = gff.file,
+##D            analysis.type = &quot;junctionsAndExons&quot;
+##D );
+##D ########################################
+##D 
+##D #Plot M-A:
+##D plotMA(jscs);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr><div align="center">[Package <em>JunctionSeq</em> version 0.5.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

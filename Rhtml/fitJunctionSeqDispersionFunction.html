@@ -1,7 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>R: Fit Shared Dispersion Function</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" type="text/css" href="R.css">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Fit Shared Dispersion Function</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
@@ -9,7 +8,7 @@
 <script>hljs.initHighlightingOnLoad();</script>
 </head><body>
 
-<table width="100%" summary="page for fitJunctionSeqDispersionFunction {JunctionSeq}"><tr><td>fitJunctionSeqDispersionFunction {JunctionSeq}</td><td align="right">R Documentation</td></tr></table>
+<table width="100%" summary="page for fitJunctionSeqDispersionFunction {JunctionSeq}"><tr><td>fitJunctionSeqDispersionFunction {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>
 Fit Shared Dispersion Function
@@ -106,7 +105,40 @@ fitted dispersions should be calculated for each. By default the dispersions are
 
 <h3>Examples</h3>
 
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
+</code></pre>
+
+<pre><code>## &gt; fitDispersionFunction() Starting (Wed Nov 11 20:24:08 2015)
+## &gt;   (fitType = parametric)
+## &gt;   (finalDispersionMethod = shrink)
+## &gt;   (fitDispersionsForExonsAndJunctionsSeparately = TRUE)
+## &gt;    fdf: Fitting dispersions:
+## &gt;       (Iteration 1) Parametric Dispersion Coefs: [0.00375844191826806,0.244438034799034]
+## &gt;       (Iteration 2) Parametric Dispersion Coefs: [0.00323638738228198,0.203836782219889]
+## &gt;       (Iteration 3) Parametric Dispersion Coefs: [0.00318075929614392,0.202926271801038]
+## &gt;       (Iteration 4) Parametric Dispersion Coefs: [0.00318666409235357,0.202323149932553]
+## &gt;       (FINAL) Parametric Dispersion Coefs: [0.00318669988481753,0.202322171391914]
+## &gt;    fdf: Fitting dispersions of exons and junctions to separate fitted trends.
+## &gt;    fdf: Fitting exon dispersions:
+## &gt;       (Iteration 1) Parametric Dispersion Coefs: [0.00375032566364328,0.268101383598956]
+## &gt;       (Iteration 2) Parametric Dispersion Coefs: [0.00268304158448649,0.225793124216409]
+## &gt;       (Iteration 3) Parametric Dispersion Coefs: [0.00260951612458187,0.225062358415434]
+## &gt;       (Iteration 4) Parametric Dispersion Coefs: [0.00254834313075846,0.226435512408088]
+## &gt;       (FINAL) Parametric Dispersion Coefs: [0.0025483430105266,0.226435517039989]
+## &gt;    fdf: Fitting splice-junction dispersions:
+## &gt;       (Iteration 1) Parametric Dispersion Coefs: [0.00366352124411408,0.225003420109359]
+## &gt;       (Iteration 2) Parametric Dispersion Coefs: [0.00424002344927811,0.181168942330325]
+## &gt;       (Iteration 3) Parametric Dispersion Coefs: [0.00427930849605139,0.178682548239613]
+## &gt;       (Iteration 4) Parametric Dispersion Coefs: [0.00429732059791796,0.177535671127819]
+## &gt;       (FINAL) Parametric Dispersion Coefs: [0.00429738020506496,0.177534579975103]
+## &gt; fdf(): &#39;Shrinking&#39; fitted and feature-specific dispersion estimates.
+## &gt; fdf() Dispersion estimate failed for 0 out of 10360 features.
+## &gt; fitDispersionFunction() Done. (Wed Nov 11 20:24:19 2015)
+</code></pre>
+
 <pre><code class="r">## Not run: 
+##D #Full example (from scratch):
 ##D ########################################
 ##D #Set up example data:
 ##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
@@ -144,5 +176,5 @@ fitted dispersions should be calculated for each. By default the dispersions are
 </code></pre>
 
 
-<hr><div align="center">[Package <em>JunctionSeq</em> version 0.5.1 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
 </body></html>
