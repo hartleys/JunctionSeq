@@ -1,13 +1,11 @@
 # JunctionSeq
     > v0.6.1 (Revised Wed Nov 11 20:04:24 EST 2015)
 
-JunctionSeq is an R package designed to detect and assess 
+[JunctionSeq](http://hartleys.github.io/JunctionSeq/) is an R package designed to detect and assess 
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
 The methodology is based on the methods used by the [DEXSeq](http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html) 
-bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343).
-
-Help, documentation, and the most recent release of JunctionSeq is available on the 
-[JunctionSeq github page](http://hartleys.github.io/JunctionSeq/index.html).
+bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343). Help, documentation, 
+and the most recent release of JunctionSeq is available on the [JunctionSeq github page](http://hartleys.github.io/JunctionSeq/).
 
 Issues, bug reports, or feature requests can be posted to the 
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
