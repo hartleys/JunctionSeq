@@ -1,3 +1,4 @@
+message("Loading JunctionSeq installer (v0.6.1e)");
 
 JS.install <- function(...){
   message("Installing dependencies...");
