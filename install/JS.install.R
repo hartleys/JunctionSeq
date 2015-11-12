@@ -63,7 +63,7 @@ JS.install.optional <- function(...){
 
 
 
-messsage("JunctionSeq Installation scripts loaded.");
+message("JunctionSeq Installation scripts loaded.");
 message("To install CRAN dependencies, use the command:");
 message("JS.install.CRAN.dependencies()");
 message("   (note: all options will be bassed directly to install.packages())");
