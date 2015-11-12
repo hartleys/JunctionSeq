@@ -1,20 +1,19 @@
 # JunctionSeq
-    > v0.6.1 (Revised Wed Nov 11 20:04:24 EST 2015)
+    > v0.5.1 (Revised Tue Nov 10 18:58:07 EST 2015)
 
-JunctionSeq is an R package designed to detect and assess 
+#### WARNING: As of October 14th, 2015, this version of JunctionSeq (v0.5.1) is no longer compatible with the most recent Bioconductor release (v3.2). Some of the data structures used in Bioconductor 3.1 have been "deprecated" in a way that breaks their functionality. All future releases of JunctionSeq will **require** Bioconductor 3.2 or higher.
+
+#### If you are using Bioconductor 3.0 or 3.1, then you will need to use JunctionSeq v0.5.1, which is the last JunctionSeq release compatible with these Bioconductor releases.
+
+[JunctionSeq](http://hartleys.github.io/JunctionSeq/index.html) is an R package designed to detect and assess 
 differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
 The methodology is based on the methods used by the [DEXSeq](http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html) 
-bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343).
-
-Help, documentation, and the most recent release of JunctionSeq is available on the 
+bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343). Help, documentation, and the most recent release of JunctionSeq is available on the 
 [JunctionSeq github page](http://hartleys.github.io/JunctionSeq/index.html).
 
 Issues, bug reports, or feature requests can be posted to the 
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
 The developers can be contacted at JunctionSeq-Contact (at) list.nih.gov.
-
-Note: the current version of JunctionSeq is ONLY compatible with Bioconductor 3.2 or higher.
-For older versions of JunctionSeq compatible with Bioconductor 3.0 and 3.1, see JunctionSeq release v0.5.1.
 
 ##LEGAL:
 This software package is licensed under the GNU-GPL v3:
