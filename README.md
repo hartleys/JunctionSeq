@@ -1,7 +1,7 @@
 # JunctionSeq
     > v0.5.1 (Revised Tue Nov 10 18:58:07 EST 2015)
 
-#### WARNING: As of October 14th, 2015, this version of JunctionSeq (v0.5.1) is no longer compatible with the most recent Bioconductor release (v3.2). Some of the data structures used in Bioconductor 3.1 have been "deprecated" in a way that breaks their functionality. All future releases of JunctionSeq will **require** Bioconductor 3.2 or higher.
+#### WARNING: As of October 14th, 2015, this version of JunctionSeq (v0.5.1) is no longer compatible with the most recent Bioconductor release (v3.2). Some of the data structures used in Bioconductor 3.1 have been "depreciated" in a way that breaks their functionality. All future releases of JunctionSeq will **require** Bioconductor 3.2 or higher.
 
 #### If you are using Bioconductor 3.0 or 3.1, then you will need to use JunctionSeq v0.5.1, which is the last JunctionSeq release compatible with these Bioconductor releases.
 
