@@ -1,5 +1,6 @@
 
 message("Installing dependencies...");
+message("this installer is deprecated! use JS.install.R instead!")
 
 message("Installing CRAN package dependencies... ",date());
 if(! require("statmod")) install.packages("statmod")
