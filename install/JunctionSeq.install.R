@@ -1,7 +1,7 @@
 
-message("Installing dependencies...");
-message("this installer is deprecated! use JS.install.R instead!")
 
+message("this installer is deprecated! use JS.install.R instead!")
+stop()
 message("Installing CRAN package dependencies... ",date());
 if(! require("statmod")) install.packages("statmod")
 if(! require("plotrix")) install.packages("plotrix")
