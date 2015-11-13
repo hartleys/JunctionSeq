@@ -1,6 +1,11 @@
 
 
 message("this installer is deprecated! use JS.install.R instead!")
+message("");
+message("Use the R commands:");
+message("source(\"http://hartleys.github.io/JunctionSeq/install/JS.install.R\");");
+message("JS.install();");
+
 
 oldInstallerFcn <- function(){
 message("Installing CRAN package dependencies... ",date());
@@ -25,7 +30,7 @@ if(! require("IRanges")) biocLite("IRanges");
 if(! require("S4Vectors")) biocLite("S4Vectors");
 if(! require("genefilter")) biocLite("genefilter");
 if(! require("geneplotter")) biocLite("geneplotter");
-}
+
 
 
 message("Done installing Bioconductor package dependencies. ",date());
@@ -47,3 +52,5 @@ message("Installation complete. ",date());
 message("Testing to see if package can be loaded... ",date());
 library("JunctionSeq");
 message("Done.",date());
+
+}
