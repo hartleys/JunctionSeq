@@ -1,7 +1,8 @@
 
 
 message("this installer is deprecated! use JS.install.R instead!")
-stop()
+
+oldInstallerFcn <- function(){
 message("Installing CRAN package dependencies... ",date());
 if(! require("statmod")) install.packages("statmod")
 if(! require("plotrix")) install.packages("plotrix")
@@ -24,6 +25,9 @@ if(! require("IRanges")) biocLite("IRanges");
 if(! require("S4Vectors")) biocLite("S4Vectors");
 if(! require("genefilter")) biocLite("genefilter");
 if(! require("geneplotter")) biocLite("geneplotter");
+}
+
+
 message("Done installing Bioconductor package dependencies. ",date());
 
 message("Done installing package dependencies. ",date());
