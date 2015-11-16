@@ -46,12 +46,17 @@ command:
 
 ##INSTALLATION:
 
+JunctionSeq is primarily designed for use on high performance linux workstations or cluster environments.
+
 JunctionSeq can be installed automatically in R using the command:
 
     > source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
     > JS.install();
 
 In order to successfully install from source on windows, you must have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed.
+
+In order to successfully install from source on OSX (mac), you must have the Xcode tools installed with up-to-date version of the GCC compiler 
+(see [here](https://wiki.helsinki.fi/display/HUGG/Installing+the+GNU+compilers+on+Mac+OS+X) for a tutorial on how to do that).
 
 The splice, gene, and exon read-counts required by JunctionSeq can be created 
 using the QoRTs software package, available [here](http://hartleys.github.io/QoRTs/index.html).
