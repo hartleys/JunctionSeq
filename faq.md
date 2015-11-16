@@ -1,4 +1,4 @@
-    > v0.6.1 (Revised Wed Nov 11 20:04:24 EST 2015)
+    > v0.6.4 (Revised Mon Nov 16 14:25:05 EST 2015)
 
 #Frequently Asked Questions
 

@@ -1,9 +1,10 @@
-    > v0.6.1 (Revised Wed Nov 11 20:04:24 EST 2015)
+    > v0.6.4 (Revised Mon Nov 16 14:25:05 EST 2015)
 
-JunctionSeq is an R package for detection and visualization of  
-differential usage of exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
+[JunctionSeq](http://hartleys.github.io/JunctionSeq/) is an R package for detection and visualization of differential usage of 
+exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
 The methodology is heavily based on the [DEXSeq](http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html) 
-bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343).
+bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343). More information
+is available on the [JunctionSeq GitHub Pages](http://hartleys.github.io/JunctionSeq/).
 
 The core advantage of JunctionSeq over other similar tools is that it provides a powerful automated tools for
 generating readable and interpretable plots and tables to facilitate the interpretation of the results.
