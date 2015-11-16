@@ -68,6 +68,10 @@
 }
 
 \examples{
+
+data(exampleDataSet,package="JctSeqExData2");
+jscs <- estimateJunctionSeqSizeFactors(jscs);
+
 \dontrun{
 ########################################
 #Set up example data:

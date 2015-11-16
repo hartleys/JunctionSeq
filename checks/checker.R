@@ -14,11 +14,11 @@ library("BiocCheck");
 #js.tar <- paste0("C:\\Users\\hartleys\\work\\nihwork\\home_copy\\projects\\ZZZ-JunctionSeq\\releases\\v",ver,"\\JunctionSeq_",ver,".tar.gz");
 js.tar <- paste0("../JunctionSeq_",ver,".tar.gz");
 
-sc <- file(paste0("R-CMD-BiocCheck-",winVer,"-",RVER,".log"), open = 'w');
+sc <- file(paste0("R-CMD-BiocCheck-",winVer,"-",RVER,".log"), open = 'a');
 sink(file = sc , type = "message");
 message("Starting BiocCheck... (",date(),")");
 message("     R Version: \"",R.Version(),"\"");
-BiocCheck(js.tar);
+test <- BiocCheck(js.tar);
 message("Finished BiocCheck. (",date(),")");
 sink(file = NULL, type = "message");
 close(sc);
