@@ -1,3 +1,9 @@
+:: This ".bat" file is a DOS script that runs the built JunctionSeq archive package
+::      through a series of tests and checks across multiple R distributions.
+::      in a windows environment.
+::      First through R v3.2.2, then through a recent R development version.
+
+
 @ECHO OFF
 SET /P VER=Please enter the version number: 
 IF "%VER%"=="" GOTO Error

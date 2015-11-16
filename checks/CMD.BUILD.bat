@@ -1,3 +1,6 @@
+:: This ".bat" file is a DOS script that builds JunctionSeq in windows.
+::      It also compiles a windows binary file.
+
 @ECHO OFF
 SET /P VER=Please enter the version number: 
 IF "%VER%"=="" GOTO Error
@@ -32,7 +35,16 @@ C:/PROGRA~1/R/R-3.2.2/bin/x64/R CMD INSTALL --build -l "InstBinary" "JunctionSeq
 echo ----- R CMD buildBinary COMPLETE (%TIME%, %DATE%)        >> ../R-CMD-buildBinary-WIN64-3.2.2.log
 echo ----- R CMD buildBinary COMPLETE (%TIME%, %DATE%) -----
 
-copy /Y JunctionSeq_0.6.1.zip "../JunctionSeq_0.6.1_WIN64-R3.2.2-BINARY.zip"
+copy /Y JunctionSeq_%VER%.zip "../JunctionSeq_%VER%_WIN64-R3.2.2-BINARY.zip"
+
+echo ----- R CMD CHECK STARTING (%TIME%, %DATE%) -----
+echo ----- R CMD CHECK STARTING (%TIME%, %DATE%) -----         >  ../R-CMD-CHECK-WIN64-built-3.2.2.log
+C:/PROGRA~1/R/R-3.2.2/bin/x64/R --version                      >> ../R-CMD-CHECK-WIN64-built-3.2.2.log 2>&1
+echo --------------------------------------------------------------      >> ../R-CMD-build-WIN64-built-3.2.2.log
+C:/PROGRA~1/R/R-3.2.2/bin/x64/R CMD build "JunctionSeq_%VER%.zip"        >> ../R-CMD-CHECK-WIN64-built-3.2.2.log
+echo ----- R CMD CHECK COMPLETE (%TIME%, %DATE%) -----         >> ../R-CMD-CHECK-WIN64-built-3.2.2.log
+echo ----- R CMD CHECK COMPLETE (%TIME%, %DATE%) -----
+
 
 GOTO End
 :Error
