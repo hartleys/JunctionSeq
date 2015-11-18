@@ -16,7 +16,10 @@ Read junctionSeq annotation files produced by QoRTs.
 
 <h3>Description</h3>
 
-<p>This function reads the &quot;flattened&quot; gff annotation file created by QoRTs. This annotation file contains all the gene, transcript, exon, and junction ID's and their loci.
+<p>This function reads the &quot;flattened&quot; gff annotation file created by QoRTs. 
+This annotation file contains all the gene, transcript, exon, and junction ID's and their loci.
+In general this function is not used by the end-user, but is called internally by 
+<code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code> or <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>.
 </p>
 
 
@@ -39,6 +42,12 @@ mergeNovelSplices functions (depending on whether inclusion of novel splice junc
 </p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> object, containing the annotation information from the flat gff file.
+</p>
 
 
 <h3>Examples</h3>
@@ -67,5 +76,5 @@ head(annoData);
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.4 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.7 <a href="00Index.html">Index</a>]</div>
 </body></html>
