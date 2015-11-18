@@ -112,6 +112,7 @@ calc.filtered.adjusted.p <- function(
     dispModelMatrix,
     cooksFilter = TRUE, cooksCutoff,
     pAdjustMethod = "BH",
+    filterThreshold = NULL,
     verbose = TRUE
 ){
    #independentFiltering = TRUE;
@@ -154,7 +155,7 @@ calc.filtered.adjusted.p <- function(
   
   # perform independent filtering
   if(independentFiltering) {
-    if(verbose) message(">      automatically selecting a filtering threshold to optimize results at the alpha < ",alpha," significance level.");
+    #if(verbose) message(">      Automatically selecting a filtering threshold to optimize results at the alpha < ",alpha," significance level.");
     
     if (missing(filter)) {
       stop("Must set a filter parameter!");
@@ -173,22 +174,33 @@ calc.filtered.adjusted.p <- function(
     padj <- filtPadj[, j, drop=TRUE]
     cutoffs <- quantile(filter, theta)
     filterThreshold <- cutoffs[j];
-    use <- filter >= filterThreshold;
+    use <- (filter >= filterThreshold) & testable;
     filterNumRej <- data.frame(theta=theta, numRej=numRej)
     
     
     if(verbose) message(">      Automatically selecting a filtering threshold of ",filterThreshold," to optimize results at the alpha < ",alpha," significance level.");
-    if(verbose) message(">         (Automatic independent filtering: ",sum(testable & (! use))," out of ",sum(testable)," features filtered out, using baseMean < ",filterThreshold,")");
-    if(verbose) message(">         (Rejected null hypothesis for ",sum(numRej[j]), " features at alpha < ",alpha,")");
+    if(verbose) message(">         (Filtering ",sum(testable & (! use))," out of ",sum(testable)," \"testable\" features, using baseMean < ",filterThreshold,")");
+    if(verbose) message(">         (Rejected H0 for ",sum(numRej[j])," out of ",sum(use), " features at alpha < ",alpha,")");
     status[testable & (! use)] <- "LOW_COUNTS_INDEP_FILTER";
     testable[testable & (! use)] <- FALSE;
     
   } else {
-    # regular p-value adjustment
-    # which does not include those rows which were removed
-    # by maximum Cook's distance
-    padj <- p.adjust(pvalue,method=pAdjustMethod)
+    if(is.null(filterThreshold)) {
+      filterThreshold <- -1;
+    }
+    padj <- rep(NA,length(filter));
+    use <- (filter >= filterThreshold) & testable;
+    padj[use] <- p.adjust(pvalue[use],method=pAdjustMethod);
+    numRej  <- sum(padj < alpha, na.rm=TRUE);
+    j <- 1;
+    
+    filterNumRej <- data.frame(theta = sum(testable & (! use)) / sum(testable), numRej =  numRej);
+    
+    if(verbose) message(">      Filtering for preset threshold (BaseMean > ",filterThreshold,")");
+    if(verbose) message(">         (Filtering ",sum(testable & (! use))," out of ",sum(testable)," \"testable\" features, using baseMean < ",filterThreshold,")");
+    if(verbose) message(">         (Rejected H0 for ",sum(numRej[j])," out of ",sum(use), " features at alpha < ",alpha,")");
   }
+  #if(verbose) print(filterNumRej);
   
   if(verbose) message("> Final p.adjust filtering complete.");
   
@@ -770,6 +782,8 @@ fitDispersionFunction_advancedMode <- function( jscs,
    useForFit <- f.na(disps > minFitDisp) & (! fData(jscs)$allZero);
    isExon <- fData(jscs)$featureType == "exonic_part";
    
+   message("min(means[useForFit], na.rm=T)=",min(means[useForFit], na.rm=T));
+   
    if((! any(isExon)) | (! any(! isExon))){
      fitDispersionsForExonsAndJunctionsSeparately <- FALSE;
    }
@@ -901,6 +915,9 @@ adapted.estimateDispersionsFit <- function(means, disps, fitType = c("parametric
     }
     attr(dispFunction, "fitType") <- fitType;
     
+    #For debugging:
+    ##exportedDispFunction <<- dispFunction;
+    
     varLogDispEsts <- mad(log(disps) - log(dispFunction(means)), na.rm = TRUE)^2;
     attr( dispFunction, "varLogDispEsts" ) <- varLogDispEsts;
     
@@ -948,9 +965,21 @@ adapted.localDispersionFit <- function( means, disps, minDisp ) {
     return(rep(minDisp,length(disps)))
   }
   d <- data.frame(logDisps = log(disps), logMeans = log(means))
+  
+  #message("starting locfit");
   fit <- locfit(logDisps ~ logMeans, data=d[disps >= minDisp*10,,drop=FALSE],
                 weights = means[disps >= minDisp*10])
-  dispFunction <- function(means) exp(predict(fit, data.frame(logMeans=log(means))))
+  #message("locfit generated.");
+  dispFunction <- function(means) {
+    keep <- ! ( is.infinite(log(means)) | is.na(means) | is.nan(means) );
+    out <- rep(NA,length(means));
+    out[keep] <- exp(predict(fit, data.frame(logMeans=log(means[keep]))));
+    #message("sum(keep) = ",sum(keep));
+    #message("length(keep)=",length(keep));
+    #message("sum(is.infinite(log(means)))=",sum(is.infinite(log(means))));
+    #message("sum(is.infinite((means)))=",sum(is.infinite((means))));
+    out;
+  }
   return(dispFunction)
 }
 

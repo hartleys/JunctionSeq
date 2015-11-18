@@ -1,4 +1,4 @@
------ R-DEVEL CMD BiocCheck STARTING (17:14:15.80, Mon 11/16/2015) -----  
+----- R-DEVEL CMD BiocCheck STARTING (12:45:26.12, Wed 11/18/2015) -----  
 R Under development (unstable) (2015-11-11 r69621) -- "Unsuffered Consequences"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
@@ -10,7 +10,7 @@ For more information about these matters see
 http://www.gnu.org/licenses/.
 
 --------------------------------------------------------------------        
-Starting BiocCheck... (Mon Nov 16 17:14:17 2015)
+Starting BiocCheck... (Wed Nov 18 12:45:27 2015)
      R Version: "x86_64-w64-mingw32x86_64mingw32x86_64, mingw32Under development (unstable)33.02015111169621RR Under development (unstable) (2015-11-11 r69621)Unsuffered Consequences"
 * This is BiocCheck, version 1.7.0.
 * BiocCheck is a work in progress. Output and severity of issues may
@@ -30,14 +30,14 @@ Starting BiocCheck... (Mon Nov 16 17:14:17 2015)
       strheight, plot.new, par, plot.window, rect, text, lines, par,
       plot.new, plot.window, title, segments, legend, rect, abline,
       text, strheight, strwidth, points, strheight, segments, rect,
-      polygon, strwidth, text, model.matrix, terms.formula, formula,
+      strwidth, text, par, lines, model.matrix, terms.formula, formula,
       model.matrix, model.matrix, model.matrix, hist, rchisq, rnorm,
       hist, loess, predict, formula, terms, model.matrix, formula,
       optimize, fitted.values, formula, model.matrix, as.formula,
       terms.formula, formula, dnbinom, optim, model.matrix, strwidth,
       par, strwidth, par, strwidth, model.matrix, model.matrix,
-      coefficients, model.matrix, coefficients, dnbinom, dnorm,
-      model.matrix' (used in adapted.estimateDispersionsMAP,
+      coefficients, model.matrix, coefficients, dnbinom, dnorm' (used
+      in adapted.estimateDispersionsMAP,
       adapted.estimateDispersionsPriorVar,
       adapted.estimateDispersionsPriorVar , adapted.localDispersionFit
       , adapted.parametricDispersionFit, advlines, arrangeCoefs,
@@ -117,30 +117,31 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking parsed R code in R directory, examples, vignettes...
 * Checking for direct slot access...
 * Checking for T...
+      Found T in R/adapted.functions.R (line 785, column 74)
+    * RECOMMENDED: Use TRUE instead of T (found in 1 files)
 * Checking for F...
 * Checking for browser()...
 * Checking for <<-...
-      Found <<- in R/adapted.functions.R (line 457, column 26)
+      Found <<- in R/adapted.functions.R (line 469, column 26)
       Found <<- in R/DESeq2.adapted.core.R (line 917, column 20)
     * CONSIDER: Avoiding '<<-'' if possible (found in 2 files)
 * Checking for library/require of JunctionSeq...
 * Checking DESCRIPTION/NAMESPACE consistency...
     * RECOMMENDED: Import stats in DESCRIPTION as well as NAMESPACE.
 * Checking function lengths....................................
-* The longest function is 825 lines long
+* The longest function is 829 lines long
 * The longest 5 functions are:
-* plotJunctionSeqResultsForGene() (R/main.plotGenes.R, line 565): 825
+* plotJunctionSeqResultsForGene() (R/main.plotGenes.R, line 574): 829
   lines
 * JunctionSeqHTML() (R/file.output.R, line 50): 444 lines
 * makeAllPlotPages() (R/file.output.R, line 503): 358 lines
 * drawPlot() (R/plotting.helpers.R, line 263): 310 lines
-* buildAllPlots() (R/main.plotGenes.R, line 6): 269 lines
+* buildAllPlots() (R/main.plotGenes.R, line 6): 274 lines
 * Checking man pages...
     * RECOMMENDED: Add non-empty \value sections to the following man
       pages:
       buildAllPlots.Rd, buildAllPlotsForGene.Rd, defaultColorList.Rd,
       plotDispEsts.Rd, plotJunctionSeqResultsForGene.Rd, plotMA.Rd,
-      readAnnotationData.Rd, runJunctionSeqAnalyses.Rd,
       writeBedTrack.Rd, writeCompleteResults.Rd
 * Checking exported objects have runnable examples...
     * CONSIDER: Adding runnable examples to the following man pages
@@ -149,11 +150,11 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking package NEWS...
 * Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source,
   and vignette source...
-    * CONSIDER: Shortening lines; 3058 lines (15%) are > 80 characters
+    * CONSIDER: Shortening lines; 3083 lines (15%) are > 80 characters
       long.
     * CONSIDER: Replacing tabs with 4 spaces; 11 lines (0%) contain
       tabs.
-    * CONSIDER: Indenting lines with a multiple of 4 spaces; 9597 lines
+    * CONSIDER: Indenting lines with a multiple of 4 spaces; 9660 lines
       (48%) are not.
   See http://bioconductor.org/developers/how-to/coding-style/
 * Checking for canned comments in man pages...
@@ -164,10 +165,10 @@ See http://bioconductor.org/developers/how-to/biocViews/
 
 Summary:
 REQUIRED count: 0
-RECOMMENDED count: 5
+RECOMMENDED count: 6
 CONSIDERATION count: 8
 For detailed information about these checks, see the BiocCheck
 vignette, available at
 http://bioconductor.org/packages/3.3/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
-Finished BiocCheck. (Mon Nov 16 17:16:03 2015)
------ R-DEVEL CMD BiocCheck COMPLETE (17:16:03.93, Mon 11/16/2015) -----  
+Finished BiocCheck. (Wed Nov 18 12:47:21 2015)
+----- R-DEVEL CMD BiocCheck COMPLETE (12:47:21.59, Wed 11/18/2015) -----  

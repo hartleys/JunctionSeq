@@ -1,13 +1,13 @@
 @ECHO OFF
 
 SET /P VER=Please enter the version number: 
+IF "%VER%"=="" GOTO Error
+ECHO Running Cleanup for version = %VER%
 
-if NOT exist JunctionSeq_%VER%.zip (
+if NOT exist ../JunctionSeq_%VER%.tar.gz (
   GOTO Error
 )
 
-
-echo "PERFORMING CLEANUP AND COPYING FILES..."
 :: go to the directory containing this .bat file:
 cd %~dp0
 

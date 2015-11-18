@@ -843,19 +843,19 @@ estimateDispersionsMAP <- function(object, outlierSD=2, dispPriorVar,
                  outlierSD * sqrt(varLogDispEsts)
   dispOutlier[is.na(dispOutlier)] <- FALSE
   dispersionFinal[dispOutlier] <- mcols(objectNZ)$dispGeneEst[dispOutlier]
- 
+  
   resultsList <- list(dispersion = dispersionFinal,
                       dispIter = dispResMAP$iter,
                       dispOutlier = dispOutlier,
                       dispMAP = dispMAP)
-
+  
   dispDataFrame <- buildDataFrameWithNARows(resultsList, mcols(object)$allZero)
   mcols(dispDataFrame) <- DataFrame(type=rep("intermediate",ncol(dispDataFrame)),
                                     description=c("final estimate of dispersion",
                                       "number of iterations",
                                       "dispersion flagged as outlier",
                                       "maximum a posteriori estimate"))
-
+  
   mcols(object) <- cbind(mcols(object), dispDataFrame)
   return(object)
 }

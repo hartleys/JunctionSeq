@@ -896,25 +896,7 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
    rect(tr.raw$start, ymin, tr.raw$end, ymin+exon.height, col=tr$fillColor, border = "transparent", lwd = anno.lwd / 2, xpd = NA, ...);
    rect(tr.mergedExons$start, ymin, tr.mergedExons$end, ymin+exon.height, col="transparent", border = TX.EXON.BORDER.COLOR, lwd = anno.lwd / 2, xpd = NA, ...);
    
-   if(draw.strand){
-     arrow.width <- convertHeightToWidth(exon.height) / 2;
-     if(is.null(trStrand)){
-       #Do Nothing
-     } else if(trStrand == "+"){
-       #message("+!");
-       lastEnd <- tr.raw$end[length(tr.raw$end)];
 
-       polygon(c(lastEnd,lastEnd, lastEnd + arrow.width), 
-               c(ymin,ymin + exon.height, exon.height/2 + ymin), 
-               col=tr$fillColor[length(tr$fillColor)], border = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
-     } else if (trStrand == "-"){
-       #message("-!");
-       firstStart <- tr.raw$start[1];
-       polygon(c(firstStart,firstStart, firstStart - arrow.width),
-               c(ymin,ymin + exon.height, exon.height/2 + ymin), 
-               col=tr$fillColor[1], border = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
-     }
-   }
    
    if(length(exon.breaks) > 0){
      segments(exon.breaks,ymin,exon.breaks,ymin+exon.height, col = "black", lwd = anno.lwd / 2, lty = 3, ...)
@@ -927,6 +909,45 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
    }
    
    text(id.leftX,ymin + 0.8,labels=trName,srt=0,xpd=NA,cex= anno.cex.TX.ID, adj=c(0,1),...);
+   
+   
+   #draw.strand <- TRUE;
+   if(draw.strand){
+     arrow.height <- strheight(">", cex = anno.cex.TX.ID);
+     arrow.width <- convertHeightToWidth(exon.height) / 2;
+     arrow.len <- par("cxy")[1]*1.75*anno.cex.TX.ID;
+     
+     if(is.null(trStrand)){
+       #Do Nothing
+       #message("??");
+     } else if(trStrand == "+"){
+       #message("+!");
+       lastEnd <- tr.raw$end[length(tr.raw$end)];
+       
+       arrow.X <- lastEnd + arrow.len
+       arrow.mid <- exon.height/2 + ymin;
+       
+       lines(c(lastEnd,arrow.X),c(arrow.mid, arrow.mid), lwd = anno.lwd / 2, xpd = NA, ...);
+       JS.arrowChars( arrow.X , arrow.mid, "right", arrow.cex = anno.cex.TX.ID, lwd = anno.lwd / 2, xpd = NA, ...);
+       
+       #polygon(c(lastEnd,lastEnd, lastEnd + arrow.width), 
+       #        c(ymin,ymin + exon.height, exon.height/2 + ymin), 
+       #        col=tr$fillColor[length(tr$fillColor)], border = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
+     } else if (trStrand == "-"){
+       #message("-!");
+       firstStart <- tr.raw$start[1];
+       
+       arrow.X <- firstStart - arrow.len
+       arrow.mid <- exon.height/2 + ymin;
+       
+       lines(c(arrow.X, firstStart),c(arrow.mid, arrow.mid), lwd = anno.lwd / 2, xpd = NA, ...);
+       JS.arrowChars( arrow.X , arrow.mid, "left", arrow.cex = anno.cex.TX.ID, lwd = anno.lwd / 2, xpd = NA, ...);
+       
+       #polygon(c(firstStart,firstStart, firstStart - arrow.width),
+       #        c(ymin,ymin + exon.height, exon.height/2 + ymin), 
+       #        col=tr$fillColor[1], border = TX.EXON.BORDER.COLOR, xpd = NA, lwd = anno.lwd / 2)
+     }
+   }
 }
 #############################################
 

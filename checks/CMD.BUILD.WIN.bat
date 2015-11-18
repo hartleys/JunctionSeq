@@ -21,21 +21,21 @@ xcopy /E /I /Q ..\..\JunctionSeq JunctionSeq
 :: --------------------------------------------------------------------------------------------------------------
 :: Build a package archive:
 echo ----- R CMD build STARTING (%TIME%, %DATE%) -----
-echo ----- R CMD build STARTING (%TIME%, %DATE%) -----         >  ../R-CMD-build-WIN64-3.2.2.log
-C:/PROGRA~1/R/R-3.2.2/bin/x64/R --version                      >> ../R-CMD-build-WIN64-3.2.2.log 2>&1
-echo --------------------------------------------------------------         >> ../R-CMD-build-WIN64-3.2.2.log
-C:/PROGRA~1/R/R-3.2.2/bin/x64/R CMD build "JunctionSeq"        >> ../R-CMD-build-WIN64-3.2.2.log
-echo ----- R CMD build COMPLETE (%TIME%, %DATE%) -----         >> ../R-CMD-build-WIN64-3.2.2.log
+echo ----- R CMD build STARTING (%TIME%, %DATE%) -----         >  ../../buildLogs/R-CMD-build-WIN64-R-v3.2.2.log
+C:/PROGRA~1/R/R-3.2.2/bin/x64/R --version                      >> ../../buildLogs/R-CMD-build-WIN64-R-v3.2.2.log 2>&1
+echo --------------------------------------------------------------         >> ../../buildLogs/R-CMD-build-WIN64-R-v3.2.2.log
+C:/PROGRA~1/R/R-3.2.2/bin/x64/R CMD build "JunctionSeq"        >> ../../buildLogs/R-CMD-build-WIN64-R-v3.2.2.log
+echo ----- R CMD build COMPLETE (%TIME%, %DATE%) -----         >> ../../buildLogs/R-CMD-build-WIN64-R-v3.2.2.log
 echo ----- R CMD build COMPLETE (%TIME%, %DATE%) -----
 
 :: --------------------------------------------------------------------------------------------------------------
 :: R CMD Check the windows-built version:
 echo ----- R CMD CHECK STARTING (%TIME%, %DATE%) -----
-echo ----- R CMD CHECK STARTING (%TIME%, %DATE%) -----         >  ../R-CMD-CHECK-WIN64_built-R-v3.2.2.log
-C:/PROGRA~1/R/R-3.2.2/bin/x64/R --version                      >> ../R-CMD-CHECK-WIN64_built-R-v3.2.2.log 2>&1
-echo --------------------------------------------------------------      >> ../R-CMD-CHECK-WIN64_built-R-v3.2.2.log
-C:/PROGRA~1/R/R-3.2.2/bin/x64/R CMD check --no-build-vignettes "JunctionSeq_%VER%.tar.gz"        >> ../R-CMD-CHECK-WIN64_built-R-v3.2.2.log
-echo ----- R CMD CHECK COMPLETE (%TIME%, %DATE%) -----         >> ../R-CMD-CHECK-WIN64_built-R-v3.2.2.log
+echo ----- R CMD CHECK STARTING (%TIME%, %DATE%) -----         >  ../../buildLogs/R-CMD-CHECK-WIN64_built-R-v3.2.2.log
+C:/PROGRA~1/R/R-3.2.2/bin/x64/R --version                      >> ../../buildLogs/R-CMD-CHECK-WIN64_built-R-v3.2.2.log 2>&1
+echo --------------------------------------------------------------      >> ../../buildLogs/R-CMD-CHECK-WIN64_built-R-v3.2.2.log
+C:/PROGRA~1/R/R-3.2.2/bin/x64/R CMD check --no-build-vignettes "JunctionSeq_%VER%.tar.gz"        >> ../../buildLogs/R-CMD-CHECK-WIN64_built-R-v3.2.2.log
+echo ----- R CMD CHECK COMPLETE (%TIME%, %DATE%) -----         >> ../../buildLogs/R-CMD-CHECK-WIN64_built-R-v3.2.2.log
 echo ----- R CMD CHECK COMPLETE (%TIME%, %DATE%) -----
 
 GOTO End

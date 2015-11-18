@@ -394,7 +394,7 @@ these column could have come in during colData import")
   object <- estimateDispersionsFit(object, fitType=fitType, quiet=quiet)
   if (!quiet) message("final dispersion estimates")
   object <- estimateDispersionsMAP(object, maxit=maxit, quiet=quiet, modelMatrix=modelMatrix)
-
+  
   # replace the previous design
   if (noReps) design(object) <- designIn
   

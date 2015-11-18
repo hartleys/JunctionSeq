@@ -1,4 +1,4 @@
------ R-DEVEL CMD CHECK STARTING (17:03:25.51, Mon 11/16/2015) -----  
+----- R-DEVEL CMD CHECK STARTING (12:33:40.78, Wed 11/18/2015) -----  
 R Under development (unstable) (2015-11-11 r69621) -- "Unsuffered Consequences"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
@@ -10,13 +10,13 @@ For more information about these matters see
 http://www.gnu.org/licenses/.
 
 --------------------------------------------------------------------        
-* using log directory 'C:/Users/hartleys/work/nihwork/home_copy/projects/ZZZ-JunctionSeq/releases/v0.6.4/checks/JunctionSeq.Rcheck'
+* using log directory 'C:/Users/hartleys/work/nihwork/home_copy/projects/ZZZ-JunctionSeq/releases/v0.6.7/checks/JunctionSeq.Rcheck'
 * using R Under development (unstable) (2015-11-11 r69621)
 * using platform: x86_64-w64-mingw32 (64-bit)
 * using session charset: ISO8859-1
 * using option '--no-build-vignettes'
 * checking for file 'JunctionSeq/DESCRIPTION' ... OK
-* this is package 'JunctionSeq' version '0.6.4'
+* this is package 'JunctionSeq' version '0.6.7'
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
@@ -82,4 +82,4 @@ http://www.gnu.org/licenses/.
 * checking PDF version of manual ... OK
 * DONE
 Status: OK
------ R-DEVEL CMD CHECK COMPLETE (17:08:41.57, Mon 11/16/2015) -----  
+----- R-DEVEL CMD CHECK COMPLETE (12:39:24.29, Wed 11/18/2015) -----  

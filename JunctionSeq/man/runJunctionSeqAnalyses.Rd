@@ -206,6 +206,9 @@
     USED ONLY FOR INTERNAL TESTING! NOT INTENDED FOR ACTUAL USE! 
   }
 }
+\value{
+  A \code{\link{JunctionSeqCountSet}} object, containing the complete analysis dataset and results.
+}
 
 \examples{
 \dontrun{

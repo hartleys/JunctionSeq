@@ -13,11 +13,14 @@ advlines <- function(x, y, col = "black", lty = 1, lwd = 1, secondary = FALSE, s
   lines(x, y,col=col, lty = lty, lwd = lwd,...);
 }
 
+REPORTMEM.VERBOSE <- FALSE;
+
 reportMem <- function(jscs){
-     if(requireNamespace("pryr", quietly=TRUE)){
-       message("     Total mem_used(): ",pryr::mem_used());
-     }
+    if(requireNamespace("pryr", quietly=TRUE)){
+      message("     Total mem_used(): ",pryr::mem_used());
+    }
      
+    if(REPORTMEM.VERBOSE){
      #message("     object.size(jscs): ",format(object.size(jscs),units="auto"));
       message("     Memory Usage:");
       message("        jscs: ", format(object.size(jscs), units="auto"));
@@ -30,6 +33,7 @@ reportMem <- function(jscs){
       message("        jscs@countVectors: ", format(object.size(jscs@countVectors), units="auto"));      
       message("        jscs@flatGffData: ", format(object.size(jscs@flatGffData), units="auto"));
       message("        jscs@DESeqDataSet : ", format(object.size(jscs@DESeqDataSet), units="auto"));
+    }
 }
 
 make.progress.report.fcn <- function(maxVal, numReports, reportStringPrefix){
@@ -332,7 +336,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
      plotting.device.params <- overmerge.list(list(pointsize = 18), plotting.device.params);
      
      cairo.package.found <- requireNamespace("Cairo", quietly=TRUE)
-     #warning("Note: R device CairoSVG has known issues that make labels unreadable on most renderers.");
+     #warning("Note: R device CairoSVG has known issues that make labels unreadable on certain renderers.");
      if(cairo.package.found){
        plotdevfunc <- function(filename, heightMult, widthMult){
          if(base.plot.units == "px"){ unitmod <- 150; } else { unitmod <- 1; }

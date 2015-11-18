@@ -101,6 +101,11 @@ buildAllPlots <- function(jscs,
     #}
   } else {
     if(verbose) message("> buildAllPlots: Found ", length(gene.list), " genes to plot.");
+    
+    if(! all(gene.list %in% unique(fData(jscs)$geneID) )){
+      notFound <- ! (gene.list %in% unique(fData(jscs)$geneID))
+      stop(paste0("FATAL ERROR: Not all GeneID's found in dataset! Example: geneID \"", gene.list[notFound][1],"\" is missing!" ));
+    }
   }
   
   #if(length(gene.list) > 0){
@@ -329,6 +334,10 @@ buildAllPlotsForGene <- function(geneID,jscs,
     
     if(length(outfile.prefix) == 1){
       outfile.prefix <- rep(outfile.prefix, 8);
+    }
+    
+    if(! any( geneID == fData(jscs)$geneID )){
+      stop(paste0("FATAL ERROR: GeneID \"",geneID,"\" not found in dataset!" ));
     }
     
   if(is.null(openPlottingDeviceFunc) | is.null(closePlottingDeviceFunc)){
@@ -601,6 +610,10 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
       TX.annotation.height <- TX.annotation.relative.height * 10;
       CONNECTIONS.height <- CONNECTIONS.relative.height * 10;
       SPLICE.annotation.height <- SPLICE.annotation.relative.height * 10;
+      
+      if(! any( geneID == fData(jscs)$geneID )){
+        stop(paste0("FATAL ERROR: GeneID \"",geneID,"\" not found in dataset!" ));
+      }
       
       flat.gff.data <- jscs@flatGffData;
       exonRescaleFunction <- match.arg(exonRescaleFunction);

@@ -93,7 +93,7 @@ plotDispEsts <- function( jscs, ylim, xlim,
       smoothScatter(log10(px),log10(py),nbin = smooth.nbin, nrpoints = nrpoints,
                      xlim = xlim, ylim=ylim,xlab="",ylab="",axes=FALSE, xaxs="i", yaxs="i",  ...);
     } else {
-      if( jscs@dispFunctionType[["finalDispersionMethod"]] == "shrink"){
+      if( (! is.null(jscs@dispFunctionType[["finalDispersionMethod"]]))  && jscs@dispFunctionType[["finalDispersionMethod"]] == "shrink"){
         plot(log10(px),log10(py),
                        xlim = xlim, ylim=ylim,xlab="",ylab="",axes=FALSE, xaxs="i", yaxs="i", pch = pch.MLE, cex = points.cex, col = pchColor,
                        ...);
@@ -113,12 +113,12 @@ plotDispEsts <- function( jscs, ylim, xlim,
     if(miniTicks) axis(4, at = ticks.at, labels = FALSE, tcl = -0.25, lwd = anno.lwd, lwd.ticks = anno.lwd / 2, ...);
     
     if(show.legends){
-      if(jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]]){
+      if((! is.null(jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]]))  && jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]]){
            #Exon / Junction Labels (only if both exons and junctions are found and tested:
            legend("bottomright",legend=c("Exons","Junctions"),text.col=linecol, bg="transparent", box.col="transparent")
       }
       legend.pt.cex <- if(pch.MLE == 46){points.cex * 5} else {points.cex}
-      if( jscs@dispFunctionType[["finalDispersionMethod"]] == "shrink"){
+      if( (! is.null(jscs@dispFunctionType[["finalDispersionMethod"]]))  &&  jscs@dispFunctionType[["finalDispersionMethod"]] == "shrink"){
          legend("topright", bg="transparent", box.col="transparent", seg.len=1, cex = text.cex,
                   legend=c("MLE","Fitted","MAP"),
                   lty =  c(NA,1,NA), 
@@ -133,11 +133,20 @@ plotDispEsts <- function( jscs, ylim, xlim,
     log.xg = seq( min(decade.at), max(decade.at), length.out=200 );
     xg <- 10 ^ log.xg;
     
-    if(jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]]){
-      lines(log.xg, log10(jscs@dispFunctionExon(xg)) , col=linecol[1], lwd=lwd.fitted, cex = lines.cex, ...);
-      lines(log.xg, log10(jscs@dispFunctionJct(xg)) , col=linecol[2], lwd=lwd.fitted, cex = lines.cex, ...);
-    } else {
-      lines(log.xg, log10(jscs@dispFunction(xg)) , col=linecol[1], lwd=lwd.fitted, cex = lines.cex, ...);
+    if( (! is.null(jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]])) ){
+      if(jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]]){
+        lines(log.xg, log10(jscs@dispFunctionExon(xg)) , col=linecol[1], lwd=lwd.fitted, cex = lines.cex, ...);
+        lines(log.xg, log10(jscs@dispFunctionJct(xg)) , col=linecol[2], lwd=lwd.fitted, cex = lines.cex, ...);
+      } else {
+        lines(log.xg, log10(jscs@dispFunction(xg)) , col=linecol[1], lwd=lwd.fitted, cex = lines.cex, ...);
+      }
+    }
+    
+    if(! is.null(attr(jscs, "filterThreshold"))){
+      filterThreshold <- attr(jscs, "filterThreshold");
+      if(filterThreshold > 0){
+        abline(v = log10(filterThreshold),col="gray",lty=3, lwd = lwd.fitted, ...);
+      }
     }
 }
 

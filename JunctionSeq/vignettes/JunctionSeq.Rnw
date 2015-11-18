@@ -67,7 +67,9 @@ BiocStyle::latex()
 \title{JunctionSeq Package User Manual}
 \author{Stephen Hartley\\
 National Human Genome Research Institute\\
-National Institutes of Health}
+National Institutes of Health\\
+v0.6.7 %REPLACE_THIS_LINE_WITH_VERSION_NUMBER
+}
 
 
 \begin{document}
@@ -100,15 +102,18 @@ openBitmap = function(nm, rows=1, cols=1, height = 600, width = 800, cex = 1.2) 
 
 The JunctionSeq R package offers a powerful tool for detecting, identifying, and characterizing differential usage of transcript exons and/or splice junctions in next-generation, high-throughput RNA-Seq experiments.
 
-\emph{"Differential usage"} is defined as a differential expression of a particular feature or sub-unit of a gene (such as an exon or spice junction) relative to the overall expression of the gene as a whole (which may or may not itself be differentially expressed). The term was originally used by Anders et.al.\cite{DEXSeq} for their tool, DEXSeq, which is designed to detect differential usage of exonic sub-regions in RNA-Seq data. Tests for differential usage can be used as a proxy for detecting isoform-specific differential regulation such as isoform switching, alternative splicing, alternative start site usage, or alternative stop site usage.
+\emph{"Differential usage"} is defined as a differential expression of a particular feature or sub-unit of a gene (such as an exon or spice junction) relative to the overall expression of the gene as a whole (which may or may not itself be differentially expressed). The term was originally used by Anders et.al.\cite{DEXSeq} for their tool, DEXSeq, which is designed to detect differential usage of exonic sub-regions in RNA-Seq data. Tests for differential usage can be used as a proxy for detecting alternative isoform regulation (AIR).
 
-JunctionSeq builds upon and expands the basic design put forth by DEXSeq, providing (among other things) the ability to test for both differential exon usage and differential splice junction usage. These two types of analyses are complementary: Exons represent a broad region on the transcripts, exons tend to
-have higher counts than the individual splice junctions (particularly for large exons) and as such tests for differential exon usage will often have higher power under ideal conditions. However, certain combinations of isoform
+Although many tools already exist to detect alternative isoform regulation, the results of these tools are almost universally resistant to interpretation. Alternative isoform regulation is a broad and diverse class of phenomena which may involve alternative splicing, alternative promoting, nucleosome occupancy, long non coding RNAs, alternative polyadenylation, or any number of these factors occurring simultaneously. Unlike simple gene-level differential expression, such regulation cannot be represented by a single p-value and fold-change. The results are often complex and counterintuitive, and effective interpretation is both crucial and non-trivial.
+
+JunctionSeq provides a powerful and comprehensive automated visualization toolset to assist in this interpretation process. This includes gene profile plots (see Section \ref{sec:subplot1}), as well as genome-wide browser tracks for use with IGV or the UCSC genome browser (see Section \ref{sec:browserFiles}). Together, these visualizations allow the user to quickly and intuitively interpret and understand the underlying regulatory phenomena that are taking place. 
+
+This visualization toolset is the core advantage to JunctionSeq over similar methods like DEXSeq. In fact, using a specific set of parameters (outlined in Section \ref{sec:methods-dexreplicate}), you can replicate a DEXSeq analysis in JunctionSeq, and thus use the JunctionSeq visualization tools along with the standard DEXSeq methodology.
+
+Under the default parameterization, JunctionSeq also builds upon and expands the basic design put forth by DEXSeq, providing (among other things) the ability to test for both differential exon usage and differential splice junction usage. These two types of analyses are complementary: Exons represent a broad region on the transcripts and thus tend to have higher counts than the individual splice junctions (particularly for large exons) and as such tests for differential exon usage will often have higher power under ideal conditions. However, certain combinations of isoform
 differentials may not result in strong observed differentials in the individual exons, and up- or down-regulation in unannotated isoforms may not be detectable at all. The addition of splice junction usage analysis makes it possible to detect a broader array of isoform-regulation phenomena, as well as vastly improving the detection of differentials in unannotated isoforms.
 
 JunctionSeq is \emph{not} designed to detect changes in overall gene expression. Gene-level differential expression is best detected with tools designed specifically for that purpose such as DESeq2\cite{DESeq2} or edgeR\cite{edgeR}.
-
-The core advantage to JunctionSeq is that it provides powerful and comprehensive automated visualization tools designed to assist in the interpretation of the results. JunctionSeq produces an array of intuitive expression plots along with genome-wide browser tracks for use with IGV or the UCSC genome browser.
 
 Additional help and documentation is \href{http://hartleys.github.io/JunctionSeq/index.html}{available online}. There is also a \href{http://hartleys.github.io/JunctionSeq/doc/example-walkthrough.pdf}{comprehensive walkthrough} of 
 the entire analysis pipeline, along with a full \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip}{example dataset} with 

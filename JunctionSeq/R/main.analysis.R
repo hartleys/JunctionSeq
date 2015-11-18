@@ -31,6 +31,10 @@ estimateJunctionSeqSizeFactors <- function( jscs , method.sizeFactors = c("byGen
    
    sizeFactors(jscs@DESeqDataSet) <- rep(sizeFactors(jscs),2);
    
+   if(replicateDEXSeqBehavior.useRawBaseMean){
+     warning("Option replicateDEXSeqBehavior.useRawBaseMean replicates a bug in an old version of DEXSeq. It is only intended for testing purposes. NOT FOR GENERAL USE!");
+   }
+   
    fData(jscs)$baseMean <- rowMeans(counts(jscs, normalized= ! replicateDEXSeqBehavior.useRawBaseMean));
    fData(jscs)$baseVar <- rowVars(counts(jscs, normalized=! replicateDEXSeqBehavior.useRawBaseMean));
    
@@ -72,7 +76,7 @@ fitJunctionSeqDispersionFunction <- function(jscs ,
    method.dispFit <- match.arg(method.dispFit);
    method.dispFinal <- match.arg(method.dispFinal);
    
-   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM = method.GLM);
+   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM.DispFit = method.GLM);
    attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.dispFit = method.dispFit);
    attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.dispFinal = method.dispFinal);
    
@@ -510,7 +514,7 @@ estimateJunctionSeqDispersions <- function( jscs,
    fData(jscs)$status <- rep("OK",nrow(fData(jscs)));
    #fData(jscs)$baseMean <- rowMeans(  );
    
-   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM = method.GLM);
+   attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM.DispEst = method.GLM);
    
    testable <- ! fData(jscs)$allZero;
    fData(jscs)$status[! testable] <- "ALL_ZERO";
@@ -645,7 +649,8 @@ testForDiffUsage <- function( jscs,
                                 pAdjustMethod = "BH",
                                 verbose = TRUE){
   method.GLM <- match.arg(method.GLM);
-  attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM = method.GLM);
+  attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM.HTEST = method.GLM);
+  
   
   keep.debug.model.data <- TRUE;
   stopifnot( inherits( jscs, "JunctionSeqCountSet" ) )
@@ -676,6 +681,12 @@ testForDiffUsage <- function( jscs,
    
    if(verbose & INTERNALDEBUGMODE) simpleReportMem();
    if(method.GLM %in% c("advanced","DESeq2-style")){
+   
+     if(keep.hypothesisTest.fit){
+       message("Saving Hypothesis Test Model Fits is Deprecated with DESeq2-style hypothesis testing.");
+       warning("Saving Hypothesis Test Model Fits is Deprecated with DESeq2-style hypothesis testing.");
+     }
+   
      BPPARAM <- MulticoreParam(workers = nCores);
      reducedModelMatrix <- mm0;
      fullModelMatrix <- mm1;
@@ -729,8 +740,6 @@ testForDiffUsage <- function( jscs,
        if(verbose) message("---> tJfDU(): No non-NA maxCooks values. Ignoring cooks.");
      }
      
-     
-
         modelFrame <- constructModelFrame( jscs )
         mm <- rmDepCols( model.matrix( test.formula1, modelFrame ) )
         cfp <- calc.filtered.adjusted.p(
@@ -745,6 +754,7 @@ testForDiffUsage <- function( jscs,
                         cooksCutoff = cooksCutoff,
                         pAdjustMethod = pAdjustMethod,
                         independentFiltering = (meanCountTestableThreshold == "auto"),
+                        filterThreshold =meanCountTestableThreshold,
                         verbose = verbose);
         fData(jscs)$padjust <- cfp[["res"]]$padjust;
         fData(jscs)$status <- cfp[["res"]]$status;
@@ -774,7 +784,7 @@ testForDiffUsage <- function( jscs,
             #   a ;
             #}
             out <- testFeatureForDJU.fromRow(test.formula1, jscs, i, modelFrame, mm0, mm1, fData(jscs)[i, dispColumn] , keepCoefs = keepCoefs);
-            out[["fit"]] <- "FIT_NOT_SAVED";
+            if(! keep.hypothesisTest.fit) out[["fit"]] <- list(fitH0 = "FIT_NOT_SAVED", fitH1 = "FIT_NOT_SAVED") ;
             out;
             #testFeatureForDJU(test.formula1, jscs, geneIDs(jscs)[i], countbinIDs(jscs)[i], modelFrame, mm0, mm1, fData(jscs)[i, dispColumn] , keepCoefs = keepCoefs, use.alternate.method = use.alternate.method) 
          } else {
@@ -783,7 +793,7 @@ testForDiffUsage <- function( jscs,
                        pval = NA, 
                        disp = NA, 
                        countVector = jscs@countVectors[i,], 
-                       fit = list(fitH0 = NA, fitH1 = NA) 
+                       fit = list(fitH0 = NA, fitH1 = NA)
                   ));
          }
        })
@@ -793,7 +803,7 @@ testForDiffUsage <- function( jscs,
       coefficient <- do.call(rbind.data.frame, lapply(mdl.out,"[[", "coefficient"));
       logFC <- do.call(rbind.data.frame, lapply(mdl.out,"[[", "logFC"));
 
-      modelFits <- lapply(mdl.out, "[[", "pval");
+      modelFits <- lapply(mdl.out, "[[", "fit"); #Currently nonfunctional
       names(modelFits) <- featureNames( jscs );
       jscs@modelFitForHypothesisTest <- modelFits;
 
@@ -825,6 +835,15 @@ testForDiffUsage <- function( jscs,
 
       fData(jscs)$pvalue <- pvals;
       fData(jscs)$simple_padjust <- p.adjust( fData(jscs)$pvalue, method=pAdjustMethod )
+      
+      fData(jscs)$padjust <- p.adjust( fData(jscs)$pvalue, method=pAdjustMethod )
+      
+      if(meanCountTestableThreshold == "auto"){
+         warning("Automatic threshold selection is NOT compatible with simpleML mode!");
+         meanCountTestableThreshold <- -1;
+      }
+      attr(jscs, "filterThreshold") <- meanCountTestableThreshold;
+      attr(jscs, "filterNumRej") <- sum( fData(jscs)$padjust < optimizeFilteringForAlpha, na.rm = TRUE);
       
       #if(meanCountTestableThreshold == "auto"){
 

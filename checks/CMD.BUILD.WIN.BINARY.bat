@@ -19,11 +19,11 @@ mkdir InstBinary
 :: --------------------------------------------------------------------------------------------------------------
 :: Build a windows binary:
 echo ----- R CMD buildBinary STARTING (%TIME%, %DATE%) ----- 
-echo ----- R CMD buildBinary STARTING (%TIME%, %DATE%) -----  >  R-CMD-buildBinary-WIN64-3.2.2.log
-C:/PROGRA~1/R/R-3.2.2/bin/x64/R --version                     >> R-CMD-buildBinary-WIN64-3.2.2.log 2>&1
-echo --------------------------------------------------------------        >> R-CMD-buildBinary-WIN64-3.2.2.log
-C:/PROGRA~1/R/R-3.2.2/bin/x64/R CMD INSTALL --build -l "InstBinary" "../JunctionSeq_%VER%.tar.gz" >> R-CMD-buildBinary-WIN64-3.2.2.log
-echo ----- R CMD buildBinary COMPLETE (%TIME%, %DATE%)        >> R-CMD-buildBinary-WIN64-3.2.2.log
+echo ----- R CMD buildBinary STARTING (%TIME%, %DATE%) -----  >  ../buildLogs/R-CMD-buildBinary-WIN64-3.2.2.log
+C:/PROGRA~1/R/R-3.2.2/bin/x64/R --version                     >> ../buildLogs/R-CMD-buildBinary-WIN64-3.2.2.log 2>&1
+echo --------------------------------------------------------------        >> ../buildLogs/R-CMD-buildBinary-WIN64-3.2.2.log
+C:/PROGRA~1/R/R-3.2.2/bin/x64/R CMD INSTALL --build -l "InstBinary" "../JunctionSeq_%VER%.tar.gz" >> ../buildLogs/R-CMD-buildBinary-WIN64-3.2.2.log
+echo ----- R CMD buildBinary COMPLETE (%TIME%, %DATE%)        >> ../buildLogs/R-CMD-buildBinary-WIN64-3.2.2.log
 echo ----- R CMD buildBinary COMPLETE (%TIME%, %DATE%) -----
 
 GOTO End
