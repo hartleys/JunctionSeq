@@ -1,4 +1,4 @@
------ R CMD BiocCheck STARTING (12:47:21.60, Wed 11/18/2015) ----- 
+----- R CMD BiocCheck STARTING (19:42:44.75, Wed 11/18/2015) ----- 
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
@@ -10,7 +10,7 @@ For more information about these matters see
 http://www.gnu.org/licenses/.
 
 -------------------------------------------------------------------- 
-Starting BiocCheck... (Wed Nov 18 12:47:23 2015)
+Starting BiocCheck... (Wed Nov 18 19:42:47 2015)
      R Version: "x86_64-w64-mingw32x86_64mingw32x86_64, mingw3232.22015081469053RR version 3.2.2 (2015-08-14)Fire Safety"
 * This is BiocCheck, version 1.6.0.
 * BiocCheck is a work in progress. Output and severity of issues may
@@ -115,8 +115,6 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking parsed R code in R directory, examples, vignettes...
 * Checking for direct slot access...
 * Checking for T...
-      Found T in R/adapted.functions.R (line 785, column 74)
-    * RECOMMENDED: Use TRUE instead of T (found in 1 files)
 * Checking for F...
 * Checking for browser()...
 * Checking for <<-...
@@ -148,11 +146,11 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking package NEWS...
 * Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source,
   and vignette source...
-    * CONSIDER: Shortening lines; 3083 lines (15%) are > 80 characters
+    * CONSIDER: Shortening lines; 3091 lines (15%) are > 80 characters
       long.
     * CONSIDER: Replacing tabs with 4 spaces; 11 lines (0%) contain
       tabs.
-    * CONSIDER: Indenting lines with a multiple of 4 spaces; 9660 lines
+    * CONSIDER: Indenting lines with a multiple of 4 spaces; 9671 lines
       (48%) are not.
   See http://bioconductor.org/developers/how-to/coding-style/
 * Checking for canned comments in man pages...
@@ -163,10 +161,10 @@ See http://bioconductor.org/developers/how-to/biocViews/
 
 Summary:
 REQUIRED count: 0
-RECOMMENDED count: 4
+RECOMMENDED count: 3
 CONSIDERATION count: 8
 For detailed information about these checks, see the BiocCheck
 vignette, available at
 http://bioconductor.org/packages/3.2/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
-Finished BiocCheck. (Wed Nov 18 12:49:29 2015)
------ R CMD BiocCheck COMPLETE (12:49:29.79, Wed 11/18/2015) -----  
+Finished BiocCheck. (Wed Nov 18 19:44:24 2015)
+----- R CMD BiocCheck COMPLETE (19:44:24.69, Wed 11/18/2015) -----  

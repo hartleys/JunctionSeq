@@ -1,4 +1,4 @@
------ R CMD exDataBuild (Wed Nov 18 12:06:52 EST 2015)          -----
+----- R CMD exDataBuild (Wed Nov 18 18:06:54 EST 2015)          -----
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,16 +9,16 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD exDataBuild STARTING (Wed Nov 18 12:06:52 EST 2015) -----
+----- R CMD exDataBuild STARTING (Wed Nov 18 18:06:54 EST 2015) -----
 * checking for file '/home/hartleys/UTILS/R/JctSeqExData2/DESCRIPTION' ... OK
 * preparing 'JctSeqExData2':
 * checking DESCRIPTION meta-information ... OK
+* installing the package to build vignettes
+* creating vignettes ... OK
 * checking for LF line-endings in source and make files
 * checking for empty or unneeded directories
-Removed empty directory 'JctSeqExData2/inst/doc'
-Removed empty directory 'JctSeqExData2/vignettes'
 * looking to see if a 'data/datalist' file should be added
 * re-saving image files
-* building 'JctSeqExData2_0.6.7.tar.gz'
+* building 'JctSeqExData2_0.6.9.tar.gz'
 
------ R CMD exDataBuild COMPLETE (Wed Nov 18 12:08:12 EST 2015) -----
+----- R CMD exDataBuild COMPLETE (Wed Nov 18 18:08:35 EST 2015) -----

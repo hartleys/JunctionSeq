@@ -1,4 +1,4 @@
------ R CMD CHECK (Wed Nov 18 11:52:55 EST 2015) ----- 
+----- R CMD CHECK (Wed Nov 18 17:55:03 EST 2015) ----- 
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,14 +9,14 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD CHECK STARTING (Wed Nov 18 11:52:55 EST 2015) -----
-* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.7/JunctionSeq.Rcheck'
+----- R CMD CHECK STARTING (Wed Nov 18 17:55:03 EST 2015) -----
+* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.9/JunctionSeq.Rcheck'
 * using R version 3.2.2 (2015-08-14)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: ASCII
 * using option '--no-build-vignettes'
 * checking for file 'JunctionSeq/DESCRIPTION' ... OK
-* this is package 'JunctionSeq' version '0.6.7'
+* this is package 'JunctionSeq' version '0.6.9'
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
@@ -27,7 +27,7 @@ http://www.gnu.org/licenses/.
 * checking for sufficient/correct file permissions ... OK
 * checking whether package 'JunctionSeq' can be installed ... OK
 * checking installed package size ... NOTE
-  installed size is  6.8Mb
+  installed size is  6.9Mb
   sub-directories of 1Mb or more:
     doc    2.4Mb
     libs   2.9Mb
@@ -77,5 +77,5 @@ http://www.gnu.org/licenses/.
 * checking PDF version of manual ... OK
 * DONE
 Status: 1 NOTE
------ R CMD CHECK COMPLETE (Wed Nov 18 11:57:52 EST 2015) -----
-Wed Nov 18 11:57:52 EST 2015
+----- R CMD CHECK COMPLETE (Wed Nov 18 17:58:58 EST 2015) -----
+Wed Nov 18 17:58:58 EST 2015

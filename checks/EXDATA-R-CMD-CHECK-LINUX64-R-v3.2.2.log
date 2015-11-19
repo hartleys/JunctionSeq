@@ -1,4 +1,4 @@
------ R CMD exDataCheck (Wed Nov 18 12:08:12 EST 2015)          -----
+----- R CMD exDataCheck (Wed Nov 18 18:08:35 EST 2015)          -----
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,13 +9,13 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD exDataCheck STARTING (Wed Nov 18 12:08:12 EST 2015) -----
-* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.7/JunctionSeq/vignettes/JctSeqExData2.Rcheck'
+----- R CMD exDataCheck STARTING (Wed Nov 18 18:08:35 EST 2015) -----
+* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.9/JunctionSeq/vignettes/JctSeqExData2.Rcheck'
 * using R version 3.2.2 (2015-08-14)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: ASCII
 * checking for file 'JctSeqExData2/DESCRIPTION' ... OK
-* this is package 'JctSeqExData2' version '0.6.7'
+* this is package 'JctSeqExData2' version '0.6.9'
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
@@ -26,11 +26,13 @@ http://www.gnu.org/licenses/.
 * checking for sufficient/correct file permissions ... OK
 * checking whether package 'JctSeqExData2' can be installed ... OK
 * checking installed package size ... NOTE
-  installed size is 132.3Mb
+  installed size is 137.7Mb
   sub-directories of 1Mb or more:
     data       8.7Mb
-    extdata  123.2Mb
+    doc        5.4Mb
+    extdata  123.1Mb
 * checking package directory ... OK
+* checking 'build' directory ... OK
 * checking DESCRIPTION meta-information ... OK
 * checking top-level files ... OK
 * checking for left-over files ... OK
@@ -53,14 +55,22 @@ http://www.gnu.org/licenses/.
 * checking contents of 'data' directory ... OK
 * checking data for non-ASCII characters ... OK
 * checking data for ASCII and uncompressed saves ... OK
+* checking installed files from 'inst/doc' ... OK
+* checking files in 'vignettes' ... OK
 * checking examples ... OK
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes in 'inst/doc' ... OK
+* checking running R code from vignettes ...
+   'JctSeqExData2.Rnw' ... OK
+ OK
+* checking re-building of vignette outputs ... OK
 * checking PDF version of manual ... OK
 * DONE
 
 Status: 1 NOTE
 See
-  '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.7/JunctionSeq/vignettes/JctSeqExData2.Rcheck/00check.log'
+  '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.9/JunctionSeq/vignettes/JctSeqExData2.Rcheck/00check.log'
 for details.
 
 
------ R CMD exDataCheck COMPLETE (Wed Nov 18 12:08:47 EST 2015) -----
+----- R CMD exDataCheck COMPLETE (Wed Nov 18 18:09:38 EST 2015) -----

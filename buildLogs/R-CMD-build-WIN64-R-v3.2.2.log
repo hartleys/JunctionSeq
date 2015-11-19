@@ -1,4 +1,4 @@
------ R CMD build STARTING (12:33:24.78, Wed 11/18/2015) -----         
+----- R CMD build STARTING (17:13:15.77, Wed 11/18/2015) -----         
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
@@ -19,5 +19,5 @@ http://www.gnu.org/licenses/.
 * cleaning src
 * checking for LF line-endings in source and make files
 * checking for empty or unneeded directories
-* building 'JunctionSeq_0.6.7.tar.gz'
------ R CMD build COMPLETE (12:46:57.04, Wed 11/18/2015) -----         
+* building 'JunctionSeq_0.6.9.tar.gz'
+----- R CMD build COMPLETE (17:25:12.53, Wed 11/18/2015) -----         
