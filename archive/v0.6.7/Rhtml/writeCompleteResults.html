@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Produce output data files, given annotation files and DEXSeq...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for writeCompleteResults {JunctionSeq}"><tr><td>writeCompleteResults {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Produce output data files, given annotation files and DEXSeq 
+exonCountSet object and DEXSeq results data.
+</h2>
+
+<h3>Description</h3>
+
+<p>This function takes the raw DEXSeq results and merges in feature 
+annotations, as well as calculating and merging in a number of 
+different normalized and fitted values for each level of the 
+condition variable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+writeCompleteResults(jscs, outfile.prefix, 
+                        gzip.output = TRUE,
+                        FDR.threshold = 0.05,
+                        save.allGenes = TRUE, save.sigGenes = TRUE,
+                        save.fit = FALSE, save.VST = FALSE,
+                        save.bedTracks = TRUE,
+                        save.jscs = FALSE,
+                        bedtrack.format = c("BED", "GTF", "GFF3"),
+                        verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually created by <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code>.
+</p>
+<p>Alternatively, this can be created manually by <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. 
+However in this case a number of additional steps will be necessary: 
+Dispersions and size factors must then be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>. Hypothesis tests must
+be performed by <code><a href="testForDiffUsage.html">testForDiffUsage</a></code>. Effect sizes and parameter
+estimates must be created via <code><a href="estimateEffectSizes.html">estimateEffectSizes</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>outfile.prefix</code></td>
+<td>
+<p>A string indicating the filename prefix where output files should be saved.</p>
+</td></tr>
+<tr valign="top"><td><code>gzip.output</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, then all &quot;.txt&quot; text files should be gzip-compressed to save space.</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.threshold</code></td>
+<td>
+<p>The adjusted-p-value threshold used to determine statistical significance.</p>
+</td></tr>
+<tr valign="top"><td><code>save.allGenes</code></td>
+<td>
+<p>Logical. Whether to save files containing data for all genes.</p>
+</td></tr>
+<tr valign="top"><td><code>save.sigGenes</code></td>
+<td>
+<p>Logical. Whether to save a separate set of files containing data for only the significant genes. If this and save.allGenes are both true then two sets of files will be generated.</p>
+</td></tr>
+<tr valign="top"><td><code>save.fit</code></td>
+<td>
+<p>Logical. Whether to save model fit data.</p>
+</td></tr>
+<tr valign="top"><td><code>save.VST</code></td>
+<td>
+<p>Logical. Whether to save VST-transformed data.</p>
+</td></tr>
+<tr valign="top"><td><code>save.bedTracks</code></td>
+<td>
+<p>Logical. Whether to save &quot;bed&quot; junction coverage tracks.</p>
+</td></tr>
+<tr valign="top"><td><code>save.jscs</code></td>
+<td>
+<p>Logical. Whether to the entire <code>JunctionSeqCountSet</code> object. Default is FALSE.</p>
+</td></tr>  
+<tr valign="top"><td><code>bedtrack.format</code></td>
+<td>
+
+<p>Character string. The format to use for the browser tracks.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>A boolean flag indicating whether or not to print progress information during execution. (Default=FALSE)</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Saves a wide variety of data from the analyses.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+#Write results tables and browser track files:
+writeCompleteResults(jscs, outfile.prefix = &quot;./results.&quot;);
+</code></pre>
+
+<pre><code>## &gt; STARTING writeCompleteResults (Wed Nov 18 12:00:29 2015)
+## &gt; wcr: outfile.prefix:  ./results.
+## &gt; wcr: FDR.threshold:  0.05
+## &gt; wcr: save.allGenes:  TRUE
+## &gt; wcr: save.sigGenes:  TRUE
+## &gt; wcr: save.fit:  FALSE
+## &gt; wcr: save.VST:  FALSE
+## &gt; wcr: bedtrack.format:  BED
+## &gt; wcr: Writing sizeFactors.
+## &gt; wcr: Writing results for 117 genes.
+## &gt; wcr:     Found 1516 counting bins belonging to these genes.
+## &gt; wcr: Writing results for 8 genes with 1 or more significant junctions (at adjusted-p-value threshold 0.05)
+## &gt; wcr:     Found 226 counting bins belonging to those genes.
+## &gt; DONE writeCompleteResults (Wed Nov 18 12:00:29 2015)
+</code></pre>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ######################
+##D #Run example analysis:
+##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
+##D            sample.names = decoder$sample.ID,
+##D            condition=factor(decoder$group.ID),
+##D            flat.gff.file = gff.file,
+##D            analysis.type = &quot;junctionsAndExons&quot;
+##D );
+##D ########################################
+##D 
+##D #Write results tables and browser track files:
+##D writeCompleteResults(jscs, outfile.prefix = &quot;./results.&quot;);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.7 <a href="00Index.html">Index</a>]</div>
+</body></html>
