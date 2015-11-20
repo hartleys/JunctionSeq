@@ -510,7 +510,7 @@ estimateJunctionSeqDispersions <- function( jscs,
                                             nCores=1, 
                                             use.multigene.aggregates = FALSE, 
                                             verbose = TRUE){
-   if(verbose) message("---> STARTING estimateJunctionSeqDispersions: (",date(),")");
+   if(verbose) message("---> STARTING estimateJunctionSeqDispersions: (v",packageVersion("JunctionSeq"),") (",date(),")");
    stopifnot( inherits( jscs, "JunctionSeqCountSet" ) )
    if( all( is.na( sizeFactors( jscs )) ) ){
      stop("Please calculate size factors before estimating dispersions\n")

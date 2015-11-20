@@ -87,7 +87,7 @@ runJunctionSeqAnalyses <- function(sample.files, sample.names, condition,
   }
   
   if(verbose){
-    message("> STARTING runJunctionSeqAnalyses (",date(),")");
+    message("> STARTING runJunctionSeqAnalyses (v",packageVersion("JunctionSeq"),") (",date(),")");
     message(paste("> rJSA: sample.files: ", paste0(sample.files,collapse=", ")));
     message(paste("> rJSA: sample.names: ",  paste0(sample.names,collapse=", ")));
     message(paste("> rJSA: condition: ",    paste0(condition,collapse=", ")));
@@ -257,7 +257,7 @@ writeCompleteResults <- function(jscs, outfile.prefix,
                             ){
    bedtrack.format <- match.arg(bedtrack.format);
    if(verbose){
-       message("> STARTING writeCompleteResults (",date(),")");
+       message("> STARTING writeCompleteResults (v",packageVersion("JunctionSeq"),") (",date(),")");
        message(paste("> wcr: outfile.prefix: ",outfile.prefix));
        message(paste("> wcr: FDR.threshold: ",FDR.threshold));
        message(paste("> wcr: save.allGenes: ",save.allGenes));
@@ -610,6 +610,7 @@ readJunctionSeqCounts <- function(countfiles = NULL, countdata = NULL,
    }
    if(verbose){
       #message("---> RJSC: countfiles: ",paste0(countfiles, collapse=","));
+      message("---> RJSC; (v",packageVersion("JunctionSeq"),")");
       message("---> RJSC: samplenames: ",paste0(samplenames, collapse=","));
       message("---> RJSC: flat.gff.file: ",flat.gff.file);
       message("---> RJSC: use.exons:",use.exons);

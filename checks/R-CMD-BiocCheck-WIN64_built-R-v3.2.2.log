@@ -1,0 +1,157 @@
+Starting BiocCheck... (Fri Nov 20 17:48:21 2015)
+     R Version: "x86_64-w64-mingw32x86_64mingw32x86_64, mingw3232.22015081469053RR version 3.2.2 (2015-08-14)Fire Safety"
+* This is BiocCheck, version 1.6.0.
+* BiocCheck is a work in progress. Output and severity of issues may
+  change.
+* Installing package...
+* Checking for version number mismatch...
+* Checking if other packages can import this one...
+* Checking to see if we understand object initialization....
+    * CONSIDER: Clarifying how objects 'formula, model.matrix, hist,
+      rchisq, rnorm, hist, loess, predict, predict, glm, Gamma,
+      coefficients, lines, model.matrix, coefficients, terms,
+      coefficients, terms.formula, weighted.mean, dev.off, qf,
+      p.adjust, model.matrix, terms, df, col2rgb, rgb, strwidth,
+      strheight, strwidth, strheight, model.matrix, terms,
+      model.matrix, read.table, formula, terms.formula, terms, par,
+      plot.new, plot.window, par, strwidth, lines, rect, segments,
+      strheight, plot.new, par, plot.window, rect, text, lines, par,
+      plot.new, plot.window, title, segments, legend, rect, abline,
+      text, strheight, strwidth, points, strheight, segments, rect,
+      strwidth, text, par, lines, model.matrix, terms.formula, formula,
+      model.matrix, model.matrix, model.matrix, hist, rchisq, rnorm,
+      hist, loess, predict, formula, terms, model.matrix, formula,
+      optimize, fitted.values, formula, packageVersion, model.matrix,
+      as.formula, terms.formula, formula, dnbinom, optim, model.matrix,
+      strwidth, par, strwidth, par, strwidth, model.matrix,
+      model.matrix, coefficients, model.matrix, coefficients, dnbinom,
+      dnorm' (used in adapted.estimateDispersionsMAP,
+      adapted.estimateDispersionsPriorVar,
+      adapted.estimateDispersionsPriorVar , adapted.localDispersionFit
+      , adapted.parametricDispersionFit, advlines, arrangeCoefs,
+      arrangeCoefs , averagePriorsOverLevels, balanceFeatures ,
+      buildAllPlots, calc.filtered.adjusted.p,
+      checkForExperimentalReplicates, cleanContrast, color2transparent,
+      convertHeightToWidth, convertWidthToHeight, covarianceMatrix,
+      DESeq, DESeqDataSet, DESeqDataSetFromHTSeqCount , DESeqParallel,
+      designAndArgChecker, device.limits, drawGene, drawGene.noSplices,
+      drawHalfLoop, drawPlot, drawTranscript, estimateBetaPriorVar,
+      estimateDispersions.DESeqDataSet, estimateDispersionsGeneEst,
+      estimateDispersionsMAP, estimateDispersionsPriorVar,
+      estimateDispersionsPriorVar , estimateEffectSizes,
+      estimateEffectSizes.BigModel, estimateFeatureDispersionFromRow,
+      estimateFeatureDispersionFromRow ,
+      estimateJunctionSeqDispersions, estimatelog2FoldChanges,
+      estimateMLEForBetaPriorVar, estimateSizeFactorsIterate ,
+      estimateSizeFactorsIterate, estimateUnsharedDispersions,
+      fit.character.vector.helper, fit.title, fit.vert,
+      fitAndArrangeCoefs, fitDispersionFunction_simpleMode,
+      fitDispersionFunctionHelper_SIMPLE, fitDispInR ,
+      fitGLMsWithPrior, fitNbinomGLMs, fitNbinomGLMsOptim ,
+      fitNbinomGLMsOptim, generateAllExpressionEstimates ,
+      generateAllExpressionEstimates.v2, generateSigExpressionEstimates
+      , get.character.dim, get.filtered.padjust, getAllData2,
+      getContrast, getLogFoldChangeFromModel,
+      getNonInteractionColumnIndices, getPlottingDeviceFunc ,
+      JS.arrowChars, JS.axis, JS.perGeneQValueBySimulation,
+      JunctionSeqHTML, localDispersionFit , logConditionalLikelihood ,
+      makeExampleDESeqDataSet, makeExpandedModelMatrix,
+      makeGeneLevelAxis, makevstaxis, makeWaldTest,
+      matchUpperQuantileForVariance,
+      matchWeightedUpperQuantileForVariance, nbinomLogLike, nbinomLRT,
+      nbinomWaldTest, parametricDispersionFit, plotDispEsts,
+      plotJunctionSeqResultsForGene, plotMA, plotMA_HELPER,
+      plotting.limits, plotTranscriptsOnly, pvalueAdjustment,
+      qorts.axis.break, readAnnotationData, readGeneInfo,
+      readJunctionSeqCounts, readJunctionSeqCounts , replaceOutliers,
+      replaceOutliersWithTrimmedMean, reportMem,
+      runJunctionSeqAnalyses, shrink.character.vector, strheightSRT90,
+      testFeatureForDJU.fromCountVector, testForDiffUsage,
+      write.fmt.table, write.junction.bed.file,
+      write.junction.bed.file.GTFCONVERT, write.simple.table.gz,
+      writeCompleteResults, writeExprBedTrack, writeSizeFactors,
+      wtd.quantile) were initialized. Maybe they are part of a data set
+      loaded with data(), or perhaps part of an object referenced in
+      with() or within().
+* Checking vignette directory...
+* This is a software package, checking vignette directories...
+* # of chunks: 34, # of eval=FALSE: 12 (35%)
+* Checking version number...
+* Checking version number validity...
+* Checking R Version dependency...
+* Checking biocViews...
+* Checking that biocViews are present...
+* Checking that biocViews come from the same category...
+* Checking biocViews validity...
+* Checking for recommended biocViews...
+    * CONSIDER: Adding some of these automatically suggested biocViews:
+      GeneExpression, Coverage, GO
+See http://bioconductor.org/developers/how-to/biocViews/
+* Checking build system compatibility...
+* Checking for blank lines in DESCRIPTION...
+* Checking for whitespace in DESCRIPTION field names...
+* Checking that Package field matches dir/tarball name...
+* Checking for Version field...
+* Checking for valid maintainer...
+* Checking unit tests...
+    * CONSIDER: Adding unit tests.  We strongly encourage them. See
+      http://www.bioconductor.org/developers/how-to/unitTesting-guidelines/.
+* Checking native routine registration...
+    * RECOMMENDED: Register native routines! see
+      http://cran.r-project.org/doc/manuals/R-exts.html#Registering-native-routines
+* Checking for deprecated package usage...
+* Checking parsed R code in R directory, examples, vignettes...
+* Checking for direct slot access...
+* Checking for T...
+* Checking for F...
+* Checking for browser()...
+* Checking for <<-...
+      Found <<- in R/adapted.functions.R (line 469, column 26)
+      Found <<- in R/DESeq2.adapted.core.R (line 917, column 20)
+    * CONSIDER: Avoiding '<<-'' if possible (found in 2 files)
+* Checking for library/require of JunctionSeq...
+* Checking DESCRIPTION/NAMESPACE consistency...
+    * RECOMMENDED: Import stats in DESCRIPTION as well as NAMESPACE.
+* Checking function lengths....................................
+* The longest function is 829 lines long
+* The longest 5 functions are:
+* plotJunctionSeqResultsForGene() (R/main.plotGenes.R, line 574): 829
+  lines
+* JunctionSeqHTML() (R/file.output.R, line 50): 444 lines
+* makeAllPlotPages() (R/file.output.R, line 503): 358 lines
+* drawPlot() (R/plotting.helpers.R, line 263): 310 lines
+* buildAllPlots() (R/main.plotGenes.R, line 6): 274 lines
+* Checking man pages...
+    * RECOMMENDED: Add non-empty \value sections to the following man
+      pages:
+      buildAllPlots.Rd, buildAllPlotsForGene.Rd, defaultColorList.Rd,
+      plotDispEsts.Rd, plotJunctionSeqResultsForGene.Rd, plotMA.Rd,
+      writeBedTrack.Rd, writeCompleteResults.Rd
+* Checking exported objects have runnable examples...
+    * CONSIDER: Adding runnable examples to the following man pages
+      which document exported objects:
+      estimateJunctionSeqDispersions.Rd, runJunctionSeqAnalyses.Rd
+* Checking package NEWS...
+* Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source,
+  and vignette source...
+    * CONSIDER: Shortening lines; 3093 lines (15%) are > 80 characters
+      long.
+    * CONSIDER: Replacing tabs with 4 spaces; 11 lines (0%) contain
+      tabs.
+    * CONSIDER: Indenting lines with a multiple of 4 spaces; 9672 lines
+      (48%) are not.
+  See http://bioconductor.org/developers/how-to/coding-style/
+* Checking for canned comments in man pages...
+* Checking if package already exists in CRAN...
+* Checking for support site registration...
+* Maintainer is registered at support site!
+
+
+Summary:
+REQUIRED count: 0
+RECOMMENDED count: 3
+CONSIDERATION count: 8
+For detailed information about these checks, see the BiocCheck
+vignette, available at
+http://bioconductor.org/packages/3.2/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
+Finished BiocCheck. (Fri Nov 20 17:49:56 2015)

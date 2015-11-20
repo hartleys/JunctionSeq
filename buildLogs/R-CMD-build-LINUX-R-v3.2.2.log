@@ -1,0 +1,24 @@
+----- R CMD build (Fri Nov 20 15:51:23 EST 2015)          -----
+R version 3.2.2 (2015-08-14) -- "Fire Safety"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under the terms of the
+GNU General Public License versions 2 or 3.
+For more information about these matters see
+http://www.gnu.org/licenses/.
+
+----- R CMD build STARTING (Fri Nov 20 15:51:23 EST 2015) -----
+* checking for file '/home/hartleys/UTILS/R/JunctionSeq/DESCRIPTION' ... OK
+* preparing 'JunctionSeq':
+* checking DESCRIPTION meta-information ... OK
+* cleaning src
+* installing the package to build vignettes
+* creating vignettes ... OK
+* cleaning src
+* checking for LF line-endings in source and make files
+* checking for empty or unneeded directories
+* building 'JunctionSeq_0.6.12.tar.gz'
+
+----- R CMD build COMPLETE (Fri Nov 20 15:56:41 EST 2015) -----
