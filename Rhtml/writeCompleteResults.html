@@ -114,11 +114,17 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
-#Write results tables and browser track files:
+</code></pre>
+
+<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
+## &#39;exampleDataSet&#39; not found
+</code></pre>
+
+<pre><code class="r">#Write results tables and browser track files:
 writeCompleteResults(jscs, outfile.prefix = &quot;./results.&quot;);
 </code></pre>
 
-<pre><code>## &gt; STARTING writeCompleteResults (Wed Nov 18 18:01:16 2015)
+<pre><code>## &gt; STARTING writeCompleteResults (v0.6.12) (Fri Nov 20 17:19:49 2015)
 ## &gt; wcr: outfile.prefix:  ./results.
 ## &gt; wcr: FDR.threshold:  0.05
 ## &gt; wcr: save.allGenes:  TRUE
@@ -127,11 +133,9 @@ writeCompleteResults(jscs, outfile.prefix = &quot;./results.&quot;);
 ## &gt; wcr: save.VST:  FALSE
 ## &gt; wcr: bedtrack.format:  BED
 ## &gt; wcr: Writing sizeFactors.
-## &gt; wcr: Writing results for 117 genes.
-## &gt; wcr:     Found 1516 counting bins belonging to these genes.
-## &gt; wcr: Writing results for 8 genes with 1 or more significant junctions (at adjusted-p-value threshold 0.05)
-## &gt; wcr:     Found 226 counting bins belonging to those genes.
-## &gt; DONE writeCompleteResults (Wed Nov 18 18:01:16 2015)
+</code></pre>
+
+<pre><code>## Error in writeSizeFactors(jscs, file = paste0(outfile.prefix, &quot;sizeFactors.txt&quot;)): No size factors to write.
 </code></pre>
 
 <pre><code class="r">## Not run: 
@@ -163,5 +167,5 @@ writeCompleteResults(jscs, outfile.prefix = &quot;./results.&quot;);
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.9 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
 </body></html>

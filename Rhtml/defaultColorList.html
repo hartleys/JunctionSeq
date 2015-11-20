@@ -59,8 +59,13 @@ Character vector. The colors for each condition, in order. Will be shortened to 
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+</code></pre>
 
-#Set a few alternative colors:
+<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
+## &#39;exampleDataSet&#39; not found
+</code></pre>
+
+<pre><code class="r">#Set a few alternative colors:
 buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs, 
                      outfile.prefix = &quot;./oddColors.&quot;,
                      colorList = list(SIG.FEATURE.COLOR = &quot;red&quot;,
@@ -70,15 +75,11 @@ buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs,
 </code></pre>
 
 <pre><code>## starting buildAllPlotsForGene() for geneID: ENSRNOG00000009281
-## Starting nested heights...
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts (with TX)
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr
+</code></pre>
+
+<pre><code>## Error in buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs, outfile.prefix = &quot;./oddColors.&quot;, : object &#39;jscs&#39; not found
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.9 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
 </body></html>

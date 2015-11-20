@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: JunctionSeq Dispersion Estimation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for estimateJunctionSeqDispersions {JunctionSeq}"><tr><td>estimateJunctionSeqDispersions {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+JunctionSeq Dispersion Estimation
+</h2>
+
+<h3>Description</h3>
+
+<p>This method estimates the sample dispersion for each 
+counting bin (in other words, each splice junction locus). 
+</p>
+<p>This function is called internally by the <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code> 
+function, and thus for most purposes users should not need to call this
+function directly. It may be useful to advanced users performing non-standard
+analyses.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+estimateJunctionSeqDispersions( jscs, 
+        method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
+        test.formula1 = formula(~ sample + countbin + condition : countbin),
+        meanCountTestableThreshold="auto", nCores=1, 
+        use.multigene.aggregates = FALSE, 
+        verbose = TRUE)
+        
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually initially created by 
+<code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. Size factors must be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.GLM</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>The default is &quot;advanced&quot; or, equivalently, &quot;DESeq2-style&quot;. This uses the 
+dispersion estimation methodology used by DESeq2 and DEXSeq v1.12.0 or higher to generate the initial (feature-specific) dispersion estimates. The alternative 
+method is &quot;simpleML&quot; or, equivalently, &quot;DEXSeq-v1.8.0-style&quot;. This uses a simpler maximum-likelihood-based method used by the original DESeq and
+by DEXSeq v1.8.0 or less.
+</p>
+</td></tr>
+<tr valign="top"><td><code>test.formula1</code></td>
+<td>
+
+<p>The model formula. Note that this formula is different from the 
+formula used to calculate parameter estimates and effect size.
+This is because the two noise components (gene-level and 
+countbin-level noise) are folded into the sample term. Since
+we only intend to test the condition-countbin interaction,
+we do not need to model the gene-level differential expression.
+</p>
+<p>NOTE: the biological condition to be tested MUST be named 
+&quot;condition&quot;.
+</p>
+</td></tr>
+<tr valign="top"><td><code>meanCountTestableThreshold</code></td>
+<td>
+
+<p>&quot;auto&quot; or Numeric value. Features with a total mean normalized count of less than this value will be excluded from the analyses.
+If left as the default (&quot;auto&quot;), then the cutoff threshold will be determined automatically using the DESeq2 independent filtering method.
+</p>
+</td></tr>
+<tr valign="top"><td><code>nCores</code></td>
+<td>
+
+<p>Either an integer or a BiocParallelParam object. 
+Either way, this determines The number of cores to use. Note that multicore functionality may not be available on all platforms. 
+If parallel execution is not available then JunctionSeq will automatically fallback to single-core execution. See the BiocParallel
+package for more information.
+</p>
+</td></tr>
+<tr valign="top"><td><code>use.multigene.aggregates</code></td>
+<td>
+<p>Logical value. Whether to attempt to test &quot;aggregate genes&quot; which consist of multiple genes that overlap with one another. Note that inclusion of aggregate genes may affect the false discovery rate, since by their very nature aggregate genes will often show differential splice junction usage, as the two genes will often be regulated independently.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>A boolean flag indicating whether or not to print progress information during execution. (Default=FALSE)</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A JunctionSeqCountSet, with dispersion results included.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">## Not run: 
+##D #Full example (from scratch):
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ########################################
+##D #Advanced Analysis:
+##D 
+##D #Make a &quot;design&quot; dataframe:
+##D design &lt;- data.frame(condition = factor(decoder$group.ID));
+##D #Read the QoRTs counts.
+##D jscs = readJunctionSeqCounts(countfiles = countFiles,
+##D            samplenames = decoder$sample.ID,
+##D            design = design,
+##D            flat.gff.file = gff.file
+##D );
+##D #Generate the size factors and load them into the JunctionSeqCountSet:
+##D jscs &lt;- estimateJunctionSeqSizeFactors(jscs);
+##D #Estimate feature-specific dispersions:
+##D jscs &lt;- estimateJunctionSeqDispersions(jscs);
+##D #Fit dispersion function and estimate MAP dispersion:
+##D jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
+##D #Test for differential usage:
+##D jscs &lt;- testForDiffUsage(jscs);
+##D #Estimate effect sizes and expression estimates:
+##D jscs &lt;- estimateEffectSizes( jscs);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.9 <a href="00Index.html">Index</a>]</div>
+</body></html>

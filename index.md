@@ -1,4 +1,4 @@
-    > v0.6.9 (Revised Wed Nov 18 17:48:22 EST 2015)
+    > v0.6.12 (Revised Fri Nov 20 15:42:49 EST 2015)
 
 [JunctionSeq](http://hartleys.github.io/JunctionSeq/) is an R package for detection and visualization of differential usage of 
 exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 

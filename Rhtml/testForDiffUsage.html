@@ -147,21 +147,16 @@ If left as the default (&quot;auto&quot;), then the cutoff threshold will be det
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
-jscs &lt;- testForDiffUsage(jscs);
 </code></pre>
 
-<pre><code>## -------&gt; testJunctionsForDiffUsage: Starting hypothesis test iteration. (Wed Nov 18 18:01:14 2015)
-## using supplied model matrix
-## found results columns, replacing these
-## -------&gt; testJunctionsForDiffUsage: Finished hypothesis test iteration. (Wed Nov 18 18:01:15 2015)
-## -------&gt; testJunctionsForDiffUsage: Finished compiling hypothesis test results. (Wed Nov 18 18:01:15 2015)
-## ---&gt; tJfDU(): No non-NA maxCooks values. Ignoring cooks.
-## &gt; Performing final p.adjust filtering.
-## &gt;      No cook&#39;s cutoffs found.
-## &gt;      Automatically selecting a filtering threshold of 0.113670218253199 to optimize results at the alpha &lt; 0.01 significance level.
-## &gt;         (Filtering 0 out of 482 &quot;testable&quot; features, using baseMean &lt; 0.113670218253199)
-## &gt;         (Rejected H0 for 13 out of 482 features at alpha &lt; 0.01)
-## &gt; Final p.adjust filtering complete.
+<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
+## &#39;exampleDataSet&#39; not found
+</code></pre>
+
+<pre><code class="r">jscs &lt;- testForDiffUsage(jscs);
+</code></pre>
+
+<pre><code>## Error in testForDiffUsage(jscs): Please calculate size factors before estimating dispersions
 </code></pre>
 
 <pre><code class="r">## Not run: 
@@ -202,5 +197,5 @@ jscs &lt;- testForDiffUsage(jscs);
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.9 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
 </body></html>

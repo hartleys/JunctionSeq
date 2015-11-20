@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Test Junctions for Differential Junction Usage</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for testForDiffUsage {JunctionSeq}"><tr><td>testForDiffUsage {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Test Junctions for Differential Junction Usage
+</h2>
+
+<h3>Description</h3>
+
+<p>This function runs the hypothesis tests for differential junction
+usage.
+</p>
+<p>This function is called internally by the <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code> 
+function, and thus for most purposes users should not need to call this
+function directly. It may be useful to advanced users performing non-standard
+analyses.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+testForDiffUsage( jscs, 
+          test.formula0 = formula(~ sample + countbin), 
+          test.formula1 = formula(~ sample + countbin + condition : countbin),
+          method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
+          dispColumn="dispersion", nCores=1, 
+          keep.hypothesisTest.fit = FALSE,
+          meanCountTestableThreshold = "auto",
+          optimizeFilteringForAlpha = 0.01,
+          method.cooksFilter = TRUE,
+          cooksCutoff,
+          pAdjustMethod = "BH",
+          verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually initially created by 
+<code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. Dispersions and size factors must be
+set, usually using functions <code><a href="estimateJunctionSeqSizeFactors.html">estimateJunctionSeqSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>test.formula0</code></td>
+<td>
+
+<p>The formula for the null hypothesis. Note that the condition to be tested must be named &quot;condition&quot;.
+</p>
+</td></tr>
+<tr valign="top"><td><code>test.formula1</code></td>
+<td>
+
+<p>The formula for the alternative hypothesis. Note that the condition to be tested must be named &quot;condition&quot;.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.GLM</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>The default is &quot;advanced&quot; or, equivalently, &quot;DESeq2-style&quot;. This uses the 
+model test methodology used by DESeq2 and DEXSeq v1.12.0 or higher. The alternative 
+method is &quot;simpleML&quot; or, equivalently, &quot;DEXSeq-v1.8.0-style&quot;. This uses a simpler maximum-likelihood-based method used by the original DESeq and
+by some earlier versions of DEXSeq (v1.8.0 or less).
+</p>
+</td></tr>
+<tr valign="top"><td><code>dispColumn</code></td>
+<td>
+
+<p>Character value. The name of the <code>fData(jscs)</code> column in which the model dispersion is stored.
+</p>
+</td></tr>
+<tr valign="top"><td><code>nCores</code></td>
+<td>
+
+<p>Either an integer or a BiocParallelParam object. 
+Either way, this determines The number of cores to use. Note that multicore functionality may not be available on all platforms. 
+If parallel execution is not available then JunctionSeq will automatically fallback to single-core execution. See the BiocParallel
+package for more information.
+</p>
+</td></tr>
+<tr valign="top"><td><code>keep.hypothesisTest.fit</code></td>
+<td>
+
+<p>Logical value. If <code>TRUE</code>, save both complete hypothesis test model fits for every gene. This will require a lot of memory, but may be useful for statistical diagnostics. Default: <code>FALSE</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>meanCountTestableThreshold</code></td>
+<td>
+
+<p>&quot;auto&quot; or Numeric value. Features with a total mean normalized count of less than this value will be excluded from the analyses.
+If left as the default (&quot;auto&quot;), then the cutoff threshold will be determined automatically using the DESeq2 independent filtering method.
+</p>
+</td></tr>
+<tr valign="top"><td><code> optimizeFilteringForAlpha </code></td>
+<td>
+
+<p>Numeric value between 0 and 1. If <code>meanCountTestableThreshold</code> is set to &quot;auto&quot; then this sets the adjusted-p-value threshold to optimize against.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.cooksFilter</code></td>
+<td>
+
+<p>Logical value. if <code>TRUE</code>, use the cook's filter to detect and remove outliers.
+</p>
+</td></tr>
+<tr valign="top"><td><code>cooksCutoff</code></td>
+<td>
+
+<p>The cook's cutoff threshold to use.
+</p>
+</td></tr>
+<tr valign="top"><td><code>pAdjustMethod</code></td>
+<td>
+
+<p>The p-adjustment method to use with the <code>p.adjust</code> function.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>if TRUE, send debugging and progress messages to the console / stdout.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A JunctionSeqCountSet, with hypothesis test results included.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+jscs &lt;- testForDiffUsage(jscs);
+</code></pre>
+
+<pre><code>## -------&gt; testJunctionsForDiffUsage: Starting hypothesis test iteration. (Wed Nov 18 18:01:14 2015)
+## using supplied model matrix
+## found results columns, replacing these
+## -------&gt; testJunctionsForDiffUsage: Finished hypothesis test iteration. (Wed Nov 18 18:01:15 2015)
+## -------&gt; testJunctionsForDiffUsage: Finished compiling hypothesis test results. (Wed Nov 18 18:01:15 2015)
+## ---&gt; tJfDU(): No non-NA maxCooks values. Ignoring cooks.
+## &gt; Performing final p.adjust filtering.
+## &gt;      No cook&#39;s cutoffs found.
+## &gt;      Automatically selecting a filtering threshold of 0.113670218253199 to optimize results at the alpha &lt; 0.01 significance level.
+## &gt;         (Filtering 0 out of 482 &quot;testable&quot; features, using baseMean &lt; 0.113670218253199)
+## &gt;         (Rejected H0 for 13 out of 482 features at alpha &lt; 0.01)
+## &gt; Final p.adjust filtering complete.
+</code></pre>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ########################################
+##D #Advanced Analysis:
+##D 
+##D #Make a &quot;design&quot; dataframe:
+##D design &lt;- data.frame(condition = factor(decoder$group.ID));
+##D #Read the QoRTs counts.
+##D jscs = readJunctionSeqCounts(countfiles = countFiles,
+##D            samplenames = decoder$sample.ID,
+##D            design = design,
+##D            flat.gff.file = gff.file
+##D );
+##D #Generate the size factors and load them into the JunctionSeqCountSet:
+##D jscs &lt;- estimateJunctionSeqSizeFactors(jscs);
+##D #Estimate feature-specific dispersions:
+##D jscs &lt;- estimateJunctionSeqDispersions(jscs);
+##D #Fit dispersion function and estimate MAP dispersion:
+##D jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
+##D #Test for differential usage:
+##D jscs &lt;- testForDiffUsage(jscs);
+##D #Estimate effect sizes and expression estimates:
+##D jscs &lt;- estimateEffectSizes( jscs);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.9 <a href="00Index.html">Index</a>]</div>
+</body></html>

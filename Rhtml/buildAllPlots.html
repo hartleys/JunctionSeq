@@ -465,77 +465,16 @@ for internally-generated parameters. DO NOT USE.
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
-buildAllPlots(jscs);
 </code></pre>
 
-<pre><code>## &gt; buildAllPlots: Found 5 genes with at least one significant exon, at adjusted-p-value threshold 0.01
-## &gt; buildAllPlots: Starting plotting...
-## &gt; buildAllPlots: Generating Dispersion Plot
-##      abundance ranges from 0.145790229164005 to 5483.2391226577
-##      dispersion ranges from 1.94121702327417e-06 to 2.08796433211328
-##      Plotting dispersions from 2.61759974125911e-05 to 2.08796433211328
-## &gt; buildAllPlots: Generating MA-Plot (log2FC(CTRL/CASE))
-## &gt; buildAllPlots: Writing HTML results index.
-##    Copying default css stylesheet.
-##    Writing html index. Wed Nov 18 18:00:28 2015
-##    Writing formula data. Wed Nov 18 18:00:28 2015
-##    Writing methods data. Wed Nov 18 18:00:28 2015
-##    Writing sample data. Wed Nov 18 18:00:28 2015
-##    Writing dispersion data. Wed Nov 18 18:00:28 2015
-##    Writing summary plots. Wed Nov 18 18:00:28 2015
-##    Compiling data table. Wed Nov 18 18:00:28 2015
-##    Writing data table. Wed Nov 18 18:00:28 2015
-##    Html index complete. Wed Nov 18 18:00:28 2015
-##    Writing pages. Wed Nov 18 18:00:28 2015
-##    Finished all html files. Wed Nov 18 18:00:29 2015
-## &gt; buildAllPlots: Finished writing HTML results index.
-## &gt; buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 5)
-## starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
-## Starting nested heights...
-## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: expr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: expr
-## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: normCounts (with TX)
-## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: normCounts
-## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: rExpr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000008079, plot.type: rExpr
-## &gt; buildAllPlots: starting geneID: ENSRNOG00000009281 (2 of 5)
-## starting buildAllPlotsForGene() for geneID: ENSRNOG00000009281
-## Starting nested heights...
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts (with TX)
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr
-## &gt; buildAllPlots: starting geneID: ENSRNOG00000056944 (3 of 5)
-## starting buildAllPlotsForGene() for geneID: ENSRNOG00000056944
-## Starting nested heights...
-## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: expr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: expr
-## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: normCounts (with TX)
-## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: normCounts
-## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: rExpr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000056944, plot.type: rExpr
-## &gt; buildAllPlots: starting geneID: ENSRNOG00000004621 (4 of 5)
-## starting buildAllPlotsForGene() for geneID: ENSRNOG00000004621
-## Starting nested heights...
-## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: expr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: expr
-## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: normCounts (with TX)
-## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: normCounts
-## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: rExpr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000004621, plot.type: rExpr
-## &gt; buildAllPlots: starting geneID: ENSRNOG00000002210 (5 of 5)
-## starting buildAllPlotsForGene() for geneID: ENSRNOG00000002210
-## Starting nested heights...
-## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: expr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: expr
-## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: normCounts (with TX)
-## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: normCounts
-## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: rExpr (with TX)
-## &gt; pJSRfG(): ENSRNOG00000002210, plot.type: rExpr
-## &gt; buildAllPlots: Plotting complete.
-## &gt; buildAllPlots: Plotting and data writing complete.
+<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
+## &#39;exampleDataSet&#39; not found
+</code></pre>
+
+<pre><code class="r">buildAllPlots(jscs);
+</code></pre>
+
+<pre><code>## Error in buildAllPlots(jscs): object &#39;jscs&#39; not found
 </code></pre>
 
 <pre><code class="r">## Not run: 
@@ -568,5 +507,5 @@ buildAllPlots(jscs);
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.9 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
 </body></html>

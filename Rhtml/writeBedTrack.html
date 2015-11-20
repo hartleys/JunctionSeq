@@ -200,10 +200,20 @@ By default JunctionSeq will attempt to automatically generate a reasonable track
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
-writeExprBedTrack(&quot;test.exonCoverage.bed.gz&quot;, jscs, 
-                  plot.exons = TRUE, plot.junctions = FALSE)
+</code></pre>
 
-## Not run: 
+<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
+## &#39;exampleDataSet&#39; not found
+</code></pre>
+
+<pre><code class="r">writeExprBedTrack(&quot;test.exonCoverage.bed.gz&quot;, jscs, 
+                  plot.exons = TRUE, plot.junctions = FALSE)
+</code></pre>
+
+<pre><code>## Error in rep(&quot;&quot;, nrow(estimates)): invalid &#39;times&#39; argument
+</code></pre>
+
+<pre><code class="r">## Not run: 
 ##D ########################################
 ##D #Set up example data:
 ##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
@@ -241,5 +251,5 @@ writeExprBedTrack(&quot;test.exonCoverage.bed.gz&quot;, jscs,
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.9 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
 </body></html>

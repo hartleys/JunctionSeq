@@ -106,31 +106,16 @@ fitted dispersions should be calculated for each. By default the dispersions are
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
-jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
 </code></pre>
 
-<pre><code>## &gt; fitDispersionFunction() Starting (Wed Nov 18 18:01:05 2015)
-## &gt;   (fitType = parametric)
-## &gt;   (finalDispersionMethod = shrink)
-## &gt;   (fitDispersionsForExonsAndJunctionsSeparately = TRUE)
-## min(means[useForFit], na.rm=T)=0.145790229164005
-## &gt;    fdf: Fitting dispersions:
-## &gt;       (Iteration 1) Parametric Dispersion Coefs: [0.00465281511379578,0.21833858566876]
-## &gt;       (Iteration 2) Parametric Dispersion Coefs: [0.00253260913896324,0.233591354846305]
-## &gt;       (FINAL) Parametric Dispersion Coefs: [0.00253247692869196,0.233595537310823]
-## &gt;    fdf: Fitting dispersions of exons and junctions to separate fitted trends.
-## &gt;    fdf: Fitting exon dispersions:
-## &gt;       (Iteration 1) Parametric Dispersion Coefs: [0.00461337253078784,0.282542146211808]
-## &gt;       (Iteration 2) Parametric Dispersion Coefs: [0.00192271455359532,0.299462126671736]
-## &gt;       (Iteration 3) Parametric Dispersion Coefs: [0.00185198065165201,0.288367123706038]
-## &gt;       (FINAL) Parametric Dispersion Coefs: [0.00185203762243628,0.28836437004481]
-## &gt;    fdf: Fitting splice-junction dispersions:
-## &gt;       (Iteration 1) Parametric Dispersion Coefs: [0.00388660231675664,0.179229887506683]
-## &gt;       (Iteration 2) Parametric Dispersion Coefs: [0.00375522634365911,0.180626540822821]
-## &gt;       (FINAL) Parametric Dispersion Coefs: [0.00375530334214226,0.180625053840781]
-## &gt; fdf(): &#39;Shrinking&#39; fitted and feature-specific dispersion estimates.
-## &gt; fdf() Dispersion estimate failed for 0 out of 482 features.
-## &gt; fitDispersionFunction() Done. (Wed Nov 18 18:01:05 2015)
+<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
+## &#39;exampleDataSet&#39; not found
+</code></pre>
+
+<pre><code class="r">jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
+</code></pre>
+
+<pre><code>## Error in fitJunctionSeqDispersionFunction(jscs): object &#39;jscs&#39; not found
 </code></pre>
 
 <pre><code class="r">## Not run: 
@@ -172,5 +157,5 @@ jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.9 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
 </body></html>
