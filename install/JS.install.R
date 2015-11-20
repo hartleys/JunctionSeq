@@ -98,13 +98,14 @@ JS.install.JunctionSeq <- function(installFromSource = TRUE, ...){
       message("Installing from source (Windows)");
       message("   Note: This requires Rtools. ");
       message("   (https://cran.r-project.org/bin/windows/Rtools/)");
-      message("To install without Rtools, you can use the command:");
-      message("   JS.install.JunctionSeq(installFromSource=FALSE);");
-      message("   (installs a compiled binary)");
+      #message("To install without Rtools, you can use the command:");
+      #message("   JS.install.JunctionSeq(installFromSource=FALSE);");
+      #message("   (installs a compiled binary)");
       install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",repos=NULL, type="source", ...);
     } else {
-      message("Installing from binary (Windows)");
-      install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST-WIN.zip",repos=NULL, type="source", ...);
+      stop("Binary installation not currently supported on this platform!");
+      #message("Installing from binary (Windows)");
+      #install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST-WIN.zip",repos=NULL, type="source", ...);
     }
   } else {
     message("Installing from source (",Sys.info()[["sysname"]],")");
@@ -153,9 +154,9 @@ message("To install JunctionSeq, once all dependencies are installed, use the co
 message("JS.install.JunctionSeq()");
 message("   (note: all options will be bassed directly to install.packages())");
 message("");
-message("To install to windows via a binary (does not require Rtools):");
-message("JS.install.JunctionSeq(installFromSource = FALSE)");
-message("");
+#message("To install to windows via a binary (does not require Rtools):");
+#message("JS.install.JunctionSeq(installFromSource = FALSE)");
+#message("");
 message("To install all required packages and JunctionSeq (from source), use the command:");
 message("JS.install()");
 message("");
