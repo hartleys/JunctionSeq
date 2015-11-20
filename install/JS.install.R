@@ -29,24 +29,24 @@ JS.install <- function(...){
 }
 
 JS.install.CRAN.dependencies <- function( ...){
-  if(! attemptLoad("statmod"))))        install.packages("statmod"        , ...)
-  if(! attemptLoad("statmod")))) stop(paste0("Installation of package statmod failed"));
+  if(! attemptLoad("statmod"))        install.packages("statmod"        , ...)
+  if(! attemptLoad("statmod")) stop(paste0("Installation of package statmod failed"));
   
-  if(! attemptLoad("plotrix"))))        install.packages("plotrix"        , ...)
-  if(! attemptLoad("plotrix")))) stop(paste0("Installation of package plotrix failed"));
+  if(! attemptLoad("plotrix"))        install.packages("plotrix"        , ...)
+  if(! attemptLoad("plotrix")) stop(paste0("Installation of package plotrix failed"));
   
-  if(! attemptLoad("stringr"))))        install.packages("stringr"        , ...)
-  if(! attemptLoad("stringr")))) stop(paste0("Installation of package stringr failed"));
-  
-  if(! attemptLoad("Rcpp"))))           install.packages("Rcpp"           , ...)
-  if(! attemptLoad("Rcpp")))) stop(paste0("Installation of package Rcpp failed"));
+  if(! attemptLoad("stringr"))        install.packages("stringr"        , ...)
+  if(! attemptLoad("stringr")) stop(paste0("Installation of package stringr failed"));
+
+  if(! attemptLoad("Rcpp"))           install.packages("Rcpp"           , ...)
+  if(! attemptLoad("Rcpp")) stop(paste0("Installation of package Rcpp failed"));
 
   
-  if(! attemptLoad("RcppArmadillo"))))  install.packages("RcppArmadillo"  , ...)
-  if(! attemptLoad("RcppArmadillo")))) stop(paste0("Installation of package RcppArmadillo failed"));
+  if(! attemptLoad("RcppArmadillo"))  install.packages("RcppArmadillo"  , ...)
+  if(! attemptLoad("RcppArmadillo")) stop(paste0("Installation of package RcppArmadillo failed"));
 
-  if(! attemptLoad("locfit"))))         install.packages("locfit"         , ...)
-  if(! attemptLoad("locfit")))) stop(paste0("Installation of package locfit failed"));
+  if(! attemptLoad("locfit"))         install.packages("locfit"         , ...)
+  if(! attemptLoad("locfit")) stop(paste0("Installation of package locfit failed"));
 
   #Deprecated dependencies:
   #if(! attemptLoad("ggplot2"))))       install.packages("ggplot2"        , ...)
@@ -56,35 +56,35 @@ JS.install.CRAN.dependencies <- function( ...){
 JS.install.BIOC.dependencies <- function(...){
   source("http://bioconductor.org/biocLite.R");
   biocLite();
-  if(! attemptLoad("Biobase"))))              biocLite("Biobase"              , ...);
-  if(! attemptLoad("Biobase")))) stop(paste0("Installation of package Biobase failed"));
+  if(! attemptLoad("Biobase"))              biocLite("Biobase"              , ...);
+  if(! attemptLoad("Biobase")) stop(paste0("Installation of package Biobase failed"));
 
   
-  if(! attemptLoad("BiocGenerics"))))         biocLite("BiocGenerics"         , ...);
-  if(! attemptLoad("BiocGenerics")))) stop(paste0("Installation of package BiocGenerics failed"));
+  if(! attemptLoad("BiocGenerics"))         biocLite("BiocGenerics"         , ...);
+  if(! attemptLoad("BiocGenerics")) stop(paste0("Installation of package BiocGenerics failed"));
 
   
-  if(! attemptLoad("BiocParallel"))))         biocLite("BiocParallel"         , ...);
-  if(! attemptLoad("BiocParallel")))) stop(paste0("Installation of package BiocParallel failed"));
+  if(! attemptLoad("BiocParallel"))         biocLite("BiocParallel"         , ...);
+  if(! attemptLoad("BiocParallel")) stop(paste0("Installation of package BiocParallel failed"));
 
 
-  if(! attemptLoad("GenomicRanges"))))        biocLite("GenomicRanges"        , ...);
-  if(! attemptLoad("GenomicRanges")))) stop(paste0("Installation of package GenomicRanges failed"));
+  if(! attemptLoad("GenomicRanges"))        biocLite("GenomicRanges"        , ...);
+  if(! attemptLoad("GenomicRanges")) stop(paste0("Installation of package GenomicRanges failed"));
 
-  if(! attemptLoad("IRanges"))))              biocLite("IRanges"              , ...);
-  if(! attemptLoad("IRanges")))) stop(paste0("Installation of package IRanges failed"));
+  if(! attemptLoad("IRanges"))              biocLite("IRanges"              , ...);
+  if(! attemptLoad("IRanges")) stop(paste0("Installation of package IRanges failed"));
 
-  if(! attemptLoad("S4Vectors"))))            biocLite("S4Vectors"            , ...);
-  if(! attemptLoad("S4Vectors")))) stop(paste0("Installation of package S4Vectors failed"));
+  if(! attemptLoad("S4Vectors"))            biocLite("S4Vectors"            , ...);
+  if(! attemptLoad("S4Vectors")) stop(paste0("Installation of package S4Vectors failed"));
 
-  if(! attemptLoad("genefilter"))))           biocLite("genefilter"           , ...);
-  if(! attemptLoad("genefilter")))) stop(paste0("Installation of package genefilter failed"));
+  if(! attemptLoad("genefilter"))           biocLite("genefilter"           , ...);
+  if(! attemptLoad("genefilter")) stop(paste0("Installation of package genefilter failed"));
 
-  if(! attemptLoad("geneplotter"))))          biocLite("geneplotter"          , ...);
-  if(! attemptLoad("geneplotter")))) stop(paste0("Installation of package geneplotter failed"));
+  if(! attemptLoad("geneplotter"))          biocLite("geneplotter"          , ...);
+  if(! attemptLoad("geneplotter")) stop(paste0("Installation of package geneplotter failed"));
 
-  if(! attemptLoad("SummarizedExperiment")))) biocLite("SummarizedExperiment" , ...);
-  if(! attemptLoad("SummarizedExperiment")))) stop(paste0("Installation of package SummarizedExperiment failed"));
+  if(! attemptLoad("SummarizedExperiment")) biocLite("SummarizedExperiment" , ...);
+  if(! attemptLoad("SummarizedExperiment")) stop(paste0("Installation of package SummarizedExperiment failed"));
 
 }
 
@@ -116,22 +116,22 @@ JS.install.JunctionSeq <- function(installFromSource = TRUE, ...){
 }
 
 JS.install.optional <- function(...){
-  if(! attemptLoad("knitr"))))       install.packages("knitr"        , ...)
-  if(! attemptLoad("knitr")))) stop(paste0("Installation of package SummarizedExperiment failed"));
+  if(! attemptLoad("knitr"))       install.packages("knitr"        , ...)
+  if(! attemptLoad("knitr")) stop(paste0("Installation of package SummarizedExperiment failed"));
 
-  if(! attemptLoad("Cairo"))))       install.packages("Cairo"        , ...)
-  if(! attemptLoad("Cairo")))) stop(paste0("Installation of package Cairo failed"));
+  if(! attemptLoad("Cairo"))       install.packages("Cairo"        , ...)
+  if(! attemptLoad("Cairo")) stop(paste0("Installation of package Cairo failed"));
 
-  if(! attemptLoad("pryr"))))        install.packages("pryr"         , ...)
-  if(! attemptLoad("pryr")))) stop(paste0("Installation of package pryr failed"));
+  if(! attemptLoad("pryr"))        install.packages("pryr"         , ...)
+  if(! attemptLoad("pryr")) stop(paste0("Installation of package pryr failed"));
 
-  if(! attemptLoad("MASS"))))        install.packages("MASS"        , ...)
-  if(! attemptLoad("MASS")))) stop(paste0("Installation of package MASS failed"));
+  if(! attemptLoad("MASS"))        install.packages("MASS"        , ...)
+  if(! attemptLoad("MASS")) stop(paste0("Installation of package MASS failed"));
 
   source("http://bioconductor.org/biocLite.R");
   biocLite();
-  if(! attemptLoad("BiocStyles"))))          biocLite("BiocStyles"          , ...);
-  if(! attemptLoad("BiocStyles")))) stop(paste0("Installation of package BiocStyles failed"));
+  if(! attemptLoad("BiocStyles"))          biocLite("BiocStyles"          , ...);
+  if(! attemptLoad("BiocStyles")) stop(paste0("Installation of package BiocStyles failed"));
   
   install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz",repos=NULL, type="source", ...);
 }
@@ -154,7 +154,7 @@ message("JS.install.JunctionSeq()");
 message("   (note: all options will be bassed directly to install.packages())");
 message("");
 message("To install to windows via a binary (does not require Rtools):");
-message("JS.install.windowsBinary()");
+message("JS.install.JunctionSeq(installFromSource = FALSE)");
 message("");
 message("To install all required packages and JunctionSeq (from source), use the command:");
 message("JS.install()");
