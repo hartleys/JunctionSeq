@@ -1,4 +1,4 @@
-message("Loading JunctionSeq installer (v0.6.1e)");
+message("Loading JunctionSeq installer (v0.6.12c)");
 
 attemptLoad <- function(pkg){
   return(suppressWarnings(suppressPackageStartupMessages(require(pkg))));
