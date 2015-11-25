@@ -102,15 +102,18 @@ JS.install.JunctionSeq <- function(install.from.source = TRUE, verbose = TRUE, .
       if(verbose) message("  NOTE: You MUST have Rtools installed in order to install from source on Windows!");
       if(verbose) message("        If you do not have Rtools, you can either install Rtools or install the ");
       if(verbose) message("        compiled binary using the command:");
-      if(verbose) message("  JS.install.JunctionSeq(install.from.source=TRUE)");
+      if(verbose) message("  JS.install.JunctionSeq(install.from.source=FALSE)");
       
     } else if(sysname == "Linux"){
       if(verbose) message("Installing from source on Linux.");
     } else if(sysname == "Darwin" || sysname == "Yosemite" || sysname == "Mavericks"){
       if(verbose) message("Installing from source on OSX (",sysname,")");
-      if(verbose) message("  NOTE: You MUST have Xcode installed in order to install from source on OSX!");
+      if(verbose) message("  NOTE: You MUST have Xcode and gfortran 4.8.2 installed in order to install from source on OSX!");
       if(verbose) message("        You may need other non-standard tools as well, depending on OS version.");
-      if(verbose) message("        Installing JunctionSeq on OSX is not currrently recommended.");
+      if(verbose) message("  If you don't want to install these, you can install ");
+      if(verbose) message("  using a pre-compiled binary with the command:");
+      if(verbose) message("  JS.install.JunctionSeq(install.from.source=FALSE)");
+      
     } else {
       if(verbose) message("Installing from source on unknown OS (",sysname,")");
     }
