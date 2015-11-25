@@ -1,0 +1,14 @@
+
+v0.6.8:
+ Several bugfixes, along with some error checking.
+ * Fixed one place where I used an "T" instead of "TRUE", so BiocCheck stops complaining.
+ * Local dispersion fit setting now propagates properly from runJunctionSeqAnalysis to fitJunctionSeqDispersionFunction.
+ * Local dispersion fit now works with the standard "DESeq2-style" method.GLM.
+ * Manual setting of inclusion thresholds now works with the "DESeq2-style" method.GLM.
+ * keep.hypothesisTest.fit now prints a warning when attempted with the "DESeq2-style" method.GLM, as saving the fit statistics cannot easily be implemented using this method (since all the model fitting happens in C++).
+ * If you attempt to plot a non-existent gene, it now prints an informative error.
+ * Fixed other output-compatibility issues with the legacy "simpleML" mode.
+ * Tested all sorts of combinations of method modes. Added warnings to at least some of the incompatible combinations.
+ * Reduced extraneous messages in debug mode.
+
+

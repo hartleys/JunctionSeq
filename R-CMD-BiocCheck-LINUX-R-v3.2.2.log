@@ -1,4 +1,4 @@
------ R CMD BiocCheck (Fri Nov 20 17:38:57 EST 2015) ----- 
+----- R CMD BiocCheck (Wed Nov 25 15:13:39 EST 2015) ----- 
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD BiocCheck STARTING (Fri Nov 20 17:38:57 EST 2015) -----
+----- R CMD BiocCheck STARTING (Wed Nov 25 15:13:39 EST 2015) -----
 * This is BiocCheck, version 1.6.0.
 * BiocCheck is a work in progress. Output and severity of issues may
   change.
@@ -126,12 +126,12 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking function lengths....................................
 * The longest function is 829 lines long
 * The longest 5 functions are:
-* plotJunctionSeqResultsForGene() (R/main.plotGenes.R, line 574): 829
+* plotJunctionSeqResultsForGene() (R/main.plotGenes.R, line 587): 829
   lines
 * JunctionSeqHTML() (R/file.output.R, line 50): 444 lines
 * makeAllPlotPages() (R/file.output.R, line 503): 358 lines
-* drawPlot() (R/plotting.helpers.R, line 263): 310 lines
-* buildAllPlots() (R/main.plotGenes.R, line 6): 274 lines
+* drawPlot() (R/plotting.helpers.R, line 263): 311 lines
+* buildAllPlots() (R/main.plotGenes.R, line 6): 287 lines
 * Checking man pages...
     * RECOMMENDED: Add non-empty \value sections to the following man
       pages:
@@ -145,11 +145,11 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking package NEWS...
 * Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source,
   and vignette source...
-    * CONSIDER: Shortening lines; 3093 lines (15%) are > 80 characters
+    * CONSIDER: Shortening lines; 3025 lines (15%) are > 80 characters
       long.
     * CONSIDER: Replacing tabs with 4 spaces; 11 lines (0%) contain
       tabs.
-    * CONSIDER: Indenting lines with a multiple of 4 spaces; 9672 lines
+    * CONSIDER: Indenting lines with a multiple of 4 spaces; 9693 lines
       (48%) are not.
   See http://bioconductor.org/developers/how-to/coding-style/
 * Checking for canned comments in man pages...
@@ -165,4 +165,4 @@ CONSIDERATION count: 8
 For detailed information about these checks, see the BiocCheck
 vignette, available at
 http://bioconductor.org/packages/3.2/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
------ R CMD BiocCheck COMPLETE (Fri Nov 20 17:40:46 EST 2015) -----
+----- R CMD BiocCheck COMPLETE (Wed Nov 25 15:15:29 EST 2015) -----

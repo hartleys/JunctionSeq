@@ -1,0 +1,69 @@
+#Base packages:
+import(methods)
+
+#CRAN packages:
+import(statmod)
+import(plotrix)
+import(stringr)
+import(Rcpp)
+import(RcppArmadillo)
+#import(ggplot2)
+import(SummarizedExperiment);
+
+#Bioconductor packages:
+import(Biobase)
+import(BiocGenerics)
+import(BiocParallel)
+import(GenomicRanges)
+import(IRanges)
+import(S4Vectors)
+
+#CRAN function imports:
+#importFrom(Hmisc,wtd.quantile)
+importFrom(locfit,locfit)
+importFrom(stats,coef)
+#import(stats)
+
+#Bioconductor function imports:
+importFrom(genefilter,filtered_p)
+importFrom(genefilter,rowVars)
+importFrom(geneplotter,plotMA)
+
+
+useDynLib(JunctionSeq)
+
+export(
+  runJunctionSeqAnalyses,                      #             
+  writeCompleteResults,                    #
+  buildAllPlots,                    #
+  
+  readJunctionSeqCounts,             #
+  estimateJunctionSeqDispersions,                    #
+  testForDiffUsage,                    #
+  estimateEffectSizes,
+  estimateJunctionSeqSizeFactors,
+  fitJunctionSeqDispersionFunction,
+  
+  readAnnotationData,                    #
+  
+  plotMA,                    #
+  plotDispEsts,                    #
+  buildAllPlotsForGene,                    #
+  plotJunctionSeqResultsForGene,                    #
+  
+  writeSizeFactors,
+  
+  writeExprBedTrack,
+  writeSigBedTrack,
+  
+  JUNCTIONSEQ.DEFAULT.COLOR.LIST
+  
+  #Depreciated:
+  #fitDispersionFunction,
+  #estimateSizeFactors, 
+  #generateCompleteResults,                    # 
+  #generateAllExpressionEstimates                    #
+)
+exportClasses( 
+  "JunctionSeqCountSet"
+)

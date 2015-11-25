@@ -1,0 +1,29 @@
+JunctionSeqCountSet-class
+                        Class '"JunctionSeqCountSet"'
+buildAllPlots           Create and save a full battery of JunctionSeq
+                        expression plots.
+buildAllPlotsForGene    Create and save one or more JunctionSeq
+                        expression plots.
+defaultColorList        JunctionSeq Color Parameters
+estimateEffectSizes     Estimate Effect Sizes, parameter estimates,
+                        etc.
+estimateJunctionSeqDispersions
+                        JunctionSeq Dispersion Estimation
+estimateJunctionSeqSizeFactors
+                        Estimate Size Factors
+fitJunctionSeqDispersionFunction
+                        Fit Shared Dispersion Function
+plotDispEsts            Plot Fitted and Test-wise Dispersion
+plotJunctionSeqResultsForGene
+                        Generate a JunctionSeq expression plot.
+plotMA                  Generate a MA-Plot
+readAnnotationData      Read junctionSeq annotation files produced by
+                        QoRTs.
+readJunctionSeqCounts   Read junctionSeq count files
+runJunctionSeqAnalyses
+                        Run a JunctionSeq analysis.
+testForDiffUsage        Test Junctions for Differential Junction Usage
+writeCompleteResults    Produce output data files, given annotation
+                        files and DEXSeq exonCountSet object and DEXSeq
+                        results data.
+writeExprBedTrack       Write splice junction browser tracks
