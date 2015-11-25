@@ -28,34 +28,37 @@ It internally calls functions <code><a href="readAnnotationData.html">readAnnota
 <h3>Usage</h3>
 
 <pre>
-  runJunctionSeqAnalyses(sample.files, sample.names, condition, 
-     flat.gff.file, 
-     analysis.type = c("junctionsAndExons","junctionsOnly","exonsOnly"),
-     meanCountTestableThreshold = "auto",
-     nCores = 1,
-     use.covars, 
-     test.formula0 = formula(~ sample + countbin), 
-     test.formula1 = formula(~ sample + countbin + condition : countbin),
-     effect.formula = formula(~ condition + countbin + condition : countbin),
-     geneLevel.formula = formula(~ condition),
-     use.exons, use.junctions, 
-     use.known.junctions = TRUE, 
-     use.novel.junctions = TRUE, 
-     use.multigene.aggregates = FALSE, 
-     gene.names, 
-     method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
-     method.dispFit = c("parametric", "local", "mean"), 
-     method.dispFinal = c("shrink","max","fitted","noShare"),
-     method.sizeFactors = c("byGenes","byCountbins"),
-     method.countVectors = c("geneLevelCounts","sumOfAllBinsForGene","sumOfAllBinsOfSameTypeForGene"),
-     method.expressionEstimation = c("feature-vs-gene","feature-vs-otherFeatures"),
-     method.cooksFilter = TRUE,
-     optimizeFilteringForAlpha = 0.01,
-     fitDispersionsForExonsAndJunctionsSeparately = TRUE,
-     keep.hypothesisTest.fit = FALSE,
-     keep.estimation.fit = FALSE,
-     replicateDEXSeqBehavior.useRawBaseMean = FALSE,
-     verbose = TRUE, debug.mode = FALSE)
+runJunctionSeqAnalyses(sample.files, sample.names, condition, 
+   flat.gff.file, 
+   analysis.type = c("junctionsAndExons","junctionsOnly","exonsOnly"),
+   meanCountTestableThreshold = "auto",
+   nCores = 1,
+   use.covars, 
+   test.formula0 = formula(~ sample + countbin), 
+   test.formula1 = formula(~ sample + countbin + condition : countbin),
+   effect.formula = formula(~ condition + countbin + condition : countbin),
+   geneLevel.formula = formula(~ condition),
+   use.exons, use.junctions, 
+   use.known.junctions = TRUE, 
+   use.novel.junctions = TRUE, 
+   use.multigene.aggregates = FALSE, 
+   gene.names, 
+   method.GLM = c(c("advanced","DESeq2-style"), 
+                  c("simpleML","DEXSeq-v1.8.0-style")),
+   method.dispFit = c("parametric", "local", "mean"), 
+   method.dispFinal = c("shrink","max","fitted","noShare"),
+   method.sizeFactors = c("byGenes","byCountbins"),
+   method.countVectors = c("geneLevelCounts","sumOfAllBinsForGene",
+                           "sumOfAllBinsOfSameTypeForGene"),
+   method.expressionEstimation = c("feature-vs-gene",
+                                   "feature-vs-otherFeatures"),
+   method.cooksFilter = TRUE,
+   optimizeFilteringForAlpha = 0.01,
+   fitDispersionsForExonsAndJunctionsSeparately = TRUE,
+   keep.hypothesisTest.fit = FALSE,
+   keep.estimation.fit = FALSE,
+   replicateDEXSeqBehavior.useRawBaseMean = FALSE,
+   verbose = TRUE, debug.mode = FALSE)
 </pre>
 
 
@@ -326,15 +329,19 @@ Without this option the results would differ slightly (generally by less than 1 
 <pre><code class="r">## Not run: 
 ##D ########################################
 ##D #Set up example data:
-##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqExData2&quot;);
 ##D decoder &lt;- read.table(decoder.file,
-##D                       header=T,
-##D                       stringsAsFactors=F);
-##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqExData2&quot;);
 ##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
-##D                  decoder$sample.ID,
-##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-##D                  package=&quot;JctSeqExData2&quot;);
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqExData2&quot;);
 ##D ########################################
 ##D 
 ##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
@@ -348,5 +355,5 @@ Without this option the results would differ slightly (generally by less than 1 
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.16 <a href="00Index.html">Index</a>]</div>
 </body></html>

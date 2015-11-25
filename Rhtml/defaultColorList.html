@@ -45,10 +45,12 @@ or <code><a href="plotJunctionSeqResultsForGene.html">plotJunctionSeqResultsForG
 </p>
 <p><code>SIG.VERTLINE.COLOR, NOSIG.VERTLINE.COLOR, UNTESTABLE.VERTLINE.COLOR</code>: The colors of the vertical dotted lines in the plotting panel.
 </p>
-<p><code>SIG.FEATURE.BORDER.COLOR, NOSIG.FEATURE.BORDER.COLOR, UNTESTABLE.FEATURE.BORDER.COLOR, EXCLUDED.FEATURE.BORDER.COLOR</code>: 
+<p><code>SIG.FEATURE.BORDER.COLOR</code>, <code>NOSIG.FEATURE.BORDER.COLOR</code>, 
+<code>UNTESTABLE.FEATURE.BORDER.COLOR</code>, <code>EXCLUDED.FEATURE.BORDER.COLOR</code>: 
 The color for borders of features in the gene and transcript annotation.
 </p>
-<p><code>SIG.FEATURE.FILL.COLOR, NOSIG.FEATURE.FILL.COLOR, UNTESTABLE.FEATURE.FILL.COLOR, EXCLUDED.FEATURE.FILL.COLOR</code>
+<p><code>SIG.FEATURE.FILL.COLOR</code>, <code>NOSIG.FEATURE.FILL.COLOR</code>, 
+<code>UNTESTABLE.FEATURE.FILL.COLOR</code>, <code>EXCLUDED.FEATURE.FILL.COLOR</code>
 The colors for exon shading in the gene and transcript annotation.
 </p>
 <p><code>PLOTTING.LINE.COLORS</code> 
@@ -59,13 +61,8 @@ Character vector. The colors for each condition, in order. Will be shortened to 
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
-</code></pre>
 
-<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
-## &#39;exampleDataSet&#39; not found
-</code></pre>
-
-<pre><code class="r">#Set a few alternative colors:
+#Set a few alternative colors:
 buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs, 
                      outfile.prefix = &quot;./oddColors.&quot;,
                      colorList = list(SIG.FEATURE.COLOR = &quot;red&quot;,
@@ -75,11 +72,15 @@ buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs,
 </code></pre>
 
 <pre><code>## starting buildAllPlotsForGene() for geneID: ENSRNOG00000009281
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr
 </code></pre>
 
-<pre><code>## Error in buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs, outfile.prefix = &quot;./oddColors.&quot;, : object &#39;jscs&#39; not found
-</code></pre>
 
-
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.16 <a href="00Index.html">Index</a>]</div>
 </body></html>

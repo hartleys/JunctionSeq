@@ -29,43 +29,45 @@ be generated with and without the full transcript information.
 <pre>
 
 buildAllPlotsForGene(geneID, jscs,
-                     outfile.prefix = "./", 
-                     use.plotting.device = c("png","CairoPNG","svg","tiff","cairo_ps","custom"),
-                     sequencing.type = c("paired-end","single-end"),
-                     use.vst=FALSE, use.log = TRUE, 
-                     exon.rescale.factor = 0.3,
-                     with.TX=TRUE,without.TX=TRUE,
-                     expr.plot=TRUE,normCounts.plot=TRUE,
-                     rExpr.plot=TRUE,rawCounts.plot=FALSE,
-                     colorRed.FDR.threshold = 0.01, 
-                     colorList=list(),
-                     plot.gene.level.expression = TRUE,
-                     plot.exon.results, plot.junction.results, plot.novel.junction.results,
-                     plot.untestable.results = FALSE,
-                     plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, gene.lwd = plot.lwd / 2,
-                     par.cex = 1, name.files.with.geneID = TRUE,
-                     anno.cex.text = 1,
-                     anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
-                     drawCoordinates = TRUE,
-                     yAxisLabels.inExponentialForm = FALSE,
-                     show.strand.arrows = 1, 
-                     graph.margins = c(2, 3, 3, 3),
-                     base.plot.height = 12, base.plot.width = 12, 
-                     base.plot.units = "in", 
-                     GENE.annotation.relative.height = 0.1, 
-                     TX.annotation.relative.height = 0.05,
-                     CONNECTIONS.relative.height = 0.1,
-                     SPLICE.annotation.relative.height = 0.1,
-                     TX.margins = c(0,0.5),
-                     autoscale.height.to.fit.TX.annotation = TRUE,
-                     autoscale.width.to.fit.bins = 35,
-                     plotting.device.params = list(),
-                     condition.legend.text, include.TX.names = TRUE,
-                     draw.start.end.sites = TRUE, draw.nested.SJ = TRUE,
-                     openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
-                     verbose=TRUE, debug.mode = FALSE,
-                     INTERNAL.VARS=list(),
-                     ...)
+     outfile.prefix = "./", 
+     use.plotting.device = c("png","CairoPNG","svg",
+                             "tiff","cairo_ps","custom"),
+     sequencing.type = c("paired-end","single-end"),
+     use.vst=FALSE, use.log = TRUE, 
+     exon.rescale.factor = 0.3,
+     with.TX=TRUE,without.TX=TRUE,
+     expr.plot=TRUE,normCounts.plot=TRUE,
+     rExpr.plot=TRUE,rawCounts.plot=FALSE,
+     colorRed.FDR.threshold = 0.01, 
+     colorList=list(),
+     plot.gene.level.expression = TRUE,
+     plot.exon.results, plot.junction.results, plot.novel.junction.results,
+     plot.untestable.results = FALSE,
+     plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
+     gene.lwd = plot.lwd / 2,
+     par.cex = 1, name.files.with.geneID = TRUE,
+     anno.cex.text = 1,
+     anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
+     drawCoordinates = TRUE,
+     yAxisLabels.inExponentialForm = FALSE,
+     show.strand.arrows = 1, 
+     graph.margins = c(2, 3, 3, 3),
+     base.plot.height = 12, base.plot.width = 12, 
+     base.plot.units = "in", 
+     GENE.annotation.relative.height = 0.1, 
+     TX.annotation.relative.height = 0.05,
+     CONNECTIONS.relative.height = 0.1,
+     SPLICE.annotation.relative.height = 0.1,
+     TX.margins = c(0,0.5),
+     autoscale.height.to.fit.TX.annotation = TRUE,
+     autoscale.width.to.fit.bins = 35,
+     plotting.device.params = list(),
+     condition.legend.text, include.TX.names = TRUE,
+     draw.start.end.sites = TRUE, draw.nested.SJ = TRUE,
+     openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
+     verbose=TRUE, debug.mode = FALSE,
+     INTERNAL.VARS=list(),
+     ...)
 
 </pre>
 
@@ -369,34 +371,36 @@ for internally-generated parameters. DO NOT USE.
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
-</code></pre>
-
-<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
-## &#39;exampleDataSet&#39; not found
-</code></pre>
-
-<pre><code class="r">buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs);
+buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs);
 </code></pre>
 
 <pre><code>## starting buildAllPlotsForGene() for geneID: ENSRNOG00000009281
-</code></pre>
-
-<pre><code>## Error in buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs): object &#39;jscs&#39; not found
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr
 </code></pre>
 
 <pre><code class="r">## Not run: 
 ##D ########################################
 ##D #Set up example data:
-##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqExData2&quot;);
 ##D decoder &lt;- read.table(decoder.file,
-##D                       header=T,
-##D                       stringsAsFactors=F);
-##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqExData2&quot;);
 ##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
-##D                  decoder$sample.ID,
-##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-##D                  package=&quot;JctSeqExData2&quot;);
-##D ######################
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqExData2&quot;);
+##D ########################################
 ##D #Run example analysis:
 ##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
 ##D            sample.names = decoder$sample.ID,
@@ -413,5 +417,5 @@ for internally-generated parameters. DO NOT USE.
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.16 <a href="00Index.html">Index</a>]</div>
 </body></html>

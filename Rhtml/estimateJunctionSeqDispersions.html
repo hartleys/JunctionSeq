@@ -30,11 +30,12 @@ analyses.
 
 <pre>
 estimateJunctionSeqDispersions( jscs, 
-        method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
-        test.formula1 = formula(~ sample + countbin + condition : countbin),
-        meanCountTestableThreshold="auto", nCores=1, 
-        use.multigene.aggregates = FALSE, 
-        verbose = TRUE)
+    method.GLM = c(c("advanced","DESeq2-style"),
+                   c("simpleML","DEXSeq-v1.8.0-style")),
+    test.formula1 = formula(~ sample + countbin + condition : countbin),
+    meanCountTestableThreshold="auto", nCores=1, 
+    use.multigene.aggregates = FALSE, 
+    verbose = TRUE)
         
 
 </pre>
@@ -116,15 +117,19 @@ package for more information.
 ##D #Full example (from scratch):
 ##D ########################################
 ##D #Set up example data:
-##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqExData2&quot;);
 ##D decoder &lt;- read.table(decoder.file,
-##D                       header=T,
-##D                       stringsAsFactors=F);
-##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqExData2&quot;);
 ##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
-##D                  decoder$sample.ID,
-##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-##D                  package=&quot;JctSeqExData2&quot;);
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqExData2&quot;);
 ##D ########################################
 ##D #Advanced Analysis:
 ##D 
@@ -151,5 +156,5 @@ package for more information.
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.16 <a href="00Index.html">Index</a>]</div>
 </body></html>

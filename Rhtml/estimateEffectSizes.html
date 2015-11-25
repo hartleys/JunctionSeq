@@ -30,15 +30,16 @@ analyses.
 <h3>Usage</h3>
 
 <pre>
-   estimateEffectSizes(jscs, 
-        method.expressionEstimation = c("feature-vs-gene","feature-vs-otherFeatures"),
-        effect.formula = formula(~ condition + countbin + condition : countbin),
-        geneLevel.formula = formula(~ condition),
-        calculate.geneLevel.expression = TRUE,
-        keep.estimation.fit = FALSE,
-        nCores=1, 
-        dispColumn="dispersion",
-        verbose = TRUE)</pre>
+estimateEffectSizes(jscs, 
+   method.expressionEstimation = c("feature-vs-gene",
+                                   "feature-vs-otherFeatures"),
+   effect.formula = formula(~ condition + countbin + condition : countbin),
+   geneLevel.formula = formula(~ condition),
+   calculate.geneLevel.expression = TRUE,
+   keep.estimation.fit = FALSE,
+   nCores=1, 
+   dispColumn="dispersion",
+   verbose = TRUE)</pre>
 
 
 <h3>Arguments</h3>
@@ -128,16 +129,13 @@ package for more information.
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+jscs &lt;- estimateEffectSizes(jscs);
 </code></pre>
 
-<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
-## &#39;exampleDataSet&#39; not found
-</code></pre>
-
-<pre><code class="r">jscs &lt;- estimateEffectSizes(jscs);
-</code></pre>
-
-<pre><code>## Error in is(jscs, &quot;JunctionSeqCountSet&quot;): object &#39;jscs&#39; not found
+<pre><code>## -------&gt; estimateEffectSizes: (Calculating effect size and predicted values for feature 1000 of 1516)(Wed Nov 25 15:17:32 2015)
+## -------&gt; estimateEffectSizes: Estimating gene-level expression.
+## -------&gt; estimateEffectSizes: Starting gene-wise p-adjust. (Wed Nov 25 15:17:34 2015)
+## -------&gt; estimateEffectSizes: Finished gene-wise p-adjust. (Wed Nov 25 15:17:34 2015)
 </code></pre>
 
 <pre><code class="r">## Not run: 
@@ -145,15 +143,19 @@ package for more information.
 ##D 
 ##D ########################################
 ##D #Set up example data:
-##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqExData2&quot;);
 ##D decoder &lt;- read.table(decoder.file,
-##D                       header=T,
-##D                       stringsAsFactors=F);
-##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqExData2&quot;);
 ##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
-##D                  decoder$sample.ID,
-##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-##D                  package=&quot;JctSeqExData2&quot;);
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqExData2&quot;);
 ##D ########################################
 ##D #Advanced Analysis:
 ##D 
@@ -180,5 +182,5 @@ package for more information.
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.16 <a href="00Index.html">Index</a>]</div>
 </body></html>

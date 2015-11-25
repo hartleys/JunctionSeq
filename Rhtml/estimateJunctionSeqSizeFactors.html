@@ -113,30 +113,24 @@ Without this option the results would differ slightly (generally by less than 1 
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
-</code></pre>
+jscs &lt;- estimateJunctionSeqSizeFactors(jscs);
 
-<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
-## &#39;exampleDataSet&#39; not found
-</code></pre>
-
-<pre><code class="r">jscs &lt;- estimateJunctionSeqSizeFactors(jscs);
-</code></pre>
-
-<pre><code>## Error in is(jscs, &quot;JunctionSeqCountSet&quot;): object &#39;jscs&#39; not found
-</code></pre>
-
-<pre><code class="r">## Not run: 
+## Not run: 
 ##D ########################################
 ##D #Set up example data:
-##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqExData2&quot;);
 ##D decoder &lt;- read.table(decoder.file,
-##D                       header=T,
-##D                       stringsAsFactors=F);
-##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqExData2&quot;);
 ##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
-##D                  decoder$sample.ID,
-##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-##D                  package=&quot;JctSeqExData2&quot;);
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqExData2&quot;);
 ##D ########################################
 ##D #Advanced Analysis:
 ##D 
@@ -163,5 +157,5 @@ Without this option the results would differ slightly (generally by less than 1 
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.16 <a href="00Index.html">Index</a>]</div>
 </body></html>

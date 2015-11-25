@@ -23,37 +23,37 @@ Write splice junction browser tracks
 <h3>Usage</h3>
 
 <pre>
-  writeExprBedTrack(file, jscs, 
-                    trackLine,
-                    only.with.sig.gene = TRUE,
-                    only.sig = FALSE, 
-                    only.testable = TRUE, 
-                    plot.exons = TRUE, plot.junctions = TRUE, plot.novel.junctions = TRUE,
-                    group.RGB, 
-                    use.score = FALSE, 
-                    FDR.threshold = 0.05, 
-                    count.digits = 1, 
-                    includeGeneID = FALSE,
-                    includeLocusID = TRUE,
-                    includeGroupID = TRUE,
-                    output.format = c("BED", "GTF", "GFF3"),
-                    verbose = TRUE)
+writeExprBedTrack(file, jscs, 
+     trackLine,
+     only.with.sig.gene = TRUE,
+     only.sig = FALSE, 
+     only.testable = TRUE, 
+     plot.exons = TRUE, plot.junctions = TRUE, plot.novel.junctions = TRUE,
+     group.RGB, 
+     use.score = FALSE, 
+     FDR.threshold = 0.05, 
+     count.digits = 1, 
+     includeGeneID = FALSE,
+     includeLocusID = TRUE,
+     includeGroupID = TRUE,
+     output.format = c("BED", "GTF", "GFF3"),
+     verbose = TRUE)
 
-  writeSigBedTrack(file, 
-                   jscs, 
-                   trackLine,
-                   only.sig = TRUE, 
-                   only.testable = TRUE, 
-                   plot.exons = TRUE, plot.junctions = TRUE, plot.novel.junctions = TRUE,
-                   sig.RGB = "255,0,0", 
-                   nonsig.RGB = "0,0,0", 
-                   use.score = TRUE, 
-                   FDR.threshold = 0.05, 
-                   pval.digits = 4, 
-                   includeGeneID = FALSE,
-                   includeLocusID = TRUE,
-                   output.format = c("BED", "GTF", "GFF3"),
-                   verbose = TRUE)
+writeSigBedTrack(file, 
+     jscs, 
+     trackLine,
+     only.sig = TRUE, 
+     only.testable = TRUE, 
+     plot.exons = TRUE, plot.junctions = TRUE, plot.novel.junctions = TRUE,
+     sig.RGB = "255,0,0", 
+     nonsig.RGB = "0,0,0", 
+     use.score = TRUE, 
+     FDR.threshold = 0.05, 
+     pval.digits = 4, 
+     includeGeneID = FALSE,
+     includeLocusID = TRUE,
+     output.format = c("BED", "GTF", "GFF3"),
+     verbose = TRUE)
 
 </pre>
 
@@ -200,31 +200,25 @@ By default JunctionSeq will attempt to automatically generate a reasonable track
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
-</code></pre>
-
-<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
-## &#39;exampleDataSet&#39; not found
-</code></pre>
-
-<pre><code class="r">writeExprBedTrack(&quot;test.exonCoverage.bed.gz&quot;, jscs, 
+writeExprBedTrack(&quot;test.exonCoverage.bed.gz&quot;, jscs, 
                   plot.exons = TRUE, plot.junctions = FALSE)
-</code></pre>
 
-<pre><code>## Error in rep(&quot;&quot;, nrow(estimates)): invalid &#39;times&#39; argument
-</code></pre>
-
-<pre><code class="r">## Not run: 
+## Not run: 
 ##D ########################################
 ##D #Set up example data:
-##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqExData2&quot;);
 ##D decoder &lt;- read.table(decoder.file,
-##D                       header=T,
-##D                       stringsAsFactors=F);
-##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqExData2&quot;);
 ##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
-##D                  decoder$sample.ID,
-##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-##D                  package=&quot;JctSeqExData2&quot;);
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqExData2&quot;);
 ##D ######################
 ##D #Run example analysis:
 ##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
@@ -251,5 +245,5 @@ By default JunctionSeq will attempt to automatically generate a reasonable track
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.16 <a href="00Index.html">Index</a>]</div>
 </body></html>

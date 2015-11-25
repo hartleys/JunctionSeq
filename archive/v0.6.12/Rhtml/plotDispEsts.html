@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Plot Fitted and Test-wise Dispersion</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for plotDispEsts {JunctionSeq}"><tr><td>plotDispEsts {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Plot Fitted and Test-wise Dispersion
+</h2>
+
+<h3>Description</h3>
+
+<p>Plots the countbin-specific estimated dispersion and the fitted dispersion curve.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  plotDispEsts( jscs, ylim, xlim, 
+               linecol=c("#0000FF","#FF0000"), 
+               pointcol = c("#00009980","#99000080"),
+               title.main = "Dispersion Estimates", 
+               xlab = "Mean Normalized Coverage", 
+               ylab = "Dispersion",
+               miniTicks = TRUE,
+               pch.MLE = 46, pch.MAP = 1, lwd.fitted = 2,
+               par.cex = 1, points.cex = 1, text.cex = 1, lines.cex = 8,
+               use.smoothScatter = FALSE, smooth.nbin = 512, nrpoints = 100,
+               plot.exon.results = TRUE, 
+               plot.junction.results = TRUE, 
+               anno.lwd = 2,
+               mar = c(4.1,4.1,3.1,1.1),
+               show.legends = TRUE,
+               verbose = TRUE, debug.mode = FALSE,
+               ... )
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually created by <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code>.
+</p>
+<p>Alternatively, this can be created manually by <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. 
+Dispersions and size factors must then be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>. Hypothesis tests must
+be performed by <code><a href="testForDiffUsage.html">testForDiffUsage</a></code>. 
+</p>
+</td></tr>
+<tr valign="top"><td><code>ylim</code></td>
+<td>
+
+<p>The plotting range for the y-axis.
+</p>
+</td></tr>
+<tr valign="top"><td><code>xlim</code></td>
+<td>
+
+<p>The plotting range for the x-axis.
+</p>
+</td></tr>
+<tr valign="top"><td><code>linecol</code></td>
+<td>
+
+<p>Character vector of length 2. The line color to use for the fit line. If the fits were performed separately for exons and junctions, the junction line will be drawn with the second color.
+</p>
+</td></tr>
+<tr valign="top"><td><code>pointcol</code></td>
+<td>
+
+<p>Character vector of length 2. The point color to use for the final dispersions. If the fits were performed separately for exons and junctions, the junction points will be drawn with the second color.
+</p>
+</td></tr>
+<tr valign="top"><td><code>title.main</code></td>
+<td>
+
+<p>The main title of the plot.
+</p>
+</td></tr>
+<tr valign="top"><td><code>xlab</code></td>
+<td>
+
+<p>The label for the x-axis.
+</p>
+</td></tr>
+<tr valign="top"><td><code>ylab</code></td>
+<td>
+
+<p>The label for the y-axis.
+</p>
+</td></tr>
+<tr valign="top"><td><code>miniTicks</code></td>
+<td>
+
+<p>Whether or not to plot smaller ticks at the tenth-decades.
+</p>
+</td></tr>
+<tr valign="top"><td><code>par.cex</code></td>
+<td>
+
+<p>The base cex value to be passed to par() immediately before all plots are created. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>points.cex</code></td>
+<td>
+
+<p>The character expansion value for the plotted points.
+</p>
+</td></tr>
+<tr valign="top"><td><code>text.cex</code></td>
+<td>
+
+<p>The character expansion value for the annotation text (labels, etc).
+</p>
+</td></tr>
+<tr valign="top"><td><code>lines.cex</code></td>
+<td>
+
+<p>The character expansion value for lines. What this means seems to vary depending on the plotting device.
+</p>
+</td></tr>
+<tr valign="top"><td><code>pch.MLE</code></td>
+<td>
+
+<p>Numeric. The pch code for the MLE (ie single-feature) dispersion estimate. The default is a small point.
+</p>
+</td></tr>
+<tr valign="top"><td><code>pch.MAP</code></td>
+<td>
+
+<p>Numeric. The pch code for the MAP (ie. final) dispersion estimate. The default is a circle.
+</p>
+</td></tr>
+<tr valign="top"><td><code>lwd.fitted</code></td>
+<td>
+
+<p>Numeric. The width of the dispersion fit line(s).
+</p>
+</td></tr>
+<tr valign="top"><td><code>use.smoothScatter</code></td>
+<td>
+
+<p>Logical. If TRUE, features will be ploted with density shading rather than having each point plotted.
+</p>
+</td></tr>
+<tr valign="top"><td><code>smooth.nbin</code></td>
+<td>
+
+<p>The number of bins to smooth, for the density plot, if <code>use.smoothScatter</code> is TRUE.
+</p>
+</td></tr>
+<tr valign="top"><td><code>nrpoints</code></td>
+<td>
+
+<p>The number of extra points to plot, if <code>use.smoothScatter</code> is TRUE.
+</p>
+</td></tr>
+<tr valign="top"><td><code>plot.exon.results</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, plot results for exons. Technically speaking, JunctionSeq can be used to do DEXSeq-style analyses on exon partitions. However this functionality is for advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.junction.results</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, plot results for splice junctions. For advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>anno.lwd</code></td>
+<td>
+
+<p>The lwd value to be passed to <code><a href="../../graphics/html/lines.html">lines</a></code>, <code><a href="../../graphics/html/box.html">box</a></code>, <code><a href="../../graphics/html/axis.html">axis</a></code>, and similar.
+</p>
+</td></tr>
+<tr valign="top"><td><code>mar</code></td>
+<td>
+
+<p>The margin sizes, expressed in lines. see <code>link{par}</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>show.legends</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, display legends.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>if TRUE, send debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>debug.mode</code></td>
+<td>
+<p>if TRUE, send even more debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional options to pass to plotting functions, particularly graphical parameters.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+</code></pre>
+
+<pre><code>## Warning in data(exampleDataSet, package = &quot;JctSeqExData2&quot;): data set
+## &#39;exampleDataSet&#39; not found
+</code></pre>
+
+<pre><code class="r">plotDispEsts(jscs);
+</code></pre>
+
+<pre><code>## Error in counts(jscs, normalized = TRUE): error in evaluating the argument &#39;object&#39; in selecting a method for function &#39;counts&#39;: Error: object &#39;jscs&#39; not found
+</code></pre>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(&quot;extdata/annoFiles/decoder.bySample.txt&quot;,package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                       header=T,
+##D                       stringsAsFactors=F);
+##D gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D                  decoder$sample.ID,
+##D                  &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D                  package=&quot;JctSeqExData2&quot;);
+##D ######################
+##D #Run example analysis:
+##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
+##D            sample.names = decoder$sample.ID,
+##D            condition=factor(decoder$group.ID),
+##D            flat.gff.file = gff.file,
+##D            analysis.type = &quot;junctionsAndExons&quot;
+##D );
+##D ########################################
+##D 
+##D #Plot dispersions:
+##D plotDispEsts(jscs);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.12 <a href="00Index.html">Index</a>]</div>
+</body></html>
