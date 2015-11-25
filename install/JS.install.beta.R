@@ -1,6 +1,6 @@
 JUNCTIONSEQVERSION = "0.6.16"
 
-message("Loading JunctionSeq installer (v0.6.1e)");
+message("Loading JunctionSeq installer (v0.7.0.0)");
 message("For JunctionSeq v",JUNCTION.SEQ.VERSION);
 
 
@@ -95,7 +95,7 @@ JS.install.BIOC.dependencies <- function(...){
 }
 
 JS.install.JunctionSeq <- function(install.from.source = FALSE, ...){
-  if(install.from.source)){
+  if(install.from.source){
     sysname <- Sys.info()$sysname;
     if(sysname == "Windows"){
       message("Installing from source on Windows.");
@@ -119,12 +119,17 @@ JS.install.JunctionSeq <- function(install.from.source = FALSE, ...){
     sysname <- Sys.info()$sysname;
     if(sysname == "Windows"){
       message("Installing Windows binary");
-      install.packages(paste0("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_",JUNCTIONSEQVERSION,".zip"),repos=NULL, type="source", ...);
+      install.packages(paste0("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_",JUNCTIONSEQVERSION,".zip"),repos=NULL, ...);
     } else if(sysname == "Linux"){
       stop(paste0("Compiled JunctionSeq binary not available for OS ",sysname));
     } else if(sysname == "Darwin" || sysname == "Yosemite" || sysname == "Mavericks"){
-      stop(paste0("Compiled JunctionSeq binary not available for OS ",sysname));
+      message("Installing OSX binary. (",sysname,")");
+      message("   NOTE: This binary is experimental and may not work on all versions of OSX.");
+      message("         If you do encounter an error, PLEASE post it to the JunctionSeq Issues page");
+      message("         Found here: http://github.com/hartleys/JunctionSeq/issues");
+      install.packages(paste0("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_",JUNCTIONSEQVERSION,".tgz"),repos=NULL, ...);
     } else {
+      message("Operating System \"",sysname,"\" not recognized.");
       stop(paste0("Compiled JunctionSeq binary not available for OS ",sysname));
     }
   }
