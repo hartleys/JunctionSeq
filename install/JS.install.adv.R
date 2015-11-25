@@ -55,28 +55,28 @@ JunctionSeq.BIOC.optional <- c("BiocStyles")
 #User functions:
 
 
-JS.install <- function(install.from.source = FALSE){
+JS.install <- function(install.from.source = TRUE, verbose = TRUE){
   message("Installing dependencies...");
 
-  message("Installing CRAN package dependencies... ",date());
-  message("   This can be called directly using the function JS.install.CRAN.dependencies(...)");
-  JS.install.CRAN.dependencies();
-  message("Done installing CRAN package dependencies. ",date());
+  if(verbose) message("Installing CRAN package dependencies... ",date());
+  if(verbose) message("   This can be called directly using the function JS.install.CRAN.dependencies(...)");
+  JS.install.CRAN.dependencies(verbose = verbose);
+  if(verbose) message("Done installing CRAN package dependencies. ",date());
 
-  message("Installing Bioconductor package dependencies... ",date());
-  message("   This can be called directly using the function JS.install.BIOC.dependencies(...)");
-  JS.install.BIOC.dependencies();
-  message("Done installing Bioconductor package dependencies. ",date());
+  if(verbose) message("Installing Bioconductor package dependencies... ",date());
+  if(verbose) message("   This can be called directly using the function JS.install.BIOC.dependencies(...)");
+  JS.install.BIOC.dependencies(verbose = verbose);
+  if(verbose) message("Done installing Bioconductor package dependencies. ",date());
 
-  message("Done installing package dependencies. ",date());
+  if(verbose) message("Done installing package dependencies. ",date());
 
-  message("Beginning JunctionSeq Installation... ",date());
-  JS.install.JunctionSeq(install.from.source = install.from.source);
-  message("Installation complete. ",date());
+  if(verbose) message("Beginning JunctionSeq Installation... ",date());
+  JS.install.JunctionSeq(install.from.source = install.from.source, verbose = verbose);
+  if(verbose) message("Installation complete. ",date());
 
-  message("Testing to see if package can be loaded... ",date());
+  if(verbose) message("Testing to see if package can be loaded... ",date());
   library("JunctionSeq");
-  message("Done.",date());
+  if(verbose) message("Done.",date());
 }
 
 JS.install.CRAN.dependencies <- function(verbose = TRUE, ...){
@@ -85,7 +85,7 @@ JS.install.CRAN.dependencies <- function(verbose = TRUE, ...){
   }
 }
 
-JS.install.BIOC.dependencies <- function(...){
+JS.install.BIOC.dependencies <- function(verbose = TRUE, ...){
   source("http://bioconductor.org/biocLite.R");
   biocLite();
 
@@ -94,49 +94,49 @@ JS.install.BIOC.dependencies <- function(...){
   }
 }
 
-JS.install.JunctionSeq <- function(install.from.source = FALSE, ...){
+JS.install.JunctionSeq <- function(install.from.source = TRUE, verbose = TRUE, ...){
   if(install.from.source){
-    sysname <- Sys.info()$sysname;
+    sysname <- Sys.info()[["sysname"]];
     if(sysname == "Windows"){
-      message("Installing from source on Windows.");
-      message("  NOTE: You MUST have Rtools installed in order to install from source on Windows!");
-      message("        If you do not have Rtools, you can either install Rtools or install the ");
-      message("        compiled binary using the command:");
-      message("  JS.install.JunctionSeq(install.from.source=TRUE)");
+      if(verbose) message("Installing from source on Windows.");
+      if(verbose) message("  NOTE: You MUST have Rtools installed in order to install from source on Windows!");
+      if(verbose) message("        If you do not have Rtools, you can either install Rtools or install the ");
+      if(verbose) message("        compiled binary using the command:");
+      if(verbose) message("  JS.install.JunctionSeq(install.from.source=TRUE)");
       
     } else if(sysname == "Linux"){
-      message("Installing from source on Linux.");
+      if(verbose) message("Installing from source on Linux.");
     } else if(sysname == "Darwin" || sysname == "Yosemite" || sysname == "Mavericks"){
-      message("Installing from source on OSX (",sysname,")");
-      message("  NOTE: You MUST have Xcode installed in order to install from source on OSX!");
-      message("        You may need other non-standard tools as well, depending on OS version.");
-      message("        Installing JunctionSeq on OSX is not currrently recommended.");
+      if(verbose) message("Installing from source on OSX (",sysname,")");
+      if(verbose) message("  NOTE: You MUST have Xcode installed in order to install from source on OSX!");
+      if(verbose) message("        You may need other non-standard tools as well, depending on OS version.");
+      if(verbose) message("        Installing JunctionSeq on OSX is not currrently recommended.");
     } else {
-      message("Installing from source on unknown OS (",sysname,")");
+      if(verbose) message("Installing from source on unknown OS (",sysname,")");
     }
     install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",repos=NULL, type="source", ...);
   } else {
-    sysname <- Sys.info()$sysname;
+    sysname <- Sys.info()[["sysname"]];
     if(sysname == "Windows"){
-      message("Installing Windows binary");
+      if(verbose) message("Installing Windows binary");
       install.packages(paste0("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_",JUNCTIONSEQVERSION,".zip"),repos=NULL, ...);
     } else if(sysname == "Linux"){
       stop(paste0("Compiled JunctionSeq binary not available for OS ",sysname));
     } else if(sysname == "Darwin" || sysname == "Yosemite" || sysname == "Mavericks"){
-      message("Installing OSX binary. (",sysname,")");
-      message("   NOTE: This binary is experimental and may not work on all versions of OSX.");
-      message("         If you do encounter an error, PLEASE post it to the JunctionSeq Issues page");
-      message("         Found here: http://github.com/hartleys/JunctionSeq/issues");
+      if(verbose) message("Installing OSX binary. (",sysname,")");
+      if(verbose) message("   NOTE: This binary is experimental and may not work on all versions of OSX.");
+      if(verbose) message("         If you do encounter an error, PLEASE post it to the JunctionSeq Issues page");
+      if(verbose) message("         Found here: http://github.com/hartleys/JunctionSeq/issues");
       install.packages(paste0("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_",JUNCTIONSEQVERSION,".tgz"),repos=NULL, ...);
     } else {
-      message("Operating System \"",sysname,"\" not recognized.");
+      if(verbose) message("Operating System \"",sysname,"\" not recognized.");
       stop(paste0("Compiled JunctionSeq binary not available for OS ",sysname));
     }
   }
 }
 
 
-JS.install.optional <- function(){
+JS.install.optional <- function(verbose = TRUE){
   for(d in JunctionSeq.CRAN.optional){
     attemptLoadAndInstall.CRAN(d, verbose=verbose);
   }
