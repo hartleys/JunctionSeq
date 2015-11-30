@@ -53,20 +53,10 @@ JunctionSeq can be installed automatically in R using the command:
     > source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
     > JS.install();
 
+See the [FAQ](faq.html) for more information on installing on Windows or OSX.
 
 The splice, gene, and exon read-counts required by JunctionSeq can be created 
 using the QoRTs software package, available [here](http://hartleys.github.io/QoRTs/index.html).
-
-###Installation on Windows or OSX:
-
-In order to successfully install from source on windows, you must have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) 
-installed.
-
-Installation on OSX (mac) is not currently supported. In order to successfully install from source on OSX, 
-you must have the Xcode tools installed, along with several other R 
-development tools, found [here](https://cran.r-project.org/bin/macosx/tools/). According to some reports these
-packages are actually out-of-date and may not function properly. See [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/)
-for a description of some of these problems. JunctionSeq has not been tested on OSX at this time, although testing is currently pending.
 
 ##EXAMPLE DATA:
 Another example dataset, used in the vignette, is packaged as an R package, and can be installed with the command:
