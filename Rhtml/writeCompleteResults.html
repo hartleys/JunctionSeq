@@ -111,6 +111,12 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 </p>
 
 
+<h3>Value</h3>
+
+<p>This is a side-effecting function, and does not return a value.
+</p>
+
+
 <h3>Examples</h3>
 
 <pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
@@ -118,7 +124,7 @@ estimates must be created via <code><a href="estimateEffectSizes.html">estimateE
 writeCompleteResults(jscs, outfile.prefix = &quot;./results.&quot;);
 </code></pre>
 
-<pre><code>## &gt; STARTING writeCompleteResults (v0.6.16) (Wed Nov 25 15:17:42 2015)
+<pre><code>## &gt; STARTING writeCompleteResults (v0.6.26) (Thu Dec 10 17:27:18 2015)
 ## &gt; wcr: outfile.prefix:  ./results.
 ## &gt; wcr: FDR.threshold:  0.05
 ## &gt; wcr: save.allGenes:  TRUE
@@ -129,9 +135,10 @@ writeCompleteResults(jscs, outfile.prefix = &quot;./results.&quot;);
 ## &gt; wcr: Writing sizeFactors.
 ## &gt; wcr: Writing results for 117 genes.
 ## &gt; wcr:     Found 1516 counting bins belonging to these genes.
+##    Compiling data table. Thu Dec 10 17:27:18 2015
 ## &gt; wcr: Writing results for 8 genes with 1 or more significant junctions (at adjusted-p-value threshold 0.05)
 ## &gt; wcr:     Found 226 counting bins belonging to those genes.
-## &gt; DONE writeCompleteResults (Wed Nov 25 15:17:42 2015)
+## &gt; DONE writeCompleteResults (Thu Dec 10 17:27:19 2015)
 </code></pre>
 
 <pre><code class="r">## Not run: 
@@ -167,5 +174,5 @@ writeCompleteResults(jscs, outfile.prefix = &quot;./results.&quot;);
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.16 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.26 <a href="00Index.html">Index</a>]</div>
 </body></html>

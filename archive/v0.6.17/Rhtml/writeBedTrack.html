@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Write splice junction browser tracks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for writeBedTrack {JunctionSeq}"><tr><td>writeBedTrack {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Write splice junction browser tracks
+</h2>
+
+<h3>Description</h3>
+
+<p>This function saves the JunctionSeq results in the form of a set of &quot;bed&quot; files designed for use with the UCSC genome browser.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+writeExprBedTrack(file, jscs, 
+     trackLine,
+     only.with.sig.gene = TRUE,
+     only.sig = FALSE, 
+     only.testable = TRUE, 
+     plot.exons = TRUE, plot.junctions = TRUE, plot.novel.junctions = TRUE,
+     group.RGB, 
+     use.score = FALSE, 
+     FDR.threshold = 0.05, 
+     count.digits = 1, 
+     includeGeneID = FALSE,
+     includeLocusID = TRUE,
+     includeGroupID = TRUE,
+     output.format = c("BED", "GTF", "GFF3"),
+     verbose = TRUE)
+
+writeSigBedTrack(file, 
+     jscs, 
+     trackLine,
+     only.sig = TRUE, 
+     only.testable = TRUE, 
+     plot.exons = TRUE, plot.junctions = TRUE, plot.novel.junctions = TRUE,
+     sig.RGB = "255,0,0", 
+     nonsig.RGB = "0,0,0", 
+     use.score = TRUE, 
+     FDR.threshold = 0.05, 
+     pval.digits = 4, 
+     includeGeneID = FALSE,
+     includeLocusID = TRUE,
+     output.format = c("BED", "GTF", "GFF3"),
+     verbose = TRUE)
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>Character string. File path for the output bed file.</p>
+</td></tr>
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually created by <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code>.
+</p>
+<p>Alternatively, this can be created manually by <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. 
+However in this case a number of additional steps will be necessary: 
+Dispersions and size factors must then be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>. Hypothesis tests must
+be performed by <code><a href="testForDiffUsage.html">testForDiffUsage</a></code>. Effect sizes and parameter
+estimates must be created via <code><a href="estimateEffectSizes.html">estimateEffectSizes</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>trackLine</code></td>
+<td>
+
+<p>The &quot;track line&quot; of the bed file. In other words, the first line of the file. 
+By default JunctionSeq will attempt to automatically generate a reasonable track line.
+</p>
+</td></tr>
+<tr valign="top"><td><code>only.with.sig.gene</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, only genes containing statistically significant results will be included.
+</p>
+</td></tr>
+<tr valign="top"><td><code>only.sig</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, only statistically significant loci will be included.
+</p>
+</td></tr>
+<tr valign="top"><td><code>only.testable</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, only loci with sufficiently high expression to be tested will be included.
+</p>
+</td></tr>
+<tr valign="top"><td><code>plot.exons</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, exons will be plotted.
+</p>
+</td></tr>
+<tr valign="top"><td><code>plot.junctions</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, splice junctions will be plotted.
+</p>
+</td></tr>
+<tr valign="top"><td><code>plot.novel.junctions</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, novel splice junctions will be plotted (if plot.junctions is also <code>TRUE</code>).
+</p>
+</td></tr>
+<tr valign="top"><td><code>sig.RGB</code></td>
+<td>
+
+<p>Character string. The RGB color for significant genes. Must be in the format &quot;r,g,b&quot;, with each value ranging from 0 to 255.
+</p>
+</td></tr>
+<tr valign="top"><td><code>nonsig.RGB</code></td>
+<td>
+
+<p>Character string. The RGB color for non-significant loci. Must be in the format &quot;r,g,b&quot;, with each value ranging from 0 to 255.
+</p>
+</td></tr>
+<tr valign="top"><td><code>group.RGB</code></td>
+<td>
+
+<p>Character string. The RGB color used for each experimental group. Must be in the format &quot;r,g,b&quot;, with each value ranging from 0 to 255. Must have a length equal to the number of experimental condition values.
+</p>
+</td></tr>
+<tr valign="top"><td><code>use.score</code></td>
+<td>
+
+<p>Logical. If TRUE, score each locus based on the p-value.
+</p>
+</td></tr>
+<tr valign="top"><td><code>FDR.threshold</code></td>
+<td>
+
+<p>Numeric. The FDR-adjusted p-value threshold to use to assign statistical significance.
+</p>
+</td></tr>
+<tr valign="top"><td><code>count.digits</code></td>
+<td>
+
+<p>Numeric. The number of digits after the decimal point to include for the mean normalized counts.
+</p>
+</td></tr>
+<tr valign="top"><td><code>pval.digits</code></td>
+<td>
+
+<p>Numeric. The number of digits after the decimal point to include for the p-values.
+</p>
+</td></tr>  
+<tr valign="top"><td><code>includeGeneID</code></td>
+<td>
+
+<p>Logical. If TRUE, include the ID of the gene in the &quot;name&quot; field of each line.
+</p>
+</td></tr>
+<tr valign="top"><td><code>includeLocusID</code></td>
+<td>
+
+<p>Logical. If TRUE, include the ID of the locus in the &quot;name&quot; field of each line.
+</p>
+</td></tr>
+<tr valign="top"><td><code>includeGroupID</code></td>
+<td>
+
+<p>Logical. If TRUE, include the ID of the group in the &quot;name&quot; field of each line.
+</p>
+</td></tr>
+<tr valign="top"><td><code>output.format</code></td>
+<td>
+
+<p>Character string. The format to use.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+
+<p>Logical. if TRUE, output debugging/progress information.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+writeExprBedTrack(&quot;test.exonCoverage.bed.gz&quot;, jscs, 
+                  plot.exons = TRUE, plot.junctions = FALSE)
+
+## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqExData2&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqExData2&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqExData2&quot;);
+##D ######################
+##D #Run example analysis:
+##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
+##D            sample.names = decoder$sample.ID,
+##D            condition=factor(decoder$group.ID),
+##D            flat.gff.file = gff.file,
+##D            analysis.type = &quot;junctionsAndExons&quot;
+##D );
+##D ########################################
+##D 
+##D #Exon coverage:
+##D writeExprBedTrack(&quot;test.exonCoverage.bed.gz&quot;, jscs, 
+##D                   plot.exons = TRUE, plot.junctions = FALSE)
+##D #Junction coverage:
+##D writeExprBedTrack(&quot;test.jctCoverage.bed.gz&quot;, jscs, 
+##D                   plot.exons = FALSE, plot.junctions = TRUE)
+##D #Both Exon and Junction coverage:
+##D writeExprBedTrack(&quot;test.featureCoverage.bed.gz&quot;, jscs)
+##D 
+##D #p-values of significant features:
+##D writeSigBedTrack(&quot;test.pvals.bed.gz&quot;, jscs)
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.16 <a href="00Index.html">Index</a>]</div>
+</body></html>

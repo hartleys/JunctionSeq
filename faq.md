@@ -1,4 +1,4 @@
-    > v0.6.16 (Revised Wed Nov 25 14:52:43 EST 2015)
+    > v0.6.26 (Revised Thu Dec 10 16:53:14 EST 2015)
 
 #Frequently Asked Questions
 
@@ -40,11 +40,6 @@ JunctionSeq can be installed automatically from source using the R commands:
     > source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
     > JS.install();
 
-In order to successfully install from source on windows, you must have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed. 
-Alternatively you can install the pre-compiled binaries, see next section. Installation on OSX is more complex, and requires Xcode and 
-gfortran 4.8.2 (see [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/)). 
-For installation on OSX, you may want to install the pre-compiled binaries (see below).
-
 ##MANUAL INSTALLATION:
 
 If you encounter problems with installation, you can install all prerequisite packages manually using the R commands:
@@ -53,8 +48,7 @@ If you encounter problems with installation, you can install all prerequisite pa
     install.packages("statmod")
     install.packages("plotrix")
     install.packages("stringr")
-    install.packages("Rcpp")
-    install.packages("RcppArmadillo")
+    install.packages("Hmisc")
     install.packages("locfit")
     #Install Bioconductor packages:
     source("http://bioconductor.org/biocLite.R");
@@ -68,6 +62,7 @@ If you encounter problems with installation, you can install all prerequisite pa
     biocLite("genefilter");
     biocLite("geneplotter");
     biocLite("SummarizedExperiment");
+    biocLite("DESeq2");
 
 You can then install JunctionSeq itself with the command:
 
@@ -76,21 +71,7 @@ You can then install JunctionSeq itself with the command:
                        repos = NULL, 
                        type="source")
 
-If you are installing to windows, you will also require [Rtools](https://cran.r-project.org/bin/windows/Rtools/) 
-which allows advanced packages to be installed from source-code. Installing from source to OSX is a little more complex,
-and requires Xcode and gfortran 4.8.2. See [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/)
-for a description of some of these issues.
-
-Alternatively, you can also install the pre-compiled binaries. This only works for 
-windows and recent versions of OSX. It has been tested on OSX v14.5 (Darwin).
-
-    #Install Windows binary:
-    install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_0.6.16.zip",
-                     repos=NULL);
-    #OR
-    #Install OSX binary:
-    install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_0.6.16.tgz",
-                     repos=NULL);
+JunctionSeq NO LONGER REQUIRES COMPILATION. Thus, Rtools and XCode toolsets are no longer necessary to install JunctionSeq.
 
 ##Reducing Memory Usage:
 
