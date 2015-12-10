@@ -204,6 +204,10 @@ buildAllPlotsForGene(geneID, jscs,
   
 }
 
+\value{
+  This is a side-effecting function, and does not return a value.
+}
+
 \examples{
 data(exampleDataSet,package="JctSeqExData2");
 buildAllPlotsForGene(geneID = "ENSRNOG00000009281", jscs);

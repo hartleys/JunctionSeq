@@ -129,7 +129,7 @@ the entire analysis pipeline, along with a full \href{https://dl.dropboxusercont
 %--------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------
 
-JunctionSeq requires R v3.2.2 as well as a number of R packages. The easiest way to install it is to use the automated installer. Note that to install JunctionSeq on windows, you must have \href{https://cran.r-project.org/bin/windows/Rtools/}{Rtools}.
+JunctionSeq requires R v3.2.2 as well as a number of R packages. See the [JunctionSeq website](http://hartleys.github.io/JunctionSeq/) for more detailed and updated information on JunctionSeq installation. In general, the easiest way to install it is to use the automated installer:
 
 <<installer, eval=FALSE>>=
 source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
@@ -145,6 +145,7 @@ install.packages("stringr");
 install.packages("Rcpp");
 install.packages("RcppArmadillo");
 install.packages("locfit");
+install.packages("Hmisc");
 
 #Bioconductor dependencies:
 source("http://bioconductor.org/biocLite.R");
@@ -158,6 +159,7 @@ biocLite("S4Vectors");
 biocLite("genefilter");
 biocLite("geneplotter");
 biocLite("SummarizedExperiment");
+biocLite("DESeq2");
 
 install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",
                  repos = NULL, 

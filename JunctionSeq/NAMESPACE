@@ -1,14 +1,16 @@
 #Base packages:
 import(methods)
+#import(stats)
 
 #CRAN packages:
 import(statmod)
 import(plotrix)
 import(stringr)
-import(Rcpp)
-import(RcppArmadillo)
+#import(Rcpp)
+#import(RcppArmadillo)
 #import(ggplot2)
 import(SummarizedExperiment);
+import(DESeq2);
 
 #Bioconductor packages:
 import(Biobase)
@@ -19,10 +21,12 @@ import(IRanges)
 import(S4Vectors)
 
 #CRAN function imports:
-#importFrom(Hmisc,wtd.quantile)
+importFrom(Hmisc,wtd.quantile)
 importFrom(locfit,locfit)
-importFrom(stats,coef)
-#import(stats)
+
+##It's not clear why this is imported in DESeq2. Maybe it overwrites a version of coef that I don't see?
+##In any case, none of my code has any direct calls to coef so far as I can tell.
+##importFrom(stats,coef)
 
 #Bioconductor function imports:
 importFrom(genefilter,filtered_p)
@@ -30,7 +34,7 @@ importFrom(genefilter,rowVars)
 importFrom(geneplotter,plotMA)
 
 
-useDynLib(JunctionSeq)
+#useDynLib(JunctionSeq)
 
 export(
   runJunctionSeqAnalyses,                      #             

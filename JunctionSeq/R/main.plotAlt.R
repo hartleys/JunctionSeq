@@ -1,3 +1,15 @@
+#These functions were (loosely) based on similar functions created for the DEXSeq package.
+#
+# Note that DEXSeq is licensed under the GPL v3. Therefore this
+#   code packaged together is licensed under the GPL v3, as noted in the LICENSE file.
+# Some code snippets are "united states government work" and thus cannot be
+#   copyrighted. See the LICENSE file for more information.
+#
+# The current versions of the original functions upon which these were based can be found
+#    here: http://github.com/Bioconductor-mirror/DEXSeq
+#
+# Updated Authorship and license information can be found here:
+#   here: http://github.com/Bioconductor-mirror/DEXSeq/blob/master/DESCRIPTION
 
 
 ##########################################################################

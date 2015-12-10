@@ -1,3 +1,15 @@
+#These functions were (loosely) based on similar functions created for the DEXSeq package.
+#
+# Note that DEXSeq is licensed under the GPL v3. Therefore this
+#   code packaged together is licensed under the GPL v3, as noted in the LICENSE file.
+# Some code snippets are "united states government work" and thus cannot be
+#   copyrighted. See the LICENSE file for more information.
+#
+# The current versions of the original functions upon which these were based can be found
+#    here: http://github.com/Bioconductor-mirror/DEXSeq
+#
+# Updated Authorship and license information can be found here:
+#   here: http://github.com/Bioconductor-mirror/DEXSeq/blob/master/DESCRIPTION
 
 ##########################################################################
 ######### Generating Plots From Results:
@@ -738,7 +750,7 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
         message("> pJSRfG(): ", geneID, ", plot.type: ", plot.type,displayTXstring);
      }
      
-     chrom.label <- as.character(merged.data$chr[1]);
+     chrom.label <- as.character(merged.data$chr[merged.data$geneID == geneID][1]);
      
      rt <- merged.data$geneID == geneID;
      if(! plot.exon.results){
@@ -1170,21 +1182,6 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
           
           plot.new();
           plot.window(xlim=c(0, plotWindowXmax), ylim=c(0,1), xaxs = "i");
-          
-          ##Rescale:
-          ##if(is.na(exon.rescale.factor) | exon.rescale.factor <= 0 | exon.rescale.factor >= 1){
-          ##  rel <- (data.frame(sub.allExon$start, sub.allExon$end))-rel.calc.min;
-          ##  rel <- rel/(rel.calc.max - rel.calc.min);
-          ##  rescale.iv <- NULL;
-          ##  connection.lines.top    <- apply(rbind(intervals[rango], intervals[rango+1]-((intervals[rango+1]-intervals[rango])*0.2)), 2, median);
-          ##  connection.lines.bottom <- apply((rbind(rel[rango,2], rel[rango, 1])), 2, median) * plotWindowXmax
-          ##} else {
-          #rescale.iv <- generate.interval.scale(
-          #    data.frame(
-          #      start = c(sub.allExon$start, sub.allJunction$start),
-          #      end = c(sub.allExon$end, sub.allJunction$end),
-          #      is.exon = c(sub.allExon$is.exon, sub.allJunction$is.exon)
-          #    ),exon.rescale.factor, exonRescaleFunction, debug.mode = debug.mode);
           rel <- data.frame(start = rescale.coords(sub$start,rescale.iv), 
                             end   = rescale.coords(sub$end,  rescale.iv));
             #print(rel);

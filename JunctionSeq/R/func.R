@@ -1,3 +1,15 @@
+#Some of these functions were based on similar functions created for the DEXSeq package.
+#
+# Note that DEXSeq is licensed under the GPL v3. Therefore this
+#   code packaged together is licensed under the GPL v3, as noted in the LICENSE file.
+# Some code snippets are "united states government work" and thus cannot be
+#   copyrighted. See the LICENSE file for more information.
+#
+# The current versions of the original functions upon which these were based can be found
+#    here: http://github.com/Bioconductor-mirror/DEXSeq
+#
+# Updated Authorship and license information can be found here:
+#   here: http://github.com/Bioconductor-mirror/DEXSeq/blob/master/DESCRIPTION
 
 
 
@@ -300,39 +312,50 @@ writeCompleteResults <- function(jscs, outfile.prefix,
    sig.features <- which( f.na(fData(jscs)$padjust < FDR.threshold) );
    gene.list <- unique(as.character(fData(jscs)$geneID[sig.features]));
    
+
+   
    if(save.sigGenes){
-     
-     
      if(length(sig.features) == 0){
        if(verbose) message("> wcr: Zero Significant Features! (at adjusted-p-value threshold ",FDR.threshold,")");
      } #else {
+       
+       try({
+         genewiseTable <- makeGeneWiseTable(jscs, gene.list, FDR.threshold = FDR.threshold, verbose = verbose);
+         write.simple.table.gz(pData(genewiseTable),file=paste0(outfile.prefix,"sigGenes.genewiseResults.txt"),      use.gzip=gzip.output,row.names=FALSE,col.names=TRUE,quote=FALSE, sep = '\t');
+       });
        
        if(verbose) message("> wcr: Writing results for ", length(gene.list), " genes with 1 or more significant junctions (at adjusted-p-value threshold ", FDR.threshold,")");
      
        sig.rows <- which( as.character(fData(jscs)$geneID) %in% gene.list );
        if(verbose) message("> wcr:     Found ", length(sig.rows), " counting bins belonging to those genes.");
-     
-     
+       
+       
                     write.simple.table.gz(expression.data[sig.rows,, drop=FALSE],     file=paste0(outfile.prefix,"sigGenes.expression.data.txt"),      use.gzip=gzip.output,row.names=FALSE,col.names=TRUE,quote=FALSE, sep = '\t');
        if(save.VST) write.simple.table.gz(expression.data.vst[sig.rows,, drop=FALSE], file=paste0(outfile.prefix,"sigGenes.expression.data.VST.txt"),  use.gzip=gzip.output,row.names=FALSE,col.names=TRUE,quote=FALSE, sep = '\t');
                     write.table.gz(fData(jscs)[sig.rows,, drop=FALSE],         file=paste0(outfile.prefix,"sigGenes.results.txt"), use.gzip=gzip.output,row.names="featureID",col.names=TRUE,quote=FALSE);
      #}
    }
    
+   if(gzip.output){
+     bedFileExt <- ".bed.gz";
+   } else {
+     bedFileExt <- ".bed";
+   }
+   
    if(save.bedTracks){
      if(save.allGenes){
        if(any(fData(jscs)$featureType == "splice_site" | fData(jscs)$featureType == "novel_splice_site")){
-         writeExprBedTrack(paste0(outfile.prefix,"allGenes.junctionCoverage.bed.gz"), 
+         writeExprBedTrack(paste0(outfile.prefix,"allGenes.junctionCoverage",bedFileExt), 
                          jscs = jscs, 
                          plot.exons = FALSE, plot.junctions = TRUE,
-                         output.format = bedtrack.format, verbose = verbose,
+                         output.format = bedtrack.format, verbose = verbose, use.gzip = gzip.output,
                          trackLine = paste0("track name='JctExprAll' description='Splice Junction Coverage Estimates, by group' itemRgb='On' visibility=3"));
        }
        if(any(fData(jscs)$featureType == "exonic_part")){
-         writeExprBedTrack(paste0(outfile.prefix,"allGenes.exonCoverage.bed.gz"), 
+         writeExprBedTrack(paste0(outfile.prefix,"allGenes.exonCoverage",bedFileExt), 
                          jscs = jscs, 
                          only.with.sig.gene = FALSE, plot.exons = TRUE, plot.junctions = FALSE,
-                         output.format = bedtrack.format, verbose = verbose,
+                         output.format = bedtrack.format, verbose = verbose, use.gzip = gzip.output,
                          trackLine = paste0("track name='ExonExprAll' description='Exonic Region Coverage Estimates, by group' itemRgb='On' visibility=3"));
        }
      }
@@ -340,22 +363,22 @@ writeCompleteResults <- function(jscs, outfile.prefix,
        sig.features <- which( f.na(fData(jscs)$padjust < FDR.threshold) );
        #if(length(sig.features) > 0){
          if(any(fData(jscs)$featureType == "splice_site" | fData(jscs)$featureType == "novel_splice_site")){
-           writeExprBedTrack(paste0(outfile.prefix,"sigGenes.junctionCoverage.bed.gz"), 
+           writeExprBedTrack(paste0(outfile.prefix,"sigGenes.junctionCoverage",bedFileExt), 
                            jscs = jscs, 
                            only.with.sig.gene = TRUE, plot.exons = FALSE, plot.junctions = TRUE,
-                           output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold,
+                           output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold, use.gzip = gzip.output,
                            trackLine = paste0("track name='JctExprAll' description='Sig genes splice Junction Coverage Estimates, by group' itemRgb='On' visibility=3"));
          }
          if(any(fData(jscs)$featureType == "exonic_part")){
-           writeExprBedTrack(paste0(outfile.prefix,"sigGenes.exonCoverage.bed.gz"), 
+           writeExprBedTrack(paste0(outfile.prefix,"sigGenes.exonCoverage",bedFileExt), 
                            jscs = jscs, 
                            only.with.sig.gene = TRUE, plot.exons = TRUE, plot.junctions = FALSE,
-                           output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold,
+                           output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold, use.gzip = gzip.output,
                            trackLine = paste0("track name='ExonExprAll' description='Sig genes exonic Region Coverage Estimates, by group' itemRgb='On' visibility=3"));
          }
-         writeSigBedTrack(paste0(outfile.prefix,"sigGenes.pvalues.bed.gz"), 
+         writeSigBedTrack(paste0(outfile.prefix,"sigGenes.pvalues",bedFileExt), 
                           jscs = jscs,
-                          output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold,
+                          output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold, use.gzip = gzip.output,
                           trackLine = paste0("track name='JctPvals' description='Significant Splice Junctions' useScore=1 visibility=3")
                           );
        #}

@@ -1,3 +1,12 @@
+v0.6.25:
+ Major structural changes:
+ * DESeq2 code is now called as foreign function calls and calls to exported DESeq2 functions. Copy-over of DESeq2 code greatly reduced.
+ * As a consequence: JunctionSeq no longer requires Rcpp, RcppArmadillo.
+ * JunctionSeq no longer requires compilation, it no longer includes any C++ code.
+
+ In addition, a few minor bugfixes:
+ * Fixed chromosome labels in gene profile plots.
+ * Fixed behavior when label.p.vals is FALSE
 
 v0.6.8:
  Several bugfixes, along with some error checking.

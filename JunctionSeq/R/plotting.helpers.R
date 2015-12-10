@@ -1,3 +1,16 @@
+#These functions were (loosely) based on similar functions created for the DEXSeq package.
+#
+# Note that DEXSeq is licensed under the GPL v3. Therefore this
+#   code packaged together is licensed under the GPL v3, as noted in the LICENSE file.
+# Some code snippets are "united states government work" and thus cannot be
+#   copyrighted. See the LICENSE file for more information.
+#
+# The current versions of the original functions upon which these were based can be found
+#    here: http://github.com/Bioconductor-mirror/DEXSeq
+#
+# Updated Authorship and license information can be found here:
+#   here: http://github.com/Bioconductor-mirror/DEXSeq/blob/master/DESCRIPTION
+
 
 ########################################################
 # UTILITY PLOTTING FUNCTIONS:
@@ -11,8 +24,6 @@ plotTranscriptsOnly <- function(anno.data, geneID, debug.mode = TRUE, par.cex = 
 
    rt.allExon <- which(anno.data$gene_id==geneID & anno.data$featureType == "exonic_part");
    rango <- 1:length(rt.allExon);
-   
-
    
    #y.axis.title <- "";
    main.title <- paste0("Known transcripts for gene ",geneID);
@@ -69,6 +80,7 @@ plotTranscriptsOnly <- function(anno.data, geneID, debug.mode = TRUE, par.cex = 
       axis(1,at=axis1.minor,labels=rep("",length(axis1.minor)),pos=0,lwd.ticks=0.2,padj=-0.7,tcl=-0.25, cex.axis = anno.cex.text, ...);
       axis(1,at=axis1.main,labels=axis1.main,pos=0,lwd.ticks=0.2,padj=-0.7,tcl=-1, cex.axis = anno.cex.text, ...);
 }
+
 
 ########################################################
 #FUNCTION TO MAKE THE AXIS OF THE VST VALUES
@@ -590,8 +602,9 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
                      merge.exon.parts = TRUE,
                      plot.untestable.results = FALSE,
                      exon.height = 0.75,
-                     INTERNAL.VARS = INTERNAL.VARS,
+                     INTERNAL.VARS = list(),
                      flip.splicing = FALSE, gapped.flip = FALSE,
+                     ylim = c(0,1),
                      ...)
 {
    #message("drawGene cex = ",cex);
@@ -599,7 +612,7 @@ drawGene <- function(minx, maxx, tr, tr.allExon, tr.allJunction, rango, rescale.
    xpd <- NA
    plot.new()
    #plot.window(xlim=c(minx, maxx + ((maxx-minx)* 0.04)), ylim=c(0,1), xaxs = "i");
-   plot.window(xlim=c(minx, maxx), ylim=c(0,1), xaxs = "i");
+   plot.window(xlim=c(minx, maxx), ylim=ylim, xaxs = "i");
    #plot.window(xlim=c(minx, maxx), ylim=c(0, 1))
    ymax <- par("usr")[4];
    ymin <- par("usr")[3];
@@ -811,18 +824,26 @@ drawGene.noSplices <- function(minx, maxx, tr.allExon, exon.names=NULL, anno.lwd
 }
 
 
-drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.iv = NULL, names, trName, trStrand = ".", sub.sig, anno.lwd = 1, par.cex = 1, anno.cex.text = 1, anno.cex.TX.ID = anno.cex.text * 0.5, cex.arrows = 1, draw.strand = FALSE,  ...)
+drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.iv = NULL, names, trName, trStrand = ".", sub.sig, 
+                           anno.lwd = 1, par.cex = 1, anno.cex.text = 1, anno.cex.TX.ID = anno.cex.text * 0.5, 
+                           cex.arrows = 1, draw.strand = FALSE, labelPosition = c("above","left"),
+                           ...)
 {
    if(cex.arrows == "auto") cex.arrows <- 1;
+   labelPosition <- match.arg(labelPosition);
    
    exon.height = 0.8;
    if(! is.null(trName)){
-     id.ht <- strheight(trName, cex = anno.cex.TX.ID);
-     if(id.ht < 0.75){
-       exon.height <- 0.75 - id.ht;
-     } else {
-       exon.height <- 0.25;
-     }
+     if(labelPosition == "above"){
+       id.ht <- strheight(trName, cex = anno.cex.TX.ID);
+       if(id.ht < 0.75){
+         exon.height <- 0.75 - id.ht;
+       } else {
+         exon.height <- 0.25;
+       }
+     } #else if(labelPosition == "left"){
+      # id.ht <- strheight(trName, cex = anno.cex.TX.ID);
+     #}
    }
    splice.top <- exon.height * 0.9;
    splice.mid <- splice.top / 2;
@@ -903,13 +924,20 @@ drawTranscript <- function(minx, maxx, ymin, tr, tr.allJunction, rango, rescale.
      segments(exon.breaks,ymin,exon.breaks,ymin+exon.height, col = "black", lwd = anno.lwd / 2, lty = 3, ...)
    }
    
-   id.wd <- strwidth(trName, cex = anno.cex.TX.ID);
-   id.leftX <- tr.raw$start[1];
-   if(id.leftX + id.wd > maxx){
-     id.leftX <- maxx - id.wd;
+
+   if(labelPosition == "above"){
+     id.wd <- strwidth(trName, cex = anno.cex.TX.ID);
+     id.leftX <- tr.raw$start[1];
+     if(id.leftX + id.wd > maxx){
+       id.leftX <- maxx - id.wd;
+     }
+     text(id.leftX,ymin + 0.8,labels=trName,srt=0,xpd=NA,cex= anno.cex.TX.ID, adj=c(0,1),...);
+   } else if(labelPosition == "left"){
+     id.wd <- strwidth(trName, cex = anno.cex.TX.ID);
+     id.leftX <- tr.raw$start[1];
+     text(id.leftX,ymin + 0.5,labels=trName,srt=0,xpd=NA,cex= anno.cex.TX.ID, adj=c(1.1,0.5),...);
    }
    
-   text(id.leftX,ymin + 0.8,labels=trName,srt=0,xpd=NA,cex= anno.cex.TX.ID, adj=c(0,1),...);
    
    
    #draw.strand <- TRUE;

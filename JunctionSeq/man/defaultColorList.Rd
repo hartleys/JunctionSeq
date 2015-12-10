@@ -38,6 +38,10 @@
       Character vector. The colors for each condition, in order. Will be shortened to the number of conditions.
 }
 
+\value{
+  See above.
+}
+
 \keyword{datasets}
 
 \examples{

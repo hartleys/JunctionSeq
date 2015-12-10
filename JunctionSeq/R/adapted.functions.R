@@ -1,25 +1,19 @@
-#These functions were mostly extracted directly from the DEXSeq and DESeq2 source-code.
-#
-# We unfortunetely could not use the functions directly because they relied on the internal structure of the
-#   deseq data objects, which are different in JunctionSeq. Some of them were also not externally exported.
-# Additionally, many of the DESeq2 and DEXSeq commands have been changed several times in the 
-#   past few releases, breaking any code that calls these functions internally. Thus, for consistency
-#   they are copied here in static form.
+#These functions were mostly extracted directly from the DEXSeq and DESeq2 source-code, with some modifications.
 #
 # Note that DEXSeq is licensed under the GPL v3, and DESeq2 is licensed under the LGPL v3. Therefore this
 #   code packaged together is licensed under the GPL v3, as noted in the LICENSE file.
 # Some code snippets are "united states government work" and thus cannot be
 #   copyrighted. See the LICENSE file for more information.
 #
-#Most of these functions relate to setting up, running, and/or interpreting
-#   the output from negative-binomial generalized linear models.
+# The current versions of the original functions upon which these were based can be found
+#    here: http://github.com/Bioconductor-mirror/DESeq2
+#         and
+#    here: http://github.com/Bioconductor-mirror/DEXSeq
 #
-
-#I have also included the wtd.quantile function from Hmisc along with its dependencies.
-#The Hmisc package has a 14 dependencies, some of which are a pain to compile on certain
-#   platforms. It makes very little sense to require all those packages just to get a simple  
-#   weighted quantile. Thus: I have copied over the code here.
-#   Note that Hmisc is licensed with the GPL v3, and thus is compatible with this package.
+# Updated Authorship and license information can be found here:
+#   here: http://github.com/Bioconductor-mirror/DESeq2/blob/master/DESCRIPTION
+#         and
+#   here: http://github.com/Bioconductor-mirror/DEXSeq/blob/master/DESCRIPTION
 
 #From DEXSeq:
 JS.perGeneQValue = function(pvals, wTest, geneID, method = JS.perGeneQValueExact) {
@@ -1122,148 +1116,3 @@ estimatelog2FoldChanges <- function(ecs, fitExpToVar="condition", denominator=""
       return(ecs);
     }
 }
-
-
-#The Hmisc package has a 14 dependencies, some of which are a pain to compile on certain
-#   platforms. It makes very little sense to require all those packages just to get a simple  
-#   weighted quantile. Thus: I have copied over the code here.
-#   Note that Hmisc is licensed with the GPL v3, and thus is compatible with this package.
-#
-#   Additional Note: I ripped out the hardcoded "date" special cases, mostly just on principle.
-#
-
-all.is.numeric <- function (x, what = c("test", "vector"), extras = c(".", "NA")) {
-    what <- match.arg(what)
-    x <- sub("[[:space:]]+$", "", x)
-    x <- sub("^[[:space:]]+", "", x)
-    xs <- x[! (x %in% c("", extras))]
-    isnum <- suppressWarnings(!any(is.na(as.numeric(xs))))
-    if (what == "test") 
-        isnum
-    else if (isnum) 
-        as.numeric(x)
-    else x
-}
-
-wtd.table <- function (x, weights = NULL, type = c("list", "table"), normwt = FALSE, na.rm = TRUE) {
-    type <- match.arg(type)
-    if (!length(weights)) 
-        weights <- rep(1, length(x))
-    #isdate <- testDateTime(x)
-    ax <- attributes(x)
-    ax$names <- NULL
-    if (is.character(x)) 
-        x <- as.factor(x)
-    lev <- levels(x)
-    x <- unclass(x)
-    if (na.rm) {
-        s <- !is.na(x + weights)
-        x <- x[s, drop = FALSE]
-        weights <- weights[s]
-    }
-    n <- length(x)
-    if (normwt) 
-        weights <- weights * length(x)/sum(weights)
-    i <- order(x)
-    x <- x[i]
-    weights <- weights[i]
-    if (anyDuplicated(x)) {
-        weights <- tapply(weights, x, sum)
-        if (length(lev)) {
-            levused <- lev[sort(unique(x))]
-            if ((length(weights) > length(levused)) && any(is.na(weights))) 
-                weights <- weights[!is.na(weights)]
-            if (length(weights) != length(levused)) 
-                stop("program logic error")
-            names(weights) <- levused
-        }
-        if (!length(names(weights))) 
-            stop("program logic error")
-        if (type == "table") 
-            return(weights)
-        x <- all.is.numeric(names(weights), "vector")
-        #if (isdate) 
-        #    attributes(x) <- c(attributes(x), ax)
-        names(weights) <- NULL
-        return(list(x = x, sum.of.weights = weights))
-    }
-    xx <- x
-    #if (isdate) 
-    #    attributes(xx) <- c(attributes(xx), ax)
-    if (type == "list") 
-        list(x = if (length(lev)) lev[x] else xx, sum.of.weights = weights)
-    else {
-        names(weights) <- if (length(lev)) 
-            lev[x]
-        else xx
-        weights
-    }
-}
-wtd.Ecdf <- function (x, weights = NULL, type = c("i/n", "(i-1)/(n-1)", "i/(n+1)"), normwt = FALSE, na.rm = TRUE) {
-    type <- match.arg(type)
-    switch(type, `(i-1)/(n-1)` = {
-        a <- b <- -1
-    }, `i/(n+1)` = {
-        a <- 0
-        b <- 1
-    }, `i/n` = {
-        a <- b <- 0
-    })
-    if (!length(weights)) {
-        oldopt <- options(digits = 7)
-        on.exit(options(oldopt))
-        cumu <- table(x)
-        #isdate <- testDateTime(x)
-        ax <- attributes(x)
-        ax$names <- NULL
-        x <- as.numeric(names(cumu))
-        #if (isdate) 
-        #   attributes(x) <- c(attributes(x), ax)
-        cumu <- cumsum(cumu)
-        cdf <- (cumu + a)/(cumu[length(cumu)] + b)
-        if (cdf[1] > 0) {
-            x <- c(x[1], x)
-            cdf <- c(0, cdf)
-        }
-        return(list(x = x, ecdf = cdf))
-    }
-    w <- wtd.table(x, weights, normwt = normwt, na.rm = na.rm)
-    cumu <- cumsum(w$sum.of.weights)
-    cdf <- (cumu + a)/(cumu[length(cumu)] + b)
-    list(x = c(if (cdf[1] > 0) w$x[1], w$x), ecdf = c(if (cdf[1] > 0) 0, cdf))
-}
-
-
-wtd.quantile <- function (x, weights = NULL, probs = c(0, 0.25, 0.5, 0.75, 1), 
-    type = c("quantile", "(i-1)/(n-1)", "i/(n+1)", "i/n"), normwt = FALSE, 
-    na.rm = TRUE) {
-    if (!length(weights)) 
-        return(quantile(x, probs = probs, na.rm = na.rm))
-    type <- match.arg(type)
-    if (any(probs < 0 | probs > 1)) 
-        stop("Probabilities must be between 0 and 1 inclusive")
-    nams <- paste(format(round(probs * 100, if (length(probs) > 
-        1) 2 - log10(diff(range(probs))) else 2)), "%", sep = "")
-    if (type == "quantile") {
-        w <- wtd.table(x, weights, na.rm = na.rm, normwt = normwt, 
-            type = "list")
-        x <- w$x
-        wts <- w$sum.of.weights
-        n <- sum(wts)
-        order <- 1 + (n - 1) * probs
-        low <- pmax(floor(order), 1)
-        high <- pmin(low + 1, n)
-        order <- order%%1
-        allq <- approx(cumsum(wts), x, xout = c(low, high), method = "constant", 
-            f = 1, rule = 2)$y
-        k <- length(probs)
-        quantiles <- (1 - order) * allq[1:k] + order * allq[-(1:k)]
-        names(quantiles) <- nams
-        return(quantiles)
-    }
-    w <- wtd.Ecdf(x, weights, na.rm = na.rm, type = type, normwt = normwt)
-    structure(approx(w$ecdf, w$x, xout = probs, rule = 2)$y, 
-        names = nams)
-}
-
-

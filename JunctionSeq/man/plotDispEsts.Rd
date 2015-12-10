@@ -114,7 +114,9 @@
   \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}
 
 }
-
+\value{
+  This is a side-effecting function, and does not return a value.
+}
 
 \examples{
 data(exampleDataSet,package="JctSeqExData2");

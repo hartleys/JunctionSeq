@@ -1,3 +1,32 @@
+#Minor utility functions. 
+#
+# Many of these are copied-over from my other package, QoRTs.
+# Some of them were copied from here TO QoRTs.
+#
+#These utility functions are not exported, but do a bunch of minor handy stuff,
+#  like autofit text into a space, or return the device limits in user units,
+#  or activate a new plotting device from an array of options.
+#
+#Feel free to copy this over to your own code, if you so desire.
+#
+#This file is "United States Government Work" 
+#under the terms of the United States Copyright Act.  
+#It was written as part of the authors' official duties for the 
+#United States Government and thus those portions cannot be 
+#copyrighted.  Those portions of this software are freely 
+#available to the public for use without a copyright notice.  
+#Restrictions cannot be placed on its present or future use.
+#
+#Although all reasonable efforts have been taken to ensure the 
+#accuracy and reliability of the software and data, the National 
+#Human Genome Research Institute (NHGRI) and the U.S. Government 
+#does not and cannot warrant the performance or results that may 
+#be obtained by using this software or data.  NHGRI and the U.S. 
+#Government disclaims all warranties as to performance, 
+#merchantability or fitness for any particular purpose.
+#
+#
+
 
 simpleDeparse <- function(d){
   paste0(deparse(d),collapse="");

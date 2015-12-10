@@ -25,6 +25,7 @@ writeExprBedTrack(file, jscs,
      includeLocusID = TRUE,
      includeGroupID = TRUE,
      output.format = c("BED", "GTF", "GFF3"),
+     use.gzip = TRUE,
      verbose = TRUE)
 
 writeSigBedTrack(file, 
@@ -41,6 +42,7 @@ writeSigBedTrack(file,
      includeGeneID = FALSE,
      includeLocusID = TRUE,
      output.format = c("BED", "GTF", "GFF3"),
+     use.gzip = TRUE,
      verbose = TRUE)
 
 }
@@ -114,11 +116,16 @@ writeSigBedTrack(file,
   \item{output.format}{
     Character string. The format to use.
   }
+  \item{use.gzip}{
+    Logical. Whether or not to gzip the bed file.
+  }
   \item{verbose}{
     Logical. if TRUE, output debugging/progress information.
   }
 }
-
+\value{
+  This is a side-effecting function, and does not return a value.
+}
 
 \examples{
 data(exampleDataSet,package="JctSeqExData2");

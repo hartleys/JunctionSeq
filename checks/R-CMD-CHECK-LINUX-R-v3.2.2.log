@@ -1,4 +1,4 @@
------ R CMD CHECK (Wed Nov 25 15:02:38 EST 2015) ----- 
+----- R CMD CHECK (Thu Dec 10 17:00:28 EST 2015) ----- 
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,14 +9,14 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD CHECK STARTING (Wed Nov 25 15:02:38 EST 2015) -----
-* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.16/JunctionSeq.Rcheck'
+----- R CMD CHECK STARTING (Thu Dec 10 17:00:28 EST 2015) -----
+* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.26/JunctionSeq.Rcheck'
 * using R version 3.2.2 (2015-08-14)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: ASCII
 * using option '--no-build-vignettes'
 * checking for file 'JunctionSeq/DESCRIPTION' ... OK
-* this is package 'JunctionSeq' version '0.6.16'
+* this is package 'JunctionSeq' version '0.6.26'
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
@@ -26,11 +26,7 @@ http://www.gnu.org/licenses/.
 * checking for portable file names ... OK
 * checking for sufficient/correct file permissions ... OK
 * checking whether package 'JunctionSeq' can be installed ... OK
-* checking installed package size ... NOTE
-  installed size is  6.9Mb
-  sub-directories of 1Mb or more:
-    doc    2.4Mb
-    libs   2.9Mb
+* checking installed package size ... OK
 * checking package directory ... OK
 * checking 'build' directory ... OK
 * checking DESCRIPTION meta-information ... OK
@@ -49,7 +45,14 @@ http://www.gnu.org/licenses/.
 * checking dependencies in R code ... OK
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
-* checking foreign function calls ... OK
+* checking foreign function calls ... NOTE
+Foreign function calls to a different package:
+  .Call("DESeq2_fitBeta", ..., PACKAGE = "DESeq2")
+  .Call("DESeq2_fitDisp", ..., PACKAGE = "DESeq2")
+  .Call("DESeq2_fitDispGrid", ..., PACKAGE = "DESeq2")
+  .Call("DESeq2_rlogGrid", ..., PACKAGE = "DESeq2")
+See chapter 'System and foreign language interfaces' in the 'Writing R
+Extensions' manual.
 * checking R code for possible problems ... OK
 * checking Rd files ... OK
 * checking Rd metadata ... OK
@@ -59,12 +62,6 @@ http://www.gnu.org/licenses/.
 * checking Rd \usage sections ... OK
 * checking Rd contents ... OK
 * checking for unstated dependencies in examples ... OK
-* checking line endings in C/C++/Fortran sources/headers ... OK
-* checking line endings in Makefiles ... OK
-* checking compilation flags in Makevars ... OK
-* checking for GNU extensions in Makefiles ... OK
-* checking for portable use of $(BLAS_LIBS) and $(LAPACK_LIBS) ... OK
-* checking compiled code ... OK
 * checking installed files from 'inst/doc' ... OK
 * checking files in 'vignettes' ... OK
 * checking examples ... OK
@@ -79,8 +76,8 @@ http://www.gnu.org/licenses/.
 
 Status: 1 NOTE
 See
-  '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.16/JunctionSeq.Rcheck/00check.log'
+  '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_0.6.26/JunctionSeq.Rcheck/00check.log'
 for details.
 
 
------ R CMD CHECK COMPLETE (Wed Nov 25 15:07:07 EST 2015) -----
+----- R CMD CHECK COMPLETE (Thu Dec 10 17:03:52 EST 2015) -----

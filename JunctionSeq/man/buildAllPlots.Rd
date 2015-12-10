@@ -271,6 +271,10 @@ buildAllPlots(jscs,
   \item{...}{Additional options to pass to \code{\link{buildAllPlotsForGene}}, \code{\link{plotJunctionSeqResultsForGene}}, or graphical parameters passed to plotting functions.}
 }
 
+\value{
+  This is a side-effecting function, and does not return a value.
+}
+
 \examples{
 
 data(exampleDataSet,package="JctSeqExData2");

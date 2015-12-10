@@ -51,6 +51,10 @@ writeCompleteResults(jscs, outfile.prefix,
 \details{
   Saves a wide variety of data from the analyses.
 }
+
+\value{
+  This is a side-effecting function, and does not return a value.
+}
 \examples{
 data(exampleDataSet,package="JctSeqExData2");
 #Write results tables and browser track files:

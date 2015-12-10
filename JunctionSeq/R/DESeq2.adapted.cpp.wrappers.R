@@ -1,19 +1,20 @@
-#These functions were extracted directly from the DEXSeq and DESeq2 source-code.
-#
-# We unfortunetely could not use the functions directly because they relied on the internal structure of the
-#   deseq data objects, which are different in JunctionSeq.
-# Additionally, many of the DESeq2 and DEXSeq internal data structures have changed several times in the 
-#   past few releases, breaking any code that calls these functions internally. Thus, for consistency
-#   they are copied over here in static form.
+#These functions were mostly extracted directly from the DEXSeq and DESeq2 source-code.
 #
 # Note that DEXSeq is licensed under the GPL v3, and DESeq2 is licensed under the LGPL v3. Therefore this
 #   code packaged together is licensed under the GPL v3, as noted in the LICENSE file.
-# All additions to the base DEXSeq and DESeq2 code are "united states government work" and thus cannot be
+# Some code snippets are "united states government work" and thus cannot be
 #   copyrighted. See the LICENSE file for more information.
 #
-#Most of these functions relate to setting up, running, and/or interpreting
-#   the output from negative-binomial generalized linear models.
+# The current versions of the original functions upon which these were based can be found
+#    here: http://github.com/Bioconductor-mirror/DESeq2
+#         and
+#    here: http://github.com/Bioconductor-mirror/DEXSeq
 #
+# Updated Authorship and license information can be found here:
+#   here: http://github.com/Bioconductor-mirror/DESeq2/blob/master/DESCRIPTION
+#         and
+#   here: http://github.com/Bioconductor-mirror/DEXSeq/blob/master/DESCRIPTION
+
 
 #From DESeq2:
 # Fit dispersions for negative binomial GLM
@@ -117,18 +118,18 @@ fitDispGridWrapper <- function(y, x, mu, logAlphaPriorMean,
 }
 
 fitDisp <- function(ySEXP, xSEXP, mu_hatSEXP, log_alphaSEXP, log_alpha_prior_meanSEXP, log_alpha_prior_sigmasqSEXP, min_log_alphaSEXP, kappa_0SEXP, tolSEXP, maxitSEXP, use_priorSEXP) {
-    .Call('DESeq2_fitDisp', PACKAGE = 'JunctionSeq', ySEXP, xSEXP, mu_hatSEXP, log_alphaSEXP, log_alpha_prior_meanSEXP, log_alpha_prior_sigmasqSEXP, min_log_alphaSEXP, kappa_0SEXP, tolSEXP, maxitSEXP, use_priorSEXP)
+    .Call('DESeq2_fitDisp', PACKAGE = 'DESeq2', ySEXP, xSEXP, mu_hatSEXP, log_alphaSEXP, log_alpha_prior_meanSEXP, log_alpha_prior_sigmasqSEXP, min_log_alphaSEXP, kappa_0SEXP, tolSEXP, maxitSEXP, use_priorSEXP)
 }
 
 fitBeta <- function(ySEXP, xSEXP, nfSEXP, alpha_hatSEXP, contrastSEXP, beta_matSEXP, lambdaSEXP, tolSEXP, maxitSEXP, useQRSEXP) {
-    .Call('DESeq2_fitBeta', PACKAGE = 'JunctionSeq', ySEXP, xSEXP, nfSEXP, alpha_hatSEXP, contrastSEXP, beta_matSEXP, lambdaSEXP, tolSEXP, maxitSEXP, useQRSEXP)
+    .Call('DESeq2_fitBeta', PACKAGE = 'DESeq2', ySEXP, xSEXP, nfSEXP, alpha_hatSEXP, contrastSEXP, beta_matSEXP, lambdaSEXP, tolSEXP, maxitSEXP, useQRSEXP)
 }
 
 rlogGrid <- function(ySEXP, nfSEXP, betaSEXP, alphaSEXP, interceptSEXP, bgridSEXP, betapriorvarSEXP) {
-    .Call('DESeq2_rlogGrid', PACKAGE = 'JunctionSeq', ySEXP, nfSEXP, betaSEXP, alphaSEXP, interceptSEXP, bgridSEXP, betapriorvarSEXP)
+    .Call('DESeq2_rlogGrid', PACKAGE = 'DESeq2', ySEXP, nfSEXP, betaSEXP, alphaSEXP, interceptSEXP, bgridSEXP, betapriorvarSEXP)
 }
 
 fitDispGrid <- function(ySEXP, xSEXP, mu_hatSEXP, disp_gridSEXP, log_alpha_prior_meanSEXP, log_alpha_prior_sigmasqSEXP, use_priorSEXP) {
-    .Call('DESeq2_fitDispGrid', PACKAGE = 'JunctionSeq', ySEXP, xSEXP, mu_hatSEXP, disp_gridSEXP, log_alpha_prior_meanSEXP, log_alpha_prior_sigmasqSEXP, use_priorSEXP)
+    .Call('DESeq2_fitDispGrid', PACKAGE = 'DESeq2', ySEXP, xSEXP, mu_hatSEXP, disp_gridSEXP, log_alpha_prior_meanSEXP, log_alpha_prior_sigmasqSEXP, use_priorSEXP)
 }
 
