@@ -36,7 +36,7 @@ attemptLoadAndInstall.BIOC <- function(pkg, verbose = TRUE, ...){
     return(TRUE);
   } else {
     message("Attempting installation of Bioconductor package: \"",pkg,"\"");
-    source("https://bioconductor.org/biocLite.R")
+    source("http://bioconductor.org/biocLite.R")
     biocLite(pkg);
     
     if(attemptLoad(pkg, verbose = verbose)){
