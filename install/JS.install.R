@@ -1,5 +1,5 @@
 
-message("Loading JunctionSeq installer (v0.8.2)");
+message("Loading JunctionSeq installer (v0.8.3)");
 
 JunctionSeq.CRAN.dep <- c("statmod","plotrix","stringr","locfit","Hmisc");
 JunctionSeq.BIOC.dep <- c("Biobase", "BiocGenerics", "BiocParallel", "GenomicRanges", "IRanges","S4Vectors","genefilter","geneplotter","SummarizedExperiment","DESeq2");
