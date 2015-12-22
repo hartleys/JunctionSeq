@@ -335,6 +335,7 @@ makeDESeqDataSetFromJSCS <- function(jscs, test.formula1){
     colData[[i]] <- factor(colData[[i]]);
   }
   colData <- DataFrame(colData);
+  rownames(colData) <- colnames(countData);
   
   jscs@DESeqDataSet <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = test.formula1, ignoreRank = TRUE);
   return(jscs);

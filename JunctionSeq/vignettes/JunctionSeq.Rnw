@@ -538,7 +538,7 @@ plotMA(jscs, FDR.threshold=0.05);
 
 \pagebreak
 %----------
-\subsection{Gene plots} \label{sec:allPlot}
+\subsection{Gene Profile plots} \label{sec:allPlot}
 %----------
 
 Generally it is desired to print plots for all genes that have one or more splice junctions with statistically significant differential splice junction usage. By default, JunctionSeq uses an FDR-adjusted p-value threshold of 0.01.
@@ -560,7 +560,7 @@ JunctionSeq will also generate an html index file for easy browsing of these out
 
 \pagebreak
 %----------
-\subsubsection{Coverage/Expression Plots} \label{sec:subplot1}
+\subsubsection{Coverage/Expression Profile Plots} \label{sec:subplot1}
 %----------
 
 Figure \ref{../plots/expr/ENSRNOG00000009281-expr-fig} displays the model estimates of the mean normalized exonic-region/splice-junction coverage counts for each biological condition (in this example: DAY vs NIGHT). Note that these values are not equal to the simple mean normalized read counts across all samples. Rather, these estimates are derived from the GLM parameter estimates (via linear contrasts).
@@ -572,8 +572,8 @@ There are a few things to note about this plot:
   \begin{itemize}
     \item The y-axis is log-transformed, except for the area between 0 and 1 which is plotted on a simple linear scale. 
     \item In the line drawing at the bottom, the exons and introns are not drawn to a common scale. The exons are enlarged to improve readability. Each exon or intron is  rescaled proportionately to the square-root of their width, then the exons are scaled up to take up 30 percent of the horizontal space. This can be adjusted via the "exon.rescale.factor" parameter (the default is 0.3), or turned off entirely by setting this parameter to -1. The proportionality function can also be changed using the \texttt{exonRescaleFunction} parameter. For mammalian genomes at least, we have found square-root-proportional function to be a good trade-off between making sure that features are distinct while still being able to visually identify which features are larger or smaller.
-    \item Note that junction J007 is marked as significantly differentially used, even though it is NOT differentially expressed. This is because JunctionSeq does not test for simple differential expression. It tests for differential splice junction coverage relative to gene-wide expression. Therefore, if (as in this case) the gene as a whole is strongly differentially expressed, then a splice junction that is NOT differentially expressed is the one that is being differentially used. 
-    \item Similarly, splice junction N009 is differentially used in the opposite way: while the gene itself is somewhat differentially expressed (at a fold change of roughly 3-4x overall), this particular junction has a \emph{massive} differential, far beyond that found in the gene as a whole (at 45x fold change). Thus, it is being differentially used.
+    \item Note that the rightmost junction (J005) is marked as significantly differentially used, even though it is NOT differentially expressed. This is because JunctionSeq does not test for simple differential expression. It tests for differential splice junction coverage relative to gene-wide expression. Therefore, if (as in this case) the gene as a whole is strongly differentially expressed, then a splice junction that is NOT differentially expressed is the one that is being differentially used. 
+    \item Similarly the second junction from the right (N008), which is novel, is differentially used in the opposite way: while the gene itself is somewhat differentially expressed (at a fold change of roughly 3-4x overall), this particular junction has a \emph{massive} differential, far beyond that found in the gene as a whole (at 45x fold change). Thus, it is being differentially used.
   \end{itemize}
 
 \pagebreak

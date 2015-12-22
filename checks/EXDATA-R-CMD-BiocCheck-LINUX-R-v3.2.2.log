@@ -1,4 +1,4 @@
------ R CMD BiocCheck (Thu Dec 10 17:26:03 EST 2015)          -----
+----- R CMD BiocCheck (Tue Dec 22 14:50:36 EST 2015)          -----
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD BiocCheck STARTING (Thu Dec 10 17:26:03 EST 2015) -----
+----- R CMD BiocCheck STARTING (Tue Dec 22 14:50:36 EST 2015) -----
 * This is BiocCheck, version 1.6.0.
 * BiocCheck is a work in progress. Output and severity of issues may
   change.
@@ -48,16 +48,13 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking DESCRIPTION/NAMESPACE consistency...
 * Checking function lengths..
 * Checking man pages...
-    * RECOMMENDED: Add non-empty \value sections to the following man
-      pages:
-      exampleDataSet.Rd
 * Checking exported objects have runnable examples...
 * Checking package NEWS...
 * Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source,
   and vignette source...
     * CONSIDER: Shortening lines; 250 lines (15%) are > 80 characters
       long.
-    * CONSIDER: Indenting lines with a multiple of 4 spaces; 298 lines
+    * CONSIDER: Indenting lines with a multiple of 4 spaces; 299 lines
       (18%) are not.
   See http://bioconductor.org/developers/how-to/coding-style/
 * Checking for canned comments in man pages...
@@ -68,9 +65,9 @@ See http://bioconductor.org/developers/how-to/biocViews/
 
 Summary:
 REQUIRED count: 0
-RECOMMENDED count: 1
+RECOMMENDED count: 0
 CONSIDERATION count: 4
 For detailed information about these checks, see the BiocCheck
 vignette, available at
 http://bioconductor.org/packages/3.2/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
------ R CMD BiocCheck COMPLETE (Thu Dec 10 17:26:16 EST 2015) -----
+----- R CMD BiocCheck COMPLETE (Tue Dec 22 14:50:48 EST 2015) -----
