@@ -82,7 +82,7 @@ JS.install.optional <- function(){
     attemptLoadAndInstall.BIOC(d, verbose=verbose);
   }
   
-  install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz",repos=NULL, type="source", ...);
+  install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz",repos=NULL, type="source");
 }
 
 
