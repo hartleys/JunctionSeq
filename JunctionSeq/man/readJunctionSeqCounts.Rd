@@ -123,17 +123,17 @@ readJunctionSeqCounts(countfiles, countdata,
 #Set up example data:
 decoder.file <- system.file(
                   "extdata/annoFiles/decoder.bySample.txt",
-                  package="JctSeqExData2");
+                  package="JctSeqData");
 decoder <- read.table(decoder.file,
                   header=TRUE,
                   stringsAsFactors=FALSE);
 gff.file <- system.file(
             "extdata/tiny/withNovel.forJunctionSeq.gff.gz",
-            package="JctSeqExData2");
+            package="JctSeqData");
 countFiles <- system.file(paste0("extdata/tiny/",
      decoder$sample.ID,
      "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"),
-     package="JctSeqExData2");
+     package="JctSeqData");
 ########################################
 #Advanced Analysis:
 

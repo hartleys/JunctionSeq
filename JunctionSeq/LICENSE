@@ -1,5 +1,8 @@
-This software package is licensed under the GNU-GPL v3. A full
-copy of the GPL v3 can be found in at inst/doc/gpl.v3.txt
+This software package includes code derived from the DEXSeq 
+bioconductor package, which is licensed under the GNU-GPL v3.
+
+This software package itself is licensed under the GNU-GPL v3. A full
+copy of the GPL v3 can be found in the file inst/doc/gpl.v3.txt
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

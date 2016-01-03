@@ -44,332 +44,53 @@ setClass( "JunctionSeqCountSet",
       versions = c( classVersion("eSet"), JunctionSeqCountSet = "0.0.5" ) ) )
 )
 
-################################
-##Accessors and Replacers:
-##  These were too much of a pain to use. Just use the slots. They really shouldn't be used
-##  directly by end-users anyways.
-################################
-##
-##
-#setGeneric("jscs.designColumns",   function(object,...)       standardGeneric("jscs.designColumns"))
-#setGeneric("jscs.designColumns<-", function(object,...,value) standardGeneric("jscs.designColumns<-"))
-#setMethod("jscs.designColumns", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@designColumns;
-#})
-#setReplaceMethod("jscs.designColumns", signature(object="JunctionSeqCountSet", value="character"),
-#  function( object, value ) {
-#   object@designColumns <- value;
-#})
-################################
-#setGeneric("jscs.dispFitCoefs",   function(object,...)       standardGeneric("jscs.dispFitCoefs"))
-#setGeneric("jscs.dispFitCoefs<-", function(object,...,value) standardGeneric("jscs.dispFitCoefs<-"))
-#setMethod("jscs.dispFitCoefs", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@dispFitCoefs;
-#})
-#setReplaceMethod("jscs.dispFitCoefs", signature(object="JunctionSeqCountSet", value="numeric"),
-#  function( object, value ) {
-#   object@dispFitCoefs <- value;
-#})
-################################
-#setGeneric("jscs.fittedMu",   function(object,...)       standardGeneric("jscs.fittedMu"))
-#setGeneric("jscs.fittedMu<-", function(object,...,value) standardGeneric("jscs.fittedMu<-"))
-#setMethod("jscs.fittedMu", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@fittedMu;
-#})
-#setReplaceMethod("jscs.fittedMu", signature(object="JunctionSeqCountSet", value="matrix"),
-#  function( object, value ) {
-#   object@fittedMu <- value;
-#})
-################################
-#setGeneric("jscs.dispFunctionType",   function(object,...)       standardGeneric("jscs.dispFunctionType"))
-#setGeneric("jscs.dispFunctionType<-", function(object,...,value) standardGeneric("jscs.dispFunctionType<-"))
-#setMethod("jscs.dispFunctionType", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@dispFunctionType;
-#})
-#setReplaceMethod("jscs.dispFunctionType", signature(object="JunctionSeqCountSet", value="list"),
-#  function( object, value ) {
-#   object@dispFunctionType <- value;
-#})
-################################
-#setGeneric("jscs.dispFunction",   function(object,...)       standardGeneric("jscs.dispFunction"))
-#setGeneric("jscs.dispFunction<-", function(object,...,value) standardGeneric("jscs.dispFunction<-"))
-#setMethod("jscs.dispFunction", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@dispFunction;
-#})
-#setReplaceMethod("jscs.dispFunction", signature(object="JunctionSeqCountSet", value="function"),
-#  function( object, value ) {
-#   object@dispFunction <- value;
-#})
-################################
-#setGeneric("jscs.dispFunctionJct",   function(object,...)       standardGeneric("jscs.dispFunctionJct"))
-#setGeneric("jscs.dispFunctionJct<-", function(object,...,value) standardGeneric("jscs.dispFunctionJct<-"))
-#setMethod("jscs.dispFunctionJct", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@dispFunctionJct;
-#})
-#setReplaceMethod("jscs.dispFunctionJct", signature(object="JunctionSeqCountSet", value="function"),
-#  function( object, value ) {
-#   object@dispFunctionJct <- value;
-#})
-################################
-#setGeneric("jscs.dispFunctionExon",   function(object,...)       standardGeneric("jscs.dispFunctionExon"))
-#setGeneric("jscs.dispFunctionExon<-", function(object,...,value) standardGeneric("jscs.dispFunctionExon<-"))
-#setMethod("jscs.dispFunctionExon", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@dispFunctionExon;
-#})
-#setReplaceMethod("jscs.dispFunctionExon", signature(object="JunctionSeqCountSet", value="function"),
-#  function( object, value ) {
-#   object@dispFunctionExon <- value;
-#})
-################################
-#setGeneric("jscs.formulas",   function(object,...)       standardGeneric("jscs.formulas"))
-#setGeneric("jscs.formulas<-", function(object,...,value) standardGeneric("jscs.formulas<-"))
-#setMethod("jscs.formulas", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@formulas;
-#})
-#setReplaceMethod("jscs.formulas", signature(object="JunctionSeqCountSet", value="list"),
-#  function( object, value ) {
-#   object@formulas <- value;
-#})
-################################
-#setGeneric("jscs.annotationFile",   function(object,...)       standardGeneric("jscs.annotationFile"))
-#setGeneric("jscs.annotationFile<-", function(object,...,value) standardGeneric("jscs.annotationFile<-"))
-#setMethod("jscs.annotationFile", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@annotationFile;
-#})
-#setReplaceMethod("jscs.annotationFile", signature(object="JunctionSeqCountSet", value="character"),
-#  function( object, value ) {
-#   object@annotationFile <- value;
-#})
-################################
-#setGeneric("jscs.geneCountData",   function(object,...)       standardGeneric("jscs.geneCountData"))
-#setGeneric("jscs.geneCountData<-", function(object,...,value) standardGeneric("jscs.geneCountData<-"))
-#setMethod("jscs.geneCountData", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@geneCountData;
-#})
-#setReplaceMethod("jscs.geneCountData", signature(object="JunctionSeqCountSet", value="matrix"),
-#  function( object, value ) {
-#   object@geneCountData <- value;
-#})
-################################
-#setGeneric("jscs.countVectors",   function(object,...)       standardGeneric("jscs.countVectors"))
-#setGeneric("jscs.countVectors<-", function(object,...,value) standardGeneric("jscs.countVectors<-"))
-#setMethod("jscs.countVectors", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@countVectors;
-#})
-#setReplaceMethod("jscs.countVectors", signature(object="JunctionSeqCountSet", value="matrix"),
-#  function( object, value ) {
-#   object@countVectors <- value;
-#})
-################################
-#setGeneric("jscs.altSizeFactors",   function(object,...)       standardGeneric("jscs.altSizeFactors"))
-#setGeneric("jscs.altSizeFactors<-", function(object,...,value) standardGeneric("jscs.altSizeFactors<-"))
-#setMethod("jscs.altSizeFactors", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@altSizeFactors;
-#})
-#setReplaceMethod("jscs.altSizeFactors", signature(object="JunctionSeqCountSet", value="data.frame"),
-#  function( object, value ) {
-#   object@altSizeFactors <- value;
-#})
-################################
-#setGeneric("jscs.plottingEstimates",   function(object,...)       standardGeneric("jscs.plottingEstimates"))
-#setGeneric("jscs.plottingEstimates<-", function(object,...,value) standardGeneric("jscs.plottingEstimates<-"))
-#setMethod("jscs.plottingEstimates", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@plottingEstimates;
-#})
-#setReplaceMethod("jscs.plottingEstimates", signature(object="JunctionSeqCountSet", value="list"),
-#  function( object, value ) {
-#   object@plottingEstimates <- value;
-#})
-################################
-#setGeneric("jscs.geneLevelPlottingEstimates",   function(object,...)       standardGeneric("jscs.geneLevelPlottingEstimates"))
-#setGeneric("jscs.geneLevelPlottingEstimates<-", function(object,...,value) standardGeneric("jscs.geneLevelPlottingEstimates<-"))
-#setMethod("jscs.geneLevelPlottingEstimates", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@geneLevelPlottingEstimates;
-#})
-#setReplaceMethod("jscs.geneLevelPlottingEstimates", signature(object="JunctionSeqCountSet", value="list"),
-#  function( object, value ) {
-#   object@geneLevelPlottingEstimates <- value;
-#})
-################################
-#setGeneric("jscs.modelFitForHypothesisTest",   function(object,...)       standardGeneric("jscs.modelFitForHypothesisTest"))
-#setGeneric("jscs.modelFitForHypothesisTest<-", function(object,...,value) standardGeneric("jscs.modelFitForHypothesisTest<-"))
-#setMethod("jscs.modelFitForHypothesisTest", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@modelFitForHypothesisTest;
-#})
-#setReplaceMethod("jscs.modelFitForHypothesisTest", signature(object="JunctionSeqCountSet", value="list"),
-#  function( object, value ) {
-#   object@modelFitForHypothesisTest <- value;
-#})
-################################
-#setGeneric("jscs.modelFitForEffectSize",   function(object,...)       standardGeneric("jscs.modelFitForEffectSize"))
-#setGeneric("jscs.modelFitForEffectSize<-", function(object,...,value) standardGeneric("jscs.modelFitForEffectSize<-"))
-#setMethod("jscs.modelFitForEffectSize", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@modelFitForEffectSize;
-#})
-#setReplaceMethod("jscs.modelFitForEffectSize", signature(object="JunctionSeqCountSet", value="list"),
-#  function( object, value ) {
-#   object@modelFitForEffectSize <- value;
-#})
-################################
-#setGeneric("jscs.flatGffData",   function(object,...)       standardGeneric("jscs.flatGffData"))
-#setGeneric("jscs.flatGffData<-", function(object,...,value) standardGeneric("jscs.flatGffData<-"))
-#setMethod("jscs.flatGffData", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@flatGffData;
-#})
-#setReplaceMethod("jscs.flatGffData", signature(object="JunctionSeqCountSet", value="data.frame"),
-#  function( object, value ) {
-#   object@flatGffData <- value;
-#})
-################################
-#setGeneric("jscs.flatGffGeneData",   function(object,...)       standardGeneric("jscs.flatGffGeneData"))
-#setGeneric("jscs.flatGffGeneData<-", function(object,...,value) standardGeneric("jscs.flatGffGeneData<-"))
-#setMethod("jscs.flatGffGeneData", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@flatGffGeneData;
-#})
-#setReplaceMethod("jscs.flatGffGeneData", signature(object="JunctionSeqCountSet", value="list"),
-#  function( object, value ) {
-#   object@flatGffGeneData <- value;
-#})
-################################
-#setGeneric("jscs.analysisType",   function(object,...)       standardGeneric("jscs.analysisType"))
-#setGeneric("jscs.analysisType<-", function(object,...,value) standardGeneric("jscs.analysisType<-"))
-#setMethod("jscs.analysisType", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@analysisType;
-#})
-#setReplaceMethod("jscs.analysisType", signature(object="JunctionSeqCountSet", value="character"),
-#  function( object, value ) {
-#   object@analysisType <- value;
-#})
-################################
-#setGeneric("jscs.DESeqDataSet",   function(object,...)       standardGeneric("jscs.DESeqDataSet"))
-#setGeneric("jscs.DESeqDataSet<-", function(object,...,value) standardGeneric("jscs.DESeqDataSet<-"))
-#setMethod("jscs.DESeqDataSet", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@DESeqDataSet;
-#})
-#setReplaceMethod("jscs.DESeqDataSet", signature(object="JunctionSeqCountSet", value="DESeqDataSet"),
-#  function( object, value ) {
-#   object@DESeqDataSet <- value;
-#})
-################################
-#setGeneric("jscs.modelCoefficientsSample",   function(object,...)       standardGeneric("jscs.modelCoefficientsSample"))
-#setGeneric("jscs.modelCoefficientsSample<-", function(object,...,value) standardGeneric("jscs.modelCoefficientsSample<-"))
-#setMethod("jscs.modelCoefficientsSample", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@modelCoefficientsSample;
-#})
-#setReplaceMethod("jscs.modelCoefficientsSample", signature(object="JunctionSeqCountSet", value="list"),
-#  function( object, value ) {
-#   object@modelCoefficientsSample <- value;
-#})
-################################
-#setGeneric("jscs.modelCoefficientsGene",   function(object,...)       standardGeneric("jscs.modelCoefficientsGene"))
-#setGeneric("jscs.modelCoefficientsGene<-", function(object,...,value) standardGeneric("jscs.modelCoefficientsGene<-"))
-#setMethod("jscs.modelCoefficientsGene", signature(object="JunctionSeqCountSet"),
-#  function( object) {
-#    object@modelCoefficientsGene;
-#})
-#setReplaceMethod("jscs.modelCoefficientsGene", signature(object="JunctionSeqCountSet", value="list"),
-#  function( object, value ) {
-#   object@modelCoefficientsGene <- value;
-#})
-################################
-
-#setMethod("show","JunctionSeqCountSet",
-#   function(object){
-#      cat("QoRTs_QC_Results object:\n");
-#      
-#      cat("Memory Usage:");
-#      cat("object: ", format(object.size(object), units="Mb");
-#      cat("fData(object): ",format(object.size(fData(object)),"Mb");
-#      cat("pData(object): ",format(object.size(pData(object)),"Mb");
-#      
-#      cat("object@fittedMu: ",format(object.size(object@fittedMu),"Mb");
-#      cat("counts(object): ", format(object.size(counts(object)), units="Mb");
-#      cat("object@geneCountData: ", format(object.size(object@geneCountData), units="Mb");
-#      cat("object@countVectors: ", format(object.size(object@countVectors), units="Mb");      
-#      cat("object@flatGffData: ", format(object.size(object@flatGffData), units="Mb");
-#
-#      #Add more printing stuff here?
-#   }
-#);
-
-
-#save.JunctionSeqCountSet <- function(jscs){
-#  
-#}
-
-#load.JunctionSeqCountSet <- function(file){
-#  
-#}
 
 makeDESeqDataSetFromJSCS <- function(jscs, test.formula1){
-  countData <- jscs@countVectors;
+  countData <- jscs@countVectors
   colData <- rbind.data.frame(
                               cbind.data.frame(data.frame(sample = rownames(pData(jscs))) , pData(jscs) ),
                               cbind.data.frame(data.frame(sample = rownames(pData(jscs))) , pData(jscs) )
-  );
-  colData$countbin <- factor(c(  rep("this",ncol(countData)/2)  ,   rep("others",ncol(countData)/2)   ), levels = c("this","others"));
-  #print("colData:");
-  #print(colData);
+  )
+  colData$countbin <- factor(c(  rep("this",ncol(countData)/2)  ,   rep("others",ncol(countData)/2)   ), levels = c("this","others"))
   for(i in 1:ncol(colData)){
-    colData[[i]] <- factor(colData[[i]]);
+    colData[[i]] <- factor(colData[[i]])
   }
-  colData <- DataFrame(colData);
-  rownames(colData) <- colnames(countData);
+  colData <- DataFrame(colData)
+  rownames(colData) <- colnames(countData)
   
-  jscs@DESeqDataSet <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = test.formula1, ignoreRank = TRUE);
-  return(jscs);
+  jscs@DESeqDataSet <- DESeqDataSetFromMatrix(countData = countData, colData = colData, design = test.formula1, ignoreRank = TRUE)
+  return(jscs)
 }
 
 getModelFit <- function(jscs, featureID, geneID, countbinID, modelFitType = c("fitH0","fitH1","fitEffect")){
   if(is.null(featureID)){
     if(is.null(geneID) | is.null(countbinID)){
-      stop("ERROR: getModelFit(): either featureID or geneID AND countbinID must be set!");
+      stop("ERROR: getModelFit(): either featureID or geneID AND countbinID must be set!")
     } else {
-      featureID <- paste0(geneID, ":", countbinID);
+      featureID <- paste0(geneID, ":", countbinID)
     }
   }
   
-  out <- list();
+  out <- list()
   if(any(modelFitType == "fitH0")){
     if(is.null(jscs@modelFitForHypothesisTest)){
-      stop("ERROR: getModelFit(): no modelFitForHypothesisTest found. Run testJunctionsForDJU().");
+      stop("ERROR: getModelFit(): no modelFitForHypothesisTest found. Run testJunctionsForDJU().")
     }
-    out[["fitH0"]] <- jscs@modelFitForHypothesisTest[[featureID]][["fitH0"]];
+    out[["fitH0"]] <- jscs@modelFitForHypothesisTest[[featureID]][["fitH0"]]
   }
   if(any(modelFitType == "fitH1")){
     if(is.null(jscs@modelFitForHypothesisTest)){
-      stop("ERROR: getModelFit(): no modelFitForHypothesisTest found. Run testJunctionsForDJU().");
+      stop("ERROR: getModelFit(): no modelFitForHypothesisTest found. Run testJunctionsForDJU().")
     }
-    out[["fitH1"]] <- jscs@modelFitForHypothesisTest[[featureID]][["fitH1"]];
+    out[["fitH1"]] <- jscs@modelFitForHypothesisTest[[featureID]][["fitH1"]]
   }
   if(any(modelFitType == "fitEffect")){
     if(is.null(jscs@modelFitForEffectSize)){
-      stop("ERROR: getModelFit(): no modelFitForHypothesisTest found. Run testJunctionsForDJU().");
+      stop("ERROR: getModelFit(): no modelFitForHypothesisTest found. Run testJunctionsForDJU().")
     }
-    out[["fitEffect"]] <- jscs@modelFitForEffectSize[[featureID]];
+    out[["fitEffect"]] <- jscs@modelFitForEffectSize[[featureID]]
   }
-  return(out);
+  return(out)
 }
 
 
@@ -393,10 +114,10 @@ newJunctionSeqCountSet <- function( countData, geneCountData, design, geneIDs, c
       stop("The geneIDs or countbinIDs are not unique")
    }
    if(any(duplicated(rownames(geneCountData)))){
-      stop("The geneIDs in the geneCountData are not unique");
+      stop("The geneIDs in the geneCountData are not unique")
    }
    if(any(duplicated(colnames(geneCountData)))){
-      stop("The sample ID's in the geneCountData are not unique");
+      stop("The sample ID's in the geneCountData are not unique")
    }
 
    phenoData <- annotatedDataFrameFrom( countData, byrow=FALSE )
@@ -446,7 +167,7 @@ newJunctionSeqCountSet <- function( countData, geneCountData, design, geneIDs, c
    varMetadata( featureData )[ "dispBeforeSharing", "labelDescription" ] <- "feature dispersion (Cox-Reid estimate)"
 
    featureData$dispFitted <- rep( NA_real_, nrow( countData ) )
-   varMetadata( featureData )[ "dispFitted", "labelDescription" ] <- "Fitted mean-variance estimate.";
+   varMetadata( featureData )[ "dispFitted", "labelDescription" ] <- "Fitted mean-variance estimate."
 
    featureData$dispersion <- rep( NA_real_, nrow( countData ) )
    varMetadata( featureData )[ "dispersion", "labelDescription" ] <- "Final dispersion estimate."
@@ -484,8 +205,8 @@ newJunctionSeqCountSet <- function( countData, geneCountData, design, geneIDs, c
    varMetadata( featureData )[ "strand", "labelDescription" ] <- "strand of feature"
    varMetadata( featureData )[ "transcripts", "labelDescription" ] <- "transcripts in which this feature is contained"
 
-   featureData$baseMean <- rep( NA_real_, nrow( countData ) );
-   varMetadata( featureData )[ "baseMean", "labelDescription" ] <- "The mean normalized counts across all samples.";
+   featureData$baseMean <- rep( NA_real_, nrow( countData ) )
+   varMetadata( featureData )[ "baseMean", "labelDescription" ] <- "The mean normalized counts across all samples."
    
 
    if( is( design, "data.frame" ) || is( design, "AnnotatedDataFrame" ) ) {
@@ -659,11 +380,6 @@ setReplaceMethod("design", signature(object="JunctionSeqCountSet"),
       validObject(cds)
       cds
 })
-
-#setMethod("design",       signature(cds="JunctionSeqCountSet"), .design)
-#setMethod("design<-",     signature(cds="JunctionSeqCountSet"), `.design<-`)
-#setMethod("conditions",   signature(cds="JunctionSeqCountSet"), .design)
-#setMethod("conditions<-", signature(cds="JunctionSeqCountSet"), `.design<-`)
 
 geneIDs <- function( ecs ) {
    stopifnot( is( ecs, "JunctionSeqCountSet" ) )

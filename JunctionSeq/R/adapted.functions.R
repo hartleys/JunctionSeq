@@ -109,17 +109,17 @@ calc.filtered.adjusted.p <- function(
     filterThreshold = NULL,
     verbose = TRUE
 ){
-   #independentFiltering = TRUE;
-   if(verbose) message("> Performing final p.adjust filtering.");
-   pvalue[!testable] <- NA;
-   status <- as.character(status);
+   #independentFiltering = TRUE
+   if(verbose) message("> Performing final p.adjust filtering.")
+   pvalue[!testable] <- NA
+   status <- as.character(status)
    
-   m <- nrow(dispModelMatrix);
-   p <- ncol(dispModelMatrix);
+   m <- nrow(dispModelMatrix)
+   p <- ncol(dispModelMatrix)
   
   if(cooksFilter){
     if(is.null(maxCooks)){
-      if(verbose) message(">      No cook's cutoffs found.");
+      if(verbose) message(">      No cook's cutoffs found.")
     } else {
       if (m > p) {
         defaultCutoff <- qf(.99, p, m - p)
@@ -127,32 +127,30 @@ calc.filtered.adjusted.p <- function(
           cooksCutoff <- defaultCutoff
         }
         stopifnot(length(cooksCutoff)==1)
-        if (is.logical(cooksCutoff) & cooksCutoff) {
+        if (is.logical(cooksCutoff) && cooksCutoff) {
           cooksCutoff <- defaultCutoff
         }
       } else {
         cooksCutoff <- FALSE
       }
-      if(verbose) message(">      Applying cooks cutoff outlier filtering.");
+      if(verbose) message(">      Applying cooks cutoff outlier filtering.")
       # apply cutoff based on maximum Cook's distance
       performCooksCutoff <- (is.numeric(cooksCutoff) | cooksCutoff) 
-      if ((m > p) & performCooksCutoff) {
-        cooksOutlier <- f.na(maxCooks > cooksCutoff);
+      if ((m > p) && performCooksCutoff) {
+        cooksOutlier <- f.na(maxCooks > cooksCutoff)
 
-        if(verbose) message(">      Filtering out ",sum(cooksOutlier & testable)," features because maxCooks > ",cooksCutoff);
+        if(verbose) message(">      Filtering out ",sum(cooksOutlier & testable)," features because maxCooks > ",cooksCutoff)
         pvalue[cooksOutlier] <- NA
-        status[testable & cooksOutlier] <- "COOKS_OUTLIER";
-        testable[testable & cooksOutlier] <- FALSE;
+        status[testable & cooksOutlier] <- "COOKS_OUTLIER"
+        testable[testable & cooksOutlier] <- FALSE
       }
     }
   }
   
   # perform independent filtering
   if(independentFiltering) {
-    #if(verbose) message(">      Automatically selecting a filtering threshold to optimize results at the alpha < ",alpha," significance level.");
-    
     if (missing(filter)) {
-      stop("Must set a filter parameter!");
+      stop("Must set a filter parameter!")
     }
     if (missing(theta)) {
       lowerQuantile <- mean(filter == 0)
@@ -167,36 +165,35 @@ calc.filtered.adjusted.p <- function(
     j <- which.max(numRej)
     padj <- filtPadj[, j, drop=TRUE]
     cutoffs <- quantile(filter, theta)
-    filterThreshold <- cutoffs[j];
-    use <- (filter >= filterThreshold) & testable;
+    filterThreshold <- cutoffs[j]
+    use <- (filter >= filterThreshold) & testable
     filterNumRej <- data.frame(theta=theta, numRej=numRej)
     
     
-    if(verbose) message(">      Automatically selecting a filtering threshold of ",filterThreshold," to optimize results at the alpha < ",alpha," significance level.");
-    if(verbose) message(">         (Filtering ",sum(testable & (! use))," out of ",sum(testable)," \"testable\" features, using baseMean < ",filterThreshold,")");
-    if(verbose) message(">         (Rejected H0 for ",sum(numRej[j])," out of ",sum(use), " features at alpha < ",alpha,")");
-    status[testable & (! use)] <- "LOW_COUNTS_INDEP_FILTER";
-    testable[testable & (! use)] <- FALSE;
+    if(verbose) message(">      Automatically selecting a filtering threshold of ",filterThreshold," to optimize results at the alpha < ",alpha," significance level.")
+    if(verbose) message(">         (Filtering ",sum(testable & (! use))," out of ",sum(testable)," \"testable\" features, using baseMean < ",filterThreshold,")")
+    if(verbose) message(">         (Rejected H0 for ",sum(numRej[j])," out of ",sum(use), " features at alpha < ",alpha,")")
+    status[testable & (! use)] <- "LOW_COUNTS_INDEP_FILTER"
+    testable[testable & (! use)] <- FALSE
     
   } else {
     if(is.null(filterThreshold)) {
-      filterThreshold <- -1;
+      filterThreshold <- -1
     }
-    padj <- rep(NA,length(filter));
-    use <- (filter >= filterThreshold) & testable;
-    padj[use] <- p.adjust(pvalue[use],method=pAdjustMethod);
-    numRej  <- sum(padj < alpha, na.rm=TRUE);
-    j <- 1;
+    padj <- rep(NA,length(filter))
+    use <- (filter >= filterThreshold) & testable
+    padj[use] <- p.adjust(pvalue[use],method=pAdjustMethod)
+    numRej  <- sum(padj < alpha, na.rm=TRUE)
+    j <- 1
     
-    filterNumRej <- data.frame(theta = sum(testable & (! use)) / sum(testable), numRej =  numRej);
+    filterNumRej <- data.frame(theta = sum(testable & (! use)) / sum(testable), numRej =  numRej)
     
-    if(verbose) message(">      Filtering for preset threshold (BaseMean > ",filterThreshold,")");
-    if(verbose) message(">         (Filtering ",sum(testable & (! use))," out of ",sum(testable)," \"testable\" features, using baseMean < ",filterThreshold,")");
-    if(verbose) message(">         (Rejected H0 for ",sum(numRej[j])," out of ",sum(use), " features at alpha < ",alpha,")");
+    if(verbose) message(">      Filtering for preset threshold (BaseMean > ",filterThreshold,")")
+    if(verbose) message(">         (Filtering ",sum(testable & (! use))," out of ",sum(testable)," \"testable\" features, using baseMean < ",filterThreshold,")")
+    if(verbose) message(">         (Rejected H0 for ",sum(numRej[j])," out of ",sum(use), " features at alpha < ",alpha,")")
   }
-  #if(verbose) print(filterNumRej);
   
-  if(verbose) message("> Final p.adjust filtering complete.");
+  if(verbose) message("> Final p.adjust filtering complete.")
   
   return(list(
     res = data.frame(
@@ -206,7 +203,7 @@ calc.filtered.adjusted.p <- function(
     ),
     filterThreshold = filterThreshold,
     filterNumRej = filterNumRej
-  ));
+  ))
   
 }
 
@@ -263,7 +260,7 @@ estimateSizeFactorsForMatrix <- function( counts, locfunc = stats::median, geoMe
       exp(locfunc((log(cnts) - loggeomeans)[is.finite(loggeomeans) & cnts > 0]))
     })
   } else {
-    if ( !( is.numeric(controlGenes) | is.logical(controlGenes) ) ) {
+    if ( !( is.numeric(controlGenes) || is.logical(controlGenes) ) ) {
       stop("controlGenes should be either a numeric or logical vector")
     }
     loggeomeansSub <- loggeomeans[controlGenes]
@@ -305,7 +302,7 @@ estimateUnsharedDispersions <- function(object,
   mcols(object) <- mcols( mergeObject )[matchedNames,]
   assays(object) <- assays(mergeObject[matchedNames,])
   
-  return(object);
+  return(object)
 }
 
 adapted.estimateDispersionsMAP <- function( jscs, useRows, #dispFn, 
@@ -318,66 +315,30 @@ adapted.estimateDispersionsMAP <- function( jscs, useRows, #dispFn,
     stopifnot(length(dispTol) == 1)
     stopifnot(length(maxit) == 1)
     
-    dispBeforeSharing <- fData(jscs)$dispBeforeSharing[useRows];
-    dispFitted        <- fData(jscs)$dispFitted[useRows];
-    #dispFn <- jscs@dispFunction;
-    means <- fData(jscs)$baseMean[useRows];
-    countVectors <- jscs@countVectors[useRows,];
-    mu <- jscs@fittedMu[useRows,];
+    dispBeforeSharing <- fData(jscs)$dispBeforeSharing[useRows]
+    dispFitted        <- fData(jscs)$dispFitted[useRows]
+    means <- fData(jscs)$baseMean[useRows]
+    countVectors <- jscs@countVectors[useRows,]
+    mu <- jscs@fittedMu[useRows,]
     
-    #if (!is.null(mcols(object)$dispersion)) {
-    #    if (!quiet) 
-    #        message("found already estimated dispersions, removing these")
-    #    removeCols <- c("dispersion", "dispOutlier", "dispMAP", 
-    #        "dispIter", "dispConv")
-    #    mcols(object) <- mcols(object)[, !names(mcols(object)) %in% 
-    #        removeCols, drop = FALSE]
-    #}
-    #if (missing(modelMatrix)) {
-    #    modelMatrix <- model.matrix(design(object), data = as.data.frame(colData(object)))
-    #}
     if (missing(modelMatrix)) {
-        #modelMatrix <- model.matrix(test.formula1, data = as.data.frame(pData(jscs)))
         modelFrame <- constructModelFrame( jscs )
         modelMatrix <- rmDepCols( model.matrix( test.formula1, modelFrame ) )
     }
-    aboveMinDisp <- f.na(dispBeforeSharing > minDisp * 100);
-    varLogDispEsts <- mad(log(dispBeforeSharing[aboveMinDisp]) - log(dispFitted[aboveMinDisp]), na.rm = TRUE)^2;
-    #else {
-    #    message("using supplied model matrix")
-    #}
+    aboveMinDisp <- f.na(dispBeforeSharing > minDisp * 100)
+    varLogDispEsts <- mad(log(dispBeforeSharing[aboveMinDisp]) - log(dispFitted[aboveMinDisp]), na.rm = TRUE)^2
     if (missing(dispPriorVar)) {
-    #   if (sum(mcols(object)$dispGeneEst >= minDisp * 100, na.rm = TRUE) == 0) {
         if (sum(dispBeforeSharing >= minDisp * 100, na.rm = TRUE) == 0) {
-            stop(paste0("all genes have dispersion estimates < ", minDisp * 10, "!"));
-            #warning(paste0("all genes have dispersion estimates < ", minDisp * 10, ", returning disp = ", minDisp *  10))
-            #resultsList <- list(dispersion = minDisp * 10)
-            #dispDataFrame <- buildDataFrameWithNARows(resultsList, mcols(object)$allZero)
-            #mcols(dispDataFrame) <- DataFrame(type = "intermediate",  description = "final estimates of dispersion")
-            #mcols(object) <- cbind(mcols(object), dispDataFrame)
-            #dispFn <- dispersionFunction(object)
-            #attr(dispFn, "dispPriorVar") <- 0.25
-            #dispersionFunction(object, estimateVar = FALSE) <- dispFn
-            #return(object)
+            stop(paste0("all genes have dispersion estimates < ", minDisp * 10, "!"))
         }
         dispPriorVar <- adapted.estimateDispersionsPriorVar(dispBeforeSharing = dispBeforeSharing, dispFitted = dispFitted, varLogDispEsts = varLogDispEsts, modelMatrix = modelMatrix, minDisp = minDisp, verbose = verbose)
-        #dispFn <- dispersionFunction(object)
-        #attr(dispFn, "dispPriorVar") <- dispPriorVar
-        #dispersionFunction(object, estimateVar = FALSE) <- dispFn
         
-    } #else {
-    #    dispFn <- dispersionFunction(object)
-    #    attr(dispFn, "dispPriorVar") <- dispPriorVar
-    #    dispersionFunction(object, estimateVar = FALSE) <- dispFn
-    #}
+    }
     stopifnot(length(dispPriorVar) == 1)
-    #objectNZ <- object[!mcols(object)$allZero, , drop = FALSE]
-    #varLogDispEsts <- attr(dispFn, "varLogDispEsts")
     
     
     log_alpha_prior_sigmasq <- dispPriorVar
     
-    #mu <- 
     dispInit <- ifelse(dispBeforeSharing > 0.1 * dispFitted, 
                        dispBeforeSharing, 
                        dispFitted)
@@ -401,36 +362,25 @@ adapted.estimateDispersionsMAP <- function( jscs, useRows, #dispFn,
     dispMAP <- pmin(pmax(dispMAP, minDisp), maxDisp)
     dispersionFinal <- dispMAP
     dispOutlier <- f.na(log(dispBeforeSharing) > log(dispFitted) + outlierSD * sqrt(varLogDispEsts))
-    #dispOutlier[is.na(dispOutlier)] <- FALSE
     dispersionFinal[dispOutlier] <- dispBeforeSharing[dispOutlier]
     resultsList <- list(dispersion = dispersionFinal, 
                         dispIter = dispResMAP$iter, 
                         dispOutlier = dispOutlier, 
                         dispMAP = dispMAP)
-    #dispDataFrame <- buildDataFrameWithNARows(resultsList, mcols(object)$allZero)
-    #mcols(dispDataFrame) <- DataFrame(type = rep("intermediate", 
-    #    ncol(dispDataFrame)), description = c("final estimate of dispersion", 
-    #    "number of iterations", "dispersion flagged as outlier", 
-    #    "maximum a posteriori estimate"))
-    #mcols(object) <- cbind(mcols(object), dispDataFrame)
-    #return(object)
-    return(resultsList);
+
+    return(resultsList)
 }
 
 
 
 adapted.estimateDispersionsPriorVar <- function (dispBeforeSharing, dispFitted, varLogDispEsts, minDisp = 1e-08, modelMatrix, verbose = TRUE){
-    #objectNZ <- object[!mcols(object)$allZero, , drop = FALSE]
     
     aboveMinDisp <- dispBeforeSharing >= minDisp * 100
-    #if (missing(modelMatrix)) {
-    #    modelMatrix <- model.matrix(design(object), data = as.data.frame(colData(object)))
-    #}
-    dispResiduals <- log(dispBeforeSharing) - log(dispFitted);
+
+    dispResiduals <- log(dispBeforeSharing) - log(dispFitted)
     if (sum(aboveMinDisp, na.rm = TRUE) == 0) {
         stop("no data found which is greater than minDisp")
     }
-    #varLogDispEsts <- attr(dispersionFunction(object), "varLogDispEsts")
     m <- nrow(modelMatrix)
     p <- ncol(modelMatrix)
     if(((m - p) <= 3) & (m > p)) {
@@ -471,7 +421,7 @@ adapted.estimateDispersionsPriorVar <- function (dispBeforeSharing, dispFitted, 
         dispPriorVar <- varLogDispEsts
         expVarLogDisp <- 0
     }
-    return(dispPriorVar);
+    return(dispPriorVar)
 }
 
 ##############################
@@ -480,10 +430,10 @@ adapted.estimateDispersionsPriorVar <- function (dispBeforeSharing, dispFitted, 
 vst <- function(x, ecs)
 {
   if(is.null(ecs@dispFunctionType[["fitType"]])){
-    stop("vst: Cannot find dispersion fit data! Fit dispersions first.");
+    stop("vst: Cannot find dispersion fit data! Fit dispersions first.")
   } else if(ecs@dispFunctionType[["fitType"]] != "parametric"){
-    warning("vst cannot be performed without parametric dispersion fit. Using un-transformed data instead.");
-    return(x);
+    warning("vst cannot be performed without parametric dispersion fit. Using un-transformed data instead.")
+    return(x)
   } else {
     suppressWarnings(
       ( 2 / ( sqrt(ecs@dispFitCoefs[1]) ) ) * 
@@ -501,7 +451,7 @@ rmDepCols <- function(m) {
       #Added functionality: pass on the "assign" attribute:
       out <- m[ , -q$pivot[ (q$rank+1) : ncol(m) ] ]
       attr(out,"assign") <- attr(m,"assign")[ -q$pivot[ (q$rank+1) : ncol(m) ] ]
-      out;
+      out
    }else{
       m
    }
@@ -551,7 +501,7 @@ estimateFeatureDispersionFromRow <- function( ecs, i, modelFrame, mm , use.alter
      stop("Please calculate size factors before estimating dispersions\n")
    }
    
-   count <- ecs@countVectors[i,];
+   count <- ecs@countVectors[i,]
    disp <- .1
    for( i in 1:10 ) {
      fit <- glmnb.fit( mm, count, dispersion = disp, offset = log( modelFrame$sizeFactor ) )
@@ -571,34 +521,27 @@ constructModelFrame <- function( ecs ){
      sample = sampleNames(ecs),
      design(ecs, drop=FALSE),
      sizeFactor = sizeFactors(ecs) )
-  #modelFrame <- rbind(modelFrame, modelFrame);
-  #modelFrame$countbin <- 
   modelFrame <- rbind(
      cbind( modelFrame, countbin="this" ),
      cbind( modelFrame, countbin="others" ) )
-  modelFrame$countbin <- factor(modelFrame$countbin, levels = c("this","others"));
+  modelFrame$countbin <- factor(modelFrame$countbin, levels = c("this","others"))
   rownames(modelFrame) <- NULL
   return( modelFrame )
 }
 
 arrangeCoefs <- function( frm, mf, mm = model.matrix( frm, mf ), fit = NULL, insertValues = TRUE ) {
 
-   #if( any( attr( mm, "contrasts" ) != "contr.treatment" ) )
-   #   stop( "Can only deal with standard 'treatment' contrasts." )   # Do I need this? # No.
    if( is.null(fit) & insertValues )
       stop( "If fit==NULL, returnCoefValues must be FALSE" )
    if( !is.null(fit) )
-      stopifnot( all( colnames(mm) == names(coefficients(fit)) ) );
+      stopifnot( all( colnames(mm) == names(coefficients(fit)) ) )
 
-   fctTbl <- attr( terms(frm), "factors" );
+   fctTbl <- attr( terms(frm), "factors" )
 
    coefIndicesList <- 
    lapply( seq_len(ncol(fctTbl)), function( fctTblCol ) {
       termName <- colnames(fctTbl)[ fctTblCol ]
       varsInTerm <- stringr::str_split( termName, stringr::fixed(":") )[[1]] 
-      #This check returns an error when a term appears as a interaction effect but not as a main effect (for example, for the hypothesis test model!)
-      #stopifnot( all( fctTbl[ varsInTerm, fctTblCol ] == 1 ) )
-      #stopifnot( sum( fctTbl[ , fctTblCol ] ) == length( varsInTerm ) )
       coefNames <- colnames(mm)[ attr( mm, "assign" ) == fctTblCol ]
       lvlTbl <- stringr::str_match( coefNames, 
          stringr::str_c( "^", stringr::str_c( varsInTerm, "([^:]*)", collapse=":" ), "$" ) )[ , -1, drop=FALSE ]
@@ -680,14 +623,12 @@ balanceFeatures <- function( coefs, dispersions ) {
 ##################################################################
 
 fitDispersionFunction_simpleMode <- function(jscs, verbose = TRUE){
-     #Options(warn = 1);
-     if(verbose) message("> fitDispersionFunction(): Fallback mode.");
-     if(verbose) message("> fitDispersionFunction() Starting (",date(),")");
+     if(verbose) message("> fitDispersionFunction(): Fallback mode.")
+     if(verbose) message("> fitDispersionFunction() Starting (",date(),")")
      stopifnot(is(jscs, "JunctionSeqCountSet"))
      if(all(is.na(fData(jscs)$dispBeforeSharing))){
         stop("no CR dispersion estimations found, please first call estimateDispersions function")
      }
-     #means <- colMeans( t(counts(jscs))/sizeFactors(jscs) )
      means <- fData(jscs)$baseMean
      disps <- fData(jscs)$dispBeforeSharing
      coefs <- c( .1, 1 )
@@ -699,26 +640,24 @@ fitDispersionFunction_simpleMode <- function(jscs, verbose = TRUE){
 
         #FIX ME! TEST ME! (Note: Done.)
         fit <- tryCatch({
-            #testVar <- "ATEST!";
-            glmgam.fit(mm, disps[good], coef.start=coefs, maxit=250);
+            glmgam.fit(mm, disps[good], coef.start=coefs, maxit=250)
           }, warning = function(w){
-            message("> fitDispersionFunction(): warning encountered in glmgam.fit (iteration ",iter,")\n    ",w);
-            #message(testVar);
-            glmgam.fit(mm, disps[good], coef.start=coefs, maxit=250);
+            message("> fitDispersionFunction(): warning encountered in glmgam.fit (iteration ",iter,")\n    ",w)
+            glmgam.fit(mm, disps[good], coef.start=coefs, maxit=250)
           }, error = function(e){
-            message("> fitDispersionFunction(): Fatal Error encountered in glmgam.fit (iteration ",iter,")");
-            message("> fitDispersionFunction(): Failed to fit the dispersion function!");
-            stop(e);
+            message("> fitDispersionFunction(): Fatal Error encountered in glmgam.fit (iteration ",iter,")")
+            message("> fitDispersionFunction(): Failed to fit the dispersion function!")
+            stop(e)
           }
-        );
+        )
 
         oldcoefs <- coefs
         coefs <- coefficients(fit)
 
-        if(verbose) message("> (Iteration ",iter,") Dispersion Coefs: [",coefs[1], ",", coefs[2],"]");
+        if(verbose) message("> (Iteration ",iter,") Dispersion Coefs: [",coefs[1], ",", coefs[2],"]")
         if(coefs[1] < 0){
            coefs[1] <- 0
-           message("> fitDispersionFunction(): warning encountered on iteration ",iter,":\n    Negative intercept value in the dispersion function, it will be set to 0. Check fit diagnostics plot section from the vignette.");
+           message("> fitDispersionFunction(): warning encountered on iteration ",iter,":\n    Negative intercept value in the dispersion function, it will be set to 0. Check fit diagnostics plot section from the vignette.")
 
            warning("Negative intercept value in the dispersion function, it will be set to 0. Check fit diagnostics plot section from the vignette.")
            break
@@ -730,7 +669,7 @@ fitDispersionFunction_simpleMode <- function(jscs, verbose = TRUE){
            warning( "Dispersion fit did not converge." )
            break }
       }
-      if(verbose) message("> fitDispersionFunction(): Finished on iteration ",iter,". Dispersion Coefs: [",coefs[1], ",", coefs[2],"]");
+      if(verbose) message("> fitDispersionFunction(): Finished on iteration ",iter,". Dispersion Coefs: [",coefs[1], ",", coefs[2],"]")
       jscs@dispFitCoefs <- coefs
       fData(jscs)$dispFitted <- jscs@dispFitCoefs[1] + jscs@dispFitCoefs[2] / colMeans( t(counts(jscs))/sizeFactors(jscs) )
       fData(jscs)$dispersion <- pmin(
@@ -743,10 +682,10 @@ fitDispersionFunction_simpleMode <- function(jscs, verbose = TRUE){
       jscs@dispFunctionType <- list(fitType = "parametric", 
                                     attemptedFitType = "parametric", 
                                     finalDispersionMethod = "max", 
-                                    fitDispersionsForExonsAndJunctionsSeparately = FALSE);
+                                    fitDispersionsForExonsAndJunctionsSeparately = FALSE)
                                  
-      if(verbose) message("> fitDispersionFunction() Done. (",date(),")");
-      return(jscs);
+      if(verbose) message("> fitDispersionFunction() Done. (",date(),")")
+      return(jscs)
 }
 
 fitDispersionFunction_advancedMode <- function( jscs, 
@@ -755,74 +694,69 @@ fitDispersionFunction_advancedMode <- function( jscs,
                                                 fitDispersionsForExonsAndJunctionsSeparately = TRUE, 
                                                 nCores = 1,
                                                 verbose = TRUE){
-   #Options(warn = 1);
    minDisp <- 1e-8; # 1e8 as an arbitrary way-too-small value to capture infinities
-   minFitDisp <- minDisp * 100;
+   minFitDisp <- minDisp * 100
    
-   if(verbose) message("> fitDispersionFunction() Starting (",date(),")");
-   fitType <- match.arg(fitType);
-   finalDispersionMethod <- match.arg(finalDispersionMethod);
-   if(verbose) message(">   (fitType = ",fitType,")");
-   if(verbose) message(">   (finalDispersionMethod = ",finalDispersionMethod,")");
-   if(verbose) message(">   (fitDispersionsForExonsAndJunctionsSeparately = ",fitDispersionsForExonsAndJunctionsSeparately,")");
+   if(verbose) message("> fitDispersionFunction() Starting (",date(),")")
+   fitType <- match.arg(fitType)
+   finalDispersionMethod <- match.arg(finalDispersionMethod)
+   if(verbose) message(">   (fitType = ",fitType,")")
+   if(verbose) message(">   (finalDispersionMethod = ",finalDispersionMethod,")")
+   if(verbose) message(">   (fitDispersionsForExonsAndJunctionsSeparately = ",fitDispersionsForExonsAndJunctionsSeparately,")")
    
    stopifnot(is(jscs, "JunctionSeqCountSet"))
    if(all(is.na(fData(jscs)$dispBeforeSharing))){
       stop("no CR dispersion estimations found, please first call estimateDispersions function")
    }
-   #means <- colMeans( t(counts(jscs))/sizeFactors(jscs) )
-   means <- fData(jscs)$baseMean;
-   disps <- fData(jscs)$dispBeforeSharing;
-   useForFit <- f.na(disps > minFitDisp) & (! fData(jscs)$allZero);
-   isExon <- fData(jscs)$featureType == "exonic_part";
+   means <- fData(jscs)$baseMean
+   disps <- fData(jscs)$dispBeforeSharing
+   useForFit <- f.na(disps > minFitDisp) & (! fData(jscs)$allZero)
+   isExon <- fData(jscs)$featureType == "exonic_part"
    
-   message("min(means[useForFit], na.rm=T)=",min(means[useForFit], na.rm=TRUE));
+   message("min(means[useForFit], na.rm=T)=",min(means[useForFit], na.rm=TRUE))
    
    if((! any(isExon)) | (! any(! isExon))){
-     fitDispersionsForExonsAndJunctionsSeparately <- FALSE;
+     fitDispersionsForExonsAndJunctionsSeparately <- FALSE
    }
    if(sum(useForFit) == 0){
-     stop("No loci found with dispersion > ",minFitDisp, ". dispersion fit failed!");
+     stop("No loci found with dispersion > ",minFitDisp, ". dispersion fit failed!")
    }
    if(sum(useForFit & isExon) == 0 & fitDispersionsForExonsAndJunctionsSeparately){
-     stop("No exonic regions found with dispersion > ",minFitDisp, ". dispersion fit failed!");
+     stop("No exonic regions found with dispersion > ",minFitDisp, ". dispersion fit failed!")
    }
    if(sum(useForFit & (! isExon)) == 0 & fitDispersionsForExonsAndJunctionsSeparately){
-     stop("No splice junctions found with dispersion > ",minFitDisp, ". dispersion fit failed!");
+     stop("No splice junctions found with dispersion > ",minFitDisp, ". dispersion fit failed!")
    }
    
-   if(verbose) message(">    fdf: Fitting dispersions:");
-   dispFunction <- adapted.estimateDispersionsFit(means = means[useForFit], disps = disps[useForFit], fitType = fitType, quiet = ! verbose);
-   #dispFunction <- dispersionFunction( estimateDispersionsFit(jscs@DESeqDataSet,fitType=fitType, quiet=!verbose) );
-   jscs@dispFunction <- dispFunction;
-   if(attr(dispFunction,"fitType") == "parametric") jscs@dispFitCoefs <- attr(jscs@dispFunction,"coefficients");
+   if(verbose) message(">    fdf: Fitting dispersions:")
+   dispFunction <- adapted.estimateDispersionsFit(means = means[useForFit], disps = disps[useForFit], fitType = fitType, quiet = ! verbose)
+   jscs@dispFunction <- dispFunction
+   if(attr(dispFunction,"fitType") == "parametric") jscs@dispFitCoefs <- attr(jscs@dispFunction,"coefficients")
    
    if(fitDispersionsForExonsAndJunctionsSeparately){
-     if(verbose) message(">    fdf: Fitting dispersions of exons and junctions to separate fitted trends.");
-     if(verbose) message(">    fdf: Fitting exon dispersions:");
-     useCols <- useForFit & isExon;
-     dispFunctionExon <- adapted.estimateDispersionsFit(means = means[useCols],disps = disps[useCols], fitType = fitType, quiet = ! verbose);
-     #dispFunctionExon <- dispersionFunction( estimateDispersionsFit(jscs@DESeqDataSet[isExon],fitType=fitType, quiet=!verbose) );
+     if(verbose) message(">    fdf: Fitting dispersions of exons and junctions to separate fitted trends.")
+     if(verbose) message(">    fdf: Fitting exon dispersions:")
+     useCols <- useForFit & isExon
+     dispFunctionExon <- adapted.estimateDispersionsFit(means = means[useCols],disps = disps[useCols], fitType = fitType, quiet = ! verbose)
      
-     if(verbose) message(">    fdf: Fitting splice-junction dispersions:");
-     useCols <- useForFit & (! isExon);
-     dispFunctionJct  <- adapted.estimateDispersionsFit(means = means[useCols],disps = disps[useCols], fitType = fitType, quiet = ! verbose);
-     #dispFunctionJct <- dispersionFunction( estimateDispersionsFit(jscs@DESeqDataSet[! isExon],fitType=fitType, quiet=!verbose) );
+     if(verbose) message(">    fdf: Fitting splice-junction dispersions:")
+     useCols <- useForFit & (! isExon)
+     dispFunctionJct  <- adapted.estimateDispersionsFit(means = means[useCols],disps = disps[useCols], fitType = fitType, quiet = ! verbose)
 
-     jscs@dispFunctionExon <- dispFunctionExon;
-     jscs@dispFunctionJct  <- dispFunctionJct;
+     jscs@dispFunctionExon <- dispFunctionExon
+     jscs@dispFunctionJct  <- dispFunctionJct
 
      fData(jscs)$dispFitted <- ifelse(isExon,
                                       jscs@dispFunctionExon(means),
                                       jscs@dispFunctionJct(means)
-                                      );
+                                      )
    } else {
-     if(verbose) message(">    fdf: Fitting exons and junctions dispersions together to a single fitted trend.");
-     fData(jscs)$dispFitted <- jscs@dispFunction(means);
+     if(verbose) message(">    fdf: Fitting exons and junctions dispersions together to a single fitted trend.")
+     fData(jscs)$dispFitted <- jscs@dispFunction(means)
    }
    
    if(finalDispersionMethod == "max"){
-      if(verbose) message("> fdf(): Using the higher of the fitted or feature-specific dispersion estimates.");
+      if(verbose) message("> fdf(): Using the higher of the fitted or feature-specific dispersion estimates.")
       fData(jscs)$dispersion <- pmin(
            pmax(
               fData(jscs)$dispBeforeSharing,
@@ -830,8 +764,8 @@ fitDispersionFunction_advancedMode <- function( jscs,
               na.rm = TRUE 
               ),1e8)
    } else if(finalDispersionMethod == "shrink"){
-      if(verbose) message("> fdf(): 'Shrinking' fitted and feature-specific dispersion estimates.");
-      fData(jscs)$dispersion <- NA;
+      if(verbose) message("> fdf(): 'Shrinking' fitted and feature-specific dispersion estimates.")
+      fData(jscs)$dispersion <- NA
       if(fitDispersionsForExonsAndJunctionsSeparately){
         resultsListExon <- adapted.estimateDispersionsMAP( jscs = jscs, 
                                                useRows = (isExon) & fData(jscs)$testable,
@@ -839,51 +773,40 @@ fitDispersionFunction_advancedMode <- function( jscs,
         resultsListJct <- adapted.estimateDispersionsMAP( jscs = jscs, 
                                                useRows = (! isExon) & fData(jscs)$testable,
                                                verbose = verbose)
-        fData(jscs)$dispersion[(isExon) & fData(jscs)$testable]   <- resultsListExon[["dispersion"]];
-        fData(jscs)$dispersion[(! isExon) & fData(jscs)$testable] <- resultsListJct[["dispersion"]];
+        fData(jscs)$dispersion[(isExon) & fData(jscs)$testable]   <- resultsListExon[["dispersion"]]
+        fData(jscs)$dispersion[(! isExon) & fData(jscs)$testable] <- resultsListJct[["dispersion"]]
       } else {
         resultsList <- adapted.estimateDispersionsMAP( jscs = jscs, 
                                                useRows = fData(jscs)$testable,
                                                verbose = verbose)
-        fData(jscs)$dispersion[fData(jscs)$testable] <- resultsList[["dispersion"]];
+        fData(jscs)$dispersion[fData(jscs)$testable] <- resultsList[["dispersion"]]
       }
    } else if(finalDispersionMethod == "fitted"){
-      if(verbose) message("> fdf(): Using fitted dispersion estimates. (NOTE: NOT RECOMMENDED!)");
+      if(verbose) message("> fdf(): Using fitted dispersion estimates. (NOTE: NOT RECOMMENDED!)")
       fData(jscs)$dispersion <- pmin(fData(jscs)$dispFitted,1e8)
-      #fData(jscs)$dispersion[is.na(fData(jscs)$dispersion)] <- 1e8;
    } else if(finalDispersionMethod == "noShare"){
-      if(verbose) message("> fdf(): Using feature-specific dispersion estimates. (NOTE: NOT RECOMMENDED!)");
-      fData(jscs)$dispersion <- pmin(fData(jscs)$dispBeforeSharing,1e8);
-      #fData(jscs)$dispersion <- pmin(fData(jscs)$dispFitted,1e8);
-      #fData(jscs)$dispersion[is.na(fData(jscs)$dispersion)] <- 1e8;
+      if(verbose) message("> fdf(): Using feature-specific dispersion estimates. (NOTE: NOT RECOMMENDED!)")
+      fData(jscs)$dispersion <- pmin(fData(jscs)$dispBeforeSharing,1e8)
    }
 
    jscs@dispFunctionType <- list(fitType = attr(dispFunction,"fitType"), 
                                  attemptedFitType = fitType,
                                  finalDispersionMethod = finalDispersionMethod,
-                                 fitDispersionsForExonsAndJunctionsSeparately = fitDispersionsForExonsAndJunctionsSeparately);
+                                 fitDispersionsForExonsAndJunctionsSeparately = fitDispersionsForExonsAndJunctionsSeparately)
    
-   failedDisp <- is.na(fData(jscs)$dispersion) & fData(jscs)$testable;
+   failedDisp <- is.na(fData(jscs)$dispersion) & fData(jscs)$testable
    
-   if(verbose) message("> fdf() Dispersion estimate failed for ",sum(failedDisp)," out of ",sum(fData(jscs)$testable)," features.");
+   if(verbose) message("> fdf() Dispersion estimate failed for ",sum(failedDisp)," out of ",sum(fData(jscs)$testable)," features.")
    
    
-   if(verbose) message("> fitDispersionFunction() Done. (",date(),")");
+   if(verbose) message("> fitDispersionFunction() Done. (",date(),")")
    return(jscs)
 }
 
 
 #This code is taken from DESeq2 (which is licensed under the Lesser-GPL v3), but adapted to work with our data structures:
 adapted.estimateDispersionsFit <- function(means, disps, fitType = c("parametric", "local", "mean"),  minDisp = 1e-08, quiet = FALSE) {
-    #keep <- (! is.na(means)) & (! is.na(disps));
-    #keep <- keep & f.na(means > 0);
-    #keep <- keep & (disps > 100 * minDisp);
-    #means <- means[keep];
-    #disps <- disps[keep];
-    
-    #objectNZ <- object[!mcols(object)$allZero, ]
-    #useForFit <- mcols(objectNZ)$dispGeneEstConv
-    fitType <- match.arg(fitType);
+    fitType <- match.arg(fitType)
     stopifnot(length(fitType) == 1)
     stopifnot(length(minDisp) == 1)
     
@@ -907,28 +830,17 @@ adapted.estimateDispersionsFit <- function(means, disps, fitType = c("parametric
     if (!(fitType %in% c("parametric", "local", "mean"))) {
         stop("unknown fitType")
     }
-    attr(dispFunction, "fitType") <- fitType;
+    attr(dispFunction, "fitType") <- fitType
     
-    #For debugging:
-    ##exportedDispFunction <<- dispFunction;
+    varLogDispEsts <- mad(log(disps) - log(dispFunction(means)), na.rm = TRUE)^2
+    attr( dispFunction, "varLogDispEsts" ) <- varLogDispEsts
     
-    varLogDispEsts <- mad(log(disps) - log(dispFunction(means)), na.rm = TRUE)^2;
-    attr( dispFunction, "varLogDispEsts" ) <- varLogDispEsts;
-    
-    return(dispFunction);
-    #attr(dispFunction, "fitType") <- fitType
-    #dispersionFunction(object) <- dispFunction
-    #dispDataFrame <- buildDataFrameWithNARows(list(dispFit = dispFit), 
-    #    mcols(object)$allZero)
-    #mcols(dispDataFrame) <- DataFrame(type = "intermediate", 
-    #    description = "fitted values of dispersion")
-    #mcols(object) <- cbind(mcols(object), dispDataFrame)
-    #return(object)
+    return(dispFunction)
 }
 # Estimate a parametric fit of dispersion to the mean intensity
 adapted.parametricDispersionFit <- function( means, disps, quiet = FALSE ) {
    coefs <- c( .1, 1 )
-   iter <- 0;
+   iter <- 0
    while(TRUE) {
       residuals <- disps / ( coefs[1] + coefs[2] / means )
       good <- which( (residuals > 1e-4) & (residuals < 15) )
@@ -942,11 +854,11 @@ adapted.parametricDispersionFit <- function( means, disps, quiet = FALSE ) {
       if ( ( sum( log( coefs / oldcoefs )^2 ) < 1e-6 )  & fit$converged )
          break
       iter <- iter + 1
-      if(! quiet) message(">       (Iteration ",iter,") Parametric Dispersion Coefs: [",coefs[1], ",", coefs[2],"]");
+      if(! quiet) message(">       (Iteration ",iter,") Parametric Dispersion Coefs: [",coefs[1], ",", coefs[2],"]")
       if ( iter > 25 ) 
         stop(simpleError("dispersion fit did not converge"))
     }
-   if(! quiet)    message(">       (FINAL) Parametric Dispersion Coefs: [",coefs[1], ",", coefs[2],"]");
+   if(! quiet)    message(">       (FINAL) Parametric Dispersion Coefs: [",coefs[1], ",", coefs[2],"]")
    names( coefs ) <- c( "asymptDisp", "extraPois" )
    ans <- function(q) coefs[1] + coefs[2] / q
    attr( ans, "coefficients" ) <- coefs
@@ -960,53 +872,47 @@ adapted.localDispersionFit <- function( means, disps, minDisp ) {
   }
   d <- data.frame(logDisps = log(disps), logMeans = log(means))
   
-  #message("starting locfit");
+  #message("starting locfit")
   fit <- locfit(logDisps ~ logMeans, data=d[disps >= minDisp*10,,drop=FALSE],
                 weights = means[disps >= minDisp*10])
-  #message("locfit generated.");
+  #message("locfit generated.")
   dispFunction <- function(means) {
-    keep <- ! ( is.infinite(log(means)) | is.na(means) | is.nan(means) );
-    out <- rep(NA,length(means));
-    out[keep] <- exp(predict(fit, data.frame(logMeans=log(means[keep]))));
-    #message("sum(keep) = ",sum(keep));
-    #message("length(keep)=",length(keep));
-    #message("sum(is.infinite(log(means)))=",sum(is.infinite(log(means))));
-    #message("sum(is.infinite((means)))=",sum(is.infinite((means))));
-    out;
+    keep <- ! ( is.infinite(log(means)) | is.na(means) | is.nan(means) )
+    out <- rep(NA,length(means))
+    out[keep] <- exp(predict(fit, data.frame(logMeans=log(means[keep]))))
+    out
   }
   return(dispFunction)
 }
 
 fitDispersionFunctionHelper_SIMPLE <- function(means, disps,  quiet = FALSE){
-   verbose <- ! quiet;
-   coefs <- c( .1, 1 );
-   iter <- 0;
+   verbose <- ! quiet
+   coefs <- c( .1, 1 )
+   iter <- 0
    while(TRUE) {
       residuals <- disps / ( coefs[1] + coefs[2] / means )
       good <- which((residuals > 1e-4) & (residuals < 15))
       mm <- model.matrix(disps[good] ~ I(1/means[good]))
       
       fit <- tryCatch({
-          #testVar <- "ATEST!";
-          glmgam.fit(mm, disps[good], coef.start=coefs, maxit=250);
+          glmgam.fit(mm, disps[good], coef.start=coefs, maxit=250)
         }, warning = function(w){
-          message(">      fitDispersionFunction(): warning encountered in glmgam.fit (iteration ",iter,")\n    ",w);
-          #message(testVar);
-          glmgam.fit(mm, disps[good], coef.start=coefs, maxit=250);
+          message(">      fitDispersionFunction(): warning encountered in glmgam.fit (iteration ",iter,")\n    ",w)
+          glmgam.fit(mm, disps[good], coef.start=coefs, maxit=250)
         }, error = function(e){
-          message(">     fitDispersionFunction(): Fatal Error encountered in glmgam.fit (iteration ",iter,")");
-          message(">     fitDispersionFunction(): Failed to fit the dispersion function!");
-          stop(e);
+          message(">     fitDispersionFunction(): Fatal Error encountered in glmgam.fit (iteration ",iter,")")
+          message(">     fitDispersionFunction(): Failed to fit the dispersion function!")
+          stop(e)
         }
-      );
+      )
       
       oldcoefs <- coefs
       coefs <- coefficients(fit)
       
-      if(verbose) message(">     (Iteration ",iter,") Dispersion Coefs: [",coefs[1], ",", coefs[2],"]");
+      if(verbose) message(">     (Iteration ",iter,") Dispersion Coefs: [",coefs[1], ",", coefs[2],"]")
       if(coefs[1] < 0){
         coefs[1] <- 0
-        message(">     fitDispersionFunction(): warning encountered on iteration ",iter,":\n    Negative intercept value in the dispersion function, it will be set to 0. Check fit diagnostics plot section from the vignette.");
+        message(">     fitDispersionFunction(): warning encountered on iteration ",iter,":\n    Negative intercept value in the dispersion function, it will be set to 0. Check fit diagnostics plot section from the vignette.")
         warning("Negative intercept value in the dispersion function, it will be set to 0. Check fit diagnostics plot section from the vignette.")
         #break
       }
@@ -1018,19 +924,18 @@ fitDispersionFunctionHelper_SIMPLE <- function(means, disps,  quiet = FALSE){
         break 
       }
     }
-    if(verbose) message("> fitDispersionFunction(): Finished on iteration ",iter,". Dispersion Coefs: [",coefs[1], ",", coefs[2],"]");
+    if(verbose) message("> fitDispersionFunction(): Finished on iteration ",iter,". Dispersion Coefs: [",coefs[1], ",", coefs[2],"]")
     
     return( function(m){
-      coefs[1] + coefs[2] / m;
-    });
+      coefs[1] + coefs[2] / m
+    })
     
-    #return(coefs);
 }
 
 
 estimatelog2FoldChanges <- function(ecs, fitExpToVar="condition", denominator="", getOnlyEffects=FALSE, averageOutExpression=TRUE, nCores=1, quiet=FALSE, file="", estimate.fc.using.genewide.model = TRUE)
 {
-   myApply <- getMyApply(nCores);
+   myApply <- getMyApply(nCores)
    
    stopifnot(is(ecs, "JunctionSeqCountSet"))
    if(any(is.na(sizeFactors(ecs)))){
@@ -1041,26 +946,7 @@ estimatelog2FoldChanges <- function(ecs, fitExpToVar="condition", denominator=""
    if(! estimate.fc.using.genewide.model){
      
      #OLD VERSION:
-     #if( denominator == "" ){
-     #  denominator <- as.character(levels(design(ecs,drop=FALSE)[[fitExpToVar]])[1]);
-     #}
-     #
-     #varCoefCols <- which(substr(names(fData(ecs)), 1, 5 + nchar(fitExpToVar)) == paste0("Coef(",fitExpToVar)  );
-     #if(length(varCoefCols) == 0){
-     #  stop("No coefficients found! Cannot calculate log2foldchanges from junctionwise model! Run testJunctionsForDJU()!");
-     #}
-     #
-     #varCoefNames <- names(fData(ecs))[varCoefCols];
-     #numerator <- substr(varCoefNames, 6 + nchar(fitExpToVar), sapply(varCoefNames, nchar) - 1 );
-     #
-     #fc.names <- paste0("log2fold(",numerator,"/",denominator,")");
-     #
-     #log2fc.coef <- fData(ecs)[,varCoefCols, drop=F] / log(2);
-     #names(log2fc.coef) <- fc.names;
-     #
-     #fData(ecs) <- cbind.data.frame(fData(ecs), log2fc.coef)
-     #
-     #return(ecs);
+
    } else {
      if(sum(is.na(featureData(ecs)$dispersion))==nrow(counts(ecs))){
         stop("No dispersion parameters found, first call function estimateDispersions...\n")
@@ -1078,15 +964,7 @@ estimatelog2FoldChanges <- function(ecs, fitExpToVar="condition", denominator=""
        rownames(ret) <- paste(geneID, rownames(ret), sep=":")
        return(ret)
      }
-
-     #if( nCores > 1 ){
-     #   if(!is.loaded("mc_fork", PACKAGE="parallel")){
-     #   stop("Please load first parallel package or set parameter nCores to 1...")}
-     #   alleffects <- parallel:::mclapply( testablegenes, function(x){ geteffects(x) }, mc.cores=nCores )
-     # }else{
-     #   alleffects <- lapply( testablegenes, function(x){geteffects(x)})
-     # }
-     alleffects <- myApply( testablegenes, function(x){geteffects(x)});
+     alleffects <- myApply( testablegenes, function(x){geteffects(x)})
 
       names(alleffects) <- testablegenes
       alleffects <- do.call(rbind, alleffects)
@@ -1099,8 +977,7 @@ estimatelog2FoldChanges <- function(ecs, fitExpToVar="condition", denominator=""
          toadd[rownames(alleffects), colnames(alleffects)] <- alleffects
        }else{
          if( denominator == "" ){
-            #denominator <- as.character(design(ecs, drop=FALSE)[[fitExpToVar]][1])
-            denominator <- as.character(levels(design(ecs,drop=FALSE)[[fitExpToVar]])[1]);
+            denominator <- as.character(levels(design(ecs,drop=FALSE)[[fitExpToVar]])[1])
          }
          stopifnot( any( colnames(alleffects) %in% denominator ) )
          denoCol <- which(colnames(alleffects) == denominator)
@@ -1113,6 +990,6 @@ estimatelog2FoldChanges <- function(ecs, fitExpToVar="condition", denominator=""
        }
 
       fData(ecs) <- cbind(fData(ecs), toadd)
-      return(ecs);
+      return(ecs)
     }
 }

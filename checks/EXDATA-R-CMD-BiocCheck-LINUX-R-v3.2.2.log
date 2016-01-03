@@ -1,4 +1,4 @@
------ R CMD BiocCheck (Tue Dec 22 14:50:36 EST 2015)          -----
+----- R CMD BiocCheck (Sat Jan  2 20:45:40 EST 2016)          -----
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD BiocCheck STARTING (Tue Dec 22 14:50:36 EST 2015) -----
+----- R CMD BiocCheck STARTING (Sat Jan  2 20:45:40 EST 2016) -----
 * This is BiocCheck, version 1.6.0.
 * BiocCheck is a work in progress. Output and severity of issues may
   change.
@@ -44,7 +44,7 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking for F...
 * Checking for browser()...
 * Checking for <<-...
-* Checking for library/require of JctSeqExData2...
+* Checking for library/require of JctSeqData...
 * Checking DESCRIPTION/NAMESPACE consistency...
 * Checking function lengths..
 * Checking man pages...
@@ -52,9 +52,9 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking package NEWS...
 * Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source,
   and vignette source...
-    * CONSIDER: Shortening lines; 250 lines (15%) are > 80 characters
+    * CONSIDER: Shortening lines; 247 lines (15%) are > 80 characters
       long.
-    * CONSIDER: Indenting lines with a multiple of 4 spaces; 299 lines
+    * CONSIDER: Indenting lines with a multiple of 4 spaces; 304 lines
       (18%) are not.
   See http://bioconductor.org/developers/how-to/coding-style/
 * Checking for canned comments in man pages...
@@ -70,4 +70,4 @@ CONSIDERATION count: 4
 For detailed information about these checks, see the BiocCheck
 vignette, available at
 http://bioconductor.org/packages/3.2/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
------ R CMD BiocCheck COMPLETE (Tue Dec 22 14:50:48 EST 2015) -----
+----- R CMD BiocCheck COMPLETE (Sat Jan  2 20:46:07 EST 2016) -----

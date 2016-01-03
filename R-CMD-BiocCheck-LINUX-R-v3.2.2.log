@@ -1,4 +1,4 @@
------ R CMD BiocCheck (Tue Dec 22 14:48:11 EST 2015) ----- 
+----- R CMD BiocCheck (Sat Jan  2 20:43:18 EST 2016) ----- 
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD BiocCheck STARTING (Tue Dec 22 14:48:12 EST 2015) -----
+----- R CMD BiocCheck STARTING (Sat Jan  2 20:43:18 EST 2016) -----
 * This is BiocCheck, version 1.6.0.
 * BiocCheck is a work in progress. Output and severity of issues may
   change.
@@ -27,9 +27,9 @@ http://www.gnu.org/licenses/.
       strheight, plot.new, par, plot.window, rect, text, lines, par,
       plot.new, plot.window, title, segments, legend, rect, abline,
       text, strheight, strwidth, points, strheight, segments, rect,
-      strwidth, text, par, lines, formula, terms' (used in
-      JS.arrowChars, JS.axis, JS.perGeneQValueBySimulation,
-      JunctionSeqHTML, adapted.estimateDispersionsMAP,
+      strwidth, text, par, lines, formula' (used in JS.arrowChars,
+      JS.axis, JS.perGeneQValueBySimulation, JunctionSeqHTML,
+      adapted.estimateDispersionsMAP,
       adapted.estimateDispersionsPriorVar,
       adapted.estimateDispersionsPriorVar , adapted.localDispersionFit
       , adapted.parametricDispersionFit, advlines, applyByDimnameOLD,
@@ -45,8 +45,7 @@ http://www.gnu.org/licenses/.
       fit.character.vector.helper, fit.title, fit.vert,
       fitAndArrangeCoefs, fitDispersionFunctionHelper_SIMPLE,
       fitDispersionFunction_simpleMode, generateAllExpressionEstimates
-      , generateAllExpressionEstimates.v2,
-      generateSigExpressionEstimates , get.character.dim,
+      , generateAllExpressionEstimates.v2, get.character.dim,
       get.filtered.padjust, getAllData2, getLogFoldChangeFromModel,
       getPlottingDeviceFunc , logConditionalLikelihood ,
       makeGeneLevelAxis, makevstaxis, plotDispEsts,
@@ -64,7 +63,7 @@ http://www.gnu.org/licenses/.
       within().
 * Checking vignette directory...
 * This is a software package, checking vignette directories...
-* # of chunks: 34, # of eval=FALSE: 12 (35%)
+* # of chunks: 35, # of eval=FALSE: 13 (37%)
 * Checking version number...
 * Checking version number validity...
 * Checking R Version dependency...
@@ -93,19 +92,19 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking for F...
 * Checking for browser()...
 * Checking for <<-...
-      Found <<- in R/adapted.functions.R (line 463, column 26)
+      Found <<- in R/adapted.functions.R (line 413, column 26)
     * CONSIDER: Avoiding '<<-'' if possible (found in 1 files)
 * Checking for library/require of JunctionSeq...
 * Checking DESCRIPTION/NAMESPACE consistency...
 * Checking function lengths.............................
-* The longest function is 814 lines long
+* The longest function is 739 lines long
 * The longest 5 functions are:
-* plotJunctionSeqResultsForGene() (R/main.plotGenes.R, line 599): 814
+* plotJunctionSeqResultsForGene() (R/main.plotGenes.R, line 560): 739
   lines
-* JunctionSeqHTML() (R/file.output.R, line 62): 444 lines
-* makeAllPlotPages() (R/file.output.R, line 621): 358 lines
-* drawPlot() (R/plotting.helpers.R, line 275): 311 lines
-* buildAllPlots() (R/main.plotGenes.R, line 18): 287 lines
+* JunctionSeqHTML() (R/file.output.R, line 16): 395 lines
+* makeAllPlotPages() (R/file.output.R, line 517): 315 lines
+* buildAllPlots() (R/main.plotGenes.R, line 18): 264 lines
+* drawPlot() (R/plotting.helpers.R, line 234): 235 lines
 * Checking man pages...
 * Checking exported objects have runnable examples...
     * CONSIDER: Adding runnable examples to the following man pages
@@ -114,11 +113,11 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking package NEWS...
 * Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source,
   and vignette source...
-    * CONSIDER: Shortening lines; 2542 lines (17%) are > 80 characters
+    * CONSIDER: Shortening lines; 2236 lines (17%) are > 80 characters
       long.
     * CONSIDER: Replacing tabs with 4 spaces; 11 lines (0%) contain
       tabs.
-    * CONSIDER: Indenting lines with a multiple of 4 spaces; 7863 lines
+    * CONSIDER: Indenting lines with a multiple of 4 spaces; 7142 lines
       (54%) are not.
   See http://bioconductor.org/developers/how-to/coding-style/
 * Checking for canned comments in man pages...
@@ -134,4 +133,4 @@ CONSIDERATION count: 8
 For detailed information about these checks, see the BiocCheck
 vignette, available at
 http://bioconductor.org/packages/3.2/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
------ R CMD BiocCheck COMPLETE (Tue Dec 22 14:49:31 EST 2015) -----
+----- R CMD BiocCheck COMPLETE (Sat Jan  2 20:44:29 EST 2016) -----

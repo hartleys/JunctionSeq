@@ -11,114 +11,19 @@
 # Updated Authorship and license information can be found here:
 #   here: http://github.com/Bioconductor-mirror/DEXSeq/blob/master/DESCRIPTION
 
-
-generateSigExpressionEstimates <- function(ecs,nCores = 1,fitExpToVar="condition",verbose=TRUE, sig.gene.list){
-   #require(statmod)
-   #require(DEXSeq)
-   ##require(multicore)
-   
-   myApply <- getMyApply(nCores);
-   
-   levelCt <- length(levels(ecs@phenoData$condition))
-   sampleCt <- length(sampleNames(ecs@phenoData))
-   
-   out <- rbind( c(0.0,0.0,0.0,rep(0.0,levelCt),rep(0.0,levelCt),rep(0.0,sampleCt),rep(0.0,levelCt),rep(0.0,levelCt),rep(0.0,sampleCt)))
-   #out <- rbind( c(0,0,0,rep(0,levelCt),rep(0,levelCt),rep(0,sampleCt),rep(0,levelCt),rep(0,levelCt),rep(0,sampleCt)))
-
-   out <- data.frame(out)[0,]
-      
-   #names.out <- c("featureID","geneID","countbinID",
-   #                paste("exprVST",sort(levels(ecs@phenoData$condition)),sep='_'),paste("expr",sort(levels(ecs@phenoData$condition)),sep='_'),
-   #                paste("rExprVST",sort(levels(ecs@phenoData$condition)),sep='_'),paste("rExpr",sort(levels(ecs@phenoData$condition)),sep='_'),
-   #                paste("normCountVST",sampleNames(ecs@phenoData),sep='_'),paste("normCount",sampleNames(ecs@phenoData),sep='_'),
-   #                paste("rawCount",sampleNames(ecs@phenoData),sep='_')
-   #                );
-   names.out <- c("featureID","geneID","countbinID",
-                   paste("exprVST",(levels(ecs@phenoData$condition)),sep='_'),
-                   paste("expr",(levels(ecs@phenoData$condition)),sep='_'),
-                   paste("rExprVST",(levels(ecs@phenoData$condition)),sep='_'),
-                   paste("rExpr",(levels(ecs@phenoData$condition)),sep='_'),
-                   paste("normCountVST",sampleNames(ecs@phenoData),sep='_'),
-                   paste("normCount",sampleNames(ecs@phenoData),sep='_'),
-                   paste("rawCount",sampleNames(ecs@phenoData),sep='_')
-                   );
-   #message(dim(out));
-   gene.list <- unique(ecs@featureData$geneID);
-   blank.line.length <- length(levels(ecs@phenoData$condition)) * 4;
-   #rep(NA,length(levels(ecs@phenoData$condition)) * 4);
-   
-   if(verbose){
-      message(paste("Starting expression estimate generation on ",length(sig.gene.list)," significant top-level features (eg genes)."));
-   }
-   get.one.genes.data <- function(geneIndex){
-      geneID <- sig.gene.list[geneIndex];
-      es <- fitAndArrangeCoefs( ecs, geneID, frm=as.formula(paste("count ~", "condition",  "* countbin")) )
-      if(! is.null(es)){
-          #If the model converged properly, then output the results:
-          curr <- data.frame(getAllData(ecs,es,geneID))
-          if(geneIndex - 1 %% 10000 == 0 & verbose){
-            message("colnames:");
-            message(paste0(colnames(curr),collapse=" "));
-          }
-          names(curr) <- names.out;
-          return(curr);
-      } else {
-          #If the model does not converge, return NA for all fitted values.
-          if(verbose){
-            message(paste("glm fit failed for gene", geneID, " index: ",geneIndex));
-          }
-          curr <- featureData(ecs)@data[featureData(ecs)@data$geneID == geneID,c("geneID","countbinID")]
-          rn <- row.names(curr);
-          curr <- cbind.data.frame(rn,curr);
-          names(curr)[1] <- "featureID";
-          exonCt <- dim(curr)[1]
-          NA.buffer <- matrix(rep(NA,blank.line.length * exonCt), nrow=exonCt, ncol=blank.line.length );
-          #blankList <- lapply(1:exonCt, function(x){ blank.line });
-          norCounts <- cbind.data.frame(get.norcounts.data(ecs,geneID),get.norcounts.data(ecs,geneID,vst.xform=FALSE), get.rawcounts.data(ecs,geneID))          
-          curr <- cbind.data.frame(curr,NA.buffer,norCounts);
-          names(curr) <- names.out;
-          row.names(curr) <- rn;
-          return( curr );
-      }
-   }
-   
-   genes.data.list <- myApply(as.list(1:length(sig.gene.list)), FUN=get.one.genes.data);
-   
-   if(verbose){
-     message(paste("generated expression data for: ",length(genes.data.list),"top-level features (eg genes). Collapsing data..."));
-     #message("head(genes.data.list):");
-     #print(head(genes.data.list));
-   }
-
-   out <- do.call(rbind.data.frame,genes.data.list);
-   names(out) <- names.out;
-   
-   if(verbose){
-     message(paste("Collapsed expression data into a single data frame. generateAllExpressionEstimates() complete."));
-   }
-   #out <- out[! is.na(out$geneID) ,];
-   
-   #for(i in 4:length(names(out))){
-   #  out[,i] <- as.numeric(as.character(out[,i]));
-   #}
-   
-   out;
-}
-
-
 getAllDataList <- function(ecs,es,geneID,fitExpToVar="condition"){
    temp <- list(get.expression.data(ecs,es,geneID),   get.expression.data(ecs,es,geneID,vst.xform=FALSE),
                  get.rexpr.data(ecs,es,geneID),   get.rexpr.data(ecs,es,geneID,vst.xform=FALSE),
                  get.norcounts.data(ecs,geneID),  get.norcounts.data(ecs,geneID,vst.xform=FALSE),
                  get.rawcounts.data(ecs,geneID))
-   countbinID <- as.character(row.names(temp));
-   #temp <- t(apply(temp,MAR=c(2),FUN=function(x){ as.numeric(as.character(x)) }));
-   #temp <- apply(temp,MAR=c(2),FUN=function(x){ as.numeric(as.character(x)) });
-   geneIDs <- rep(as.character(geneID),length(countbinID));
-   featureID <- paste(geneID,countbinID,sep=':');
-   out <- cbind.data.frame(featureID = featureID,geneID=geneIDs,countbinID = countbinID,temp);
-   row.names(out) <- featureID;
-   return(out);
+   countbinID <- as.character(row.names(temp))
+   #temp <- t(apply(temp,MAR=c(2),FUN=function(x){ as.numeric(as.character(x)) }))
+   #temp <- apply(temp,MAR=c(2),FUN=function(x){ as.numeric(as.character(x)) })
+   geneIDs <- rep(as.character(geneID),length(countbinID))
+   featureID <- paste(geneID,countbinID,sep=':')
+   out <- cbind.data.frame(featureID = featureID,geneID=geneIDs,countbinID = countbinID,temp)
+   row.names(out) <- featureID
+   return(out)
 }
 
 getAllData <- function(ecs,es,geneID,fitExpToVar="condition"){
@@ -126,14 +31,12 @@ getAllData <- function(ecs,es,geneID,fitExpToVar="condition"){
                  get.rexpr.data(ecs,es,geneID),   get.rexpr.data(ecs,es,geneID,vst.xform=FALSE),
                  get.norcounts.data(ecs,geneID),  get.norcounts.data(ecs,geneID,vst.xform=FALSE),
                  get.rawcounts.data(ecs,geneID))
-   countbinID <- as.character(row.names(temp));
-   #temp <- t(apply(temp,MAR=c(2),FUN=function(x){ as.numeric(as.character(x)) }));
-   #temp <- apply(temp,MAR=c(2),FUN=function(x){ as.numeric(as.character(x)) });
-   geneIDs <- rep(as.character(geneID),length(countbinID));
-   featureID <- paste(geneID,countbinID,sep=':');
-   out <- cbind.data.frame(featureID = featureID,geneID=geneIDs,countbinID = countbinID,temp);
-   row.names(out) <- featureID;
-   return(out);
+   countbinID <- as.character(row.names(temp))
+   geneIDs <- rep(as.character(geneID),length(countbinID))
+   featureID <- paste(geneID,countbinID,sep=':')
+   out <- cbind.data.frame(featureID = featureID,geneID=geneIDs,countbinID = countbinID,temp)
+   row.names(out) <- featureID
+   return(out)
 }
 
 ##########################################################################
@@ -143,62 +46,62 @@ getAllData <- function(ecs,es,geneID,fitExpToVar="condition"){
 
 doesArrayContainDim <- function(a, dimname){
   if(is.vector(a)){
-    return(FALSE);
+    return(FALSE)
   } else {
-    return(   any(  dimname == names(dimnames(a)))   );
+    return(   any(  dimname == names(dimnames(a)))   )
   }
 }
 
 applyByDimnameOLD <- function(a, dimname, FUN){
   if(length(dimnames(a)) == 1){
     if(names(dimnames(a)) == dimname){
-      return(FUN(a));
+      return(FUN(a))
     } else {
-      stop("Internal Error. Impossible state! (applyByDimname) Dimension not found: ",dimname);
+      stop("Internal Error. Impossible state! (applyByDimname) Dimension not found: ",dimname)
     }
   } else {
-    otherDim <- which(dimname != names(dimnames(a)));
-    out <- array(apply(coef, MARGIN = otherDim, FUN = FUN));
-    dimnames(out) <- dimnames(a)[otherDim];
-    return(out);
+    otherDim <- which(dimname != names(dimnames(a)))
+    out <- array(apply(coef, MARGIN = otherDim, FUN = FUN))
+    dimnames(out) <- dimnames(a)[otherDim]
+    return(out)
   }
 }
 
 applyByDimname <- function(a, dimname, FUN){
   if(is.vector(a)){
-    return(a);
+    return(a)
   } else if(! is.array(a)){
-    stop("Can only use applyByDimname on vectors or arrays.");
+    stop("Can only use applyByDimname on vectors or arrays.")
   } else {
     if(  any(  dimname == names(dimnames(a)))   ){
       if(length(dimnames(a)) == 1){
         if(names(dimnames(a)) == dimname){
-          return(as.vector(FUN(a)));
+          return(as.vector(FUN(a)))
         } else {
-          stop("Internal Error. Impossible state! (applyByDimname) Dimension not found: ",dimname);
+          stop("Internal Error. Impossible state! (applyByDimname) Dimension not found: ",dimname)
         }
       } else {
-        otherDim <- which(dimname != names(dimnames(a)));
-        out <- array(apply(a, MARGIN = otherDim, FUN = FUN));
-        dimnames(out) <- dimnames(a)[otherDim];
-        return(out);
+        otherDim <- which(dimname != names(dimnames(a)))
+        out <- array(apply(a, MARGIN = otherDim, FUN = FUN))
+        dimnames(out) <- dimnames(a)[otherDim]
+        return(out)
       }
     } else {
-      return(a);
+      return(a)
     }
   }
 }
 
 extractFromArray <- function(a, dimname, val){
   if(length(dimnames(a)) == 1){
-    return(a[[val]]);
+    return(a[[val]])
   } else {
-    otherDim <- which(dimname != names(dimnames(a)));
+    otherDim <- which(dimname != names(dimnames(a)))
     out <- array(apply(coef, MARGIN = otherDim, FUN = function(x){
-      x[[val]];
-    }));
-    dimnames(out) <- dimnames(a)[otherDim];
-    return(out);
+      x[[val]]
+    }))
+    dimnames(out) <- dimnames(a)[otherDim]
+    return(out)
   }
 }
 
@@ -213,31 +116,30 @@ extractFromArray <- function(a, dimname, val){
 
 
 #complex effect
-#formula1 <- formula(~ condition + countbin + covar : countbin + condition : countbin);
+#formula1 <- formula(~ condition + countbin + covar : countbin + condition : countbin)
 getAllData2 <- function(jscs, runOnFeatures = seq_len(nrow(fData(jscs))),
                         fitExpToVar="condition", 
                         formula1 = formula(paste0("~ ",fitExpToVar," + countbin + ",fitExpToVar," : countbin")),
                         nCores=1, dispColumn="dispersion",verbose = TRUE){
   
-  varlist <- rownames(attr(terms(formula1), "factors"));
+  varlist <- rownames(attr(terms(formula1), "factors"))
   covarlist <- varlist[ ! varlist %in% c(fitExpToVar, "countbin") ]
   
-  myApply <- getMyApply(nCores);
+  myApply <- getMyApply(nCores)
   
   modelFrame <- constructModelFrame( jscs )
-  modelFrame$countbin <- factor(modelFrame$countbin, levels = c("others","this"));
-  mm <- rmDepCols( model.matrix( formula1, modelFrame ) );
-  conditionLevels <- levels(modelFrame[[fitExpToVar]]);
-  conditionCt <- length(conditionLevels);
+  modelFrame$countbin <- factor(modelFrame$countbin, levels = c("others","this"))
+  mm <- rmDepCols( model.matrix( formula1, modelFrame ) )
+  conditionLevels <- levels(modelFrame[[fitExpToVar]])
+  conditionCt <- length(conditionLevels)
                   
   fitList <- myApply(runOnFeatures, function(i){
-    if( verbose & i %% 1000 == 0 ){
-       message(paste0("-------> generateCompleteResults: (Calculating effect size and predicted values for feature ",i," of ",nrow(jscs),")","(",date(),")"));
+    if( verbose && i %% 1000 == 0 ){
+       message(paste0("-------> generateCompleteResults: (Calculating effect size and predicted values for feature ",i," of ",nrow(jscs),")","(",date(),")"))
     }
-    geneID <- fData(jscs)$geneID[i];
-    countbinID <- fData(jscs)$countbinID[i];
-    #countVector <- getJunctionSeqCountVector( jscs, geneID = geneID, countbinID = countbinID);
-    countVector <- jscs@countVectors[i,];
+    geneID <- fData(jscs)$geneID[i]
+    countbinID <- fData(jscs)$countbinID[i]
+    countVector <- jscs@countVectors[i,]
     
     if(! fData(jscs)$testable[i]){
       return(c(rep(NA,conditionCt - 1), rep(NA,conditionCt), rep(NA,conditionCt), 
@@ -245,122 +147,111 @@ getAllData2 <- function(jscs, runOnFeatures = seq_len(nrow(fData(jscs))),
                                         rep(NA,conditionCt), rep(NA,conditionCt), 
                                         countVector * modelFrame$sizeFactor, 
                                         vst(countVector * modelFrame$sizeFactor, jscs),
-                                        countVector));
+                                        countVector))
     } else {
-      disp <- fData(jscs)[i, dispColumn];
+      disp <- fData(jscs)[i, dispColumn]
       fit <- try( {
-        glmnb.fit( mm,  countVector, dispersion = disp, offset = log( modelFrame$sizeFactor ) );
-      });
+        glmnb.fit( mm,  countVector, dispersion = disp, offset = log( modelFrame$sizeFactor ) )
+      })
       if( any(inherits( fit, "try-error" ) )) {
-        warning( sprintf("glmnb.fit failed for %s:%s\n", as.character( geneID ), countbinID) );
-        return(list(fitConverged = FALSE, fit = NULL));
+        warning( sprintf("glmnb.fit failed for %s:%s\n", as.character( geneID ), countbinID) )
+        return(list(fitConverged = FALSE, fit = NULL))
 
         return(c(rep(NA,conditionCt - 1), rep(NA,conditionCt), rep(NA,conditionCt), 
                                           rep(NA,conditionCt), rep(NA,conditionCt), 
                                           rep(NA,conditionCt), rep(NA,conditionCt), 
                                           countVector * modelFrame$sizeFactor, 
                                           vst(countVector * modelFrame$sizeFactor, jscs),
-                                          countVector));
+                                          countVector))
       }
       
-      coefs <- arrangeCoefs( formula1, modelFrame, mm, fit = fit, insertValues = TRUE );
+      coefs <- arrangeCoefs( formula1, modelFrame, mm, fit = fit, insertValues = TRUE )
       
       predictedEstimates <- lapply(conditionLevels, function(pvn){
         pvToAdd <- sapply(coefs, function(coef){
           if("(Intercept)" %in% names(dimnames(coef))){
-            return(coef[1]);
+            return(coef[1])
           }
           if(doesArrayContainDim(coef, "countbin")){
             coef <- applyByDimname(coef, dimname = "countbin", FUN = function(cf){
-              cf[["this"]];
-            });
+              cf[["this"]]
+            })
           }
           if(doesArrayContainDim(coef, fitExpToVar)){
             coef <- applyByDimname(coef, dimname = fitExpToVar, FUN = function(cf){
-              cf[[pvn]];
-            });
+              cf[[pvn]]
+            })
           }
           for(covar in covarlist){
             if(doesArrayContainDim(coef, covar)){
               coef <- applyByDimname(coef, dimname = covar, FUN = function(cf){
-                mean(cf);
-              });
+                mean(cf)
+              })
             }
           }
-          #message("class(coef) = ", class(coef));
-          #message("length(coef) = ", length(coef));
-          as.vector(coef);
-        });
-        pvToAdd;
-      });
-      names(predictedEstimates) <- conditionLevels;
+          as.vector(coef)
+        })
+        pvToAdd
+      })
+      names(predictedEstimates) <- conditionLevels
       
       predictedEstimatesOther <- lapply(conditionLevels, function(pvn){
         pvToAdd <- sapply(coefs, function(coef){
           if("(Intercept)" %in% names(dimnames(coef))){
-            return(coef[1]);
+            return(coef[1])
           }
           if(doesArrayContainDim(coef, "countbin")){
             coef <- applyByDimname(coef, dimname = "countbin", FUN = function(cf){
-              cf[["others"]];
-            });
+              cf[["others"]]
+            })
           }
           if(doesArrayContainDim(coef, fitExpToVar)){
             coef <- applyByDimname(coef, dimname = fitExpToVar, FUN = function(cf){
-              cf[[pvn]];
-            });
+              cf[[pvn]]
+            })
           }
           for(covar in covarlist){
             if(doesArrayContainDim(coef, covar)){
               coef <- applyByDimname(coef, dimname = covar, FUN = function(cf){
-                mean(cf);
-              });
+                mean(cf)
+              })
             }
           }
-          #message("class(coef) = ", class(coef));
-          #message("length(coef) = ", length(coef));
-          as.vector(coef);
-        });
-        pvToAdd;
-      });
-      names(predictedEstimatesOther) <- conditionLevels;
+          as.vector(coef)
+        })
+        pvToAdd
+      })
+      names(predictedEstimatesOther) <- conditionLevels
       
       meanCondition <- mean(sapply(predictedEstimates, function(pe){
-          pe[[fitExpToVar]];
-      }));
+          pe[[fitExpToVar]]
+      }))
       
-      relativeEstimates <- predictedEstimates;
+      relativeEstimates <- predictedEstimates
       for(j in seq_len(length(predictedEstimates))){
-        relativeEstimates[[j]] <- predictedEstimates[[j]] - predictedEstimatesOther[[j]];
+        relativeEstimates[[j]] <- predictedEstimates[[j]] - predictedEstimatesOther[[j]]
       }
-      relativeLogExprEstimate <- sapply(relativeEstimates, sum);
-      logFCs <- relativeLogExprEstimate[-1] - relativeLogExprEstimate[1];
+      relativeLogExprEstimate <- sapply(relativeEstimates, sum)
+      logFCs <- relativeLogExprEstimate[-1] - relativeLogExprEstimate[1]
       
-      exprEstimate <- exp(sapply(predictedEstimates, sum));
-      otherExprEstimate <- exp(sapply(predictedEstimatesOther, sum));
-      relExprEstimate <- exp(relativeLogExprEstimate + predictedEstimates[[1]][["(Intercept).(Intercept)"]] + predictedEstimates[[1]][["countbin"]]);
+      exprEstimate <- exp(sapply(predictedEstimates, sum))
+      otherExprEstimate <- exp(sapply(predictedEstimatesOther, sum))
+      relExprEstimate <- exp(relativeLogExprEstimate + predictedEstimates[[1]][["(Intercept).(Intercept)"]] + predictedEstimates[[1]][["countbin"]])
       
       c(logFCs, 
         exprEstimate, vst(exprEstimate, jscs),
         otherExprEstimate, vst(otherExprEstimate, jscs),
         relExprEstimate, vst(relExprEstimate, jscs),
         countVector * modelFrame$sizeFactor, vst(countVector * modelFrame$sizeFactor, jscs),
-        countVector);
-      
-      #return(list(fitConverged = TRUE, 
-      #            fit = fit, 
-      #            exprEstimate = exprEstimate, 
-      #            otherExprEstimate = otherExprEstimate, 
-      #            relativeExprEstimate = relativeExprEstimate, 
-      #            logFCs = logFCs));
+        countVector)
     }
-  });
+  })
   
-  sampleNames <- colnames(counts(jscs));
+  sampleNames <- colnames(counts(jscs))
   
   
   
-  out <- do.call(rbind.data.frame, fitList);
+  out <- do.call(rbind.data.frame, fitList)
   names(out) <- c(paste0("logFC(",conditionLevels[-1],"/",conditionLevels[1],")"),
                   paste0("expr_",conditionLevels), paste0("exprVST_",conditionLevels),
                   paste0("exprGene_",conditionLevels),  paste0("exprGeneVST_",conditionLevels),
@@ -369,87 +260,82 @@ getAllData2 <- function(jscs, runOnFeatures = seq_len(nrow(fData(jscs))),
                   paste0("normCount_",sampleNames), paste0("normGeneCount_",sampleNames), 
                     paste0("normCountVST_",sampleNames), paste0("normGeneCountVST_",sampleNames), 
                   paste0("rawCount_",sampleNames), paste0("rawGeneCounts_",sampleNames) 
-                  );
+                  )
   
-  return(out);
+  return(out)
 }
 
 getLogFoldChangeFromModel <- function(formula1, modelFrame, mm, fit){
   fitExpToVar <- "condition"
   conditionLevels <- levels(modelFrame[[fitExpToVar]])
   
-  varlist <- rownames(attr(terms(formula1), "factors"));
+  varlist <- rownames(attr(terms(formula1), "factors"))
   covarlist <- varlist[ ! varlist %in% c(fitExpToVar, "countbin") ]
-  #conditionLevels <- levels(pData(jscs)[[fitExpToVar]]);
   
-  coefs <- arrangeCoefs( formula1, modelFrame, mm, fit = fit, insertValues = TRUE );
+  coefs <- arrangeCoefs( formula1, modelFrame, mm, fit = fit, insertValues = TRUE )
   
   predictedEstimates <- lapply(conditionLevels, function(pvn){
     pvToAdd <- sapply(coefs, function(coef){
       if("(Intercept)" %in% names(dimnames(coef))){
-        return(coef[1]);
+        return(coef[1])
       }
       if(doesArrayContainDim(coef, "countbin")){
         coef <- applyByDimname(coef, dimname = "countbin", FUN = function(cf){
-          cf[["this"]];
-        });
+          cf[["this"]]
+        })
       }
       if(doesArrayContainDim(coef, fitExpToVar)){
         coef <- applyByDimname(coef, dimname = fitExpToVar, FUN = function(cf){
-          cf[[pvn]];
-        });
+          cf[[pvn]]
+        })
       }
       for(covar in covarlist){
         if(doesArrayContainDim(coef, covar)){
           coef <- applyByDimname(coef, dimname = covar, FUN = function(cf){
-            mean(cf);
-          });
+            mean(cf)
+          })
         }
       }
-      #message("class(coef) = ", class(coef));
-      #message("length(coef) = ", length(coef));
-      as.vector(coef);
-    });
-    pvToAdd;
-  });
-  names(predictedEstimates) <- conditionLevels;
+      as.vector(coef)
+    })
+    pvToAdd
+  })
+  names(predictedEstimates) <- conditionLevels
 
   predictedEstimatesOther <- lapply(conditionLevels, function(pvn){
     pvToAdd <- sapply(coefs, function(coef){
       if("(Intercept)" %in% names(dimnames(coef))){
-        return(coef[1]);
+        return(coef[1])
       }
       if(doesArrayContainDim(coef, "countbin")){
         coef <- applyByDimname(coef, dimname = "countbin", FUN = function(cf){
-          cf[["others"]];
-        });
+          cf[["others"]]
+        })
       }
       if(doesArrayContainDim(coef, fitExpToVar)){
         coef <- applyByDimname(coef, dimname = fitExpToVar, FUN = function(cf){
-          cf[[pvn]];
-        });
+          cf[[pvn]]
+        })
       }
       for(covar in covarlist){
         if(doesArrayContainDim(coef, covar)){
           coef <- applyByDimname(coef, dimname = covar, FUN = function(cf){
-            mean(cf);
-          });
+            mean(cf)
+          })
         }
       }
-      #message("class(coef) = ", class(coef));
-      #message("length(coef) = ", length(coef));
-      as.vector(coef);
-    });
-    pvToAdd;
-  });
-  names(predictedEstimatesOther) <- conditionLevels;
+      as.vector(coef)
+    })
+    pvToAdd
+  })
+  names(predictedEstimatesOther) <- conditionLevels
 
-  relativeEstimates <- predictedEstimates;
+  relativeEstimates <- predictedEstimates
   for(j in seq_len(length(predictedEstimates))){
-    relativeEstimates[[j]] <- predictedEstimates[[j]] - predictedEstimatesOther[[j]];
+    relativeEstimates[[j]] <- predictedEstimates[[j]] - predictedEstimatesOther[[j]]
   }
-  relativeLogExprEstimate <- sapply(relativeEstimates, sum);
-  logFCs <- relativeLogExprEstimate[-1] - relativeLogExprEstimate[1];
+  relativeLogExprEstimate <- sapply(relativeEstimates, sum)
+  logFCs <- relativeLogExprEstimate[-1] - relativeLogExprEstimate[1]
   
   names(logFCs) <- paste0("logFC(",conditionLevels[-1],"/",conditionLevels[1],")")
   
@@ -459,36 +345,21 @@ getLogFoldChangeFromModel <- function(formula1, modelFrame, mm, fit){
 
 
 
-  # names.out <- c("featureID","geneID","countbinID",
-   #                paste("exprVST",(levels(jscs@phenoData$condition)),sep='_'),
-   #                paste("expr",(levels(jscs@phenoData$condition)),sep='_'),
-   #                paste("rExprVST",(levels(jscs@phenoData$condition)),sep='_'),
-   #                paste("rExpr",(levels(jscs@phenoData$condition)),sep='_'),
-   #                paste("normCountVST",sampleNames(jscs@phenoData),sep='_'),
-   #                paste("normCount",sampleNames(jscs@phenoData),sep='_'),
-   #                paste("rawCount",sampleNames(jscs@phenoData),sep='_')
-   #                );
-
-
 get.expression.data <- function(ecs, es, geneID, fitExpToVar="condition", vst.xform = TRUE){
-      #es <- fitAndArrangeCoefs( ecs, geneID, frm=as.formula(paste("count ~", fitExpToVar,  "* exon")) )
       if(is.null(es)){
           warning(sprintf("glm fit failed for gene %s", geneID))
           return()
       }
       coeff <- as.matrix( t( getEffectsForPlotting(es, averageOutExpression=FALSE, groupingVar=fitExpToVar) ) )
       coeff <- exp(coeff)
-      #ylimn <- c(0, max(coeff, na.rm=TRUE))
       if(vst.xform) coeff <- vst( coeff, ecs )
       return(coeff)
 }
 
 get.rexpr.data <- function(ecs,es,geneID,fitExpToVar="condition", vst.xform = TRUE){
-      #coeff <- as.matrix( t( getEffectsForPlotting( fitAndArrangeCoefs( ecs, geneID, frm=as.formula(paste("count ~", fitExpToVar,  "* exon")) ), averageOutExpression=TRUE, groupingVar=fitExpToVar) ) )
       coeff <- as.matrix( t( getEffectsForPlotting( es, averageOutExpression=TRUE, groupingVar=fitExpToVar) ) )
       
       coeff <- exp(coeff)
-      #ylimn <- c(0, max(coeff, na.rm=TRUE))
       if(vst.xform) coeff <- vst( coeff, ecs )
       return(coeff)
 }
@@ -496,13 +367,12 @@ get.rexpr.data <- function(ecs,es,geneID,fitExpToVar="condition", vst.xform = TR
 get.norcounts.data <- function(ecs,geneID,fitExpToVar="condition", vst.xform = TRUE){
       count <- countTableForGene(ecs, geneID, normalized=TRUE)
       #ylimn <- c(0, max(count, na.rm=TRUE))
-      if(vst.xform) count <- vst( count, ecs );
+      if(vst.xform) count <- vst( count, ecs )
       return(count)
 }
 get.rawcounts.data <- function(ecs,geneID,fitExpToVar="condition", vst.xform = FALSE){
       count <- countTableForGene(ecs, geneID, normalized=FALSE)
-      #ylimn <- c(0, max(count, na.rm=TRUE))
-      if(vst.xform) count <- vst( count, ecs );
+      if(vst.xform) count <- vst( count, ecs )
       return(count)
 }
 
@@ -561,7 +431,7 @@ fitAndArrangeCoefs <- function( ecs, geneID, frm = count ~ condition * countbin,
 {
    if(is.null(tol)) tol <- 1e-6
    mf <- modelFrameForGene( ecs, geneID )
-   if(! is.null(set.na.dispersions))  mf$dispersion <- ifelse(is.na(mf$dispersion), set.na.dispersions, mf$dispersion);
+   if(! is.null(set.na.dispersions))  mf$dispersion <- ifelse(is.na(mf$dispersion), set.na.dispersions, mf$dispersion)
    #
    if( length(levels(mf$countbin)) <= 1 )
       return( NULL )
@@ -571,9 +441,9 @@ fitAndArrangeCoefs <- function( ecs, geneID, frm = count ~ condition * countbin,
       return( NULL )
    coefs <- arrangeCoefs( frm, mf, mm, fit )
    if( balanceFeatures ) {
-      return(list(fit = fit, coefs = balanceFeatures( coefs, tapply( mf$dispersion, mf$countbin, `[`, 1 ) )));
+      return(list(fit = fit, coefs = balanceFeatures( coefs, tapply( mf$dispersion, mf$countbin, `[`, 1 ) )))
    } else {
-      return(list(fit = fit, coefs = coefs));
+      return(list(fit = fit, coefs = coefs))
    }
 }
 
@@ -584,72 +454,49 @@ fitAndArrangeCoefs <- function( ecs, geneID, frm = count ~ condition * countbin,
 
 getAllJunctionSeqCountVectors <- function( ecs, method.countVectors = c("geneLevelCounts","sumOfAllBinsForGene","sumOfAllBinsOfSameTypeForGene"), nCores = 1 ) {
    stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
-   method.countVectors <- match.arg(method.countVectors);
-   gct <- ecs@geneCountData;
+   method.countVectors <- match.arg(method.countVectors)
+   gct <- ecs@geneCountData
    
-   myApply <- getMyApply(nCores);
+   myApply <- getMyApply(nCores)
    
-   message("    getAllJunctionSeqCountVectors: dim(counts) = ",paste(dim(counts(ecs)),  sep=",",collapse=",")  , " (",date(),")" );
-   message("    getAllJunctionSeqCountVectors: dim(gct) = ",paste(dim(gct),sep=",",collapse=",") );
+   message("    getAllJunctionSeqCountVectors: dim(counts) = ",paste(dim(counts(ecs)),  sep=",",collapse=",")  , " (",date(),")" )
+   message("    getAllJunctionSeqCountVectors: dim(gct) = ",paste(dim(gct),sep=",",collapse=",") )
    
    if(method.countVectors == "geneLevelCounts"){
       
-      ##out.list <- myApply(1:nrow(fData(ecs)), function(i){
-      ##  geneID <- geneIDs(ecs)[i];
-      ##  #countbinID <- countbinIDs(ecs)[i];
-      ##  rowWithGeneID <- which(rownames(gct) == geneID);
-      ##  stopifnot( length(rowWithGeneID) == 1 );
-      ##  binCounts <- counts(ecs)[i,];
-      ##  geneCounts <- gct[rowWithGeneID,];
-      ##  return( c(binCounts, geneCounts - binCounts) );
-      ##});
-      ##message("    getAllJunctionSeqCountVectors: out.list generated. length = ",length(out.list), " (",date(),")");
-      ##out <- as.matrix(do.call(rbind, out.list));
-      featureCounts <- counts(ecs);
-      #geneCountVectors <- gct[match(geneIDs(ecs),rownames(gct)),];
-      out <- cbind(featureCounts, gct[match(geneIDs(ecs),rownames(gct)),] - featureCounts);
+      featureCounts <- counts(ecs)
+      out <- cbind(featureCounts, gct[match(geneIDs(ecs),rownames(gct)),] - featureCounts)
       # Remove rare negative numbers, which can occur on extremely low-coverege genes that appear near other genes.
-      out <- apply(out,MARGIN=c(1,2), FUN=max, 0);
-      out <- as.matrix(out);
-      mode(out) <- "integer";
-      message("    getAllJunctionSeqCountVectors: out generated. dim = ",paste(dim(out),sep=",",collapse=",")," (",date(),")");
+      out <- apply(out,MARGIN=c(1,2), FUN=max, 0)
+      out <- as.matrix(out)
+      mode(out) <- "integer"
+      message("    getAllJunctionSeqCountVectors: out generated. dim = ",paste(dim(out),sep=",",collapse=",")," (",date(),")")
       
-      rownames(out) <- rownames(fData(ecs));
-      colnames(out) <- c( paste0(colnames(counts(ecs)),"_thisBin")  , paste0(colnames(counts(ecs)),"_gene")  );
+      rownames(out) <- rownames(fData(ecs))
+      colnames(out) <- c( paste0(colnames(counts(ecs)),"_thisBin")  , paste0(colnames(counts(ecs)),"_gene")  )
       
-      return(out);
+      return(out)
    } else if(method.countVectors == "sumOfAllBinsForGene") {
       out.list <- myApply(1:nrow(fData(ecs)), function(i){
-        geneID <- geneIDs(ecs)[i];
-        #countbinID <- countbinIDs(ecs)[i];
-        rowsWithGeneID <- which(geneIDs(ecs) == geneID);
-        #stopifnot( length(rowsWithGeneID) > 1 );
-        binCounts <- counts(ecs)[i,];
-        geneCounts <- colSums(counts(ecs)[rowsWithGeneID,, drop=FALSE]);
-        return( c(binCounts, geneCounts - binCounts) );
-      });
-      message("    getAllJunctionSeqCountVectors: out.list generated. length = ",length(out.list), " (",date(),")");
-      out <- as.matrix(do.call(rbind, out.list));
-      mode(out) <- "integer";
+        geneID <- geneIDs(ecs)[i]
+        rowsWithGeneID <- which(geneIDs(ecs) == geneID)
+        binCounts <- counts(ecs)[i,]
+        geneCounts <- colSums(counts(ecs)[rowsWithGeneID,, drop=FALSE])
+        return( c(binCounts, geneCounts - binCounts) )
+      })
+      message("    getAllJunctionSeqCountVectors: out.list generated. length = ",length(out.list), " (",date(),")")
+      out <- as.matrix(do.call(rbind, out.list))
+      mode(out) <- "integer"
       
-      #out <- as.matrix(t(sapply(1:nrow(fData(ecs)),function(i){
-      #  geneID <- geneIDs(ecs)[i];
-      #  countbinID <- countbinIDs(ecs)[i];
-      #  rowWithGeneID <- which(rownames(gct) == geneID);
-      #  stopifnot( length(rowWithGeneID) == 1 );
-      #  binCounts <- counts(ecs)[i,];
-      #  geneCounts <- gct[rowWithGeneID,];
-      #  return( c(binCounts, geneCounts - binCounts) );
-      #})));
-      message("    getAllJunctionSeqCountVectors: out generated. dim = ",paste(dim(out),sep=",",collapse=",")," (",date(),")");
+      message("    getAllJunctionSeqCountVectors: out generated. dim = ",paste(dim(out),sep=",",collapse=",")," (",date(),")")
       
-      rownames(out) <- rownames(fData(ecs));
-      colnames(out) <- c( paste0(colnames(counts(ecs)),"_thisBin")  , paste0(colnames(counts(ecs)),"_gene")  );
-      return(out);
+      rownames(out) <- rownames(fData(ecs))
+      colnames(out) <- c( paste0(colnames(counts(ecs)),"_thisBin")  , paste0(colnames(counts(ecs)),"_gene")  )
+      return(out)
       
-      warning("Fallback (DEXSeq-style) model framework is depreciated and no longer supported!");
+      warning("Fallback (DEXSeq-style) model framework is depreciated and no longer supported!")
    } else if(method.countVectors == "sumOfAllBinsOfSameTypeForGene"){
-     stop("method.countVectors 'sumOfAllBinsOfSameTypeForGene' is not implemented at this time.");
+     stop("method.countVectors 'sumOfAllBinsOfSameTypeForGene' is not implemented at this time.")
    } else {
      stop("ERROR: Impossible State: getAllJunctionSeqCountVectors method.countVectors not recognized.")
    }
@@ -657,7 +504,7 @@ getAllJunctionSeqCountVectors <- function( ecs, method.countVectors = c("geneLev
 
 modelFrameForGene.v2 <- function( ecs, geneID, onlyTestable=FALSE) {
    stopifnot( is( ecs, "JunctionSeqCountSet") )
-   if( onlyTestable & any(colnames(fData(ecs)) %in% "testable")){
+   if( onlyTestable && any(colnames(fData(ecs)) %in% "testable")){
       rows <- geneIDs(ecs) == geneID & fData(ecs)$testable
    }else{
       rows <- geneIDs(ecs) == geneID
@@ -669,8 +516,6 @@ modelFrameForGene.v2 <- function( ecs, geneID, onlyTestable=FALSE) {
       sample = rep( factor( colnames( counts(ecs) ) ), each = numJunctions ),
       countbin = junctionCol,
       sizeFactor = rep( sizeFactors(ecs), each = numJunctions ) )
-   #for( cn in colnames( design(ecs,drop=FALSE) ) )
-   #   modelFrame[[cn]] <- factor(rep( design(ecs,drop=FALSE)[[cn]], each=numJunctions ), levels=sort(levels(design(ecs,drop=FALSE)[[cn]] )))
    for( cn in colnames( design(ecs,drop=FALSE) ) )
          modelFrame[[cn]] <- factor(rep( design(ecs,drop=FALSE)[[cn]], each=numJunctions ), levels=levels(design(ecs,drop=FALSE)[[cn]] ))
    modelFrame$dispersion <- fData(ecs)$dispersion[ rows ][
@@ -682,7 +527,7 @@ modelFrameForGene.v2 <- function( ecs, geneID, onlyTestable=FALSE) {
 
 modelFrameForGene <- function( ecs, geneID, onlyTestable=FALSE) {
    stopifnot( is( ecs, "JunctionSeqCountSet") )
-   if( onlyTestable & any(colnames(fData(ecs)) %in% "testable")){
+   if( onlyTestable && any(colnames(fData(ecs)) %in% "testable")){
       rows <- geneIDs(ecs) == geneID & fData(ecs)$testable
    }else{
       rows <- geneIDs(ecs) == geneID
@@ -694,8 +539,6 @@ modelFrameForGene <- function( ecs, geneID, onlyTestable=FALSE) {
       sample = rep( factor( colnames( counts(ecs) ) ), each = numJunctions ),
       countbin = junctionCol,
       sizeFactor = rep( sizeFactors(ecs), each = numJunctions ) )
-   #for( cn in colnames( design(ecs,drop=FALSE) ) )
-   #   modelFrame[[cn]] <- factor(rep( design(ecs,drop=FALSE)[[cn]], each=numJunctions ), levels=sort(levels(design(ecs,drop=FALSE)[[cn]] )))
    for( cn in colnames( design(ecs,drop=FALSE) ) )
          modelFrame[[cn]] <- factor(rep( design(ecs,drop=FALSE)[[cn]], each=numJunctions ), levels=levels(design(ecs,drop=FALSE)[[cn]] ))
    modelFrame$dispersion <- fData(ecs)$dispersion[ rows ][
@@ -707,26 +550,23 @@ modelFrameForGene <- function( ecs, geneID, onlyTestable=FALSE) {
 
 testFeatureForDJU.fromRow <- function(formula1, ecs, i, modelFrame, mm0, mm1, disp, keepCoefs = ncol(mm1)){
   stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
-  geneID <- geneIDs(ecs)[i];
-  countbinID <- countbinIDs(ecs)[i];
-  #stopifnot( any(geneIDs(ecs) %in% geneID & countbinIDs(ecs) %in% countbinID ) )
+  geneID <- geneIDs(ecs)[i]
+  countbinID <- countbinIDs(ecs)[i]
   stopifnot( !is.na(disp) )
   if( all( is.na( sizeFactors( ecs )) ) ){
     stop("Please calculate size factors first\n")
   }
-  countVector <- ecs@countVectors[i,];
+  countVector <- ecs@countVectors[i,]
   
-  #countVector <- getJunctionSeqCountVector( ecs, geneID, countbinID , use.alternate.method = use.alternate.method);
-  #countVector <- ecs@countVectors[i,];
-  conditionLevels <- levels(modelFrame[["condition"]]);
+  conditionLevels <- levels(modelFrame[["condition"]])
   
   if(is.na(disp)){
-     warning("Dispersion is NA!");
-     return(list(coefficient = rep(NA,length(keepCoefs)), logFC = rep(NA, length(conditionLevels) - 1),pval = NA, disp = NA, countVector = countVector, fit = list(fitH0 = NA, fitH1 = NA) ));
+     warning("Dispersion is NA!")
+     return(list(coefficient = rep(NA,length(keepCoefs)), logFC = rep(NA, length(conditionLevels) - 1),pval = NA, disp = NA, countVector = countVector, fit = list(fitH0 = NA, fitH1 = NA) ))
   }
   
   return(testFeatureForDJU.fromCountVector(formula1 = formula1, mm0 = mm0,mm1 = mm1,disp = disp, keepCoefs = keepCoefs, modelFrame = modelFrame, countVector = countVector, 
-                                           geneID = geneID, countbinID = countbinID));
+                                           geneID = geneID, countbinID = countbinID))
 }
 
 testFeatureForDJU.fromCountVector <- function(formula1, mm0,mm1,disp, keepCoefs = ncol(mm1), modelFrame,countVector, 
@@ -735,23 +575,22 @@ testFeatureForDJU.fromCountVector <- function(formula1, mm0,mm1,disp, keepCoefs 
   fitExpToVar <- "condition"
   conditionLevels <- levels(modelFrame[[fitExpToVar]])
   fitB <- try( {
-      fit0 <- glmnb.fit( mm0,  countVector, dispersion = disp, offset = log( modelFrame$sizeFactor ) );
-      fit1 <- glmnb.fit( mm1,  countVector, dispersion = disp, offset = log( modelFrame$sizeFactor ) );
-      list(fit0,fit1);
-  });
+      fit0 <- glmnb.fit( mm0,  countVector, dispersion = disp, offset = log( modelFrame$sizeFactor ) )
+      fit1 <- glmnb.fit( mm1,  countVector, dispersion = disp, offset = log( modelFrame$sizeFactor ) )
+      list(fit0,fit1)
+  })
   if( any(inherits( fitB, "try-error" ) )) {
-     warning( sprintf("glmnb.fit failed for %s:%s\n", as.character( geneID ), countbinID) );
-     return(list(coefficient = rep(NA,length(keepCoefs)), logFC = rep(NA, length(conditionLevels) - 1),pval = NA, disp = NA, countVector = countVector, fit = list(fitH0 = NA, fitH1 = NA) ));
+     warning( sprintf("glmnb.fit failed for %s:%s\n", as.character( geneID ), countbinID) )
+     return(list(coefficient = rep(NA,length(keepCoefs)), logFC = rep(NA, length(conditionLevels) - 1),pval = NA, disp = NA, countVector = countVector, fit = list(fitH0 = NA, fitH1 = NA) ))
   }
-  fit0 <- fitB[[1]];
-  fit1 <- fitB[[2]];
+  fit0 <- fitB[[1]]
+  fit1 <- fitB[[2]]
 
-  coefficient <- fit1$coefficients[keepCoefs];
+  coefficient <- fit1$coefficients[keepCoefs]
   
-  pval <- pchisq( deviance( fit0 ) - deviance( fit1 ), ncol( mm1 ) - ncol( mm0 ), lower.tail=FALSE );
+  pval <- pchisq( deviance( fit0 ) - deviance( fit1 ), ncol( mm1 ) - ncol( mm0 ), lower.tail=FALSE )
   
-  #logFC <- rep(NA, length(conditionLevels) - 1) # getLogFoldChangeFromModel(conditionLevels, formula1, modelFrame, mm1, fit1);
-  logFC <- getLogFoldChangeFromModel(formula1, modelFrame, mm1, fit1);
+  logFC <- getLogFoldChangeFromModel(formula1, modelFrame, mm1, fit1)
   
-  return(list(coefficient = coefficient, logFC = logFC, pval = pval, disp = disp, countVector = countVector, fit = list(fitH0 = fit0, fitH1 = fit1) ));
+  return(list(coefficient = coefficient, logFC = logFC, pval = pval, disp = disp, countVector = countVector, fit = list(fitH0 = fit0, fitH1 = fit1) ))
 }

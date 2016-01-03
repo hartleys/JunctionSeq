@@ -45,7 +45,7 @@
 \keyword{datasets}
 
 \examples{
-data(exampleDataSet,package="JctSeqExData2");
+data(exampleDataSet,package="JctSeqData");
 
 #Set a few alternative colors:
 buildAllPlotsForGene(geneID = "ENSRNOG00000009281", jscs, 

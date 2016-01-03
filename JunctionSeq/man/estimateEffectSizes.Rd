@@ -79,7 +79,7 @@ estimateEffectSizes(jscs,
 }
 
 \examples{
-data(exampleDataSet,package="JctSeqExData2");
+data(exampleDataSet,package="JctSeqData");
 jscs <- estimateEffectSizes(jscs);
 
 \dontrun{
@@ -89,17 +89,17 @@ jscs <- estimateEffectSizes(jscs);
 #Set up example data:
 decoder.file <- system.file(
                   "extdata/annoFiles/decoder.bySample.txt",
-                  package="JctSeqExData2");
+                  package="JctSeqData");
 decoder <- read.table(decoder.file,
                   header=TRUE,
                   stringsAsFactors=FALSE);
 gff.file <- system.file(
             "extdata/cts/withNovel.forJunctionSeq.gff.gz",
-            package="JctSeqExData2");
+            package="JctSeqData");
 countFiles <- system.file(paste0("extdata/cts/",
      decoder$sample.ID,
      "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"),
-     package="JctSeqExData2");
+     package="JctSeqData");
 ########################################
 #Advanced Analysis:
 

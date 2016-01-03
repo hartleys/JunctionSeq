@@ -28,7 +28,7 @@
 
 \examples{
 gff.file <- system.file("extdata/cts/withNovel.forJunctionSeq.gff.gz",
-                        package="JctSeqExData2");
+                        package="JctSeqData");
 
 #Parse the GFF file:
 annoData <- readAnnotationData(gff.file);

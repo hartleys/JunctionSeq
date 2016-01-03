@@ -85,8 +85,11 @@ National Institutes of Health
 <<setup,echo=FALSE,results="hide">>=
 options(width=80, signif=3, digits=3, prompt=" ", continue=" ")
 set.seed(0xdada)
-require("JunctionSeq")
-require("JctSeqExData2")
+
+suppressWarnings({
+      library("JunctionSeq")
+      library("JctSeqData")
+})
 
 ## To create bitmap versions of plots with many dots, circumventing
 ##   Sweave's fig=TRUE mechanism...
@@ -136,7 +139,7 @@ source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
 JS.install();
 @
 
-Alternatively it can be installed manually:
+Alternatively, JunctionSeq can be installed manually:
 <<installReqPacks, eval=FALSE>>=
 #CRAN package dependencies:
 install.packages("statmod");
@@ -164,6 +167,15 @@ biocLite("DESeq2");
 install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",
                  repos = NULL, 
                  type = "source");
+@
+
+JunctionSeq is intended to be included in a future version of Bioconductor.
+When JunctionSeq is added to a new release of bioconductor, installation
+will be possible using the command:
+
+<<biocInstall, eval=FALSE>>=
+source("http://bioconductor.org/biocLite.R")
+biocLite("JunctionSeq")
 @
 
 \emph{Generating splice junction counts:} The easiest way to generate the counts for JunctionSeq is via the QoRTs\cite{QoRTs} software package. The QoRTs software package requires R version 3.0.2 or higher, as well as (64-bit) java 6 or higher. QoRTs can be found online \href{http://hartleys.github.io/QoRTs/index.html}{here}.
@@ -194,9 +206,9 @@ It is also recommended that the data be thoroughly examined and checked for arti
 \section{Example Dataset} \label{sec:exdata}
 %----------
 
-To allow users to test JunctionSeq and experiment with its functionality, an example dataset is available online \href{http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz}{here}. It can be installed with the command:
+To allow users to test JunctionSeq and experiment with its functionality, an example dataset is available online \href{http://hartleys.github.io/JunctionSeq/install/JctSeqData_LATEST.tar.gz}{here}. It can be installed with the command:
 <<installExData, eval = FALSE>>=
-install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz", repos=FALSE, type = "source");
+install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqData_LATEST.tar.gz", repos=FALSE, type = "source");
 @
 
 A more complete walkthrough using this same dataset is available \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip}{here}. The bam files are available \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip}{here}.
@@ -210,14 +222,14 @@ Splice junction counts and annotation files generated from this example dataset 
 The annotation files can be accessed with the commands:
 <<GetExampleDataDirectory>>=
 decoder.file <- system.file("extdata/annoFiles/decoder.bySample.txt", 
-                            package="JctSeqExData2", 
+                            package="JctSeqData", 
                             mustWork=TRUE);
 decoder <- read.table(decoder.file,
                       header=TRUE,
                       stringsAsFactors=FALSE);
 gff.file <- system.file(
             "extdata/cts/withNovel.forJunctionSeq.gff.gz", 
-            package="JctSeqExData2", 
+            package="JctSeqData", 
             mustWork=TRUE);
 @
 
@@ -226,12 +238,12 @@ The count files can be accessed with the commands:
 countFiles.noNovel <- system.file(paste0("extdata/cts/",
               decoder$sample.ID,
               "/QC.spliceJunctionAndExonCounts.forJunctionSeq.txt.gz"), 
-              package="JctSeqExData2", mustWork=TRUE);
+              package="JctSeqData", mustWork=TRUE);
 
 countFiles <- system.file(paste0("extdata/cts/",
               decoder$sample.ID,
               "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"), 
-              package="JctSeqExData2", mustWork=TRUE);
+              package="JctSeqData", mustWork=TRUE);
 @
 
 %--------------------------------------------------------------------------------
@@ -1019,9 +1031,9 @@ library("DEXSeq");
 countFiles.dexseq <- system.file(paste0("extdata/cts/",
               decoder$sample.ID,
               "/QC.exonCounts.formatted.for.DEXSeq.txt.gz"), 
-              package="JctSeqExData2", mustWork=TRUE);
+              package="JctSeqData", mustWork=TRUE);
 gff.dexseq <- system.file("extdata/annoFiles/DEXSeq.flat.gff.gz",
-              package="JctSeqExData2", mustWork=TRUE);
+              package="JctSeqData", mustWork=TRUE);
 dxd <- DEXSeqDataSetFromHTSeq(
    countFiles.dexseq,
    sampleData = design,
