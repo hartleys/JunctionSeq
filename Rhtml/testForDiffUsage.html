@@ -147,15 +147,15 @@ If left as the default (&quot;auto&quot;), then the cutoff threshold will be det
 
 <h3>Examples</h3>
 
-<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqData&quot;);
 jscs &lt;- testForDiffUsage(jscs);
 </code></pre>
 
-<pre><code>## -------&gt; testJunctionsForDiffUsage: Starting hypothesis test iteration. (Tue Dec 22 14:51:57 2015)
+<pre><code>## -------&gt; testJunctionsForDiffUsage: Starting hypothesis test iteration. (Sat Jan  2 20:47:03 2016)
 ## using supplied model matrix
 ## found results columns, replacing these
-## -------&gt; testJunctionsForDiffUsage: Finished hypothesis test iteration. (Tue Dec 22 14:51:57 2015)
-## -------&gt; testJunctionsForDiffUsage: Finished compiling hypothesis test results. (Tue Dec 22 14:51:57 2015)
+## -------&gt; testJunctionsForDiffUsage: Finished hypothesis test iteration. (Sat Jan  2 20:47:04 2016)
+## -------&gt; testJunctionsForDiffUsage: Finished compiling hypothesis test results. (Sat Jan  2 20:47:04 2016)
 ## ---&gt; tJfDU(): No non-NA maxCooks values. Ignoring cooks.
 ## &gt; Performing final p.adjust filtering.
 ## &gt;      No cook&#39;s cutoffs found.
@@ -170,17 +170,17 @@ jscs &lt;- testForDiffUsage(jscs);
 ##D #Set up example data:
 ##D decoder.file &lt;- system.file(
 ##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
-##D                   package=&quot;JctSeqExData2&quot;);
+##D                   package=&quot;JctSeqData&quot;);
 ##D decoder &lt;- read.table(decoder.file,
 ##D                   header=TRUE,
 ##D                   stringsAsFactors=FALSE);
 ##D gff.file &lt;- system.file(
 ##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
-##D             package=&quot;JctSeqExData2&quot;);
+##D             package=&quot;JctSeqData&quot;);
 ##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
 ##D      decoder$sample.ID,
 ##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-##D      package=&quot;JctSeqExData2&quot;);
+##D      package=&quot;JctSeqData&quot;);
 ##D ########################################
 ##D #Advanced Analysis:
 ##D 
@@ -207,5 +207,5 @@ jscs &lt;- testForDiffUsage(jscs);
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.30 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.42 <a href="00Index.html">Index</a>]</div>
 </body></html>

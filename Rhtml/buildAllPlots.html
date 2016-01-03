@@ -482,7 +482,7 @@ for internally-generated parameters. DO NOT USE.
 
 <h3>Examples</h3>
 
-<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqExData2&quot;);
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqData&quot;);
 buildAllPlots(jscs);
 </code></pre>
 
@@ -495,17 +495,17 @@ buildAllPlots(jscs);
 ## &gt; buildAllPlots: Generating MA-Plot (log2FC(CTRL/CASE))
 ## &gt; buildAllPlots: Writing HTML results index.
 ##    Copying default css stylesheet.
-##    Writing html index. Tue Dec 22 14:51:11 2015
-##    Writing formula data. Tue Dec 22 14:51:11 2015
-##    Writing methods data. Tue Dec 22 14:51:11 2015
-##    Writing sample data. Tue Dec 22 14:51:11 2015
-##    Writing dispersion data. Tue Dec 22 14:51:11 2015
-##    Writing summary plots. Tue Dec 22 14:51:11 2015
-##    Compiling data table. Tue Dec 22 14:51:11 2015
-##    Writing data table. Tue Dec 22 14:51:11 2015
-##    Html index complete. Tue Dec 22 14:51:11 2015
-##    Writing pages. Tue Dec 22 14:51:11 2015
-##    Finished all html files. Tue Dec 22 14:51:12 2015
+##    Writing html index. Sat Jan  2 20:46:20 2016
+##    Writing formula data. Sat Jan  2 20:46:20 2016
+##    Writing methods data. Sat Jan  2 20:46:20 2016
+##    Writing sample data. Sat Jan  2 20:46:20 2016
+##    Writing dispersion data. Sat Jan  2 20:46:20 2016
+##    Writing summary plots. Sat Jan  2 20:46:20 2016
+##    Compiling data table. Sat Jan  2 20:46:20 2016
+##    Writing data table. Sat Jan  2 20:46:20 2016
+##    Html index complete. Sat Jan  2 20:46:20 2016
+##    Writing pages. Sat Jan  2 20:46:20 2016
+##    Finished all html files. Sat Jan  2 20:46:21 2016
 ## &gt; buildAllPlots: Finished writing HTML results index.
 ## &gt; buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 5)
 ## starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
@@ -561,17 +561,17 @@ buildAllPlots(jscs);
 ##D #Set up example data:
 ##D decoder.file &lt;- system.file(
 ##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
-##D                   package=&quot;JctSeqExData2&quot;);
+##D                   package=&quot;JctSeqData&quot;);
 ##D decoder &lt;- read.table(decoder.file,
 ##D                   header=TRUE,
 ##D                   stringsAsFactors=FALSE);
 ##D gff.file &lt;- system.file(
 ##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
-##D             package=&quot;JctSeqExData2&quot;);
+##D             package=&quot;JctSeqData&quot;);
 ##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
 ##D      decoder$sample.ID,
 ##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-##D      package=&quot;JctSeqExData2&quot;);
+##D      package=&quot;JctSeqData&quot;);
 ##D ########################################
 ##D #Run example analysis:
 ##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
@@ -590,5 +590,5 @@ buildAllPlots(jscs);
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.30 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.42 <a href="00Index.html">Index</a>]</div>
 </body></html>

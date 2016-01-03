@@ -1,4 +1,4 @@
-    > v0.6.30 (Revised Tue Dec 22 13:57:32 EST 2015)
+    > v0.6.42 (Revised Sat Jan  2 19:25:31 EST 2016)
 
 [JunctionSeq](http://hartleys.github.io/JunctionSeq/) is an R package for detection and visualization of differential usage of 
 exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -59,7 +59,7 @@ using the QoRTs software package, available [here](http://hartleys.github.io/QoR
 ##EXAMPLE DATA:
 Another example dataset, used in the vignette, is packaged as an R package, and can be installed with the command:
     
-    > install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz", 
+    > install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqData_LATEST.tar.gz", 
                       repos = NULL, 
                       type="source")
 

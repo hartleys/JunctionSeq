@@ -187,17 +187,17 @@ behavior is that no read or read-pair is ever counted more than once in any mode
 #Set up example data:
 decoder.file &lt;- system.file(
                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
-                  package=&quot;JctSeqExData2&quot;);
+                  package=&quot;JctSeqData&quot;);
 decoder &lt;- read.table(decoder.file,
                   header=TRUE,
                   stringsAsFactors=FALSE);
 gff.file &lt;- system.file(
             &quot;extdata/tiny/withNovel.forJunctionSeq.gff.gz&quot;,
-            package=&quot;JctSeqExData2&quot;);
+            package=&quot;JctSeqData&quot;);
 countFiles &lt;- system.file(paste0(&quot;extdata/tiny/&quot;,
      decoder$sample.ID,
      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
-     package=&quot;JctSeqExData2&quot;);
+     package=&quot;JctSeqData&quot;);
 ########################################
 #Advanced Analysis:
 
@@ -211,10 +211,10 @@ jscs = readJunctionSeqCounts(countfiles = countFiles,
 );
 </code></pre>
 
-<pre><code>## -&gt; STARTING readJunctionSeqCounts (Tue Dec 22 14:51:56 2015)
-## ---&gt; RJSC; (v0.6.30)
+<pre><code>## -&gt; STARTING readJunctionSeqCounts (Sat Jan  2 20:47:02 2016)
+## ---&gt; RJSC; (v0.6.42)
 ## ---&gt; RJSC: samplenames: SAMP1,SAMP2,SAMP3,SAMP4,SAMP5,SAMP6
-## ---&gt; RJSC: flat.gff.file: /home/hartleys/R/R3.2.2/lib/JctSeqExData2/extdata/tiny/withNovel.forJunctionSeq.gff.gz
+## ---&gt; RJSC: flat.gff.file: /home/hartleys/R/R3.2.2/lib/JctSeqData/extdata/tiny/withNovel.forJunctionSeq.gff.gz
 ## ---&gt; RJSC: use.exons:TRUE
 ## ---&gt; RJSC: use.junctions:TRUE
 ## ---&gt; RJSC: use.novel.junctions:TRUE
@@ -231,15 +231,15 @@ jscs = readJunctionSeqCounts(countfiles = countFiles,
 ## -----&gt; formatting annotation...
 ## -----&gt; initial generation...
 ## -----&gt; creating jscs...
-## -----&gt; generating count vectors... (Tue Dec 22 14:51:56 2015)
-##     getAllJunctionSeqCountVectors: dim(counts) = 1516,6 (Tue Dec 22 14:51:56 2015)
+## -----&gt; generating count vectors... (Sat Jan  2 20:47:03 2016)
+##     getAllJunctionSeqCountVectors: dim(counts) = 1516,6 (Sat Jan  2 20:47:03 2016)
 ##     getAllJunctionSeqCountVectors: dim(gct) = 117,6
-##     getAllJunctionSeqCountVectors: out generated. dim = 1516,12 (Tue Dec 22 14:51:56 2015)
-## -----&gt; count vectors generated (Tue Dec 22 14:51:56 2015)
-## -----&gt; generating DESeqDataSet... (Tue Dec 22 14:51:56 2015)
-## -----&gt; DESeqDataSet generated (Tue Dec 22 14:51:56 2015)
+##     getAllJunctionSeqCountVectors: out generated. dim = 1516,12 (Sat Jan  2 20:47:03 2016)
+## -----&gt; count vectors generated (Sat Jan  2 20:47:03 2016)
+## -----&gt; generating DESeqDataSet... (Sat Jan  2 20:47:03 2016)
+## -----&gt; DESeqDataSet generated (Sat Jan  2 20:47:03 2016)
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.30 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.6.42 <a href="00Index.html">Index</a>]</div>
 </body></html>

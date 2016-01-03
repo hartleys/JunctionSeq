@@ -1,4 +1,4 @@
-    > v0.6.30 (Revised Tue Dec 22 13:57:32 EST 2015)
+    > v0.6.42 (Revised Sat Jan  2 19:25:31 EST 2016)
 
 #Frequently Asked Questions
 
@@ -37,8 +37,8 @@ command:
 ##BASIC INSTALLATION (from source):
 JunctionSeq can be installed automatically from source using the R commands:
 
-    > source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
-    > JS.install();
+    source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
+    JS.install();
 
 ##MANUAL INSTALLATION:
 
