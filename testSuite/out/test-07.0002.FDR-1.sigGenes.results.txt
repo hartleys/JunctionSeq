@@ -1,0 +1,1 @@
+featureID	geneID	countbinID	testable	status	allZero	baseMean	baseVar	dispBeforeSharing	dispFitted	dispersion	pvalue	padjust	chr	start	end	strand	transcripts	featureType	padjust_noFilter	log2FC(CTRL/CASE)	log2FCvst(CTRL/CASE)	expr_CASE	expr_CTRL	geneWisePadj

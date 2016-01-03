@@ -1,0 +1,1 @@
+geneID	chr	start	end	strand	baseMean	geneWisePadj	mostSigID	mostSigPadjust	numExons	numKnown	numNovel	exonsSig	knownSig	novelSig	numFeatures	numSig
