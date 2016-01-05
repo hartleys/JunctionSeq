@@ -1171,7 +1171,7 @@ fixRHEL5_svg_bug <- function(infile,outfile){
 
 writeExprBedTrack <- function(file, jscs, 
                                       trackLine = "track name='JctExpr' description='Junction Coverage Estimates, by group' itemRgb='On' visibility=3",
-                                      only.with.sig.gene = TRUE,
+                                      only.with.sig.gene = FALSE,
                                       only.sig = FALSE, 
                                       only.testable = TRUE, 
                                       plot.exons = TRUE, plot.junctions = TRUE,

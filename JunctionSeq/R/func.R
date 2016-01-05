@@ -312,15 +312,15 @@ writeCompleteResults <- function(jscs, outfile.prefix,
      if(isTRUE(save.allGenes)){
        if(any(fData(jscs)$featureType == "splice_site" | fData(jscs)$featureType == "novel_splice_site")){
          writeExprBedTrack(paste0(outfile.prefix,"allGenes.junctionCoverage",bedFileExt), 
-                         jscs = jscs, 
+                         jscs = jscs, only.with.sig.gene = FALSE,
                          plot.exons = FALSE, plot.junctions = TRUE,
                          output.format = bedtrack.format, verbose = verbose, use.gzip = gzip.output,
                          trackLine = paste0("track name='JctExprAll' description='Splice Junction Coverage Estimates, by group' itemRgb='On' visibility=3"))
        }
        if(any(fData(jscs)$featureType == "exonic_part")){
          writeExprBedTrack(paste0(outfile.prefix,"allGenes.exonCoverage",bedFileExt), 
-                         jscs = jscs, 
-                         only.with.sig.gene = FALSE, plot.exons = TRUE, plot.junctions = FALSE,
+                         jscs = jscs, only.with.sig.gene = FALSE,
+                         plot.exons = TRUE, plot.junctions = FALSE,
                          output.format = bedtrack.format, verbose = verbose, use.gzip = gzip.output,
                          trackLine = paste0("track name='ExonExprAll' description='Exonic Region Coverage Estimates, by group' itemRgb='On' visibility=3"))
        }
@@ -330,15 +330,15 @@ writeCompleteResults <- function(jscs, outfile.prefix,
        #if(length(sig.features) > 0){
          if(any(fData(jscs)$featureType == "splice_site" | fData(jscs)$featureType == "novel_splice_site")){
            writeExprBedTrack(paste0(outfile.prefix,"sigGenes.junctionCoverage",bedFileExt), 
-                           jscs = jscs, 
-                           only.with.sig.gene = TRUE, plot.exons = FALSE, plot.junctions = TRUE,
+                           jscs = jscs, only.with.sig.gene = TRUE,
+                           plot.exons = FALSE, plot.junctions = TRUE,
                            output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold, use.gzip = gzip.output,
                            trackLine = paste0("track name='JctExprAll' description='Sig genes splice Junction Coverage Estimates, by group' itemRgb='On' visibility=3"))
          }
          if(any(fData(jscs)$featureType == "exonic_part")){
            writeExprBedTrack(paste0(outfile.prefix,"sigGenes.exonCoverage",bedFileExt), 
-                           jscs = jscs, 
-                           only.with.sig.gene = TRUE, plot.exons = TRUE, plot.junctions = FALSE,
+                           jscs = jscs, only.with.sig.gene = TRUE, 
+                           plot.exons = TRUE, plot.junctions = FALSE,
                            output.format = bedtrack.format, verbose = verbose, FDR.threshold= FDR.threshold, use.gzip = gzip.output,
                            trackLine = paste0("track name='ExonExprAll' description='Sig genes exonic Region Coverage Estimates, by group' itemRgb='On' visibility=3"))
          }

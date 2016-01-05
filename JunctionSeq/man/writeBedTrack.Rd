@@ -13,7 +13,7 @@
 \usage{
 writeExprBedTrack(file, jscs, 
      trackLine,
-     only.with.sig.gene = TRUE,
+     only.with.sig.gene = FALSE,
      only.sig = FALSE, 
      only.testable = TRUE, 
      plot.exons = TRUE, plot.junctions = TRUE, plot.novel.junctions = TRUE,

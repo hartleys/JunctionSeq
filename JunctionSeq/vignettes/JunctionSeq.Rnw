@@ -126,13 +126,17 @@ Additional help and documentation is \href{http://hartleys.github.io/JunctionSeq
 the entire analysis pipeline, along with a full \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip}{example dataset} with 
 \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip}{example bam files}.
 
+You can cite JunctionSeq by citing the preprint on arxiv.org:
+
+Hartley SW, Mullikin JC. \href{http://arxiv.org/abs/1512.06038}{Detection and Visualization of Differential Exon and Splice Junction Usage in RNA-Seq Data with JunctionSeq.} \href{http://arxiv.org}{arXiv} preprint \href{http://arxiv.org/abs/1512.06038}{arXiv:1512.06038}. 2015 Dec 18.
+
 %--------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------
 \section{Requirements}  \label{sec:reqs}
 %--------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------
 
-JunctionSeq requires R v3.2.2 as well as a number of R packages. See the [JunctionSeq website](http://hartleys.github.io/JunctionSeq/) for more detailed and updated information on JunctionSeq installation. In general, the easiest way to install it is to use the automated installer:
+JunctionSeq requires R v3.2.2 as well as a number of R packages. See the \href{http://hartleys.github.io/JunctionSeq/}{JunctionSeq website} for more detailed and updated information on JunctionSeq installation. In general, the easiest way to install it is to use the automated installer:
 
 <<installer, eval=FALSE>>=
 source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
