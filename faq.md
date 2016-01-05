@@ -1,4 +1,4 @@
-    > v0.6.42 (Revised Sat Jan  2 19:25:31 EST 2016)
+    > v0.6.46 (Revised Tue Jan  5 12:18:59 EST 2016)
 
 #Frequently Asked Questions
 
@@ -33,6 +33,12 @@ For a full listing of all help topics for the R utility, use the R
 command: 
 
     > help(package="JunctionSeq");
+
+##HOW DO I CITE JUNCTIONSEQ?
+
+You can currently cite the JunctionSeq methodology preprint paper as:
+
+Hartley SW, Mullikin JC. [Detection and Visualization of Differential Exon and Splice Junction Usage in RNA-Seq Data with JunctionSeq.](http://arxiv.org/abs/1512.06038) [arXiv](http://arxiv.org) preprint [arXiv:1512.06038](http://arxiv.org/abs/1512.06038). 2015 Dec 18.
 
 ##BASIC INSTALLATION (from source):
 JunctionSeq can be installed automatically from source using the R commands:
