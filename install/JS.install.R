@@ -1,5 +1,5 @@
 
-message("Loading JunctionSeq installer (v0.8.2)");
+message("Loading JunctionSeq installer (v0.8.3)");
 
 JunctionSeq.CRAN.dep <- c("statmod","plotrix","stringr","locfit","Hmisc");
 JunctionSeq.BIOC.dep <- c("Biobase", "BiocGenerics", "BiocParallel", "GenomicRanges", "IRanges","S4Vectors","genefilter","geneplotter","SummarizedExperiment","DESeq2");
@@ -52,7 +52,7 @@ attemptLoadAndInstall.BIOC <- function(pkg, verbose = TRUE, ...){
 ##########
 #User functions:
 
-
+ 
 JS.install.CRAN.dependencies <- function(verbose = TRUE, ...){
   for(d in JunctionSeq.CRAN.dep){
     attemptLoadAndInstall.CRAN(d, verbose=verbose, ...);
@@ -82,7 +82,7 @@ JS.install.optional <- function(){
     attemptLoadAndInstall.BIOC(d, verbose=verbose);
   }
   
-  install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz",repos=NULL, type="source", ...);
+  install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqExData2_LATEST.tar.gz",repos=NULL, type="source");
 }
 
 
