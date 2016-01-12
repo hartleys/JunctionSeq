@@ -1,4 +1,4 @@
------ R CMD BiocCheck (Tue Jan  5 12:59:52 EST 2016)          -----
+----- R CMD BiocCheck (Mon Jan 11 13:21:13 EST 2016)          -----
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD BiocCheck STARTING (Tue Jan  5 12:59:52 EST 2016) -----
+----- R CMD BiocCheck STARTING (Mon Jan 11 13:21:13 EST 2016) -----
 * This is BiocCheck, version 1.6.0.
 * BiocCheck is a work in progress. Output and severity of issues may
   change.
@@ -18,6 +18,7 @@ http://www.gnu.org/licenses/.
 * This is not a software package, skipping vignette checks...
 * Checking version number...
 * Checking version number validity...
+    * RECOMMENDED: y of x.y.z version should be even in release
 * Checking R Version dependency...
 * Checking biocViews...
 * Checking that biocViews are present...
@@ -65,9 +66,9 @@ See http://bioconductor.org/developers/how-to/biocViews/
 
 Summary:
 REQUIRED count: 0
-RECOMMENDED count: 0
+RECOMMENDED count: 1
 CONSIDERATION count: 4
 For detailed information about these checks, see the BiocCheck
 vignette, available at
 http://bioconductor.org/packages/3.2/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
------ R CMD BiocCheck COMPLETE (Tue Jan  5 13:00:36 EST 2016) -----
+----- R CMD BiocCheck COMPLETE (Mon Jan 11 13:22:08 EST 2016) -----

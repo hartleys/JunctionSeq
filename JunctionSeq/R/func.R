@@ -651,7 +651,13 @@ readJunctionSeqCounts <- function(countfiles = NULL, countdata = NULL,
    }
    
    is.multiGene.aggregate <- grepl("+", raw.geneID, fixed=TRUE)
-   if(isTRUE(verbose)) message("---> Note: ",sum(is.multiGene.aggregate[use.bins])," counting bins are from ",length(unique(grep("+", raw.geneID[use.bins & is.multiGene.aggregate], fixed=TRUE)))," multigene aggregates (ie. overlapping genes).")
+   multiGene.aggregate.IDs <- unique(raw.geneID[is.multiGene.aggregate & use.bins])
+   multiGene.aggregate.ct <- length(multiGene.aggregate.IDs)
+   multiGene.aggregate.geneCt <- length(unlist( strsplit(multiGene.aggregate.IDs, "+",fixed=TRUE)))
+   
+   if(isTRUE(verbose)) message("---> Note: ",sum(is.multiGene.aggregate[use.bins])," counting bins from overlapping genes") 
+   if(isTRUE(verbose)) message("--->          There are ",multiGene.aggregate.ct,    " multigene aggregates.")
+   if(isTRUE(verbose)) message("--->          There are ",multiGene.aggregate.geneCt," genes that are part of an aggregate.")
    if(isTRUE(! use.multigene.aggregates)){
       use.bins <- use.bins & (! is.multiGene.aggregate)
       if(isTRUE(verbose)) message(paste0("---> Removed multigene-aggregate features. Found: ",sum(use.bins), " features to be included so far."))
