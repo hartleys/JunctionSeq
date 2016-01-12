@@ -1,5 +1,5 @@
 Package: JunctionSeq
-Version: 0.6.46
+Version: 0.99.6
 Title: JunctionSeq: A Utility for Detection of Differential Exon and
         Splice-Junction Usage in RNA-Seq data
 Authors@R: c(person("Stephen", "Hartley", role = c("aut", "cre"),
@@ -19,7 +19,7 @@ NeedsCompilation: no
 biocViews: Sequencing, RNASeq, DifferentialExpression
 URL: http://hartleys.github.io/JunctionSeq/index.html
 BugReports: https://github.com/hartleys/JunctionSeq/issues
-Packaged: 2016-01-05 17:26:28 UTC; hartleys
+Packaged: 2016-01-11 16:42:37 UTC; hartleys
 Author: Stephen Hartley [aut, cre] (PhD),
   Simon Anders [cph],
   Alejandro Reyes [cph]

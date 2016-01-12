@@ -1,4 +1,4 @@
-JUNCTIONSEQVERSION = "0.6.46"
+JUNCTIONSEQVERSION = "0.99.6"
 
 message("Loading JunctionSeq installer (v0.6.1e)");
 message("For JunctionSeq v",JUNCTION.SEQ.VERSION);
