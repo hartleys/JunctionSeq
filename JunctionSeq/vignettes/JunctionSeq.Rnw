@@ -336,7 +336,7 @@ In order to properly filter by read depth, size factors are needed. These can be
 
 Once size factors have been generated, novel splice junctions can be selected and counted using the command:
 \begin{framed}  \small \begin{verbatim}
-java -jar /path/to/jarfile/QoRTs.jar QC \
+java -jar /path/to/jarfile/QoRTs.jar \
                 mergeNovelSplices  \
                 --minCount 6 \
                 --stranded \
