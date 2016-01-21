@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: JunctionSeq Color Parameters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for defaultColorList {JunctionSeq}"><tr><td>defaultColorList {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>JunctionSeq Color Parameters</h2>
+
+<h3>Description</h3>
+
+<p>This data set gives default color parameters for JunctionSeq. 
+Any of these parameters can be overridden by using the <code>colorList</code> 
+parameter in <code><a href="buildAllPlots.html">buildAllPlots</a></code>, <code><a href="buildAllPlotsForGene.html">buildAllPlotsForGene</a></code>, 
+or <code><a href="plotJunctionSeqResultsForGene.html">plotJunctionSeqResultsForGene</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>JUNCTIONSEQ.DEFAULT.COLOR.LIST</pre>
+
+
+<h3>Format</h3>
+
+<p>A list.</p>
+
+
+<h3>Details</h3>
+
+<p>The parameter <code>colorList</code> must be a named list. Any elements with the names listed below will override the default JunctionSeq colors.
+</p>
+<p><code>SIG.FEATURE.COLOR</code> The color of vertical lines in the plotting panel, for significant features.  
+</p>
+<p><code>NOSIG.FEATURE.COLOR</code> The color of vertical lines in the plotting panel, for tested but non-significant features.  
+</p>
+<p><code>UNTESTABLE.FEATURE.COLOR</code> The color of vertical lines in the plotting panel, for untestable features. 
+</p>
+<p><code>EXCLUDED.FEATURE.COLOR</code> The color of vertical lines in the plotting panel, for features that were not part of the analysis (for example: splice junctions in an exon-based analysis). 
+</p>
+<p><code>SIG.VERTLINE.COLOR, NOSIG.VERTLINE.COLOR, UNTESTABLE.VERTLINE.COLOR</code>: The colors of the vertical dotted lines in the plotting panel.
+</p>
+<p><code>SIG.FEATURE.BORDER.COLOR</code>, <code>NOSIG.FEATURE.BORDER.COLOR</code>, 
+<code>UNTESTABLE.FEATURE.BORDER.COLOR</code>, <code>EXCLUDED.FEATURE.BORDER.COLOR</code>: 
+The color for borders of features in the gene and transcript annotation.
+</p>
+<p><code>SIG.FEATURE.FILL.COLOR</code>, <code>NOSIG.FEATURE.FILL.COLOR</code>, 
+<code>UNTESTABLE.FEATURE.FILL.COLOR</code>, <code>EXCLUDED.FEATURE.FILL.COLOR</code>
+The colors for exon shading in the gene and transcript annotation.
+</p>
+<p><code>PLOTTING.LINE.COLORS</code> 
+Character vector. The colors for each condition, in order. Will be shortened to the number of conditions.
+</p>
+
+
+<h3>Value</h3>
+
+<p>See above.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqData&quot;);
+
+#Set a few alternative colors:
+buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs, 
+                     outfile.prefix = &quot;./oddColors.&quot;,
+                     colorList = list(SIG.FEATURE.COLOR = &quot;red&quot;,
+                                      SIG.FEATURE.FILL.COLOR = &quot;green&quot;,
+                                      NOSIG.FEATURE.FILL.COLOR = &quot;blue&quot;
+                                      ));
+</code></pre>
+
+<pre><code>## starting buildAllPlotsForGene() for geneID: ENSRNOG00000009281
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.99.6 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,4 +1,4 @@
-    > v0.99.6 (Revised Mon Jan 11 11:24:24 EST 2016)
+    > v0.99.8 (Revised Thu Jan 21 13:51:03 EST 2016)
 
 [JunctionSeq](http://hartleys.github.io/JunctionSeq/) is an R package for detection and visualization of differential usage of 
 exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -17,14 +17,17 @@ Issues, bug reports, or feature requests can be posted to the
 The developers can be contacted at JunctionSeq-Contact (at) list.nih.gov.
 
 Note: the current version of JunctionSeq is ONLY compatible with Bioconductor 3.2 or higher.
-For older versions of JunctionSeq compatible with Bioconductor 3.0 and 3.1, see JunctionSeq release v0.5.1.
+
+**JunctionSeq has been pre-accepted into [Bioconductor](https://www.bioconductor.org/), and will probably be included in the next Bioconductor release.**
+Even after JunctionSeq is added to Bioconductor we will continue to update and maintain this page, as this page provides
+additional online help and documentation.
 
 ##HELP AND DOCUMENTATION:
 
 * [The JunctionSeq user manual](doc/JunctionSeq.pdf): An introduction to differential usage analysis with JunctionSeq.
 * [The online reference documentation](Rhtml/index.html): The complete JunctionSeq R documentation.
 * [A comprehensive walkthrough](doc/example-walkthrough.pdf): describes the entire analysis pipeline from aligned reads through analysis. This includes analysis with other tools such as DESeq2, edgeR, and DEXSeq, as well as the creation of plots and browser tracks.
-* [Example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip): used with the walkthrough so you can follow along. The [example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip) are separate (~1gb download).
+* [Example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip): used with the walkthrough so you can follow along (~280mb download). The [example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip) are separate (~1gb download).
 * [An example results report](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/exampleResults/testForDU.html): An example of the plots and html files produced by JunctionSeq (created using the example dataset).
 * An example set of browser tracks from this same dataset is available 
 [here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). The trackhub used to generate this session can be found [here](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/trackHub/index.html)
