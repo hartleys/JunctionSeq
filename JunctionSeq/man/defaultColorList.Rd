@@ -6,7 +6,8 @@
 
 \title{JunctionSeq Color Parameters}
 \description{
-  This data set gives default color parameters for JunctionSeq. 
+  This data set specifies some of the default color and style parameters 
+  for JunctionSeq. 
   Any of these parameters can be overridden by using the \code{colorList} 
   parameter in \code{\link{buildAllPlots}}, \code{\link{buildAllPlotsForGene}}, 
   or \code{\link{plotJunctionSeqResultsForGene}}.
@@ -34,7 +35,21 @@
     \code{UNTESTABLE.FEATURE.FILL.COLOR}, \code{EXCLUDED.FEATURE.FILL.COLOR}
       The colors for exon shading in the gene and transcript annotation.
     
-    \code{PLOTTING.LINE.COLORS} 
+    \code{KNOWN.SPLICE.LTY}, \code{NOVEL.SPLICE.LTY}: 
+    These set the "lty" parameter for the known and novel splice junction diagrams. 
+    These must be specified as one of the character specifications. In other words, 
+    either a descriptive specification like "solid","dotted",etc., or by an even number
+    of nonzero hexadecimal digits. See the section "Line Type Specification" in the
+    graphical parameters help (link{par}). You CANNOT use the single-digit index
+    specification, as this will fail when used in vector form with the others 
+    (technically you could use them, but only if you reset ALL lty parameters).
+    
+    \code{EXON.CONNECTION.LTY}, \code{NOVEL.SPLICE.CONNECTION.LTY}, 
+    \code{KNOWN.SPLICE.CONNECTION.LTY}: The "lty" parameters for the lines
+    that connect the features on the gene schematic diagram to the plotting panel.
+    These have the same requirements as the previous set of lty parameters.
+    
+    \code{PLOTTING.LINE.COLORS}
       Character vector. The colors for each condition, in order. Will be shortened to the number of conditions.
 }
 

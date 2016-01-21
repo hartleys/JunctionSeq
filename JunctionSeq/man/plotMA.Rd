@@ -9,7 +9,7 @@
 }
 \usage{
 plotMA(jscs, 
-       FDR.threshold = 0.05, 
+       FDR.threshold = 0.01, 
        fc.name = NULL,
        fc.thresh = 1,
        use.pch = 20,

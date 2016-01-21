@@ -171,7 +171,7 @@ build.log.scale <- function(logmin, logmax){
 }
 
 plotMA <- function(jscs, 
-                           FDR.threshold = 0.05, 
+                           FDR.threshold = 0.01, 
                            fc.name = NULL,
                            fc.thresh = 1,
                            use.pch = 20,

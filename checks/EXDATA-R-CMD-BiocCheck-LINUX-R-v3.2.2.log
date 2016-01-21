@@ -1,4 +1,4 @@
------ R CMD BiocCheck (Mon Jan 11 13:21:13 EST 2016)          -----
+----- R CMD BiocCheck (Thu Jan 21 16:11:44 EST 2016)          -----
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD BiocCheck STARTING (Mon Jan 11 13:21:13 EST 2016) -----
+----- R CMD BiocCheck STARTING (Thu Jan 21 16:11:44 EST 2016) -----
 * This is BiocCheck, version 1.6.0.
 * BiocCheck is a work in progress. Output and severity of issues may
   change.
@@ -43,6 +43,8 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking for direct slot access...
 * Checking for T...
 * Checking for F...
+      Found F in vignettes/JunctionSeqExampleData.Rnw
+    * RECOMMENDED: Use FALSE instead of F (found in 1 files)
 * Checking for browser()...
 * Checking for <<-...
 * Checking for library/require of JctSeqData...
@@ -53,10 +55,10 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking package NEWS...
 * Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source,
   and vignette source...
-    * CONSIDER: Shortening lines; 247 lines (15%) are > 80 characters
+    * CONSIDER: Shortening lines; 41 lines (7%) are > 80 characters
       long.
-    * CONSIDER: Indenting lines with a multiple of 4 spaces; 304 lines
-      (18%) are not.
+    * CONSIDER: Indenting lines with a multiple of 4 spaces; 115 lines
+      (20%) are not.
   See http://bioconductor.org/developers/how-to/coding-style/
 * Checking for canned comments in man pages...
 * Checking if package already exists in CRAN...
@@ -66,9 +68,9 @@ See http://bioconductor.org/developers/how-to/biocViews/
 
 Summary:
 REQUIRED count: 0
-RECOMMENDED count: 1
+RECOMMENDED count: 2
 CONSIDERATION count: 4
 For detailed information about these checks, see the BiocCheck
 vignette, available at
 http://bioconductor.org/packages/3.2/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
------ R CMD BiocCheck COMPLETE (Mon Jan 11 13:22:08 EST 2016) -----
+----- R CMD BiocCheck COMPLETE (Thu Jan 21 16:12:27 EST 2016) -----

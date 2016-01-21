@@ -336,7 +336,7 @@ In order to properly filter by read depth, size factors are needed. These can be
 
 Once size factors have been generated, novel splice junctions can be selected and counted using the command:
 \begin{framed}  \small \begin{verbatim}
-java -jar /path/to/jarfile/QoRTs.jar QC \
+java -jar /path/to/jarfile/QoRTs.jar \
                 mergeNovelSplices  \
                 --minCount 6 \
                 --stranded \
@@ -477,9 +477,9 @@ writeCompleteResults(jscs,
 
 This produces a series of output files. The main results files are allGenes.results.txt.gz and sigGenes.results.txt.gz. The former includes rows for all genes, whereas the latter includes only genes that have one or more statistically significant differentially used splice junction locus. The columns for both are:
   \begin{itemize}
-    \item \emph{featureID}: The unique ID of the splice locus.
+    \item \emph{featureID}: The unique ID of the exon or splice junction locus.
     \item \emph{geneID}: The unique ID of the gene.
-    \item \emph{countbinID}: The sub-ID of the splice locus.
+    \item \emph{countbinID}: The sub-ID of the exon or splice junction locus.
     \item \emph{testable}: Whether the locus has sufficient coverage to test.
     \item \emph{dispBeforeSharing}: The locus-specific dispersion estimate.
     \item \emph{dispFitted}: The the fitted dispersion.
@@ -487,14 +487,37 @@ This produces a series of output files. The main results files are allGenes.resu
     \item \emph{pvalue}: The raw p-value of the test for differential usage.
     \item \emph{padjust}: The adjusted p-value, adjusted using the "FDR" method.
     \item \emph{chr, start, end, strand}: The (1-based) positon of the exonic region or splice junction. 
-    \item \emph{transcripts}: The list of known transcripts that contain this splice junction.
+    \item \emph{transcripts}: The list of known transcripts that contain this splice junction. Novel splice junctions will be listed as "UNKNOWN\_TX".
     \item \emph{featureType}: The type of the feature (exonic region, novel splice junction or known splice junction)
-    \item \emph{baseMean}: The base mean normalized coverage counts for the locus.
+    \item \emph{baseMean}: The base mean normalized coverage counts for the locus across all conditions.
     \item \emph{HtestCoef(A/B)}: The interaction coefficient from the alternate hypothesis model fit used in the hypothesis tests. This is generally not used for anything but may be useful for certain testing diagnostics.
     \item \emph{log2FC(A/B)}: The estimated log2 fold change found using the effect-size model fit. This is calculated using a different model than the model used for the hypothesis tests.
+    \item \emph{log2FCvst(A/B)}: The estimated log2 fold change between the vst-transformed estimates. This can be superior to simple fold-change estimates for the purposes of ranking effects by their effect size. Simple fold-change estimates can be deceptively high when expression levels are low.
+    \item \emph{expr\_A}: The estimate for the mean normalized counts of the feature in group A.
+    \item \emph{expr\_B}: The estimate for the mean normalized counts of the feature in group B.
+    \item \emph{geneWisePadj}: The gene-level q-value, for the hypothesis that one or more features belonging to this gene are differentially used. This value will be the same for all features belonging to the same gene.
   \end{itemize}
 
 Note: If the biological condition has more than 2 categories then there will be multiple columns for the HtestCoef and log2FC. Each group will be compared with the reference group. If the supplied condition variable is supplied as a \verb|factor| then the first "level" will be used as the reference group. 
+
+There will also be a file labelled "sigGenes.genewiseResults.txt.gz", which includes summary information for all statistically-significant genes:
+
+\begin{itemize}
+    \item \emph{geneID}: The unique ID of the gene.
+    \item \emph{chr, start, end, strand}: The (1-based) positon of the gene.
+    \item \emph{baseMean}: The base mean normalized coverage counts for the gene across all conditions.
+    \item \emph{geneWisePadj}: The gene-level q-value, for the hypothesis that one or more features belonging to this gene are differentially used. This value will be the same for all features belonging to the same gene.
+    \item \emph{mostSigID}: The sub-feature ID for the most significant exon or splice-junction belonging to the gene.
+    \item \emph{mostSigPadjust}:  The adjusted p-value for the most significant exon or splice-junction belonging to the gene.
+    \item \emph{numExons}: The number of (known) non-overlapping exonic regions belonging to the gene.
+    \item \emph{numKnown}: The number of known splice junctions belonging to the gene.
+    \item \emph{numNovel}: The number of novel splice junctions belonging to the gene.
+    \item \emph{exonsSig}: The number of statistically significant non-overlapping exonic regions belonging to the gene.
+    \item \emph{knownSig}: The number of statistically significant known splice junctions belonging to the gene.
+    \item \emph{novelSig}: The number of statistically significant novel splice junctions belonging to the gene.    
+    \item \emph{numFeatures}: The columns numExons, numKnown, and numNovel, separated by slashes.
+    \item \emph{numSig}: The columns exonsSig, knownSig, and novelSig, separated by slashes.
+\end{itemize}
 
 The writeCompleteResults function also writes a file: allGenes.expression.data.txt.gz. This file contains the raw counts, normalized counts, expression-level estimates by condition value (as normalized read counts), and relative expression estimates by condition value. These are the same values that are plotted in Section \ref{sec:allPlot}.
 
@@ -644,7 +667,7 @@ Figure \ref{../figs/SHAM1_RG1-wiggle-fig} shows an example pair of "wiggle" file
 
 The first way is to create these files at the same time as the read counts. To do this, simply add the "--chromSizes" parameter like so:
 \begin{framed}  \small \begin{verbatim}
-java -jar /path/to/jarfile/QoRTs.jar QC \
+java -jar /path/to/jarfile/QoRTs.jar \
                    --stranded \
                    --chromSizes inputData/annoFiles/chrom.sizes \
                    inputData/bamFiles/SHAM1_RG1.chr14.bam \
@@ -655,7 +678,7 @@ By default this will cause QoRTs to generate the wiggle file(s) for this sample.
 
 Alternatively, the wiggle file(s) can be generated manually using the command:
 \begin{framed}  \small \begin{verbatim}
-java -jar /path/to/jarfile/QoRTs.jar QC \
+java -jar /path/to/jarfile/QoRTs.jar \
                 bamToWiggle \
                 --stranded \
                 --negativeReverseStrand \
@@ -677,7 +700,7 @@ If this step is performed prior to merging technical replicates (see Section \re
 
 QoRTs\cite{QoRTs} can generate wiggle files containing mean normalized coverage counts across a group of samples, as shown in Figure \ref{../figs/DAY-wiggle-fig}. These can be generated using the command:
 \begin{framed}  \small \begin{verbatim}
-java -jar /path/to/jarfile/QoRTs.jar QC \
+java -jar /path/to/jarfile/QoRTs.jar \
                 mergeWig  \
                 --calcMean \
                 --trackTitle DAY_FWD \

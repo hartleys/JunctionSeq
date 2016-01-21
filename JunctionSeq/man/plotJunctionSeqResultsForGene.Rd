@@ -11,7 +11,7 @@
 }
 \usage{
 plotJunctionSeqResultsForGene(geneID, jscs, 
-    colorRed.FDR.threshold=0.05,
+    colorRed.FDR.threshold=0.01,
     plot.type = c("expr","normCounts","rExpr","rawCounts"), 
     sequencing.type = c("paired-end","single-end"),
     displayTranscripts = FALSE,
@@ -35,7 +35,7 @@ plotJunctionSeqResultsForGene(geneID, jscs,
     yAxisLabels.inExponentialForm = FALSE,
     title.main, title.ylab, title.ylab.right, 
     graph.margins = c(2, 3, 3, 3),
-    GENE.annotation.relative.height = 0.1,
+    GENE.annotation.relative.height = 0.15,
     TX.annotation.relative.height = 0.05,
     CONNECTIONS.relative.height = 0.1,
     SPLICE.annotation.relative.height = 0.1,
