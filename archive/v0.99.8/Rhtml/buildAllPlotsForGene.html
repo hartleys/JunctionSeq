@@ -1,0 +1,427 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create and save one or more JunctionSeq expression plots.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for buildAllPlotsForGene {JunctionSeq}"><tr><td>buildAllPlotsForGene {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Create and save one or more JunctionSeq expression plots.
+</h2>
+
+<h3>Description</h3>
+
+<p>Generates and saves one or more plots, displaying counts or averages for all counting bins across one particular gene. The parameters <code>expr.plot</code>, <code>normCounts.plot</code>, <code>rExpr.plot</code>, and <code>rawCounts.plot</code> determine
+which plot types are to be generated, and the parameters <code>with.TX</code> and <code>without.TX</code> determines whether these plots should include or not include the full transcript information, or if separate plots should
+be generated with and without the full transcript information.
+</p>
+<p>Note that this function has MANY parameters, allowing the user to tweak the behavior and appearance of the plots to suit their particular needs and preferences. Don't be daunted: the default parameters are probably fine for most purposes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+
+buildAllPlotsForGene(geneID, jscs,
+     outfile.prefix = "./", 
+     use.plotting.device = c("png","CairoPNG","svg",
+                             "tiff","cairo_ps","custom"),
+     sequencing.type = c("paired-end","single-end"),
+     use.vst=FALSE, use.log = TRUE, 
+     exon.rescale.factor = 0.3,
+     with.TX=TRUE,without.TX=TRUE,
+     expr.plot=TRUE,normCounts.plot=TRUE,
+     rExpr.plot=TRUE,rawCounts.plot=FALSE,
+     colorRed.FDR.threshold = 0.01, 
+     colorList=list(),
+     plot.gene.level.expression = TRUE,
+     plot.exon.results, plot.junction.results, plot.novel.junction.results,
+     plot.untestable.results = FALSE,
+     plot.lwd=3, axes.lwd = plot.lwd, anno.lwd = plot.lwd, 
+     gene.lwd = plot.lwd / 2,
+     par.cex = 1, name.files.with.geneID = TRUE,
+     anno.cex.text = 1,
+     anno.cex.axis = anno.cex.text, anno.cex.main = anno.cex.text * 1.2,
+     drawCoordinates = TRUE,
+     yAxisLabels.inExponentialForm = FALSE,
+     show.strand.arrows = 1, 
+     graph.margins = c(2, 3, 3, 3),
+     base.plot.height = 12, base.plot.width = 12, 
+     base.plot.units = "in", 
+     GENE.annotation.relative.height = 0.15, 
+     TX.annotation.relative.height = 0.05,
+     CONNECTIONS.relative.height = 0.1,
+     SPLICE.annotation.relative.height = 0.1,
+     TX.margins = c(0,0.5),
+     autoscale.height.to.fit.TX.annotation = TRUE,
+     autoscale.width.to.fit.bins = 35,
+     plotting.device.params = list(),
+     condition.legend.text, include.TX.names = TRUE,
+     draw.start.end.sites = TRUE, draw.nested.SJ = TRUE,
+     openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
+     verbose=TRUE, debug.mode = FALSE,
+     INTERNAL.VARS=list(),
+     ...)
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>geneID</code></td>
+<td>
+<p>Character string. Which gene to plot.</p>
+</td></tr>
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually created by <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code>.
+</p>
+<p>Alternatively, this can be created manually by <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. 
+However in this case a number of additional steps will be necessary: 
+Dispersions and size factors must then be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>. Hypothesis tests must
+be performed by <code><a href="testForDiffUsage.html">testForDiffUsage</a></code>. Effect sizes and parameter
+estimates must be created via <code><a href="estimateEffectSizes.html">estimateEffectSizes</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>outfile.prefix</code></td>
+<td>
+
+<p>Character string or vector. Sets the prefix file path where image files should be saved. Optionally it can be a vector of strings, assigning a different file prefix to each plot.
+</p>
+</td></tr>
+<tr valign="top"><td><code>use.plotting.device</code></td>
+<td>
+<p>The plotting device to use.</p>
+</td></tr>
+<tr valign="top"><td><code>sequencing.type</code></td>
+<td>
+
+<p>The type of sequencing used, either &quot;paired-end&quot; or &quot;single-end&quot;. This only affects the labelling of the y-axis, and does not affect the actual plots in any way.
+</p>
+</td></tr>
+<tr valign="top"><td><code>use.vst</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, all plots will be scaled via a variance stabilizing transform.</p>
+</td></tr>
+<tr valign="top"><td><code>use.log</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, all plots will be log-scaled.</p>
+</td></tr>
+<tr valign="top"><td><code>exon.rescale.factor</code></td>
+<td>
+<p>Numeric. Exons will be proportionately scaled-up so that the exonic regions make up this fraction of the horizontal plotting area. If negative, exons and introns will be plotted to a common scale. </p>
+</td></tr>
+<tr valign="top"><td><code>with.TX</code></td>
+<td>
+<p>if <code>TRUE</code>, save expression plots with the full transcripts printed</p>
+</td></tr>
+<tr valign="top"><td><code>without.TX</code></td>
+<td>
+<p>if <code>TRUE</code>, save expression plots with only the compiled exons printed. Note that if this and with.TX.plot are both TRUE, both versions will be saved seperately.</p>
+</td></tr>
+<tr valign="top"><td><code>expr.plot</code></td>
+<td>
+<p>if <code>TRUE</code>, save an expression plot of the expression parameter estimates for each splice site, for each condition.</p>
+</td></tr>
+<tr valign="top"><td><code>normCounts.plot</code></td>
+<td>
+<p>if <code>TRUE</code>, save an expression plot of the normalized mean counts for each splice site, for each sample.</p>
+</td></tr>
+<tr valign="top"><td><code>rExpr.plot</code></td>
+<td>
+<p>if <code>TRUE</code>, save an expression plot of the expression parameter estimates, relative to gene-wide expression, for each splice site, for each condition.</p>
+</td></tr>
+<tr valign="top"><td><code>rawCounts.plot</code></td>
+<td>
+<p>if <code>TRUE</code>, save an expression plot of the raw counts for each splice site, for each sample. Note that these will never be VST-transformed, even when use.vst == TRUE.</p>
+</td></tr>
+<tr valign="top"><td><code>colorRed.FDR.threshold</code></td>
+<td>
+<p>The adjusted-p-value threshold used to determine whether a feature should be marked as &quot;significant&quot; and colored pink. By default this will be the same as the FDR.threshold.</p>
+</td></tr>
+<tr valign="top"><td><code>colorList</code></td>
+<td>
+<p>A named list of R colors, setting the colors used for various things. See <code><a href="plotJunctionSeqResultsForGene.html">plotJunctionSeqResultsForGene</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>plot.gene.level.expression</code></td>
+<td>
+
+<p>Logical value. If <code>TRUE</code>, gene-level expression (when applicable) will be plotted beside the sub-element-specific expression in a small seperate plotting box. 
+For the &quot;relative expression&quot; plots the simple mean normalized expression will be plotted (since it doesn't make sense to plot something relative to itself).
+</p>
+</td></tr>
+<tr valign="top"><td><code>plot.exon.results</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, plot results for exons. By default everything that was tested will be plotted.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.junction.results</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, plot results for splice junctions. By default everything that was tested will be plotted.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.novel.junction.results</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, plot results for novel splice junctions. If false, novel splice junctions will be ignored. By default everything that was tested will be plotted.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.untestable.results</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, plots splice junctions that had coverage that was too low to be tested.</p>
+</td></tr>
+<tr valign="top"><td><code>plot.lwd</code></td>
+<td>
+<p>the line width for the plotting lines.</p>
+</td></tr>
+<tr valign="top"><td><code>axes.lwd</code></td>
+<td>
+<p>the line width for the axes.</p>
+</td></tr>
+<tr valign="top"><td><code>anno.lwd</code></td>
+<td>
+<p>the line width for the various other annotation lines.</p>
+</td></tr>
+<tr valign="top"><td><code>gene.lwd</code></td>
+<td>
+<p>the line width used for the gene annotation lines.</p>
+</td></tr>
+<tr valign="top"><td><code>par.cex</code></td>
+<td>
+
+<p>The base cex value to be passed to par() immediately before all plots are created. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>name.files.with.geneID</code></td>
+<td>
+<p>Whether to use the geneID (rather than gene name) for naming the files.</p>
+</td></tr>
+<tr valign="top"><td><code>anno.cex.text</code></td>
+<td>
+
+<p>The font size multiplier for most annotation text. This will be multiplied by a factor of the par.cex value.
+More specifically: The cex value to be passed to all function calls that take <a href="../../graphics/html/par.html">graphical parameters</a>. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>anno.cex.axis</code></td>
+<td>
+
+<p>The font size multiplier for the axis text. This will be multiplied by a factor of the par.cex value.
+More specifically: The cex.axis value to be passed to all function calls that take <a href="../../graphics/html/par.html">graphical parameters</a>. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>anno.cex.main</code></td>
+<td>
+
+<p>The font size multiplier for the main title text. This will be multiplied by a factor of the par.cex value.
+More specifically: The cex.main value to be passed to all function calls that take <a href="../../graphics/html/par.html">graphical parameters</a>. See <code><a href="../../graphics/html/par.html">par</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>drawCoordinates</code></td>
+<td>
+<p>Whether to label the genomic coordinates at the bottom of the plot.</p>
+</td></tr>
+<tr valign="top"><td><code>yAxisLabels.inExponentialForm</code></td>
+<td>
+<p>Logical. If <code>TRUE</code>, then the y-axis will be labelled in exponential form.</p>
+</td></tr>
+<tr valign="top"><td><code>show.strand.arrows</code></td>
+<td>
+<p>The number of strand-direction arrows to display. If equal to <code>1</code> (the default) then the arrow will extend from the end of the gene drawing, if it is greater than <code>1</code> then arrows will be drawn
+along the gene length. If it is <code>0</code> or <code>NA</code> then arrows will not be drawn.
+</p>
+</td></tr>
+<tr valign="top"><td><code>graph.margins</code></td>
+<td>
+
+<p>Numeric vector of length 4. These margins values used (as if for par(&quot;mar&quot;)) for the main graph. The lower part of the plot uses the same left and right margins. 
+</p>
+</td></tr>
+<tr valign="top"><td><code>base.plot.height</code></td>
+<td>
+
+<p>The base height of the standard-sized plots. 
+Plots that include the full transcript annotation will be expanded by the height of these additional rows.
+See the withTxPlot.height.multiplier parameter, below.
+</p>
+</td></tr>
+<tr valign="top"><td><code>base.plot.width</code></td>
+<td>
+<p>The base width of the plots (plots with a large number of features may be scaled up, see parameter <code>autoscale.width.to.fit.bins</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>base.plot.units</code></td>
+<td>
+<p>The units of measurement for the plot height and width. Default is px, or pixels.</p>
+</td></tr>
+<tr valign="top"><td><code>GENE.annotation.relative.height</code></td>
+<td>
+
+<p>The height of the &quot;gene track&quot; displayed underneath the main graph, relative to the height of the main graph. By default it is 20 percent.
+</p>
+</td></tr>
+<tr valign="top"><td><code>TX.annotation.relative.height</code></td>
+<td>
+
+<p>For all plots that draw the annotated-transcript set (when the <code>with.TX</code> parameter is <code>TRUE</code>), this sets the height of each transcript, as a fraction of the height of the main graph. By default it is 2.5 percent.
+</p>
+</td></tr>
+<tr valign="top"><td><code>CONNECTIONS.relative.height</code></td>
+<td>
+
+<p>The height of the panel that connects the plotting area to the gene annotation area, relative to the height of the plotting area. This panel has the lines that connects the counting bin columns to their actual loci on the gene. By default it is 10 percent.
+</p>
+</td></tr>
+<tr valign="top"><td><code>SPLICE.annotation.relative.height</code></td>
+<td>
+
+<p>The height of the area that shows the splice junction loci, relative to the size of the plotting area.
+</p>
+</td></tr>
+<tr valign="top"><td><code>TX.margins</code></td>
+<td>
+
+<p>A numeric vector of length 2. The size of the blank space between the gene plot and the transcript list and then beneath the transcript list, relative to the size of each transcript line.
+</p>
+</td></tr>
+<tr valign="top"><td><code>autoscale.height.to.fit.TX.annotation</code></td>
+<td>
+
+<p>Plots that include the full transcript annotation generally need to have a larger height in order to maintain readability. By default, 
+all plots that include transcripts will be expanded vertically by the height of the additional transcripts. This maintains the same appearance and
+aspect ratio of the main graph, but also means that the height of the plot will differ between genes.
+This parameter can be used to override that behavior if a specific figure size is desired. If <code>TRUE</code>, the <code>base.plot.height</code> will be used
+as the height of the plot, regardless of how many transcripts are included.
+</p>
+</td></tr>
+<tr valign="top"><td><code>autoscale.width.to.fit.bins</code></td>
+<td>
+
+<p>Integer value. JunctionSeq will automatically go to great lengths to autofit the data in a readable way. By default, any plots that have more than 35 plotting columns
+will be widened linearly to fit the excess columns. This parameter can be used to change that value, or turn it off entirely by setting this parameter to <code>NA</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>plotting.device.params</code></td>
+<td>
+<p>Additional parameters to be passed to the plotting device.</p>
+</td></tr>
+<tr valign="top"><td><code>condition.legend.text</code></td>
+<td>
+
+<p>List or named vector of character strings. This optional parameter can be used to assign labels to each condition variable values. It should be a list or named vector with length equal to <code>factor(condition)</code>. Each element
+should be named with one of the values from <code>factor(condition)</code>, and should contain the label. They will be listed in this order in the figure legend.
+</p>
+</td></tr>
+<tr valign="top"><td><code>include.TX.names</code></td>
+<td>
+
+<p>Logical value. If <code>TRUE</code>, then for the plots that include the annotated transcript, the transcript names will be listed. The labels will be drawn at half the size of <code>anno.cex.text</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>draw.start.end.sites</code></td>
+<td>
+
+<p>Logical value. If <code>TRUE</code>, then transcript start/end sites will be marked on the main gene annotation.
+</p>
+</td></tr>
+<tr valign="top"><td><code>draw.nested.SJ</code></td>
+<td>
+
+<p>Logical. If <code>TRUE</code>, overlapping splice junctions will be drawn layered under one another. 
+This can vastly improve readability when there are a large number of overlapping splice junctions. 
+Default is <code>TRUE</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>openPlottingDeviceFunc</code></td>
+<td>
+<p>An R function. This option can be used to use plotting devices other than the ones directly supported by JunctionSeq. This must be a function that must have 3 parameters: filename, heightMult, and widthMult. It should open the desired plotting device. For advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>closePlottingDeviceFunc</code></td>
+<td>
+<p>An R function. This must be used in conjunction with openPlottingDeviceFunc. For most devices, you can just use the function &quot;dev.off&quot;. For advanced users only.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>if <code>TRUE</code>, send debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>debug.mode</code></td>
+<td>
+<p>if TRUE, send even more debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>INTERNAL.VARS</code></td>
+<td>
+
+<p>NOT FOR GENERAL USE. Intended only for use by JunctionSeq itself, internally. This is used 
+for passing pre-generated data (when generating many similar plots, for example), and 
+for internally-generated parameters. DO NOT USE.
+</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional options to pass to <code><a href="plotJunctionSeqResultsForGene.html">plotJunctionSeqResultsForGene</a></code>, or graphical parameters passed to plotting functions.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>This is a side-effecting function, and does not return a value.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqData&quot;);
+buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs);
+</code></pre>
+
+<pre><code>## starting buildAllPlotsForGene() for geneID: ENSRNOG00000009281
+## Starting nested heights...
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: expr
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: normCounts
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr (with TX)
+## &gt; pJSRfG(): ENSRNOG00000009281, plot.type: rExpr
+</code></pre>
+
+<pre><code class="r">## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqData&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqData&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqData&quot;);
+##D ########################################
+##D #Run example analysis:
+##D jscs &lt;- runJunctionSeqAnalyses(sample.files = countFiles,
+##D            sample.names = decoder$sample.ID,
+##D            condition=factor(decoder$group.ID),
+##D            flat.gff.file = gff.file,
+##D            analysis.type = &quot;junctionsAndExons&quot;
+##D );
+##D ########################################
+##D 
+##D #Generate several related plots for the selected gene:
+##D buildAllPlotsForGene(geneID = &quot;ENSRNOG00000009281&quot;, jscs);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 0.99.8 <a href="00Index.html">Index</a>]</div>
+</body></html>

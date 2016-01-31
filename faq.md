@@ -1,4 +1,4 @@
-    > v0.99.8 (Revised Thu Jan 21 13:51:03 EST 2016)
+    > v1.0.0 (Revised Sun Jan 31 13:36:15 EST 2016)
 
 #Frequently Asked Questions
 
@@ -45,6 +45,12 @@ JunctionSeq can be installed automatically from source using the R commands:
 
     source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
     JS.install();
+
+##BIOCONDUCTOR INSTALLATION:
+If you are using the devel version of bioconductor (v3.3), then you can install the [Bioconductor version of JunctionSeq](http://bioconductor.org/packages/JunctionSeq/):
+
+    source("https://bioconductor.org/biocLite.R")
+    biocLite("JunctionSeq")
 
 ##MANUAL INSTALLATION:
 

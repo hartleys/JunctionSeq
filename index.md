@@ -1,12 +1,11 @@
-    > v0.99.8 (Revised Thu Jan 21 13:51:03 EST 2016)
+    > v1.0.0 (Revised Sun Jan 31 13:36:15 EST 2016)
 
-[JunctionSeq](http://hartleys.github.io/JunctionSeq/) is an R package for detection and visualization of differential usage of 
+[JunctionSeq](http://hartleys.github.io/JunctionSeq/) is a [Bioconductor](https://www.bioconductor.org/) package for detection and visualization of differential usage of 
 exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
 The methodology is heavily based on the [DEXSeq](http://www.bioconductor.org/packages/release/bioc/html/DEXSeq.html) 
-bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343). More information
-is available on the [JunctionSeq GitHub Pages](http://hartleys.github.io/JunctionSeq/).
+bioconductor package, originally proposed by [Anders, Reyes, and Huber](http://www.ncbi.nlm.nih.gov/pubmed/22722343).
 
-The core advantage of JunctionSeq over other similar tools is that it provides a powerful automated tools for
+One major advantage of JunctionSeq over other similar tools is that it provides a powerful automated tools for
 generating readable and interpretable plots and tables to facilitate the interpretation of the results.
 An example results report is available [here](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/exampleResults/testForDU.html). 
 An example set of browser tracks from this same dataset is available 
@@ -16,11 +15,9 @@ Issues, bug reports, or feature requests can be posted to the
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
 The developers can be contacted at JunctionSeq-Contact (at) list.nih.gov.
 
-Note: the current version of JunctionSeq is ONLY compatible with Bioconductor 3.2 or higher.
-
-**JunctionSeq has been pre-accepted into [Bioconductor](https://www.bioconductor.org/), and will probably be included in the next Bioconductor release.**
-Even after JunctionSeq is added to Bioconductor we will continue to update and maintain this page, as this page provides
-additional online help and documentation.
+**JunctionSeq is now part of [Bioconductor](https://www.bioconductor.org/), and will be included in the next release (3.3).** 
+You can install JunctionSeq using the devel branch of Bioconductor at the [JunctionSeq bioconductor page](http://bioconductor.org/packages/JunctionSeq/). Alternatively, you 
+can use the installation instructions below to install the most recent version of JunctionSeq onto the current Bioconductor release (3.2).
 
 ##HELP AND DOCUMENTATION:
 
@@ -57,18 +54,24 @@ Hartley SW, Mullikin JC. [Detection and Visualization of Differential Exon and S
 
 JunctionSeq can be installed automatically in R using the command:
 
-    > source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
-    > JS.install();
+    source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
+    JS.install();
 
 See the [FAQ](faq.html) for advanced installation options.
 
 The splice, gene, and exon read-counts required by JunctionSeq can be created 
 using the QoRTs software package, available [here](http://hartleys.github.io/QoRTs/index.html).
 
+##BIOCONDUCTOR INSTALLATION:
+If you are using the devel version of bioconductor (v3.3), then you can install the [Bioconductor version of JunctionSeq](http://bioconductor.org/packages/JunctionSeq/):
+
+    source("https://bioconductor.org/biocLite.R")
+    biocLite("JunctionSeq")
+
 ##EXAMPLE DATA:
 Another example dataset, used in the vignette, is packaged as an R package, and can be installed with the command:
     
-    > install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqData_LATEST.tar.gz", 
+    install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqData_LATEST.tar.gz", 
                       repos = NULL, 
                       type="source")
 
