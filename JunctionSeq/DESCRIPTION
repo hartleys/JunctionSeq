@@ -1,5 +1,5 @@
 Package: JunctionSeq
-Version: 0.99.8
+Version: 1.0.0
 Title: JunctionSeq: A Utility for Detection of Differential Exon and Splice-Junction Usage in RNA-Seq data
 Authors@R: c(person("Stephen", "Hartley", role = c("aut", "cre"),
            email = "JunctionSeq-contact@list.nih.gov", comment = "PhD"),

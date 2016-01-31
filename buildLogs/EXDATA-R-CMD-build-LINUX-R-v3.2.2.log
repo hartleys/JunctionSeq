@@ -1,4 +1,4 @@
------ R CMD build (Thu Jan 21 13:56:56 EST 2016)          -----
+----- R CMD build (Sun Jan 31 13:42:59 EST 2016)          -----
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD build STARTING (Thu Jan 21 13:56:56 EST 2016) -----
+----- R CMD build STARTING (Sun Jan 31 13:42:59 EST 2016) -----
 * checking for file '/cluster/ifs/users/mullikin/Klein/steve/projects/ZZZ-ExampleDataset/TestSets/QoRTsPipelineWalkthrough/outputData/JctSeqData/DESCRIPTION' ... OK
 * preparing 'JctSeqData':
 * checking DESCRIPTION meta-information ... OK
@@ -19,6 +19,6 @@ http://www.gnu.org/licenses/.
 * checking for empty or unneeded directories
 * looking to see if a 'data/datalist' file should be added
 * re-saving image files
-* building 'JctSeqData_0.99.8.tar.gz'
+* building 'JctSeqData_1.0.0.tar.gz'
 
------ R CMD build COMPLETE (Thu Jan 21 13:58:20 EST 2016) -----
+----- R CMD build COMPLETE (Sun Jan 31 13:44:41 EST 2016) -----

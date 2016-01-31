@@ -1,5 +1,5 @@
 # JunctionSeq
-    > v0.99.8 (Revised Thu Jan 21 13:51:03 EST 2016)
+    > v1.0.0 (Revised Sun Jan 31 13:36:15 EST 2016)
 
 [Help, documentation, and the most recent release of JunctionSeq is available on the JunctionSeq github page](http://hartleys.github.io/JunctionSeq/).
 

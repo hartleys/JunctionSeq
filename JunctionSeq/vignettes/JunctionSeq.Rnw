@@ -250,6 +250,24 @@ countFiles <- system.file(paste0("extdata/cts/",
               package="JctSeqData", mustWork=TRUE);
 @
 
+There is also a smaller subset dataset, intended for rapid testing purposes. This is the dataset we will use in this vignette, to reduce build times to within the Bioconductor limitations.
+
+The annotation gtf file can be accessed with the command:
+<<GetMiniExampleDataDirectory>>=
+gff.file <- system.file(
+            "extdata/tiny/withNovel.forJunctionSeq.gff.gz", 
+            package="JctSeqData", 
+            mustWork=TRUE);
+@
+
+The count files can be accessed with the commands:
+<<GetMiniCountFiles>>=
+countFiles <- system.file(paste0("extdata/tiny/",
+              decoder$sample.ID,
+              "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"), 
+              package="JctSeqData", mustWork=TRUE);
+@
+
 %--------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------
 \section{Preparations} \label{sec:prep}
@@ -366,7 +384,7 @@ This utility produces two sets of output files. First it writes a .gff file cont
 JunctionSeq includes a single function that loads the count data and performs a full analysis automatically. This function internally calls a number of sub-functions and returns a JunctionSeqCountSet object that holds the analysis results, dispersions, parameter estimates, and size factor data.
 
 %
-<<testForDJU, results="hide", warning=FALSE>>=
+<<testForDJU, eval=FALSE>>=
 jscs <- runJunctionSeqAnalyses(sample.files = countFiles,
                            sample.names = decoder$sample.ID, 
                            condition=factor(decoder$group.ID),
