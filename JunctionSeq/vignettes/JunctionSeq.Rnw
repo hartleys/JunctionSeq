@@ -389,7 +389,7 @@ jscs <- runJunctionSeqAnalyses(sample.files = countFiles,
                            sample.names = decoder$sample.ID, 
                            condition=factor(decoder$group.ID),
                            flat.gff.file = gff.file,
-                           nCores = 6,
+                           nCores = 1,
                            analysis.type = "junctionsAndExons"
                            );
 @
@@ -453,7 +453,7 @@ jscs <- estimateJunctionSeqSizeFactors(jscs);
 
 Next, we generate test-specific dispersion estimates:
 <<testStep3, results="hide", warning=FALSE>>=
-jscs <- estimateJunctionSeqDispersions(jscs, nCores = 6);
+jscs <- estimateJunctionSeqDispersions(jscs, nCores = 1);
 @
 
 Next, we fit these observed dispersions to a regression to create fitted dispersions:
@@ -463,12 +463,12 @@ jscs <- fitJunctionSeqDispersionFunction(jscs);
 
 Next, we perform the hypothesis tests for differential splice junction usage:
 <<testStep5, results="hide", warning=FALSE>>=
-jscs <- testForDiffUsage(jscs, nCores = 6); 
+jscs <- testForDiffUsage(jscs, nCores = 1); 
 @
 
 Finally, we calculate effect sizes and parameter estimates:
 <<testStep6, results="hide", warning=FALSE>>=
-jscs <- estimateEffectSizes( jscs, nCores = 6); 
+jscs <- estimateEffectSizes( jscs, nCores = 1); 
 @
 
 All these steps simply duplicates the behavior of the runJunctionSeqAnalyses function. However, far more options are available when run in this way. Full documentation of the various options for these commands:
@@ -1040,7 +1040,7 @@ jscs.DEX <- runJunctionSeqAnalyses(sample.files = countFiles,
                   sample.names = decoder$sample.ID,
                   condition = factor(decoder$group.ID),
                   flat.gff.file = gff.file, 
-                  nCores = 6,
+                  nCores = 1,
                   analysis.type = "exonsOnly",
                   method.countVectors = "sumOfAllBinsForGene",
                   method.sizeFactors = "byCountbins",
@@ -1118,7 +1118,7 @@ jscs <- runJunctionSeqAnalyses(sample.files = countFiles,
                            sample.names = decoder$sample.ID, 
                            condition=factor(threeLevelVariable),
                            flat.gff.file = gff.file,
-                           nCores = 6,
+                           nCores = 1,
                            analysis.type = "junctionsAndExons"
                            );
 @
@@ -1146,7 +1146,7 @@ jscs <- runJunctionSeqAnalyses(sample.files = countFiles.8,
                            condition= decoder.8$condition,
                            use.covars = decoder.8[,"smokeStatus",drop=F],
                            flat.gff.file = gff.file,
-                           nCores = 6,
+                           nCores = 1,
                            analysis.type = "junctionsAndExons",
 test.formula0  = ~ sample + countbin + smokeStatus : countbin, 
 test.formula1  = ~ sample + countbin + smokeStatus : countbin + condition : countbin,

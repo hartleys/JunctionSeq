@@ -1,4 +1,4 @@
------ R CMD buildBinary (Sun Jan 31 14:38:29 EST 2016)          -----
+----- R CMD buildBinary (Mon Feb  1 11:29:52 EST 2016)          -----
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD buildBinary STARTING (Sun Jan 31 14:38:30 EST 2016) -----
+----- R CMD buildBinary STARTING (Mon Feb  1 11:29:53 EST 2016) -----
 * installing to library '/home/hartleys/R/R3.2.2/lib'
 * installing *source* package 'JunctionSeq' ...
 ** R
@@ -21,6 +21,6 @@ http://www.gnu.org/licenses/.
 ** installing vignettes
 ** testing if installed package can be loaded
 * creating tarball
-packaged installation of 'JunctionSeq' as 'JunctionSeq_1.0.0_R_x86_64-pc-linux-gnu.tar.gz'
+packaged installation of 'JunctionSeq' as 'JunctionSeq_1.1.1_R_x86_64-pc-linux-gnu.tar.gz'
 * DONE (JunctionSeq)
------ R CMD buildBinary COMPLETE (Sun Jan 31 14:39:02 EST 2016) -----
+----- R CMD buildBinary COMPLETE (Mon Feb  1 11:30:35 EST 2016) -----

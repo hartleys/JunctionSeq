@@ -1,4 +1,4 @@
------ R CMD BiocCheck (Sun Jan 31 14:39:02 EST 2016) ----- 
+----- R CMD BiocCheck (Mon Feb  1 11:30:35 EST 2016) ----- 
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD BiocCheck STARTING (Sun Jan 31 14:39:02 EST 2016) -----
+----- R CMD BiocCheck STARTING (Mon Feb  1 11:30:35 EST 2016) -----
 * This is BiocCheck, version 1.6.0.
 * BiocCheck is a work in progress. Output and severity of issues may
   change.
@@ -66,6 +66,7 @@ http://www.gnu.org/licenses/.
 * # of chunks: 37, # of eval=FALSE: 14 (37%)
 * Checking version number...
 * Checking version number validity...
+    * RECOMMENDED: y of x.y.z version should be even in release
 * Checking R Version dependency...
 * Checking biocViews...
 * Checking that biocViews are present...
@@ -113,11 +114,11 @@ See http://bioconductor.org/developers/how-to/biocViews/
 * Checking package NEWS...
 * Checking formatting of DESCRIPTION, NAMESPACE, man pages, R source,
   and vignette source...
-    * CONSIDER: Shortening lines; 2262 lines (17%) are > 80 characters
+    * CONSIDER: Shortening lines; 2264 lines (17%) are > 80 characters
       long.
     * CONSIDER: Replacing tabs with 4 spaces; 11 lines (0%) contain
       tabs.
-    * CONSIDER: Indenting lines with a multiple of 4 spaces; 7152 lines
+    * CONSIDER: Indenting lines with a multiple of 4 spaces; 7164 lines
       (54%) are not.
   See http://bioconductor.org/developers/how-to/coding-style/
 * Checking for canned comments in man pages...
@@ -128,9 +129,9 @@ See http://bioconductor.org/developers/how-to/biocViews/
 
 Summary:
 REQUIRED count: 0
-RECOMMENDED count: 0
+RECOMMENDED count: 1
 CONSIDERATION count: 8
 For detailed information about these checks, see the BiocCheck
 vignette, available at
 http://bioconductor.org/packages/3.2/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#interpreting-bioccheck-output
------ R CMD BiocCheck COMPLETE (Sun Jan 31 14:40:19 EST 2016) -----
+----- R CMD BiocCheck COMPLETE (Mon Feb  1 11:32:07 EST 2016) -----

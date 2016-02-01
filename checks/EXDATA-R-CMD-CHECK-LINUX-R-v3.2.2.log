@@ -1,4 +1,4 @@
------ R CMD build (Sun Jan 31 14:40:19 EST 2016)          -----
+----- R CMD build (Mon Feb  1 11:32:07 EST 2016)          -----
 R version 3.2.2 (2015-08-14) -- "Fire Safety"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,14 +9,14 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD build STARTING (Sun Jan 31 14:40:19 EST 2016) -----
-* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.0.0/JctSeqData.Rcheck'
+----- R CMD build STARTING (Mon Feb  1 11:32:07 EST 2016) -----
+* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.1.1/JctSeqData.Rcheck'
 * using R version 3.2.2 (2015-08-14)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: ASCII
 * using option '--no-build-vignettes'
 * checking for file 'JctSeqData/DESCRIPTION' ... OK
-* this is package 'JctSeqData' version '1.0.0'
+* this is package 'JctSeqData' version '1.1.1'
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
@@ -27,10 +27,10 @@ http://www.gnu.org/licenses/.
 * checking for sufficient/correct file permissions ... OK
 * checking whether package 'JctSeqData' can be installed ... OK
 * checking installed package size ... NOTE
-  installed size is 46.9Mb
+  installed size is 48.5Mb
   sub-directories of 1Mb or more:
-    data     22.3Mb
-    extdata  23.6Mb
+    data     23.8Mb
+    extdata  23.7Mb
 * checking package directory ... OK
 * checking 'build' directory ... OK
 * checking DESCRIPTION meta-information ... OK
@@ -69,8 +69,8 @@ http://www.gnu.org/licenses/.
 
 Status: 1 NOTE
 See
-  '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.0.0/JctSeqData.Rcheck/00check.log'
+  '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.1.1/JctSeqData.Rcheck/00check.log'
 for details.
 
 
------ R CMD build COMPLETE (Sun Jan 31 14:41:06 EST 2016) -----
+----- R CMD build COMPLETE (Mon Feb  1 11:33:16 EST 2016) -----

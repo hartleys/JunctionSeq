@@ -442,16 +442,17 @@ getMyApply <- function(nCores = 1, verbose = TRUE, allowWindowsMulticore = TRUE,
      #BiocParallel.package.found <- TRUE; #suppressMessages(suppressWarnings(require("BiocParallel")))
     
      if( Sys.info()[['sysname']] == 'Windows' ){
-       message(">>> NOTE: Microsoft windows detected. As of BiocParallel v1.2.0 and R 3.1.1, simple multicore forking is not supported on windows. ")
-       message("          JunctionSeq will fall-back to single-core operation if necessary.")
+       if(verbose) message(">>> NOTE: Microsoft windows detected. As of BiocParallel v1.2.0 and R 3.1.1, simple multicore forking is not supported on windows. ")
+       if(verbose) message("          JunctionSeq will fall-back to single-core operation if necessary.")
      } 
      
-       message("    [[Using package \"BiocParallel\" for parallelization. (Using ",nCores," cores)]]")
+       if(verbose) message("    [[Using package \"BiocParallel\" for parallelization. (Using ",nCores," cores)]]")
        if( Sys.info()[['sysname']] == 'Windows' ){
-         message(">>> WARNING: attempting to use BiocParallel for multicore functionality. However: On windows machines some versions of BiocParallel appear to run very slowly and do not appear to actually use multiple cores.")
+         if(verbose) message(">>> WARNING: attempting to use BiocParallel for multicore functionality. However: On windows machines some versions of BiocParallel appear to run very slowly and do not appear to actually use multiple cores.")
        }
        myApply <- function(X, FUN){ BiocParallel::bplapply( X, FUN, BPPARAM = BiocParallel::MulticoreParam(workers = nCores) ) }
    } else {
+     if(verbose) message("> Using single-core execution.")
      myApply <- lapply
    }
    
@@ -470,6 +471,18 @@ getMyApply <- function(nCores = 1, verbose = TRUE, allowWindowsMulticore = TRUE,
    }
    
    return(myApply)
+}
+
+getBPParam <- function(nCores = 1){
+   if(! is.numeric(nCores)){
+     if(is(nCores, "BiocParallelParam")){
+       return(nCores);
+     } else {
+       stop("Fatal Error: nCores must be either an integer or a BiocParallelParam object")
+     }
+   } else {
+     return(MulticoreParam(workers=nCores));
+   }
 }
 
 ##########################################################################

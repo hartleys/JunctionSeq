@@ -564,7 +564,9 @@ estimateJunctionSeqDispersions <- function( jscs,
      mcols(jscs@DESeqDataSet)$baseVar <- fData(jscs)$baseVar
    } else {
      dds <- jscs@DESeqDataSet
-     dds <- estimateUnsharedDispersions( dds, formula=test.formula1, BPPARAM=MulticoreParam(workers=nCores), quiet= !verbose)
+     if(verbose) message("---------> Executing DESeq2 call: estimateUnsharedDispersions");
+     dds <- estimateUnsharedDispersions( dds, formula=test.formula1, BPPARAM=getBPParam(nCores), quiet= !verbose)
+     if(verbose) message("---------> Finished with DESeq2 call.");
      fData(jscs)$dispBeforeSharing <- mcols(dds)$dispGeneEst
      mcols(dds)$baseMean <- fData(jscs)$baseMean
      mcols(dds)$baseVar <- fData(jscs)$baseVar
@@ -634,7 +636,7 @@ testForDiffUsage <- function( jscs,
        warning("Saving Hypothesis Test Model Fits is Deprecated with DESeq2-style hypothesis testing.")
      }
    
-     BPPARAM <- MulticoreParam(workers = nCores)
+     BPPARAM <- getBPParam(nCores);
      reducedModelMatrix <- mm0
      fullModelMatrix <- mm1
      object <- jscs@DESeqDataSet
