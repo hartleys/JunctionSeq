@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Fit Shared Dispersion Function</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for fitJunctionSeqDispersionFunction {JunctionSeq}"><tr><td>fitJunctionSeqDispersionFunction {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Fit Shared Dispersion Function
+</h2>
+
+<h3>Description</h3>
+
+<p>Fit dispersion function to share dispersion information between 
+features across the genome.
+</p>
+<p>This function is called internally by the <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code> 
+function, and thus for most purposes users should not need to call this
+function directly. It may be useful to advanced users performing non-standard
+analyses.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+fitJunctionSeqDispersionFunction(jscs, 
+    method.GLM = c(c("advanced","DESeq2-style"), 
+                 c("simpleML","DEXSeq-v1.8.0-style")),
+    method.dispFit = c("parametric", "local", "mean"), 
+    method.dispFinal = c("shrink","max","fitted","noShare"),
+    fitDispersionsForExonsAndJunctionsSeparately = TRUE, 
+    verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually initially created by 
+<code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. Size factors must be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.GLM</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>The default is &quot;advanced&quot; or, equivalently, &quot;DESeq2-style&quot;. This uses the 
+dispersion estimation methodology used by DESeq2 and DEXSeq v1.12.0 or higher to generate the initial (feature-specific) dispersion estimates. The alternative 
+method is &quot;simpleML&quot; or, equivalently, &quot;DEXSeq-v1.8.0-style&quot;. This uses a simpler maximum-likelihood-based method used by the original DESeq and
+by DEXSeq v1.8.0 or less.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.dispFit</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>Determines the method used to generated &quot;fitted&quot; dispersion estimates. One of &quot;parametric&quot; (the default), &quot;local&quot;, or &quot;mean&quot;. See the DESeq2 documentation for more information.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.dispFinal</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>Determines the method used to arrive at a &quot;final&quot; dispersion estimate. The default, &quot;shrink&quot; uses the maximum a posteriori estimate, combining information from both
+the fitted and feature-specific dispersion estimates. This is the method used by DESeq2 and DEXSeq v1.12.0 and above.
+</p>
+</td></tr>
+<tr valign="top"><td><code>fitDispersionsForExonsAndJunctionsSeparately</code></td>
+<td>
+
+<p>When running a &quot;junctionsAndExons&quot; type analysis in which both exons and splice junctions are being tested simultaniously, this parameter
+determines whether a single fitted dispersion model should be fitted for both exons and splice junctions, or if separate 
+fitted dispersions should be calculated for each. By default the dispersions are run separately.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>if TRUE, send debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>If using the depreciated fitDispersionFunction command, use the same syntax as above.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A JunctionSeqCountSet, with dispersion results included.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqData&quot;);
+jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
+</code></pre>
+
+<pre><code>## &gt; fitDispersionFunction() Starting (Sun Jan 31 14:42:29 2016)
+## &gt;   (fitType = parametric)
+## &gt;   (finalDispersionMethod = shrink)
+## &gt;   (fitDispersionsForExonsAndJunctionsSeparately = TRUE)
+## min(means[useForFit], na.rm=T)=0.145790229164005
+## &gt;    fdf: Fitting dispersions:
+## &gt;       (Iteration 1) Parametric Dispersion Coefs: [0.00465281511379578,0.21833858566876]
+## &gt;       (Iteration 2) Parametric Dispersion Coefs: [0.00253260913896324,0.233591354846305]
+## &gt;       (FINAL) Parametric Dispersion Coefs: [0.00253247692869196,0.233595537310823]
+## &gt;    fdf: Fitting dispersions of exons and junctions to separate fitted trends.
+## &gt;    fdf: Fitting exon dispersions:
+## &gt;       (Iteration 1) Parametric Dispersion Coefs: [0.00461337253078784,0.282542146211808]
+## &gt;       (Iteration 2) Parametric Dispersion Coefs: [0.00192271455359532,0.299462126671736]
+## &gt;       (Iteration 3) Parametric Dispersion Coefs: [0.00185198065165201,0.288367123706038]
+## &gt;       (FINAL) Parametric Dispersion Coefs: [0.00185203762243628,0.28836437004481]
+## &gt;    fdf: Fitting splice-junction dispersions:
+## &gt;       (Iteration 1) Parametric Dispersion Coefs: [0.00388660231675664,0.179229887506683]
+## &gt;       (Iteration 2) Parametric Dispersion Coefs: [0.00375522634365911,0.180626540822821]
+## &gt;       (FINAL) Parametric Dispersion Coefs: [0.00375530334214226,0.180625053840781]
+## &gt; fdf(): &#39;Shrinking&#39; fitted and feature-specific dispersion estimates.
+## &gt; fdf() Dispersion estimate failed for 0 out of 482 features.
+## &gt; fitDispersionFunction() Done. (Sun Jan 31 14:42:30 2016)
+</code></pre>
+
+<pre><code class="r">## Not run: 
+##D #Full example (from scratch):
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqData&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqData&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqData&quot;);
+##D ########################################
+##D #Advanced Analysis:
+##D 
+##D #Make a &quot;design&quot; dataframe:
+##D design &lt;- data.frame(condition = factor(decoder$group.ID));
+##D #Read the QoRTs counts.
+##D jscs = readJunctionSeqCounts(countfiles = countFiles,
+##D            samplenames = decoder$sample.ID,
+##D            design = design,
+##D            flat.gff.file = gff.file
+##D );
+##D #Generate the size factors and load them into the JunctionSeqCountSet:
+##D jscs &lt;- estimateJunctionSeqSizeFactors(jscs);
+##D #Estimate feature-specific dispersions:
+##D jscs &lt;- estimateJunctionSeqDispersions(jscs);
+##D #Fit dispersion function and estimate MAP dispersion:
+##D jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
+##D #Test for differential usage:
+##D jscs &lt;- testForDiffUsage(jscs);
+##D #Estimate effect sizes and expression estimates:
+##D jscs &lt;- estimateEffectSizes( jscs);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 1.0.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
