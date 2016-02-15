@@ -298,7 +298,7 @@ If Quality Control is being done seperately by other software packages or collab
 \begin{framed} \small  \begin{verbatim}
 java -jar /path/to/jarfile/QoRTs.jar QC \
  --stranded \
- --runFunction writeKnownSplices,writeNovelSplices,writeSpliceExon \
+ --runFunctions writeKnownSplices,writeNovelSplices,writeSpliceExon \
  inputData/bamFiles/SHAM1_RG1.bam \
  inputData/annoFiles/anno.gtf.gz \
  rawCts/SHAM1_RG1/
