@@ -136,8 +136,19 @@ Hartley SW, Mullikin JC. \href{http://arxiv.org/abs/1512.06038}{Detection and Vi
 %--------------------------------------------------------------------------------
 %--------------------------------------------------------------------------------
 
-JunctionSeq requires R v3.2.2 as well as a number of R packages. See the \href{http://hartleys.github.io/JunctionSeq/}{JunctionSeq website} for more detailed and updated information on JunctionSeq installation. In general, the easiest way to install it is to use the automated installer:
+JunctionSeq requires R v3.2.2 as well as a number of R packages. See the \href{http://hartleys.github.io/JunctionSeq/}{JunctionSeq website} for more detailed and updated information on JunctionSeq installation.
 
+JunctionSeq is now part of Bioconductor, and will be included in the next release.
+If you are on the Devel branch of R (currently v3.3), then you can install
+JunctionSeq as part of the Devel branch of Bioconductor, using the commands (in R):
+<<biocInstall, eval=FALSE>>=
+source("http://bioconductor.org/biocLite.R")
+biocLite("JunctionSeq")
+@
+
+If you do not wish to work in the (often unstable) devel Bioconductor branch, you 
+can install JunctionSeq now using a custom install script, available online. 
+Use the commands (in R):
 <<installer, eval=FALSE>>=
 source("http://hartleys.github.io/JunctionSeq/install/JS.install.R");
 JS.install();
@@ -171,15 +182,6 @@ biocLite("DESeq2");
 install.packages("http://hartleys.github.io/JunctionSeq/install/JunctionSeq_LATEST.tar.gz",
                  repos = NULL, 
                  type = "source");
-@
-
-JunctionSeq is intended to be included in a future version of Bioconductor.
-When JunctionSeq is added to a new release of bioconductor, installation
-will be possible using the command:
-
-<<biocInstall, eval=FALSE>>=
-source("http://bioconductor.org/biocLite.R")
-biocLite("JunctionSeq")
 @
 
 \emph{Generating splice junction counts:} The easiest way to generate the counts for JunctionSeq is via the QoRTs\cite{QoRTs} software package. The QoRTs software package requires R version 3.0.2 or higher, as well as (64-bit) java 6 or higher. QoRTs can be found online \href{http://hartleys.github.io/QoRTs/index.html}{here}.
@@ -294,20 +296,22 @@ java -jar /path/to/jarfile/QoRTs.jar QC \
 \end{verbatim}  \end{framed}
 Note that the \verb|--stranded| option is required because this example dataset is strand-specific. Also note that QoRTs uses the original gtf annotation file, NOT the flattened gff file produced in section \ref{sec:flatAnno}. More information on this command and on the available options can be found online \href{https://dl.dropboxusercontent.com/u/103621176/QoRTs/helpDocs/jarHtml/index.html}{here}.
 
+For more information about the quality control metrics provided by QoRTs and how to visualize, organize, and view them, see the QoRTs github page and documentation, available online \href{http://hartleys.github.io/QoRTs/index.html}{here}.
+
+Certain datasets may require additional options. For example: by default, QoRTs assumes the "MAPQ" rules used by the RNA-STAR aligner and the TopHat 1 aligner. If you use other aligners (TopHat2, GSNAP, etc.) you may need to specify the "--minMAPQ" parameter. See the \href{http://hartleys.github.io/QoRTs/jarHtml/QC.html}{QoRTs QC command documentation}.
+
 If Quality Control is being done seperately by other software packages or collaborators, the JunctionSeq counts can be generated without the rest of the QC data by setting the \verb|--runFunctions| option:
 \begin{framed} \small  \begin{verbatim}
 java -jar /path/to/jarfile/QoRTs.jar QC \
  --stranded \
- --runFunction writeKnownSplices,writeNovelSplices,writeSpliceExon \
+ --runFunctions writeKnownSplices,writeNovelSplices,writeSpliceExon \
  inputData/bamFiles/SHAM1_RG1.bam \
  inputData/annoFiles/anno.gtf.gz \
  rawCts/SHAM1_RG1/
 \end{verbatim}  \end{framed}
 This will take much less time to run, as it does not generate the full battery of quality control metrics.
 
-The above script will generate a count file \verb|rawCts/SHAM1_RG1/QC.spliceJunctionAndExonCounts.forJunctionSeq.txt.gz|. This file contains both gene-level coverage counts, as well as coverage counts for transcript subunits such as exons and splice junction loci.
-
-For more information about the quality control metrics provided by QoRTs and how to visualize, organize, and view them, see the QoRTs github page and documentation, available online \href{http://hartleys.github.io/QoRTs/index.html}{here}.
+The above command will generate a count file \verb|rawCts/SHAM1_RG1/QC.spliceJunctionAndExonCounts.forJunctionSeq.txt.gz|. This file contains both gene-level coverage counts, as well as coverage counts for transcript subunits such as exons and splice junction loci. It will also generate two additional secondary count files (one with all known splice counts, the other with all novel splice counts) which may be needed if you wish to add novel splice junctions to your analysis (see Section \ref{sec:novelCounts}).
 
 %----------
 \subsection{Merging Counts from Technical Replicates (If Needed)} \label{sec:mergeCounts}
@@ -513,7 +517,7 @@ This produces a series of output files. The main results files are allGenes.resu
     \item \emph{log2FCvst(A/B)}: The estimated log2 fold change between the vst-transformed estimates. This can be superior to simple fold-change estimates for the purposes of ranking effects by their effect size. Simple fold-change estimates can be deceptively high when expression levels are low.
     \item \emph{expr\_A}: The estimate for the mean normalized counts of the feature in group A.
     \item \emph{expr\_B}: The estimate for the mean normalized counts of the feature in group B.
-    \item \emph{geneWisePadj}: The gene-level q-value, for the hypothesis that one or more features belonging to this gene are differentially used. This value will be the same for all features belonging to the same gene.
+    \item \emph{geneWisePadj}: The gene-level q-value, for the hypothesis that one or more features belonging to this gene are differentially used. This value will be the same for all features belonging to the same gene. In many studies this may actually be what you want to report.
   \end{itemize}
 
 Note: If the biological condition has more than 2 categories then there will be multiple columns for the HtestCoef and log2FC. Each group will be compared with the reference group. If the supplied condition variable is supplied as a \verb|factor| then the first "level" will be used as the reference group. 
