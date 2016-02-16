@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read junctionSeq annotation files produced by QoRTs.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for readAnnotationData {JunctionSeq}"><tr><td>readAnnotationData {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Read junctionSeq annotation files produced by QoRTs.
+</h2>
+
+<h3>Description</h3>
+
+<p>This function reads the &quot;flattened&quot; gff annotation file created by QoRTs. 
+This annotation file contains all the gene, transcript, exon, and junction ID's and their loci.
+In general this function is not used by the end-user, but is called internally by 
+<code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code> or <code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+   readAnnotationData(flat.gff.file)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>flat.gff.file</code></td>
+<td>
+
+<p>Character string. The filename of the &quot;flat&quot; gff annotation file. The file may be gzip-compressed. 
+This &quot;flat&quot; gff file must be produced by the QoRTs jar utility using the makeFlatGtf or 
+mergeNovelSplices functions (depending on whether inclusion of novel splice junctions is desired).
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code>data.frame</code> object, containing the annotation information from the flat gff file.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">gff.file &lt;- system.file(&quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+                        package=&quot;JctSeqData&quot;);
+
+#Parse the GFF file:
+annoData &lt;- readAnnotationData(gff.file);
+head(annoData);
+</code></pre>
+
+<pre><code>##               featureName featureType chrom  start    end strand
+## 1 ENSRNOG00000050954:E001 exonic_part chr14 182677 183555      -
+## 2 ENSRNOG00000050954:E002 exonic_part chr14 184706 184830      -
+## 3 ENSRNOG00000050954:E003 exonic_part chr14 186228 186453      -
+## 4 ENSRNOG00000050954:E004 exonic_part chr14 189145 189973      -
+## 5 ENSRNOG00000050954:E005 exonic_part chr14 190012 190189      -
+## 6 ENSRNOG00000050954:E006 exonic_part chr14 190205 190293      -
+##              gene_id part_number        transcripts
+## 1 ENSRNOG00000050954         001 ENSRNOT00000073973
+## 2 ENSRNOG00000050954         002 ENSRNOT00000073973
+## 3 ENSRNOG00000050954         003 ENSRNOT00000073973
+## 4 ENSRNOG00000050954         004 ENSRNOT00000073973
+## 5 ENSRNOG00000050954         005 ENSRNOT00000073973
+## 6 ENSRNOG00000050954         006 ENSRNOT00000073973
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 1.1.1 <a href="00Index.html">Index</a>]</div>
+</body></html>
