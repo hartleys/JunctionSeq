@@ -31,7 +31,7 @@ echo "### STARTING @ $(date)"
 echo "#############################################"
 
 #Selects my environment vars and stuff:
-source ~/setall.sh
+source ~/setallsl6.sh
 
 Rscript --no-save --no-restore $1 $2 $3 $4 $5 $6 $7 $8 $9
 

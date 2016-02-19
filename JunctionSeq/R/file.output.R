@@ -36,6 +36,7 @@ JunctionSeqHTML <- function(jscs,
                             number.plots = NULL,
                             css.file = NULL, css.link = NULL,
                             compare.analysis.list = NULL,
+                            minimalImageFilenames = TRUE,
                             INTERNAL.VARS = INTERNAL.VARS,
                             verbose = TRUE, debug.mode = FALSE){
    
@@ -401,6 +402,7 @@ JunctionSeqHTML <- function(jscs,
                           FDR.threshold = colorRed.FDR.threshold,
                           css.path = css.path.SUB,
                           compare.analysis.list = compare.analysis.list,
+                          minimalImageFilenames = minimalImageFilenames,
                           verbose = verbose, debug.mode = debug.mode)
        }
 
@@ -533,6 +535,7 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
                             FDR.threshold = 0.01,
                             css.path = NULL,
                             compare.analysis.list = NULL,
+                            minimalImageFilenames = TRUE,
                             verbose = TRUE, debug.mode = FALSE
                               ){
   geneRows <- which(fData(jscs)$geneID == g);    
@@ -592,16 +595,8 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
       "-rawCounts.table.html",
       "-rawCounts.table.html"
   )
-  suffixes <- c(
-      "-expr",
-      "-expr-withTX",
-      "-normCounts",
-      "-normCounts-withTX",
-      "-rExpr",
-      "-rExpr-withTX",
-      "-rawCounts",
-      "-rawCounts-withTX"
-  )
+  suffixes <- paste0("-",IMAGE.NAMES); #see 00.minor.utils.R
+  
   pageTitles <- c(
       "expression",
       "expression (with TX)",
@@ -620,29 +615,35 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
   names(pages.idx) <- suffixes
   
   if(! without.TX){
-    pages.idx <- pages.idx[ grepl("-withTX",names(pages.idx), fixed=TRUE) ]
+    pages.idx <- pages.idx[ grepl(IMAGE.NAME.TX,names(pages.idx), fixed=TRUE) ]
   }
   if(! with.TX){
-    pages.idx <- pages.idx[ ! grepl("-withTX",names(pages.idx), fixed=TRUE) ]
+    pages.idx <- pages.idx[ ! grepl(IMAGE.NAME.TX,names(pages.idx), fixed=TRUE) ]
   }
   
   if(! expr.plot){
-    pages.idx <- pages.idx[ ! grepl("-expr",names(pages.idx), fixed=TRUE) ]
+    pages.idx <- pages.idx[ ! grepl(IMAGE.NAME.MAP[["expr"]],names(pages.idx), fixed=TRUE) ]
   }
   if(! normCounts.plot){
-    pages.idx <- pages.idx[ ! grepl("-normCounts",names(pages.idx), fixed=TRUE) ]
+    pages.idx <- pages.idx[ ! grepl(IMAGE.NAME.MAP[["normCounts"]],names(pages.idx), fixed=TRUE) ]
   }
   if(! rExpr.plot){
-    pages.idx <- pages.idx[ ! grepl("-normCounts",names(pages.idx), fixed=TRUE) ]
+    pages.idx <- pages.idx[ ! grepl(IMAGE.NAME.MAP[["rExpr"]],names(pages.idx), fixed=TRUE) ]
   }
   if(! rawCounts.plot){
-    pages.idx <- pages.idx[ ! grepl("-rawCounts",names(pages.idx), fixed=TRUE) ]
+    pages.idx <- pages.idx[ ! grepl(IMAGE.NAME.MAP[["rawCounts"]],names(pages.idx), fixed=TRUE) ]
+  }
+  
+  if(minimalImageFilenames){
+    imgGeneName <- ""
+  } else {
+    imgGeneName <- paste0(g,"-");
   }
   
   if(expr.plot){
      if(without.TX){
        html.suffix <- "-expr.plot.html"
-       makePlotPage(plotfile = paste0(dirPath[1],gene.number,g,"-expr",plotting.device.ext),
+       makePlotPage(plotfile = paste0(dirPath[1],gene.number,imgGeneName,"expr",plotting.device.ext),
                   pageTitle = paste0(g, " expression"),
                   htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-expr.plot.html"),
                   navTable = navTable,
@@ -656,7 +657,7 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      }
      if(with.TX){
        html.suffix <-  "-expr-withTX.plot.html"
-       makePlotPage(plotfile = paste0(dirPath[2],gene.number,g,"-expr-withTX",plotting.device.ext),
+       makePlotPage(plotfile = paste0(dirPath[2],gene.number,imgGeneName,"expr-TX",plotting.device.ext),
                   pageTitle = paste0(g, " expression (with TX)"),
                   htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-expr-withTX.plot.html"),
                   navTable = navTable,
@@ -694,7 +695,7 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
   if(normCounts.plot){
      if(without.TX){
      html.suffix <-  "-normCounts.plot.html"
-     makePlotPage(plotfile = paste0(dirPath[3],gene.number,g,"-normCounts",plotting.device.ext),
+     makePlotPage(plotfile = paste0(dirPath[3],gene.number,imgGeneName,"normCts",plotting.device.ext),
                   pageTitle = paste0(g, " norm counts"),
                   htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-normCounts.plot.html"),
                   navTable = navTable,
@@ -708,7 +709,7 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      }
      if(with.TX){
      html.suffix <-  "-normCounts-withTX.plot.html"
-     makePlotPage(plotfile = paste0(dirPath[4],gene.number,g,"-normCounts-withTX",plotting.device.ext),
+     makePlotPage(plotfile = paste0(dirPath[4],gene.number,imgGeneName,"normCts-TX",plotting.device.ext),
                   pageTitle = paste0(g, " norm counts"),
                   htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-normCounts-withTX.plot.html"),
                   navTable = navTable,
@@ -740,7 +741,7 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
   if(rExpr.plot ){
      if(without.TX){
      html.suffix <-  "-rExpr.plot.html"
-     makePlotPage(plotfile = paste0(dirPath[5],gene.number,g,"-rExpr",plotting.device.ext),
+     makePlotPage(plotfile = paste0(dirPath[5],gene.number,imgGeneName,"rExpr",plotting.device.ext),
                   htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rExpr.plot.html"),
                   pageTitle = paste0(g, " relative expression"),
                   navTable = navTable,
@@ -754,7 +755,7 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      }
      if(with.TX){
      html.suffix <-  "-rExpr-withTX.plot.html"
-     makePlotPage(plotfile = paste0(dirPath[6],gene.number,g,"-rExpr-withTX",plotting.device.ext),
+     makePlotPage(plotfile = paste0(dirPath[6],gene.number,imgGeneName,"rExpr-TX",plotting.device.ext),
                   htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rExpr-withTX.plot.html"),
                   pageTitle = paste0(g, " relative expression (with TX)"),
                   navTable = navTable,
@@ -786,7 +787,7 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      
      if(without.TX){
      html.suffix <- "-rawCounts.plot.html"
-     makePlotPage(plotfile = paste0(dirPath[7],gene.number,g,"-rawCounts",plotting.device.ext),
+     makePlotPage(plotfile = paste0(dirPath[7],gene.number,imgGeneName,"rawCts",plotting.device.ext),
                   htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rawCounts.plot.html"),
                   pageTitle = paste0(g, " Raw Counts"),
                   navTable = navTable,
@@ -800,7 +801,7 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      }
      if(with.TX){
      html.suffix <- "-rawCounts-withTX.plot.html"
-     makePlotPage(plotfile = paste0(dirPath[8],gene.number,g,"-rawCounts-withTX",plotting.device.ext),
+     makePlotPage(plotfile = paste0(dirPath[8],gene.number,imgGeneName,"rawCts-TX",plotting.device.ext),
                   htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rawCounts-withTX.plot.html"),
                   pageTitle = paste0(g, " Raw Counts (with TX)"),
                   navTable = navTable,

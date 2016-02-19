@@ -1,3 +1,31 @@
+v1.1.3:
+  * Very minor typographical fixes and clarifications in the vignette.
+
+v1.1.1:
+  * Release version. Minor cosmetic changes.
+
+v0.99.8:
+  * Very minor changes, mostly just fixing typos in the documentation and testing the functionality of the Bioconductor svn server.
+
+v0.99.6:
+  * JunctionSeq is now pre-approved by Bioconductor, and will probably be included in the next Bioconductor release.
+  * Running in verbose mode, readJunctionSeqCounts now reports the number of gene aggregates found, and the total number of genes that belong to them.
+  * Iterated version number to 0.99.6, to sync with bioconductor submission version numbering.
+
+v0.6.46:
+  * Minor update. Added references to the arxiv preprint manuscript. Fixed bad links in the vignette. Fixed a minor bug with the browser track creator.
+
+v0.6.42:
+  * Minor update. No real functional changes, but several changes to code style.
+  * Removed all trailing semicolons
+  * Used non-vectorized logical functions in conditional statements.
+  * Removed old commented-out code.
+  * Renamed the example dataset package to "JctSeqData", rather than "JctSeqExData2".
+
+v0.6.30:
+ * Very minor bugfix, fixing an issue when JunctionSeq is installed with the most recent pre-release version of the SummarizedExperiments bioconductor package (in the development version of R).
+ * Also fixed some typos in the vignette.
+
 v0.6.25:
  Major structural changes:
  * DESeq2 code is now called as foreign function calls and calls to exported DESeq2 functions. Copy-over of DESeq2 code greatly reduced.

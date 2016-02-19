@@ -27,6 +27,16 @@
 #
 #
 
+IMAGE.NAME.TX <- "-TX";
+IMAGE.NAME.MAP <- list(
+  expr = "expr",
+  normCounts = "normCts",
+  rExpr = "rExpr",
+  rawCounts = "rawCts"
+)
+
+IMAGE.NAMES <- unlist(lapply(IMAGE.NAME.MAP,function(n){ paste0(n,c("",IMAGE.NAME.TX)) }));
+names(IMAGE.NAMES) <- IMAGE.NAMES;
 
 simpleDeparse <- function(d){
   paste0(deparse(d),collapse="")
@@ -299,8 +309,11 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
                                   base.plot.height, 
                                   base.plot.width, 
                                   base.plot.units = "px", 
+                                  verbose = TRUE, debug.mode = FALSE,
                                   plotting.device.params = list()){
-
+   
+   
+   
    use.plotting.device <- match.arg(use.plotting.device)
    if(use.plotting.device == "x11"){
        plotting.device.params <- overmerge.list(list(pointsize = 12), plotting.device.params)
@@ -311,6 +324,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
        plotdevfunc <- function(filename, heightMult, widthMult){
          plotting.device.params[["height"]] <- heightMult * base.plot.height / unitmod
          plotting.device.params[["width"]] <- widthMult * base.plot.width / unitmod
+         if(verbose){ if(debug.mode){ message("Starting device: x11(",paste0(paste0(names(plotting.device.params),"=",plotting.device.params), collapse=", "),")") } else { message("Starting device: x11") } }
          do.call(x11,plotting.device.params)
        }
        closefunc <- function(){
@@ -333,6 +347,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
          plotting.device.params[["width"]] <- widthMult * base.plot.width
          plotting.device.params[["units"]] <- base.plot.units
          plotting.device.params[["filename"]] <- paste0(filename,".png")
+         if(verbose){ if(debug.mode){ message("Starting device: Cairo::CairoPNG(",paste0(paste0(names(plotting.device.params),"=",plotting.device.params), collapse=", "),")") } else { message("Starting device: Cairo::CairoPNG (",plotting.device.params[["filename"]],")") } }
          do.call(Cairo::CairoPNG,plotting.device.params)
        }
        closefunc <- function(){
@@ -351,6 +366,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
          plotting.device.params[["height"]] <- heightMult * base.plot.height / unitmod
          plotting.device.params[["width"]] <- widthMult * base.plot.width / unitmod
          plotting.device.params[["file"]] <- paste0(filename,".svg")
+         if(verbose){ if(debug.mode){ message("Starting device: Cairo::CairoSVG(",paste0(paste0(names(plotting.device.params),"=",plotting.device.params), collapse=", "),")") } else { message("Starting device: Cairo::CairoSVG (",plotting.device.params[["filename"]],")") } }
          do.call(Cairo::CairoSVG,plotting.device.params)
        }
        closefunc <- function(){
@@ -367,6 +383,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
          plotting.device.params[["width"]] <- widthMult * base.plot.width
          plotting.device.params[["units"]] <- base.plot.units
          plotting.device.params[["filename"]] <- paste0(filename,".png")
+         if(verbose){ if(debug.mode){ message("Starting device: ",use.plotting.device,"(",paste0(paste0(names(plotting.device.params),"=",plotting.device.params), collapse=", "),")") } else { message("Starting device: ",use.plotting.device," (",plotting.device.params[["filename"]],")") } }
          do.call(png,plotting.device.params)
        }
        closefunc <- function(){
@@ -383,6 +400,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
          plotting.device.params[["width"]] <- widthMult * base.plot.width
          plotting.device.params[["units"]] <- base.plot.units
          plotting.device.params[["filename"]] <- paste0(filename,".tiff")
+         if(verbose){ if(debug.mode){ message("Starting device: ",use.plotting.device,"(",paste0(paste0(names(plotting.device.params),"=",plotting.device.params), collapse=", "),")") } else { message("Starting device: ",use.plotting.device," (",plotting.device.params[["filename"]],")") } }
          do.call(tiff,plotting.device.params)
        }
        closefunc <- function(){
@@ -399,6 +417,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
          plotting.device.params[["height"]] <- heightMult * base.plot.height / unitmod
          plotting.device.params[["width"]] <- widthMult * base.plot.width / unitmod
          plotting.device.params[["filename"]] <- paste0(filename,".svg")
+         if(verbose){ if(debug.mode){ message("Starting device: ",use.plotting.device,"(",paste0(paste0(names(plotting.device.params),"=",plotting.device.params), collapse=", "),")") } else { message("Starting device: ",use.plotting.device," (",plotting.device.params[["filename"]],")") } }
          do.call(svg,plotting.device.params)
        }
        closefunc <- function(){
@@ -415,6 +434,7 @@ getPlottingDeviceFunc <- function(use.plotting.device = c("png","x11","current",
          plotting.device.params[["height"]] <- heightMult * base.plot.height / unitmod
          plotting.device.params[["width"]] <- widthMult * base.plot.width / unitmod
          plotting.device.params[["filename"]] <- paste0(filename,".ps")
+         if(verbose){ if(debug.mode){ message("Starting device: ",use.plotting.device,"(",paste0(paste0(names(plotting.device.params),"=",plotting.device.params), collapse=", "),")") } else { message("Starting device: ",use.plotting.device," (",plotting.device.params[["filename"]],")") } }
          do.call(cairo_ps,plotting.device.params)
        }
        closefunc <- function(){

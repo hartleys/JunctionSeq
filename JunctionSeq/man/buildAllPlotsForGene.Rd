@@ -50,6 +50,7 @@ buildAllPlotsForGene(geneID, jscs,
      condition.legend.text, include.TX.names = TRUE,
      draw.start.end.sites = TRUE, draw.nested.SJ = TRUE,
      openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
+     minimalImageFilenames = FALSE,
      verbose=TRUE, debug.mode = FALSE,
      INTERNAL.VARS=list(),
      ...)
@@ -190,6 +191,14 @@ buildAllPlotsForGene(geneID, jscs,
   
   \item{openPlottingDeviceFunc}{An R function. This option can be used to use plotting devices other than the ones directly supported by JunctionSeq. This must be a function that must have 3 parameters: filename, heightMult, and widthMult. It should open the desired plotting device. For advanced users only.}
   \item{closePlottingDeviceFunc}{An R function. This must be used in conjunction with openPlottingDeviceFunc. For most devices, you can just use the function "dev.off". For advanced users only.}
+    
+  \item{minimalImageFilenames}{
+    Logical. If \code{TRUE}, then the image files will not include the gene names. 
+    By default this is \code{FALSE}, but may be set to \code{TRUE}
+    when this function is called internally by \code{\link{buildAllPlots}} using the default
+    options. This option is sometimes needed so that the image files are compatible
+    with certain web hosts that have file name length restrictions.
+  }
     
   \item{verbose}{if \code{TRUE}, send debugging and progress messages to the console / stdout.}
   \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}

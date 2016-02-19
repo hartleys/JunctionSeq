@@ -54,6 +54,7 @@ buildAllPlots <- function(jscs,
                           html.cssFile = NULL, html.cssLink = NULL, html.imgFileExtension = NULL,
                           html.plot.height = 90, html.plot.height.units = "vh",
                           html.compare.results.list = NULL,
+                          minimalImageFilenames = writeHTMLresults,
                           verbose=TRUE, debug.mode = FALSE,
                           INTERNAL.VARS = list(),
                           ...){
@@ -134,12 +135,12 @@ buildAllPlots <- function(jscs,
 
     total.gene.ct <- length(gene.list)
     number.width <- max(1, floor(log10(total.gene.ct)) + 1)
-    if( number.plots ){
-      geneNum.strings <- paste0(formatC(1:total.gene.ct, width = number.width, format = 'd', flag = '0'), "-")
+    plot.nums <- paste0(formatC(1:total.gene.ct, width = number.width, format = 'd', flag = '0'));
+    if( number.plots || minimalImageFilenames){
+      geneNum.strings <- paste0(plot.nums,"-");
     } else {
       geneNum.strings <- rep("",total.gene.ct)
     }
-
     
     if(subdirectories.by.type){
       if(! file.exists(outfile.prefix)){
@@ -202,6 +203,7 @@ buildAllPlots <- function(jscs,
                             autoscale.width.to.fit.bins = autoscale.width.to.fit.bins,
                             number.plots = geneNum.strings,
                             css.file = html.cssFile, css.link = html.cssLink,
+                            minimalImageFilenames = minimalImageFilenames,
                             compare.analysis.list = html.compare.results.list, verbose = verbose, debug.mode = debug.mode,
                             INTERNAL.VARS = INTERNAL.VARS)
      if(verbose) message("> buildAllPlots: Finished writing HTML results index.")
@@ -269,6 +271,7 @@ buildAllPlots <- function(jscs,
                             condition.legend.text = condition.legend.text, include.TX.names = include.TX.names, draw.start.end.sites=draw.start.end.sites,
                             verbose=verbose, debug.mode = debug.mode,
                             sequencing.type=sequencing.type,
+                            minimalImageFilenames = minimalImageFilenames,
                             INTERNAL.VARS = INTERNAL.VARS,
                             ...)
 
@@ -288,6 +291,9 @@ buildAllPlots <- function(jscs,
 ##############################################################################################################################################################################################################################
 ##############################################################################################################################################################################################################################
 ##############################################################################################################################################################################################################################
+
+
+
 
 #pointsize = 18, res = 150
 buildAllPlotsForGene <- function(geneID,jscs,
@@ -324,6 +330,7 @@ buildAllPlotsForGene <- function(geneID,jscs,
                           condition.legend.text = NULL, include.TX.names = TRUE, draw.start.end.sites = TRUE,
                           draw.nested.SJ = TRUE,
                           openPlottingDeviceFunc = NULL, closePlottingDeviceFunc = NULL,
+                          minimalImageFilenames = FALSE,
                           verbose=TRUE, debug.mode = FALSE, 
                           INTERNAL.VARS = list(),
                           ...){
@@ -350,6 +357,7 @@ buildAllPlotsForGene <- function(geneID,jscs,
                                             base.plot.height = base.plot.height,
                                             base.plot.width = base.plot.width,
                                             base.plot.units = base.plot.units,
+                                            verbose = verbose, debug.mode = debug.mode,
                                             plotting.device.params = plotting.device.params)
     openPlottingDeviceFunc <- devFunctions[[1]]
     closePlottingDeviceFunc <- devFunctions[[2]]
@@ -402,10 +410,12 @@ buildAllPlotsForGene <- function(geneID,jscs,
       message("Final Dimensions, With TX:",base.plot.width * width.multiplier,"x",base.plot.height * withTxPlot.height.multiplier)
     }
     
-    geneName <- if(name.files.with.geneID){
-      geneID
+    geneName <- if(minimalImageFilenames){
+      ""
+    } else if(name.files.with.geneID){
+      paste0(geneID,"-");
     } else {
-      jscs@flatGffGeneData$gene_name[jscs@flatGffGeneData$geneID == geneID]
+      paste0(jscs@flatGffGeneData$gene_name[jscs@flatGffGeneData$geneID == geneID],"-");
     }
     
       if(is.null(plot.exon.results)){
@@ -423,18 +433,17 @@ buildAllPlotsForGene <- function(geneID,jscs,
       }
     
     
-    
-    
     if(expr.plot){
       plot.type <- "expr"
+      plot.type.title <- IMAGE.NAME.MAP[[plot.type]];
       if(with.TX){
-        outfile <- paste(outfile.prefix[1],geneName,"-",plot.type,"-withTx","",sep="")
+        outfile <- paste(outfile.prefix[1],geneName,"",plot.type.title,IMAGE.NAME.TX,"",sep="")
         openPlottingDeviceFunc(outfile,heightMult=withTxPlot.height.multiplier,widthMult=width.multiplier)
         plotJunctionSeqResultsForGene(geneID, jscs, colorRed.FDR.threshold = FDR,colorList = colorList, plot.type = plot.type, use.vst=use.vst,use.log=use.log,exon.rescale.factor=exon.rescale.factor,displayTranscripts=TRUE,plot.lwd=plot.lwd,axes.lwd = axes.lwd, anno.lwd = anno.lwd , par.cex = par.cex, anno.cex.text = anno.cex.text, plot.exon.results = plot.exon.results , plot.junction.results = plot.junction.results , plot.novel.junction.results = plot.novel.junction.results , plot.untestable.results = plot.untestable.results,anno.cex.axis = anno.cex.axis, anno.cex.main = anno.cex.main,drawCoordinates = drawCoordinates, graph.margins = graph.margins, yAxisLabels.inExponentialForm = yAxisLabels.inExponentialForm, plot.gene.level.expression = plot.gene.level.expression,condition.legend.text = condition.legend.text, include.TX.names = include.TX.names,GENE.annotation.relative.height = GENE.annotation.relative.height, TX.annotation.relative.height = TX.annotation.relative.height, draw.start.end.sites=draw.start.end.sites, show.strand.arrows = show.strand.arrows, debug.mode = debug.mode,sequencing.type=sequencing.type,gene.lwd= gene.lwd,CONNECTIONS.relative.height = CONNECTIONS.relative.height,TX.margins=TX.margins,SPLICE.annotation.relative.height=SPLICE.annotation.relative.height,draw.nested.SJ=draw.nested.SJ,INTERNAL.VARS = INTERNAL.VARS,...)
         closePlottingDeviceFunc();  
       }
       if(without.TX){
-        outfile <- paste(outfile.prefix[2],geneName,"-",plot.type,"","",sep="")
+        outfile <- paste(outfile.prefix[2],geneName,"",plot.type.title,"","",sep="")
         openPlottingDeviceFunc(outfile,heightMult=1,widthMult=width.multiplier)
         plotJunctionSeqResultsForGene(geneID, jscs,  colorRed.FDR.threshold = FDR,colorList = colorList, plot.type = plot.type, use.vst=use.vst,use.log=use.log ,exon.rescale.factor=exon.rescale.factor,plot.lwd=plot.lwd,axes.lwd = axes.lwd, anno.lwd = anno.lwd, par.cex = par.cex, anno.cex.text = anno.cex.text, plot.exon.results = plot.exon.results , plot.junction.results = plot.junction.results , plot.novel.junction.results = plot.novel.junction.results, plot.untestable.results = plot.untestable.results,anno.cex.axis = anno.cex.axis, anno.cex.main = anno.cex.main,drawCoordinates = drawCoordinates, graph.margins = graph.margins, yAxisLabels.inExponentialForm = yAxisLabels.inExponentialForm, plot.gene.level.expression = plot.gene.level.expression,condition.legend.text = condition.legend.text, include.TX.names = include.TX.names,GENE.annotation.relative.height = GENE.annotation.relative.height, TX.annotation.relative.height = TX.annotation.relative.height, draw.start.end.sites=draw.start.end.sites, show.strand.arrows = show.strand.arrows, debug.mode = debug.mode,sequencing.type=sequencing.type,gene.lwd= gene.lwd,CONNECTIONS.relative.height = CONNECTIONS.relative.height,TX.margins=TX.margins,SPLICE.annotation.relative.height=SPLICE.annotation.relative.height,draw.nested.SJ=draw.nested.SJ,INTERNAL.VARS = INTERNAL.VARS,...)
         closePlottingDeviceFunc();  
@@ -442,14 +451,15 @@ buildAllPlotsForGene <- function(geneID,jscs,
     }
     if(normCounts.plot){
       plot.type <- "normCounts"
+      plot.type.title <- IMAGE.NAME.MAP[[plot.type]];
       if(with.TX){
-        outfile <- paste(outfile.prefix[3],geneName,"-",plot.type,"-withTx","",sep="")
+        outfile <- paste(outfile.prefix[3],geneName,"",plot.type.title,IMAGE.NAME.TX,"",sep="")
         openPlottingDeviceFunc(outfile,heightMult=withTxPlot.height.multiplier,widthMult=width.multiplier)
         plotJunctionSeqResultsForGene(geneID, jscs,  colorRed.FDR.threshold = FDR,colorList = colorList, plot.type = plot.type, use.vst=use.vst,use.log=use.log ,exon.rescale.factor=exon.rescale.factor,displayTranscripts=TRUE,plot.lwd=plot.lwd,axes.lwd = axes.lwd, anno.lwd = anno.lwd, par.cex = par.cex, anno.cex.text = anno.cex.text, plot.exon.results = plot.exon.results , plot.junction.results = plot.junction.results , plot.novel.junction.results = plot.novel.junction.results, plot.untestable.results = plot.untestable.results,anno.cex.axis = anno.cex.axis, anno.cex.main = anno.cex.main,drawCoordinates = drawCoordinates,, graph.margins = graph.margins, yAxisLabels.inExponentialForm = yAxisLabels.inExponentialForm, plot.gene.level.expression = plot.gene.level.expression,condition.legend.text = condition.legend.text, include.TX.names = include.TX.names,GENE.annotation.relative.height = GENE.annotation.relative.height, TX.annotation.relative.height = TX.annotation.relative.height, draw.start.end.sites=draw.start.end.sites, show.strand.arrows = show.strand.arrows, debug.mode = debug.mode,sequencing.type=sequencing.type,gene.lwd= gene.lwd,CONNECTIONS.relative.height = CONNECTIONS.relative.height,TX.margins=TX.margins,SPLICE.annotation.relative.height=SPLICE.annotation.relative.height,draw.nested.SJ=draw.nested.SJ,INTERNAL.VARS = INTERNAL.VARS,...)
         closePlottingDeviceFunc();  
       }
       if(without.TX){
-        outfile <- paste(outfile.prefix[4],geneName,"-",plot.type,"","",sep="")
+        outfile <- paste(outfile.prefix[4],geneName,"",plot.type.title,"","",sep="")
         openPlottingDeviceFunc(outfile,heightMult=1,widthMult=width.multiplier)
         plotJunctionSeqResultsForGene(geneID, jscs,  colorRed.FDR.threshold = FDR,colorList = colorList, plot.type = plot.type, use.vst=use.vst,use.log=use.log ,exon.rescale.factor=exon.rescale.factor,plot.lwd=plot.lwd,axes.lwd = axes.lwd, anno.lwd = anno.lwd, par.cex = par.cex, anno.cex.text = anno.cex.text, plot.exon.results = plot.exon.results , plot.junction.results = plot.junction.results , plot.novel.junction.results = plot.novel.junction.results, plot.untestable.results = plot.untestable.results,anno.cex.axis = anno.cex.axis, anno.cex.main = anno.cex.main,drawCoordinates = drawCoordinates, graph.margins = graph.margins, yAxisLabels.inExponentialForm = yAxisLabels.inExponentialForm, plot.gene.level.expression = plot.gene.level.expression,condition.legend.text = condition.legend.text, include.TX.names = include.TX.names,GENE.annotation.relative.height = GENE.annotation.relative.height, TX.annotation.relative.height = TX.annotation.relative.height, draw.start.end.sites=draw.start.end.sites, show.strand.arrows = show.strand.arrows, debug.mode = debug.mode,sequencing.type=sequencing.type,gene.lwd= gene.lwd,CONNECTIONS.relative.height = CONNECTIONS.relative.height,TX.margins=TX.margins,SPLICE.annotation.relative.height=SPLICE.annotation.relative.height,draw.nested.SJ=draw.nested.SJ,INTERNAL.VARS = INTERNAL.VARS,...)
         closePlottingDeviceFunc();  
@@ -457,14 +467,15 @@ buildAllPlotsForGene <- function(geneID,jscs,
     }
     if(rExpr.plot){
       plot.type <- "rExpr"
+      plot.type.title <- IMAGE.NAME.MAP[[plot.type]];
       if(with.TX){
-        outfile <- paste(outfile.prefix[5],geneName,"-",plot.type,"-withTx","",sep="")
+        outfile <- paste(outfile.prefix[5],geneName,"",plot.type.title,IMAGE.NAME.TX,"",sep="")
         openPlottingDeviceFunc(outfile,heightMult=withTxPlot.height.multiplier,widthMult=width.multiplier)
         plotJunctionSeqResultsForGene(geneID, jscs,  colorRed.FDR.threshold = FDR,colorList = colorList, plot.type = plot.type, use.vst=use.vst,use.log=use.log ,exon.rescale.factor=exon.rescale.factor,displayTranscripts=TRUE,plot.lwd=plot.lwd,axes.lwd = axes.lwd, anno.lwd = anno.lwd, par.cex = par.cex, anno.cex.text = anno.cex.text, plot.exon.results = plot.exon.results , plot.junction.results = plot.junction.results , plot.novel.junction.results = plot.novel.junction.results, plot.untestable.results = plot.untestable.results,anno.cex.axis = anno.cex.axis, anno.cex.main = anno.cex.main,drawCoordinates = drawCoordinates, graph.margins = graph.margins, yAxisLabels.inExponentialForm = yAxisLabels.inExponentialForm, plot.gene.level.expression = plot.gene.level.expression,condition.legend.text = condition.legend.text, include.TX.names = include.TX.names,GENE.annotation.relative.height = GENE.annotation.relative.height, TX.annotation.relative.height = TX.annotation.relative.height, draw.start.end.sites=draw.start.end.sites, show.strand.arrows = show.strand.arrows, debug.mode = debug.mode,sequencing.type=sequencing.type,gene.lwd= gene.lwd,CONNECTIONS.relative.height = CONNECTIONS.relative.height,TX.margins=TX.margins,SPLICE.annotation.relative.height=SPLICE.annotation.relative.height,draw.nested.SJ=draw.nested.SJ,INTERNAL.VARS = INTERNAL.VARS,...)
         closePlottingDeviceFunc();  
       }
       if(without.TX){
-        outfile <- paste(outfile.prefix[6],geneName,"-",plot.type,"","",sep="")
+        outfile <- paste(outfile.prefix[6],geneName,"",plot.type.title,"","",sep="")
         openPlottingDeviceFunc(outfile,heightMult=1,widthMult=width.multiplier)
         plotJunctionSeqResultsForGene(geneID, jscs,  colorRed.FDR.threshold = FDR,colorList = colorList, plot.type = plot.type, use.vst=use.vst,use.log=use.log ,exon.rescale.factor=exon.rescale.factor,plot.lwd=plot.lwd,axes.lwd = axes.lwd, anno.lwd = anno.lwd, par.cex = par.cex, anno.cex.text = anno.cex.text, plot.exon.results = plot.exon.results , plot.junction.results = plot.junction.results , plot.novel.junction.results = plot.novel.junction.results, plot.untestable.results = plot.untestable.results,anno.cex.axis = anno.cex.axis, anno.cex.main = anno.cex.main,drawCoordinates = drawCoordinates,graph.margins = graph.margins, yAxisLabels.inExponentialForm = yAxisLabels.inExponentialForm, plot.gene.level.expression = plot.gene.level.expression,condition.legend.text = condition.legend.text, include.TX.names = include.TX.names,GENE.annotation.relative.height = GENE.annotation.relative.height, TX.annotation.relative.height = TX.annotation.relative.height, draw.start.end.sites=draw.start.end.sites, show.strand.arrows = show.strand.arrows, debug.mode = debug.mode,sequencing.type=sequencing.type,gene.lwd= gene.lwd,CONNECTIONS.relative.height = CONNECTIONS.relative.height,TX.margins=TX.margins,SPLICE.annotation.relative.height=SPLICE.annotation.relative.height,draw.nested.SJ=draw.nested.SJ,INTERNAL.VARS = INTERNAL.VARS,...)
         closePlottingDeviceFunc();  
@@ -472,14 +483,15 @@ buildAllPlotsForGene <- function(geneID,jscs,
     }
     if(rawCounts.plot){
       plot.type <- "rawCounts"
+      plot.type.title <- IMAGE.NAME.MAP[[plot.type]];
       if(with.TX){
-        outfile <- paste(outfile.prefix[7],geneName,"-",plot.type,"-withTx","",sep="")
+        outfile <- paste(outfile.prefix[7],geneName,"",plot.type.title,IMAGE.NAME.TX,"",sep="")
         openPlottingDeviceFunc(outfile,heightMult=withTxPlot.height.multiplier,widthMult=width.multiplier)
         plotJunctionSeqResultsForGene(geneID, jscs,  colorRed.FDR.threshold = FDR,colorList = colorList, plot.type = plot.type, use.vst=FALSE,use.log=use.log ,exon.rescale.factor=exon.rescale.factor,displayTranscripts=TRUE,plot.lwd=plot.lwd,axes.lwd = axes.lwd, anno.lwd = anno.lwd, par.cex = par.cex, anno.cex.text = anno.cex.text, plot.exon.results = plot.exon.results , plot.junction.results = plot.junction.results , plot.novel.junction.results = plot.novel.junction.results, plot.untestable.results = plot.untestable.results,anno.cex.axis = anno.cex.axis, anno.cex.main = anno.cex.main,drawCoordinates = drawCoordinates, graph.margins = graph.margins, yAxisLabels.inExponentialForm = yAxisLabels.inExponentialForm, plot.gene.level.expression = plot.gene.level.expression,condition.legend.text = condition.legend.text, include.TX.names = include.TX.names,GENE.annotation.relative.height = GENE.annotation.relative.height, TX.annotation.relative.height = TX.annotation.relative.height, draw.start.end.sites=draw.start.end.sites, show.strand.arrows = show.strand.arrows, debug.mode = debug.mode,sequencing.type=sequencing.type,gene.lwd= gene.lwd,CONNECTIONS.relative.height = CONNECTIONS.relative.height,TX.margins=TX.margins,SPLICE.annotation.relative.height=SPLICE.annotation.relative.height,draw.nested.SJ=draw.nested.SJ,INTERNAL.VARS = INTERNAL.VARS,...)
         closePlottingDeviceFunc();  
       }
       if(without.TX){
-        outfile <- paste(outfile.prefix[8],geneName,"-",plot.type,"","",sep="")
+        outfile <- paste(outfile.prefix[8],geneName,"",plot.type.title,"","",sep="")
         openPlottingDeviceFunc(outfile,heightMult=1,widthMult=width.multiplier)
         plotJunctionSeqResultsForGene(geneID, jscs,  colorRed.FDR.threshold = FDR,colorList = colorList, plot.type = plot.type, use.vst=FALSE,use.log=use.log,exon.rescale.factor=exon.rescale.factor,plot.lwd=plot.lwd,axes.lwd = axes.lwd, anno.lwd = anno.lwd, par.cex = par.cex, anno.cex.text = anno.cex.text, plot.exon.results = plot.exon.results , plot.junction.results = plot.junction.results , plot.novel.junction.results = plot.novel.junction.results, plot.untestable.results = plot.untestable.results,anno.cex.axis = anno.cex.axis, anno.cex.main = anno.cex.main,drawCoordinates = drawCoordinates, graph.margins = graph.margins, yAxisLabels.inExponentialForm = yAxisLabels.inExponentialForm, plot.gene.level.expression = plot.gene.level.expression,condition.legend.text = condition.legend.text, include.TX.names = include.TX.names,GENE.annotation.relative.height = GENE.annotation.relative.height, TX.annotation.relative.height = TX.annotation.relative.height, draw.start.end.sites=draw.start.end.sites, show.strand.arrows = show.strand.arrows, debug.mode = debug.mode,sequencing.type=sequencing.type,gene.lwd= gene.lwd,CONNECTIONS.relative.height = CONNECTIONS.relative.height,TX.margins=TX.margins,SPLICE.annotation.relative.height=SPLICE.annotation.relative.height,draw.nested.SJ=draw.nested.SJ,INTERNAL.VARS = INTERNAL.VARS,...)
         closePlottingDeviceFunc();  
@@ -601,7 +613,13 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
         stop(paste0("FATAL ERROR: GeneID \"",geneID,"\" not found in dataset!" ))
       }
       
-      flat.gff.data <- jscs@flatGffData
+      #flat.gff.data <- jscs@flatGffData[jscs@flatGffData$gene_id==geneID, ];
+      #merged.data <- fData(jscs)[fData(jscs)$geneID == geneID,];
+      flat.gff.data <- jscs@flatGffData;
+      merged.data <- fData(jscs);
+      
+      condition <- jscs@phenoData$condition
+      
       exonRescaleFunction <- match.arg(exonRescaleFunction)
       sequencing.type <- match.arg(sequencing.type)
       splice.junction.drawing.style <- match.arg(splice.junction.drawing.style)
@@ -610,14 +628,14 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
       truncateBelowOne <- TRUE
       
       if(is.null(plot.exon.results)){
-        plot.exon.results <- any( fData(jscs)$featureType == "exonic_part" )
+        plot.exon.results <- any( merged.data$featureType == "exonic_part" )
       }
       if(is.null(plot.junction.results)){
-        plot.junction.results <- any( fData(jscs)$featureType == "splice_site" | fData(jscs)$featureType == "novel_splice_site" )
+        plot.junction.results <- any( merged.data$featureType == "splice_site" | merged.data$featureType == "novel_splice_site" )
       }
       if(is.null(plot.novel.junction.results)){
         if(plot.junction.results){
-          plot.novel.junction.results <- any( fData(jscs)$featureType == "novel_splice_site" )
+          plot.novel.junction.results <- any( merged.data$featureType == "novel_splice_site" )
         } else {
           plot.novel.junction.results <- FALSE
         }
@@ -696,8 +714,8 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
      }
      
      FDR <- colorRed.FDR.threshold
-     merged.data <- fData(jscs)
-     condition <- jscs@phenoData$condition
+     
+     
 
      if(verbose){
         displayTXstring <- if(displayTranscripts) " (with TX)" else ""
@@ -759,8 +777,6 @@ plotJunctionSeqResultsForGene <- function(geneID, jscs,
        numcond <- length(condition.names)
 
        if(debug.mode && verbose) message(">    pJSRforGene(): ","Reached step 2.")
-
-
 
        ####### DETERMINE COLORS, IF THE USER DOES NOT PROVIDE ONE PER SAMPLE THE COUNT WILL OBTAIN THEM CORRESPONDING TO THEIR DESIGN ####
        ##### determine colors if not provided by user ######

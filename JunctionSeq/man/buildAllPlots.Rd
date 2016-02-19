@@ -58,6 +58,7 @@ buildAllPlots(jscs,
     html.cssFile, html.cssLink, html.imgFileExtension,
     html.plot.height = 90, html.plot.height.units = "vh",
     html.compare.results.list = NULL,
+    minimalImageFilenames = writeHTMLresults,
     verbose=TRUE, debug.mode = FALSE,
     INTERNAL.VARS = list(),
     ...)
@@ -258,7 +259,13 @@ buildAllPlots(jscs,
       \code{names(html.compare.results.list)} must be the title of each analysis as you want it to appear in the navigation links.
       Note: This parameter is incompatible with the \code{number.plots} option.
   }
-  
+  \item{minimalImageFilenames}{
+    Logical. If \code{TRUE}, then the image files will not include the gene names, but
+    instead will be numbered in order. The html files will still have the full
+    length names. This option was added because many web host servers will refuse
+    to host image files whose length exceeds 32 characters. By default
+    this option will be \code{TRUE} iff writeHTMLresults is \code{TRUE}. 
+  }
   \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
   \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
   
