@@ -111,11 +111,11 @@ JunctionSeqHTML <- function(jscs,
      
      if(verbose) message("   Writing sample data. ",date())
      writeLines(paste0("<h3>","Sample Data:","</h3>"),pf)
-     sampData <- pData(jscs)[colnames(pData(jscs)) != "countfiles"]
+     sampData <- as.matrix(pData(jscs)[colnames(pData(jscs)) != "countfiles"])
      writeLines(paste0("<table>"),pf)
-     writeLines(paste0("<tr><th>",paste0(colnames(sampData),collapse="</th><th>"),"</th></tr>"),pf)
+     writeLines(paste0("<tr><th>",paste0("sampleID",colnames(sampData),collapse="</th><th>"),"</th></tr>"),pf)
      for(i in 1:(nrow(sampData))){
-       writeLines(paste0("<tr><td>",paste0(as.character(sampData[i,]),collapse="</td><td>"),"</td></tr>"),pf)
+       writeLines(paste0("<tr><td>",paste0(rownames(sampData)[i],sampData[i,],collapse="</td><td>"),"</td></tr>"),pf)
      }
      writeLines(paste0("</table>"),pf)
      
