@@ -192,9 +192,12 @@ JunctionSeqHTML <- function(jscs,
        writeLines("<h2>Gene Table:</h2><br>", pf)
 
        mainTable <- data.frame(geneID = as.character(gene.list), stringsAsFactors=FALSE)
+       geneData <- jscs@flatGffGeneData
        geneAnno <- as.data.frame(t(sapply(gene.list, function(g){
          geneRows <- which(fData(jscs)$geneID == g)
-         c(as.character(fData(jscs)$chr[geneRows[1]]), 
+         nameRow <- which(geneData$geneID == g)
+         c(as.character(geneData[nameRow,"geneName"]),
+           as.character(fData(jscs)$chr[geneRows[1]]), 
            as.numeric(min(fData(jscs)$start[geneRows])), 
            as.numeric(max(fData(jscs)$end[geneRows])),
            as.character(fData(jscs)$strand[geneRows[1]])
@@ -205,7 +208,7 @@ JunctionSeqHTML <- function(jscs,
        }
 
        if(verbose) message("   Compiling data table. ",date())
-       colnames(geneAnno) <- c("chr","start","end","strand")
+       colnames(geneAnno) <- c("name","chr","start","end","strand")
        mainTable <- cbind.data.frame(mainTable, geneAnno)
        mainTable$chr <- as.character(mainTable$chr)
        geneBaseMeans <- rowMeans(jscs@geneCountData[match(gene.list,rownames(jscs@geneCountData)),, drop=FALSE] / sizeFactors(jscs))
