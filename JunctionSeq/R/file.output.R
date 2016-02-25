@@ -430,25 +430,30 @@ makeGeneWiseTable <- function(jscs, gene.list, FDR.threshold = 0.05, verbose = T
        noGenes <- (length(gene.list) == 0)
        
        if(! noGenes){
+         geneData <- jscs@flatGffGeneData
          geneAnno <- as.data.frame(t(sapply(gene.list, function(g){
            geneRows <- which(fData(jscs)$geneID == g)
-           c(as.character(fData(jscs)$chr[geneRows[1]]), 
+	   nameRow <- which(geneData$geneID == g)
+           c(as.character(geneData[nameRow,"geneName"]),
+             as.character(fData(jscs)$chr[geneRows[1]]), 
              as.numeric(min(fData(jscs)$start[geneRows])), 
              as.numeric(max(fData(jscs)$end[geneRows])),
              as.character(fData(jscs)$strand[geneRows[1]])
            )
          })))
-         colnames(geneAnno) <- c("chr","start","end","strand")
+         colnames(geneAnno) <- c("name","chr","start","end","strand")
        } else {
-         geneAnno <- data.frame(chr = character(), start = numeric(), end = numeric(), strand = character())
+         geneAnno <- data.frame(name = character(), chr = character(), start = numeric(), end = numeric(), strand = character())
        }
        
+       mainTable$name <- as.character(geneAnno$name)
        mainTable$chr <- as.character(geneAnno$chr)
        mainTable$start <- geneAnno$start
        mainTable$end <- geneAnno$end
        mainTable$strand <- geneAnno$strand
-       varMetadata(mainTable)[c("chr","start","end","strand"), "labelDescription"] <- 
-                              c("Gene chromosome",
+       varMetadata(mainTable)[c("name","chr","start","end","strand"), "labelDescription"] <- 
+                              c("Gene name(s)",
+                                "Gene chromosome",
                                 "Gene start",
                                 "Gene end",
                                 "Gene strand")
