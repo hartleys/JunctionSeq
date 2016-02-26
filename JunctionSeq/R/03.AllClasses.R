@@ -433,12 +433,14 @@ DEUresultTable <- function(ecs)
       pvalue=fData(ecs)$pvalue,
       padjust=fData(ecs)$padjust,
       baseMean=rowMeans(counts(ecs, normalized=TRUE)))
+   if("geneName" %in% names(fData(ecs)) )
+      result <- data.frame(geneID=result[,1],name=fData(ecs)$geneName,result[,2:ncol(result)])
 
    extracol <- regexpr("log2fold", colnames(fData(ecs)))==1
    if(any(extracol)){
       w <- which(extracol)
-      result <- data.frame(result, fData(ecs)[,w])
-      colnames(result)[7:(6+length(w))] <- colnames(fData(ecs))[w]
+      extra.df <- data.frame(fData(ecs)[,w,drop=F])
+      result <- cbind(result, extra.df)
    }
    result
 }

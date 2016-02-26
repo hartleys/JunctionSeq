@@ -743,6 +743,12 @@ mapGeneNames <- function(jscs, gene.names = NULL, gene.name.separator = "+", gen
                                                        gene.names = gene.names,
                                                        gene.name.separator = gene.name.separator,
                                                        gene.multimap.separator = gene.multimap.separator)
+  if( !is.null(gene.names) ){
+     idx <- match(fData(jscs)$geneID,jscs@flatGffGeneData$geneID)
+     fdata.gene_name <- jscs@flatGffGeneData[idx,"gene_name"]
+     fData(jscs) <- data.frame(geneID=fData(jscs)[,1],geneName=fdata.gene_name,fData(jscs)[,2:ncol(fData(jscs))])
+     varMetadata(featureData(jscs))["geneName","labelDescription"] <- "Name(s) or Alias(es) of the gene"
+  }
   return(jscs)
 }
 
@@ -759,7 +765,7 @@ mapGeneNamesToList <- function(geneIDs, gene.names = NULL, gene.name.separator =
   oldIDs.map <- as.character(gene.names[,1])
   newIDs <- as.character(gene.names[,2])
   
-  oldID.list <- strsplit(geneIDs, "+", fixed=TRUE)
+  oldID.list <- strsplit(oldIDs, "+", fixed=TRUE)
   
   out <- sapply(oldID.list, function(gs){
      gs <- as.character(gs)

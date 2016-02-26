@@ -111,11 +111,11 @@ JunctionSeqHTML <- function(jscs,
      
      if(verbose) message("   Writing sample data. ",date())
      writeLines(paste0("<h3>","Sample Data:","</h3>"),pf)
-     sampData <- pData(jscs)[colnames(pData(jscs)) != "countfiles"]
+     sampData <- as.matrix(pData(jscs)[colnames(pData(jscs)) != "countfiles"])
      writeLines(paste0("<table>"),pf)
-     writeLines(paste0("<tr><th>",paste0(colnames(sampData),collapse="</th><th>"),"</th></tr>"),pf)
+     writeLines(paste0("<tr><th>",paste0(c("sampleID",colnames(sampData)),collapse="</th><th>"),"</th></tr>"),pf)
      for(i in 1:(nrow(sampData))){
-       writeLines(paste0("<tr><td>",paste0(as.character(sampData[i,]),collapse="</td><td>"),"</td></tr>"),pf)
+       writeLines(paste0("<tr><td>",paste0(c(rownames(sampData)[i],sampData[i,]),collapse="</td><td>"),"</td></tr>"),pf)
      }
      writeLines(paste0("</table>"),pf)
      
@@ -192,9 +192,12 @@ JunctionSeqHTML <- function(jscs,
        writeLines("<h2>Gene Table:</h2><br>", pf)
 
        mainTable <- data.frame(geneID = as.character(gene.list), stringsAsFactors=FALSE)
+       geneData <- jscs@flatGffGeneData
        geneAnno <- as.data.frame(t(sapply(gene.list, function(g){
          geneRows <- which(fData(jscs)$geneID == g)
-         c(as.character(fData(jscs)$chr[geneRows[1]]), 
+         nameRow <- which(geneData$geneID == g)
+         c(as.character(geneData[nameRow,"gene_name"]),
+           as.character(fData(jscs)$chr[geneRows[1]]), 
            as.numeric(min(fData(jscs)$start[geneRows])), 
            as.numeric(max(fData(jscs)$end[geneRows])),
            as.character(fData(jscs)$strand[geneRows[1]])
@@ -205,8 +208,11 @@ JunctionSeqHTML <- function(jscs,
        }
 
        if(verbose) message("   Compiling data table. ",date())
-       colnames(geneAnno) <- c("chr","start","end","strand")
+       colnames(geneAnno) <- c("name","chr","start","end","strand")
        mainTable <- cbind.data.frame(mainTable, geneAnno)
+       mainTable$geneID <- gsub("+","+&#8203;",mainTable$geneID,fixed=T)
+       mainTable$name <- gsub("+","+&#8203;",mainTable$name,fixed=T)
+       mainTable$name <- gsub(",",",&#8203;",mainTable$name,fixed=T)
        mainTable$chr <- as.character(mainTable$chr)
        geneBaseMeans <- rowMeans(jscs@geneCountData[match(gene.list,rownames(jscs@geneCountData)),, drop=FALSE] / sizeFactors(jscs))
        mainTable$baseMean <- sprintf("%.1f",geneBaseMeans)
@@ -259,7 +265,7 @@ JunctionSeqHTML <- function(jscs,
        tableTitles[tableTitles == "numFeatures"] <- "&#35; Features<br><div style=\"font-size: smaller\">(Exon/Known/Novel)</div>"
        tableTitles[tableTitles == "numSig"] <- "&#35; Sig"
 
-       titleLine <- paste0("<tr><td rowspan=2>", paste0(tableTitles, collapse="</td> <td rowspan=2>") )
+       titleLine <- paste0("<tr><th rowspan=2>", paste0(tableTitles, collapse="</th> <th rowspan=2>") )
 
        plotColSpan <- (expr.plot + normCounts.plot + rExpr.plot + rawCounts.plot) * (with.TX + without.TX)
 
@@ -332,7 +338,8 @@ JunctionSeqHTML <- function(jscs,
        writeLines(titleLine,pf)
        for(i in 1:nrow(mainTable)){
          writeLines("   <tr>", pf)
-           line <- paste0("<td>", paste0( as.character(mainTable[i,]), collapse=" </td><td> " ) ,"</td> </tr>" )
+           line <- paste0("<td class=\"wrapping\">", as.character(mainTable[i,1]),
+                          "</td><td class=\"wrapping\">",paste0( as.character(mainTable[i,-1]), collapse="</td><td>" ) ,"</td> </tr>" )
          writeLines(line,pf)
        }
        writeLines("</table>",pf)
@@ -430,25 +437,30 @@ makeGeneWiseTable <- function(jscs, gene.list, FDR.threshold = 0.05, verbose = T
        noGenes <- (length(gene.list) == 0)
        
        if(! noGenes){
+         geneData <- jscs@flatGffGeneData
          geneAnno <- as.data.frame(t(sapply(gene.list, function(g){
            geneRows <- which(fData(jscs)$geneID == g)
-           c(as.character(fData(jscs)$chr[geneRows[1]]), 
+	   nameRow <- which(geneData$geneID == g)
+           c(as.character(geneData[nameRow,"gene_name"]),
+             as.character(fData(jscs)$chr[geneRows[1]]), 
              as.numeric(min(fData(jscs)$start[geneRows])), 
              as.numeric(max(fData(jscs)$end[geneRows])),
              as.character(fData(jscs)$strand[geneRows[1]])
            )
          })))
-         colnames(geneAnno) <- c("chr","start","end","strand")
+         colnames(geneAnno) <- c("name","chr","start","end","strand")
        } else {
-         geneAnno <- data.frame(chr = character(), start = numeric(), end = numeric(), strand = character())
+         geneAnno <- data.frame(name = character(), chr = character(), start = numeric(), end = numeric(), strand = character())
        }
        
+       mainTable$name <- as.character(geneAnno$name)
        mainTable$chr <- as.character(geneAnno$chr)
        mainTable$start <- geneAnno$start
        mainTable$end <- geneAnno$end
        mainTable$strand <- geneAnno$strand
-       varMetadata(mainTable)[c("chr","start","end","strand"), "labelDescription"] <- 
-                              c("Gene chromosome",
+       varMetadata(mainTable)[c("name","chr","start","end","strand"), "labelDescription"] <- 
+                              c("Gene name(s)",
+                                "Gene chromosome",
                                 "Gene start",
                                 "Gene end",
                                 "Gene strand")
