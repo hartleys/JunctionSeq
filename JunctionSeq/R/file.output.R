@@ -210,6 +210,8 @@ JunctionSeqHTML <- function(jscs,
        if(verbose) message("   Compiling data table. ",date())
        colnames(geneAnno) <- c("name","chr","start","end","strand")
        mainTable <- cbind.data.frame(mainTable, geneAnno)
+       mainTable$geneID <- gsub("+","&#8203;+&#8203;",mainTable$geneID,fixed=T)
+       mainTable$name <- gsub("+","&#8203;+&#8203;",mainTable$name,fixed=T)
        mainTable$chr <- as.character(mainTable$chr)
        geneBaseMeans <- rowMeans(jscs@geneCountData[match(gene.list,rownames(jscs@geneCountData)),, drop=FALSE] / sizeFactors(jscs))
        mainTable$baseMean <- sprintf("%.1f",geneBaseMeans)
@@ -262,7 +264,7 @@ JunctionSeqHTML <- function(jscs,
        tableTitles[tableTitles == "numFeatures"] <- "&#35; Features<br><div style=\"font-size: smaller\">(Exon/Known/Novel)</div>"
        tableTitles[tableTitles == "numSig"] <- "&#35; Sig"
 
-       titleLine <- paste0("<tr><td rowspan=2>", paste0(tableTitles, collapse="</td> <td rowspan=2>") )
+       titleLine <- paste0("<tr><th rowspan=2>", paste0(tableTitles, collapse="</th> <th rowspan=2>") )
 
        plotColSpan <- (expr.plot + normCounts.plot + rExpr.plot + rawCounts.plot) * (with.TX + without.TX)
 
@@ -335,7 +337,8 @@ JunctionSeqHTML <- function(jscs,
        writeLines(titleLine,pf)
        for(i in 1:nrow(mainTable)){
          writeLines("   <tr>", pf)
-           line <- paste0("<td>", paste0( as.character(mainTable[i,]), collapse=" </td><td> " ) ,"</td> </tr>" )
+           line <- paste0("<td class=\"wrapping\">", as.character(mainTable[i,1]),
+                          "</td><td class=\"wrapping\">",paste0( as.character(mainTable[i,-1]), collapse="</td><td>" ) ,"</td> </tr>" )
          writeLines(line,pf)
        }
        writeLines("</table>",pf)
