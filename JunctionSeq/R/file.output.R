@@ -212,6 +212,7 @@ JunctionSeqHTML <- function(jscs,
        mainTable <- cbind.data.frame(mainTable, geneAnno)
        mainTable$geneID <- gsub("+","+&#8203;",mainTable$geneID,fixed=T)
        mainTable$name <- gsub("+","+&#8203;",mainTable$name,fixed=T)
+       mainTable$name <- gsub(",",",&#8203;",mainTable$name,fixed=T)
        mainTable$chr <- as.character(mainTable$chr)
        geneBaseMeans <- rowMeans(jscs@geneCountData[match(gene.list,rownames(jscs@geneCountData)),, drop=FALSE] / sizeFactors(jscs))
        mainTable$baseMean <- sprintf("%.1f",geneBaseMeans)
