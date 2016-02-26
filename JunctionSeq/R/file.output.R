@@ -196,7 +196,7 @@ JunctionSeqHTML <- function(jscs,
        geneAnno <- as.data.frame(t(sapply(gene.list, function(g){
          geneRows <- which(fData(jscs)$geneID == g)
          nameRow <- which(geneData$geneID == g)
-         c(as.character(geneData[nameRow,"geneName"]),
+         c(as.character(geneData[nameRow,"gene_name"]),
            as.character(fData(jscs)$chr[geneRows[1]]), 
            as.numeric(min(fData(jscs)$start[geneRows])), 
            as.numeric(max(fData(jscs)$end[geneRows])),
@@ -437,7 +437,7 @@ makeGeneWiseTable <- function(jscs, gene.list, FDR.threshold = 0.05, verbose = T
          geneAnno <- as.data.frame(t(sapply(gene.list, function(g){
            geneRows <- which(fData(jscs)$geneID == g)
 	   nameRow <- which(geneData$geneID == g)
-           c(as.character(geneData[nameRow,"geneName"]),
+           c(as.character(geneData[nameRow,"gene_name"]),
              as.character(fData(jscs)$chr[geneRows[1]]), 
              as.numeric(min(fData(jscs)$start[geneRows])), 
              as.numeric(max(fData(jscs)$end[geneRows])),

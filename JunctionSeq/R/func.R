@@ -743,10 +743,12 @@ mapGeneNames <- function(jscs, gene.names = NULL, gene.name.separator = "+", gen
                                                        gene.names = gene.names,
                                                        gene.name.separator = gene.name.separator,
                                                        gene.multimap.separator = gene.multimap.separator)
-  idx <- match(fData(jscs)$geneID,jscs@flatGffGeneData$geneID)
-  fdata.gene_name <- jscs@flatGffGeneData[idx,"gene_name"]
-  fData(jscs) <- data.frame(geneID=fData(jscs)[,1],geneName=fdata.gene_name,fData(jscs)[,2:ncol(fData(jscs))])
-  varMetadata(featureData(jscs))["geneName","labelDescription"] <- "Name(s) or Alias(es) of the gene"
+  if( !is.null(gene.names) ){
+     idx <- match(fData(jscs)$geneID,jscs@flatGffGeneData$geneID)
+     fdata.gene_name <- jscs@flatGffGeneData[idx,"gene_name"]
+     fData(jscs) <- data.frame(geneID=fData(jscs)[,1],geneName=fdata.gene_name,fData(jscs)[,2:ncol(fData(jscs))])
+     varMetadata(featureData(jscs))["geneName","labelDescription"] <- "Name(s) or Alias(es) of the gene"
+  }
   return(jscs)
 }
 
