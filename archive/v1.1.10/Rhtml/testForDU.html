@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title> JunctionSeq Results </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="styles.css">
+</head> <body> <div style="margin:25px">
+<h1> JunctionSeq Results </h1>
+<h4> Generated using JunctionSeq v1.1.10 at Fri Feb 19 15:22:18 2016 </h4>
+
+<h3>Formulas:</h3>
+<code>formulaDispersion:~sample + countbin + condition:countbin</code><br>
+<code>test.formula0:~sample + countbin</code><br>
+<code>test.formula1:~sample + countbin + condition:countbin</code><br>
+<code>effect.formula:~condition + countbin + condition:countbin</code><br>
+<h3>Methods:</h3>
+<table>
+<tr><td><code>jscs@analysis.type</code></td><td> <code>&quot;junctionsAndExons&quot;</code></td></tr>
+<tr><td><code>method.countVectors</code></td><td> <code>&quot;geneLevelCounts&quot; </code></td></tr>
+<tr><td><code>method.sizeFactors</code></td><td> <code>&quot;byGenes&quot; </code></td></tr>
+<tr><td><code>method.GLM.DispEst</code></td><td> <code>&quot;advanced&quot; </code></td></tr>
+<tr><td><code>method.GLM.DispFit</code></td><td> <code>&quot;advanced&quot; </code></td></tr>
+<tr><td><code>method.dispFit</code></td><td> <code>&quot;parametric&quot; </code></td></tr>
+<tr><td><code>method.dispFinal</code></td><td> <code>&quot;shrink&quot; </code></td></tr>
+<tr><td><code>method.GLM.HTEST</code></td><td> <code>&quot;advanced&quot; </code></td></tr>
+<tr><td><code>method.expressionEstimation</code></td><td> <code>&quot;feature-vs-gene&quot; </code></td></tr>
+</table>
+<h3>Sample Data:</h3>
+<table>
+<tr><th>sizeFactor</th><th>condition</th></tr>
+<tr><td>1.03770897497349</td><td>1</td></tr>
+<tr><td>0.970922896075974</td><td>1</td></tr>
+<tr><td>0.978182532254502</td><td>1</td></tr>
+<tr><td>0.912079232351514</td><td>2</td></tr>
+<tr><td>1.14319503866872</td><td>2</td></tr>
+<tr><td>0.999478321313597</td><td>2</td></tr>
+</table>
+<h3>Dispersion Method:</h3>
+<table><tr>
+<th>fitType</th>
+<th>attemptedFitType</th>
+<th>finalDispersionMethod</th>
+<th>fitDispersionsForExonsAndJunctionsSeparately</th>
+</tr><tr>
+<td>parametric</td>
+<td>parametric</td>
+<td>shrink</td>
+<td>TRUE</td>
+</tr></table><br>
+<h3>Dispersion Fits:</h3>
+<table>
+<tr><th>Fit</th><th>asymptDisp</th> <th>extraPois</th></tr>
+<tr><th>Overall</th><td>0.00253247696913784</td><td>0.23359553803115</td></tr>
+<tr><th>Exonic regions</th><td>0.0018520376644803</td><td>0.288364371695177</td></tr>
+<tr><th>Splice Junctions</th><td>0.00375530332368067</td><td>0.18062505513684</td></tr>
+</table><br>
+<h3>Summary Plots:</h3>
+<table>
+<tr>
+<td><a href="dispersion-plot.png"> <img src="dispersion-plot.png"  alt="Dispersion Plot" style="width: 45vw;"></a></td>
+<td><a href="ma-plot-log2FC(CTRLvsCASE).png"> <img src="ma-plot-log2FC(CTRLvsCASE).png"  alt="MA Plot" style="width: 45vw;"></a></td>
+</tr></table>
+<h2>Gene Table:</h2><br>
+<table BORDER=1>
+<tr><td rowspan=2>geneID</td> <td rowspan=2>chr</td> <td rowspan=2>start</td> <td rowspan=2>end</td> <td rowspan=2>strand</td> <td rowspan=2>baseMean</td> <td rowspan=2>geneWisePadj</td> <td rowspan=2>mostSigID</td> <td rowspan=2>mostSigPadjust</td> <td rowspan=2>&#35; Features<br><div style="font-size: smaller">(Exon/Known/Novel)</div></td> <td rowspan=2>&#35; Sig<td colspan=6>Plots and Tables</td></tr><tr><td>expr</td><td>exprTX</td><td>normCt</td><td>normCtTX</td><td>relExpr</td><td>relExprTX</td>
+   <tr>
+<td>ENSRNOG00000008079 </td><td> chr14 </td><td> 106208175 </td><td> 106249103 </td><td> - </td><td> 3264.5 </td><td> 9.09716746377853e-13 </td><td> E013 </td><td> 9.22e-13 </td><td> 13/10/1 </td><td> 1/1/0 </td><td> <a href="htmlFiles/ENSRNOG00000008079-expr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000008079-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000008079-expr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000008079-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000008079-normCounts.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000008079-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000008079-normCounts-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000008079-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000008079-rExpr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000008079-rExpr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000008079-rExpr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000008079-rExpr.table.html">TABLE</a></td> </tr>
+   <tr>
+<td>ENSRNOG00000009281 </td><td> chr14 </td><td> 107664254 </td><td> 107760191 </td><td> - </td><td> 1191.9 </td><td> 1.13580811422764e-10 </td><td> E003 </td><td> 1.04e-10 </td><td> 3/2/3 </td><td> 1/1/1 </td><td> <a href="htmlFiles/ENSRNOG00000009281-expr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000009281-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000009281-expr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000009281-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000009281-normCounts.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000009281-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000009281-normCounts-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000009281-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000009281-rExpr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000009281-rExpr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000009281-rExpr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000009281-rExpr.table.html">TABLE</a></td> </tr>
+   <tr>
+<td>ENSRNOG00000056944 </td><td> chr14 </td><td> 8383315 </td><td> 8548130 </td><td> - </td><td> 9971.2 </td><td> 0.000633239903245486 </td><td> N026 </td><td> 0.000317 </td><td> 12/13/2 </td><td> 3/0/1 </td><td> <a href="htmlFiles/ENSRNOG00000056944-expr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000056944-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000056944-expr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000056944-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000056944-normCounts.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000056944-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000056944-normCounts-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000056944-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000056944-rExpr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000056944-rExpr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000056944-rExpr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000056944-rExpr.table.html">TABLE</a></td> </tr>
+   <tr>
+<td>ENSRNOG00000004621 </td><td> chr14 </td><td> 114126942 </td><td> 114174458 </td><td> + </td><td> 4489.6 </td><td> 0.000895746210802517 </td><td> E009 </td><td> 0.000512 </td><td> 14/11/0 </td><td> 1/1/0 </td><td> <a href="htmlFiles/ENSRNOG00000004621-expr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000004621-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000004621-expr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000004621-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000004621-normCounts.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000004621-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000004621-normCounts-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000004621-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000004621-rExpr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000004621-rExpr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000004621-rExpr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000004621-rExpr.table.html">TABLE</a></td> </tr>
+   <tr>
+<td>ENSRNOG00000002210 </td><td> chr14 </td><td> 7073444 </td><td> 7104566 </td><td> + </td><td> 3265.6 </td><td> 0.00138422886367429 </td><td> E002 </td><td> 0.000865 </td><td> 7/6/2 </td><td> 1/1/0 </td><td> <a href="htmlFiles/ENSRNOG00000002210-expr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000002210-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000002210-expr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000002210-expr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000002210-normCounts.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000002210-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000002210-normCounts-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000002210-normCounts.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000002210-rExpr.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000002210-rExpr.table.html">TABLE</a> </td><td> <a href="htmlFiles/ENSRNOG00000002210-rExpr-withTX.plot.html">PLOT</a><br><a href="htmlFiles/ENSRNOG00000002210-rExpr.table.html">TABLE</a></td> </tr>
+</table>
+</div> </body> </html>

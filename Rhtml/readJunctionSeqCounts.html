@@ -153,7 +153,7 @@ differential usage. If this parameter is set, then parameter <code>use.exons</co
 <td>
 
 <p>data.frame. This optional parameter can be used to decoder the gene id's used in the actual analysis into gene symbols or gene names for general readability.
-This must be a data.frame with two columns of character strings. The first must be the gene ID's, and the second must be the gene names (as you wish them to appear in the plots). Genes
+This must be a text file name or data.frame with two columns of character strings. The first must be the gene ID's, and the second must be the gene names (as you wish them to appear in the plots). Genes
 are allowed to have multiple gene names, in which case they will be separated by commas.
 The gene names will be used in the plots and figures.
 </p>
@@ -211,10 +211,10 @@ jscs = readJunctionSeqCounts(countfiles = countFiles,
 );
 </code></pre>
 
-<pre><code>## -&gt; STARTING readJunctionSeqCounts (Fri Feb 19 15:22:53 2016)
+<pre><code>## -&gt; STARTING readJunctionSeqCounts (Tue Mar  1 10:13:11 2016)
 </code></pre>
 
-<pre><code>## ---&gt; RJSC; (v1.1.10)
+<pre><code>## ---&gt; RJSC; (v1.1.16)
 </code></pre>
 
 <pre><code>## ---&gt; RJSC: samplenames: SAMP1,SAMP2,SAMP3,SAMP4,SAMP5,SAMP6
@@ -235,22 +235,22 @@ jscs = readJunctionSeqCounts(countfiles = countFiles,
 <pre><code>## ---&gt; File read complete.
 </code></pre>
 
-<pre><code>## ---&gt; Extracted counts. Found 1633 features so far.
+<pre><code>## ---&gt; Extracted counts. Found 1785 features so far.
 </code></pre>
 
-<pre><code>## ---&gt; Extracted gene-level counts. Found: 117 genes and aggregate-genes.
+<pre><code>## ---&gt; Extracted gene-level counts. Found: 120 genes and aggregate-genes.
 </code></pre>
 
-<pre><code>## ---&gt; Removed gene features. Found: 1516 features to be included so far.
+<pre><code>## ---&gt; Removed gene features. Found: 1665 features to be included so far.
 </code></pre>
 
-<pre><code>## ---&gt; Note: 0 counting bins from overlapping genes
+<pre><code>## ---&gt; Note: 149 counting bins from overlapping genes
 </code></pre>
 
-<pre><code>## ---&gt;          There are 0 multigene aggregates.
+<pre><code>## ---&gt;          There are 3 multigene aggregates.
 </code></pre>
 
-<pre><code>## ---&gt;          There are 0 genes that are part of an aggregate.
+<pre><code>## ---&gt;          There are 8 genes that are part of an aggregate.
 </code></pre>
 
 <pre><code>## ---&gt; Removed multigene-aggregate features. Found: 1516 features to be included so far.
@@ -277,30 +277,30 @@ jscs = readJunctionSeqCounts(countfiles = countFiles,
 <pre><code>## -----&gt; creating jscs...
 </code></pre>
 
-<pre><code>## -----&gt; generating count vectors... (Fri Feb 19 15:22:54 2016)
+<pre><code>## -----&gt; generating count vectors... (Tue Mar  1 10:13:12 2016)
 </code></pre>
 
 <pre><code>## &gt; Using single-core execution.
 </code></pre>
 
-<pre><code>##     getAllJunctionSeqCountVectors: dim(counts) = 1516,6 (Fri Feb 19 15:22:54 2016)
+<pre><code>##     getAllJunctionSeqCountVectors: dim(counts) = 1516,6 (Tue Mar  1 10:13:12 2016)
 </code></pre>
 
-<pre><code>##     getAllJunctionSeqCountVectors: dim(gct) = 117,6
+<pre><code>##     getAllJunctionSeqCountVectors: dim(gct) = 120,6
 </code></pre>
 
-<pre><code>##     getAllJunctionSeqCountVectors: out generated. dim = 1516,12 (Fri Feb 19 15:22:54 2016)
+<pre><code>##     getAllJunctionSeqCountVectors: out generated. dim = 1516,12 (Tue Mar  1 10:13:12 2016)
 </code></pre>
 
-<pre><code>## -----&gt; count vectors generated (Fri Feb 19 15:22:54 2016)
+<pre><code>## -----&gt; count vectors generated (Tue Mar  1 10:13:12 2016)
 </code></pre>
 
-<pre><code>## -----&gt; generating DESeqDataSet... (Fri Feb 19 15:22:54 2016)
+<pre><code>## -----&gt; generating DESeqDataSet... (Tue Mar  1 10:13:12 2016)
 </code></pre>
 
-<pre><code>## -----&gt; DESeqDataSet generated (Fri Feb 19 15:22:54 2016)
+<pre><code>## -----&gt; DESeqDataSet generated (Tue Mar  1 10:13:12 2016)
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 1.1.10 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 1.1.16 <a href="00Index.html">Index</a>]</div>
 </body></html>
