@@ -127,7 +127,7 @@ runJunctionSeqAnalyses(sample.files, sample.names, condition,
 
   \item{gene.names}{
     data.frame. This optional parameter can be used to decoder the gene id's used in the actual analysis into gene symbols or gene names for general readability.
-    This must be a data.frame with two columns of character strings. The first must be the gene ID's, and the second must be the gene names (as you wish them to appear in the plots). Genes
+    This must be a text file name or data.frame with two columns of character strings. The first must be the gene ID's, and the second must be the gene names (as you wish them to appear in the plots). Genes
     are allowed to have multiple gene names, in which case they will be separated by commas.
     The gene names will be used in the plots and figures.
   }

@@ -1,4 +1,4 @@
------ R CMD BiocCheck (Fri Feb 19 15:21:16 EST 2016)          -----
+----- R CMD BiocCheck (Tue Mar  1 10:11:55 EST 2016)          -----
 R version 3.2.3 (2015-12-10) -- "Wooden Christmas-Tree"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,7 +9,7 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD BiocCheck STARTING (Fri Feb 19 15:21:16 EST 2016) -----
+----- R CMD BiocCheck STARTING (Tue Mar  1 10:11:55 EST 2016) -----
 * This is BiocCheck, version 1.6.1.
 * BiocCheck is a work in progress. Output and severity of issues may
   change.
@@ -65,4 +65,4 @@ Error in curl::curl_fetch_memory(url, handle = handle) :
   Timeout was reached
 Calls: <Anonymous> ... request_fetch -> request_fetch.write_memory -> <Anonymous> -> .Call
 Execution halted
------ R CMD BiocCheck COMPLETE (Fri Feb 19 15:22:01 EST 2016) -----
+----- R CMD BiocCheck COMPLETE (Tue Mar  1 10:12:30 EST 2016) -----

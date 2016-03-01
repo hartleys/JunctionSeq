@@ -42,6 +42,27 @@ simpleDeparse <- function(d){
   paste0(deparse(d),collapse="")
 }
 
+truncateAggregateGene <- function(g){
+  truncAG <- function(x){
+    if(! grepl("+",x,fixed=TRUE)){
+      x;
+    } else {
+      cells = strsplit(x,"+",fixed=TRUE)[[1]];
+      if(length(cells) > 2){
+        paste0(cells[1],"+...+",cells[length(cells)]);
+      } else {
+        x;
+      }
+    }
+  }
+  
+  if(length(g) == 1){
+    return(truncAG(g));
+  } else {
+    return(sapply(g,truncAG));
+  }
+}
+
 simpleReportMem <- function(){
      if(requireNamespace("pryr", quietly=TRUE)){
        message("Mem used:")

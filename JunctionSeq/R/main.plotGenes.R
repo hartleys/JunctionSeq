@@ -128,6 +128,8 @@ buildAllPlots <- function(jscs,
       if(verbose) message("> buildAllPlots: Too many genes found. Only plotting the first ",max.gene.ct, " genes.")
     }
   }
+  #shortNameGeneList <- truncateAggregateGene(gene.list);
+
 
     if(verbose) message("> buildAllPlots: Starting plotting...")
 
@@ -204,6 +206,7 @@ buildAllPlots <- function(jscs,
                             number.plots = geneNum.strings,
                             css.file = html.cssFile, css.link = html.cssLink,
                             minimalImageFilenames = minimalImageFilenames,
+                            name.files.with.geneID = name.files.with.geneID,
                             compare.analysis.list = html.compare.results.list, verbose = verbose, debug.mode = debug.mode,
                             INTERNAL.VARS = INTERNAL.VARS)
      if(verbose) message("> buildAllPlots: Finished writing HTML results index.")
@@ -413,9 +416,9 @@ buildAllPlotsForGene <- function(geneID,jscs,
     geneName <- if(minimalImageFilenames){
       ""
     } else if(name.files.with.geneID){
-      paste0(geneID,"-");
+      paste0(truncateAggregateGene(geneID),"-");
     } else {
-      paste0(jscs@flatGffGeneData$gene_name[jscs@flatGffGeneData$geneID == geneID],"-");
+      paste0(truncateAggregateGene(jscs@flatGffGeneData$gene_name[jscs@flatGffGeneData$geneID == geneID]),"-");
     }
     
       if(is.null(plot.exon.results)){

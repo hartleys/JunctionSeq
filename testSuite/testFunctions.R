@@ -19,6 +19,12 @@ countFiles <- system.file(paste0("extdata/tiny/",
                decoder$sample.ID,
                "/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz"),
                package="JctSeqData");
+
+geneID.to.symbol.file <- system.file(
+                            "extdata/annoFiles/ensid.2.symbol.txt",
+                            package="JctSeqData", 
+                            mustWork=TRUE);
+
 des <- data.frame(condition = factor(decoder$group.ID));
 sample.files <- countFiles
 sample.names <- decoder$sample.ID
@@ -76,7 +82,7 @@ outputDir <- function(id = "miscTest"){
   paste0("out/",TEST.ID,".",padInt(counter),".",id,"/");
 }
 
-plotWrapper <- function(EXPR, id = "miscTest", asp = 1, height = 10, width = 10 * asp, units="in",res=100, pointsize = 12, ...){
+plotWrapper <- function(EXPR, id = "miscTest", asp = 1, height = 10, width = 10 * asp, units="in",res=72, pointsize = 12, ...){
   counter <<- counter + 1;
   png(file = paste0("out/",TEST.ID,".",padInt(counter),".",id,".png"), height = height, width = width, units = units, res= res, pointsize =pointsize, ...);
   eval(EXPR);

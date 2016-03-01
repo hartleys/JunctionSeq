@@ -29,7 +29,7 @@ setClass( "JunctionSeqCountSet",
       countVectors = "matrix",
       altSizeFactors = "data.frame",
       plottingEstimates = "list",
-      plottingEstimatesVST = "list", #DEPRECIATED! VST-xform is fast enough that it's better to calculate them as needed.
+      plottingEstimatesVST = "list", #DEPRECATED! VST-xform is fast enough that it's better to calculate them as needed.
       geneLevelPlottingEstimates = "list",
       modelFitForHypothesisTest = "list", #USUALLY unused.
       modelFitForEffectSize = "list", #USUALLY unused.

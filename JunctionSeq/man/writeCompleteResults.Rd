@@ -14,7 +14,7 @@
 \usage{
 writeCompleteResults(jscs, outfile.prefix, 
                         gzip.output = TRUE,
-                        FDR.threshold = 0.05,
+                        FDR.threshold = 0.01,
                         save.allGenes = TRUE, save.sigGenes = TRUE,
                         save.fit = FALSE, save.VST = FALSE,
                         save.bedTracks = TRUE,

@@ -1,0 +1,83 @@
+v1.1.14: 
+Minor bugfixes: (thanks to Warren McGee)
+  * When making html summary files with "use.multigene.aggregates" genes set to TRUE,
+    JunctionSeq will use shortened html file names in order to avoid filename length 
+    limitations on certain filesystems when there are numerous genes overlapping with
+    one another. Aggregate gene names will be truncated to only include the first and
+    last member genes iff there are more than 2 member genes, with a "..." in between.
+  * If minimalImageFilenames is FALSE, then Image files will similarly be renamed. Otherwise
+    they will be reduced in size even further, as per the v1.1.10 update. You can 
+    control the naming of the png files using the options: "minimalImageFilenames", 
+    "name.files.with.geneID", and "number.plots"
+  * Fixed a bug in the phenotype table on the HTML index page.
+
+Various minor "quality-of-life" improvements:
+  * When available, gene names will be included in all tables.
+  * The main index data table now includes mouseover text describing each column.
+  * Added additional information to each plot page.
+  * Added word wrapping to aggregate genes in the main index tables (thanks to Warren McGee).
+
+v1.1.12:
+  * Moved NEWS file to base directory
+  * Updated CITATION file with arxiv preprint.
+
+v1.1.10:
+  * Changed naming scheme for gene-profile plots, to reduce the length of the filenames. 
+  Some web hosts are not compatible with excessively long file names. When writeHTMLresults is TRUE,
+  JunctionSeq will now default to a shorter naming scheme in which the image files are named
+  by number rather than by gene. This behavior can be eliminated setting the
+  new minimalImageFilenames parameter to FALSE.
+  * Minor adjustments to the vignette.
+  * JunctionSeq is now built and tested on SL6 in R 3.2.3
+
+v1.1.3:
+  * Very minor typographical fixes and clarifications in the vignette.
+
+v1.1.1:
+  * Release version. Minor cosmetic changes.
+
+v0.99.8:
+  * Very minor changes, mostly just fixing typos in the documentation and testing the functionality of the Bioconductor svn server.
+
+v0.99.6:
+  * JunctionSeq is now pre-approved by Bioconductor, and will probably be included in the next Bioconductor release.
+  * Running in verbose mode, readJunctionSeqCounts now reports the number of gene aggregates found, and the total number of genes that belong to them.
+  * Iterated version number to 0.99.6, to sync with bioconductor submission version numbering.
+
+v0.6.46:
+  * Minor update. Added references to the arxiv preprint manuscript. Fixed bad links in the vignette. Fixed a minor bug with the browser track creator.
+
+v0.6.42:
+  * Minor update. No real functional changes, but several changes to code style.
+  * Removed all trailing semicolons
+  * Used non-vectorized logical functions in conditional statements.
+  * Removed old commented-out code.
+  * Renamed the example dataset package to "JctSeqData", rather than "JctSeqExData2".
+
+v0.6.30:
+ * Very minor bugfix, fixing an issue when JunctionSeq is installed with the most recent pre-release version of the SummarizedExperiments bioconductor package (in the development version of R).
+ * Also fixed some typos in the vignette.
+
+v0.6.25:
+ Major structural changes:
+ * DESeq2 code is now called as foreign function calls and calls to exported DESeq2 functions. Copy-over of DESeq2 code greatly reduced.
+ * As a consequence: JunctionSeq no longer requires Rcpp, RcppArmadillo.
+ * JunctionSeq no longer requires compilation, it no longer includes any C++ code.
+
+ In addition, a few minor bugfixes:
+ * Fixed chromosome labels in gene profile plots.
+ * Fixed behavior when label.p.vals is FALSE
+
+v0.6.8:
+ Several bugfixes, along with some error checking.
+ * Fixed one place where I used an "T" instead of "TRUE", so BiocCheck stops complaining.
+ * Local dispersion fit setting now propagates properly from runJunctionSeqAnalysis to fitJunctionSeqDispersionFunction.
+ * Local dispersion fit now works with the standard "DESeq2-style" method.GLM.
+ * Manual setting of inclusion thresholds now works with the "DESeq2-style" method.GLM.
+ * keep.hypothesisTest.fit now prints a warning when attempted with the "DESeq2-style" method.GLM, as saving the fit statistics cannot easily be implemented using this method (since all the model fitting happens in C++).
+ * If you attempt to plot a non-existent gene, it now prints an informative error.
+ * Fixed other output-compatibility issues with the legacy "simpleML" mode.
+ * Tested all sorts of combinations of method modes. Added warnings to at least some of the incompatible combinations.
+ * Reduced extraneous messages in debug mode.
+
+

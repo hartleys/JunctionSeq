@@ -226,7 +226,7 @@ runJunctionSeqAnalyses <- function(sample.files, sample.names, condition,
 
 
 writeCompleteResults <- function(jscs, outfile.prefix, 
-                            gzip.output = TRUE, FDR.threshold = 0.05,
+                            gzip.output = TRUE, FDR.threshold = 0.01,
                             save.allGenes = TRUE, save.sigGenes = TRUE, save.fit = FALSE, save.VST = FALSE,
                             save.bedTracks = TRUE,
                             save.jscs = FALSE,
@@ -739,27 +739,55 @@ readJunctionSeqCounts <- function(countfiles = NULL, countdata = NULL,
 ##############################################################################################################################################################################################################################
 
 mapGeneNames <- function(jscs, gene.names = NULL, gene.name.separator = "+", gene.multimap.separator = ","){
+  if(is.null(gene.names)){
+    jscs@flatGffGeneData$gene_name <- jscs@flatGffGeneData$geneID;
+    return(jscs)
+  }
+  if(class(gene.names) == "character"){
+    gene.names <- read.table(gene.names, sep='\t',header=TRUE,stringsAsFactors=FALSE);
+  }
+  if(class(gene.names) != "data.frame"){
+    stop("Error: gene.names must be a filename or a data frame!")
+  }
+  if(names(gene.names)[1] != "geneID"){
+    message("       (Assuming \"",names(gene.names)[1],"\" column is geneID)");
+  }
+  if(names(gene.names)[2] != "gene_name"){
+    message("       (Assuming \"",names(gene.names)[2],"\" column is gene_name)");
+  }
+  
   jscs@flatGffGeneData$gene_name <- mapGeneNamesToList(jscs@flatGffGeneData$geneID, 
                                                        gene.names = gene.names,
                                                        gene.name.separator = gene.name.separator,
                                                        gene.multimap.separator = gene.multimap.separator)
+  
+  if(ncol(gene.names) > 2){
+    for(i in 3:ncol(gene.names)){
+       jscs@flatGffGeneData[[names(gene.names)[i]]] <- mapGeneNamesToList(jscs@flatGffGeneData$geneID, 
+                                                       gene.names = gene.names,
+                                                       gene.name.separator = gene.name.separator,
+                                                       gene.multimap.separator = gene.multimap.separator,
+                                                       newID.column = 1, oldID.column = i);
+    }
+  }
+  
   return(jscs)
 }
 
-mapGeneNamesToList <- function(geneIDs, gene.names = NULL, gene.name.separator = "+", gene.multimap.separator = ","){
+mapGeneNamesToList <- function(geneIDs, gene.names = NULL, gene.name.separator = "+", gene.multimap.separator = ",", oldID.column = 1, newID.column = 2){
   if(is.null(gene.names)){
     out = geneIDs
     names(out) = geneIDs
     return(out)
   }
   if(class(gene.names) != "data.frame"){
-    stop("Error: gene.names must be a data frame!")
+    stop("Error: gene.names must be a filename or a data frame!")
   }
   oldIDs <- as.character(geneIDs)
-  oldIDs.map <- as.character(gene.names[,1])
-  newIDs <- as.character(gene.names[,2])
+  oldIDs.map <- as.character(gene.names[,oldID.column])
+  newIDs <- as.character(gene.names[,newID.column])
   
-  oldID.list <- strsplit(geneIDs, "+", fixed=TRUE)
+  oldID.list <- strsplit(oldIDs, "+", fixed=TRUE)
   
   out <- sapply(oldID.list, function(gs){
      gs <- as.character(gs)

@@ -1,4 +1,5 @@
 test.ID	expect.warnings
+11	FALSE
 01	FALSE
 02	TRUE
 03	TRUE
@@ -8,3 +9,4 @@ test.ID	expect.warnings
 07	FALSE
 08	FALSE
 09	FALSE
+10	FALSE

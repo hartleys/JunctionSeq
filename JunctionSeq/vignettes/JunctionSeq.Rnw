@@ -411,6 +411,7 @@ The advantage to our method is that reads (or read-pairs) are never counted more
     \item[\texttt{test.formula1}]: The model formula used for the alternative hypothesis in the ANODEV analysis.
     \item[\texttt{effect.formula}]: The model formula used for estimating the effect size and parameter estimates.
     \item[\texttt{geneLevel.formula}]: The model formula used for estimating the gene-level expression.
+    \item[\texttt{gene.names}]: A text file or data.frame that contains two columns: first the geneID then the gene name. Many annotations do not use common gene symbols as the primary identifier for genes. However, full ensembl ID's (for example) are not suited to easy recognition or conversation. Thus, you can use this additional parameter to tell JunctionSeq to use the common gene names in tables and plots (while still using the geneIDs for identification purposes).
   \end{description} 
 
 A full description of all these options and how they are used can be accessed using the command:
@@ -440,12 +441,22 @@ design <- data.frame(condition = factor(decoder$group.ID));
 @
 Note: the experimental condition variable MUST be named "condition".
 
+Just to demonstrate one advanced feature: We can include the gene names file. This text file contains two columns: first the geneID then the gene name. Many annotations do not use common gene symbols as the primary identifier for genes. However, full ensembl ID's (for example) are not suited to easy recognition or conversation. Thus, you can use this additional parameter to tell JunctionSeq to use the common gene names in tables and plots (while still using the geneIDs for identification purposes).
+
+<<testStep0b, results="hide", warning=FALSE>>=
+geneID.to.symbol.file <- system.file(
+                            "extdata/annoFiles/ensid.2.symbol.txt",
+                            package="JctSeqData", 
+                            mustWork=TRUE);
+@
+
 Next, the data must be loaded into a JunctionSeqCountSet:
 <<testStep1, results="hide", warning=FALSE>>=
 jscs = readJunctionSeqCounts(countfiles = countFiles,
                              samplenames = decoder$sample.ID,
                              design = design,
-                             flat.gff.file = gff.file
+                             flat.gff.file = gff.file,
+                             gene.names = geneID.to.symbol.file
                              );
 @
 

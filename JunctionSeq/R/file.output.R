@@ -38,6 +38,8 @@ JunctionSeqHTML <- function(jscs,
                             compare.analysis.list = NULL,
                             minimalImageFilenames = TRUE,
                             INTERNAL.VARS = INTERNAL.VARS,
+                            includeMouseOverSpans = TRUE,
+                            name.files.with.geneID = TRUE,
                             verbose = TRUE, debug.mode = FALSE){
    
    html.fixed.dim <- match.arg(html.fixed.dim)
@@ -111,11 +113,11 @@ JunctionSeqHTML <- function(jscs,
      
      if(verbose) message("   Writing sample data. ",date())
      writeLines(paste0("<h3>","Sample Data:","</h3>"),pf)
-     sampData <- pData(jscs)[colnames(pData(jscs)) != "countfiles"]
+     sampData <- as.matrix(pData(jscs)[colnames(pData(jscs)) != "countfiles"])
      writeLines(paste0("<table>"),pf)
-     writeLines(paste0("<tr><th>",paste0(colnames(sampData),collapse="</th><th>"),"</th></tr>"),pf)
+     writeLines(paste0("<tr><th>",paste0(c("sampleID",colnames(sampData)),collapse="</th><th>"),"</th></tr>"),pf)
      for(i in 1:(nrow(sampData))){
-       writeLines(paste0("<tr><td>",paste0(as.character(sampData[i,]),collapse="</td><td>"),"</td></tr>"),pf)
+       writeLines(paste0("<tr><td>",paste0(c(rownames(sampData)[i],sampData[i,]),collapse="</td><td>"),"</td></tr>"),pf)
      }
      writeLines(paste0("</table>"),pf)
      
@@ -191,148 +193,169 @@ JunctionSeqHTML <- function(jscs,
      } else {
        writeLines("<h2>Gene Table:</h2><br>", pf)
 
-       mainTable <- data.frame(geneID = as.character(gene.list), stringsAsFactors=FALSE)
-       geneAnno <- as.data.frame(t(sapply(gene.list, function(g){
-         geneRows <- which(fData(jscs)$geneID == g)
-         c(as.character(fData(jscs)$chr[geneRows[1]]), 
-           as.numeric(min(fData(jscs)$start[geneRows])), 
-           as.numeric(max(fData(jscs)$end[geneRows])),
-           as.character(fData(jscs)$strand[geneRows[1]])
-         )
-       })))
-       if(is.null(number.plots)){
-            number.plots <- rep("",length(gene.list))
+       mainTableADF <- (makeGeneWiseTable(jscs = jscs, gene.list = gene.list, FDR.threshold = FDR.threshold, verbose = verbose, debug.mode = debug.mode))
+       mainTable <- pData(mainTableADF);
+       mainTableMeta <- varMetadata(mainTableADF)$labelDescription;
+       
+       
+       #mainTable <- data.frame(geneID = as.character(gene.list), stringsAsFactors=FALSE)
+       #geneAnno <- as.data.frame(t(sapply(gene.list, function(g){
+       #  geneRows <- which(fData(jscs)$geneID == g)
+       #  c(as.character(fData(jscs)$chr[geneRows[1]]), 
+       #    as.numeric(min(fData(jscs)$start[geneRows])), 
+       #    as.numeric(max(fData(jscs)$end[geneRows])),
+       #    as.character(fData(jscs)$strand[geneRows[1]])
+       #  )
+       #})))
+       #if(is.null(number.plots)){
+       #     number.plots <- rep("",length(gene.list))
+       #}
+       #if(verbose) message("   Compiling data table. ",date())
+       #colnames(geneAnno) <- c("chr","start","end","strand")
+       #mainTable <- cbind.data.frame(mainTable, geneAnno)
+       #mainTable$geneID <- gsub("+","&#8203;+&#8203;",mainTable$geneID,fixed=T)
+       #mainTable$name <- gsub("+","&#8203;+&#8203;",mainTable$name,fixed=T)
+       #mainTable$chr <- as.character(mainTable$chr)
+       #geneBaseMeans <- rowMeans(jscs@geneCountData[match(gene.list,rownames(jscs@geneCountData)),, drop=FALSE] / sizeFactors(jscs))
+       #mainTable$baseMean <- sprintf("%.1f",geneBaseMeans)
+       #if(! is.null(fData(jscs)$geneWisePadj)){
+       #  mainTable$geneWisePadj <- sapply(gene.list, function(g){
+       #    geneRows <- which(fData(jscs)$geneID == g)
+       #    min( fData(jscs)$geneWisePadj[geneRows] , na.rm = TRUE)
+       #  })
+       #}
+       #mainTable$mostSigID <- sapply(gene.list, function(g){
+       #  geneRows <- which(fData(jscs)$geneID == g)
+       #  fData(jscs)$countbinID[ geneRows[which.min( fData(jscs)$padjust[geneRows])] ]
+       #})
+       #mainTable$mostSigPadjust <- sapply(gene.list, function(g){
+       #  geneRows <- which(fData(jscs)$geneID == g)
+       #  fData(jscs)$padjust[ geneRows[which.min( fData(jscs)$padjust[geneRows])] ]
+       #})
+       #mainTable$mostSigPadjust <- sprintf("%.3g",mainTable$mostSigPadjust)
+       #gene.row.list <- lapply(gene.list, function(g){  which(fData(jscs)$geneID == g) })
+       #numExons <- sapply(gene.row.list, function(geneRows){
+       #  sum(fData(jscs)$featureType[geneRows] == "exonic_part", na.rm = TRUE)
+       #})
+       #numKnown <- sapply(gene.row.list, function(geneRows){
+       #  sum(fData(jscs)$featureType[geneRows] == "splice_site", na.rm = TRUE)
+       #})
+       #numNovel <- sapply(gene.row.list, function(geneRows){
+       #  sum(fData(jscs)$featureType[geneRows] == "novel_splice_site", na.rm = TRUE)
+       #})
+       #exonsSig <- sapply(gene.row.list, function(geneRows){
+       #  sum(fData(jscs)$padjust[geneRows] < FDR.threshold & fData(jscs)$featureType[geneRows] == "exonic_part", na.rm = TRUE)
+       #})
+       #knownSig <- sapply(gene.row.list, function(geneRows){
+       #  sum(fData(jscs)$padjust[geneRows] < FDR.threshold & fData(jscs)$featureType[geneRows] == "splice_site", na.rm = TRUE)
+       #})
+       #novelSig <- sapply(gene.row.list, function(geneRows){
+       #  sum(fData(jscs)$padjust[geneRows] < FDR.threshold & fData(jscs)$featureType[geneRows] == "novel_splice_site", na.rm = TRUE)
+       #})
+       #mainTable$numFeatures = paste0(numExons,"/",numKnown,"/",numNovel)
+       #mainTable$numSig = paste0(exonsSig,"/",knownSig,"/",novelSig)
+       
+      imgGeneName <- if(minimalImageFilenames){
+        rep("",nrow(mainTable));
+      } else if(name.files.with.geneID){
+        paste0(truncateAggregateGene(mainTable$geneID),"-");
+      } else {
+        paste0(truncateAggregateGene(mainTable$geneName),"-");
+      } 
+       
+       mainTable$geneID   <- gsub("+","&#8203;+&#8203;",mainTable$geneID,fixed=TRUE);
+       if(! is.null(mainTable$geneName)){
+         mainTable$geneName <- gsub("+","&#8203;+&#8203;",mainTable$geneName,fixed=TRUE)
+         if(all(mainTable$geneID == mainTable$geneName)){
+           mainTableMeta <- mainTableMeta[colnames(mainTable) != "geneName"]
+           mainTable <- mainTable[,colnames(mainTable) != "geneName"]
+         }
        }
-
-       if(verbose) message("   Compiling data table. ",date())
-       colnames(geneAnno) <- c("chr","start","end","strand")
-       mainTable <- cbind.data.frame(mainTable, geneAnno)
-       mainTable$chr <- as.character(mainTable$chr)
-       geneBaseMeans <- rowMeans(jscs@geneCountData[match(gene.list,rownames(jscs@geneCountData)),, drop=FALSE] / sizeFactors(jscs))
-       mainTable$baseMean <- sprintf("%.1f",geneBaseMeans)
-
-       if(! is.null(fData(jscs)$geneWisePadj)){
-         mainTable$geneWisePadj <- sapply(gene.list, function(g){
-           geneRows <- which(fData(jscs)$geneID == g)
-           min( fData(jscs)$geneWisePadj[geneRows] , na.rm = TRUE)
-         })
-       }
-
-       mainTable$mostSigID <- sapply(gene.list, function(g){
-         geneRows <- which(fData(jscs)$geneID == g)
-         fData(jscs)$countbinID[ geneRows[which.min( fData(jscs)$padjust[geneRows])] ]
-       })
-
-
-       mainTable$mostSigPadjust <- sapply(gene.list, function(g){
-         geneRows <- which(fData(jscs)$geneID == g)
-         fData(jscs)$padjust[ geneRows[which.min( fData(jscs)$padjust[geneRows])] ]
-       })
-       mainTable$mostSigPadjust <- sprintf("%.3g",mainTable$mostSigPadjust)
-
-       gene.row.list <- lapply(gene.list, function(g){  which(fData(jscs)$geneID == g) })
-
-       numExons <- sapply(gene.row.list, function(geneRows){
-         sum(fData(jscs)$featureType[geneRows] == "exonic_part", na.rm = TRUE)
-       })
-       numKnown <- sapply(gene.row.list, function(geneRows){
-         sum(fData(jscs)$featureType[geneRows] == "splice_site", na.rm = TRUE)
-       })
-       numNovel <- sapply(gene.row.list, function(geneRows){
-         sum(fData(jscs)$featureType[geneRows] == "novel_splice_site", na.rm = TRUE)
-       })
-
-       exonsSig <- sapply(gene.row.list, function(geneRows){
-         sum(fData(jscs)$padjust[geneRows] < FDR.threshold & fData(jscs)$featureType[geneRows] == "exonic_part", na.rm = TRUE)
-       })
-       knownSig <- sapply(gene.row.list, function(geneRows){
-         sum(fData(jscs)$padjust[geneRows] < FDR.threshold & fData(jscs)$featureType[geneRows] == "splice_site", na.rm = TRUE)
-       })
-       novelSig <- sapply(gene.row.list, function(geneRows){
-         sum(fData(jscs)$padjust[geneRows] < FDR.threshold & fData(jscs)$featureType[geneRows] == "novel_splice_site", na.rm = TRUE)
-       })
-
-       mainTable$numFeatures = paste0(numExons,"/",numKnown,"/",numNovel)
-       mainTable$numSig = paste0(exonsSig,"/",knownSig,"/",novelSig)
-
+       mainTableMeta <- mainTableMeta[! (colnames(mainTable) %in% c("numExons","numKnown","numNovel","exonsSig","knownSig","novelSig"))]
+       mainTable <- mainTable[, ! (colnames(mainTable) %in% c("numExons","numKnown","numNovel","exonsSig","knownSig","novelSig"))]
+       
        tableTitles <- colnames(mainTable)
        tableTitles[tableTitles == "numFeatures"] <- "&#35; Features<br><div style=\"font-size: smaller\">(Exon/Known/Novel)</div>"
-       tableTitles[tableTitles == "numSig"] <- "&#35; Sig"
-
-       titleLine <- paste0("<tr><td rowspan=2>", paste0(tableTitles, collapse="</td> <td rowspan=2>") )
-
+       tableTitles[tableTitles == "numSig"] <- "&#35; Sig";
+       if(includeMouseOverSpans){
+         tableTitles <- paste0("<span title=\"",mainTableMeta,"\">",tableTitles,"</span>")
+       }
+       titleLine <- paste0("<tr><th rowspan=2>", paste0(tableTitles, collapse="</th> <th rowspan=2>") )
+       baseTitleLine <- paste0(titleLine,"</tr><tr></tr>");
+       baseMainTable <- mainTable;
+       
        plotColSpan <- (expr.plot + normCounts.plot + rExpr.plot + rawCounts.plot) * (with.TX + without.TX)
 
        if(plotColSpan > 0){
-         titleLine <- paste0(titleLine,"<td colspan=",plotColSpan,">Plots and Tables</td>")
+         titleLine <- paste0(titleLine,"<th colspan=",plotColSpan,"> <span title=\"Links to plots and tables generated by JunctionSeq\"> Plots and Tables </span> </th>")
          titleLine <- paste0(titleLine,"</tr><tr>")
        }
 
        ##############
 
+       #Table columns: 
+       # geneID, geneName, chr, start, end, strand, baseMean, geneWisePadj, mostSigID, mostSigPadjust, numExons, numKnown, numNovel, exonsSig, knownSig, novelSig, numFeatures, numSig
 
-
-
+       shortNameGeneList <- truncateAggregateGene(gene.list);
+       
        ##############
 
        if(expr.plot){
          if(without.TX){
-           mainTable$expr.plot <- paste0("<a href=\"htmlFiles/",gene.list,"-expr.plot.html\">","PLOT","</a><br>",
-                                         "<a href=\"htmlFiles/",gene.list,"-expr.table.html\">","TABLE","</a>")
-           titleLine <- paste0(titleLine,"<td>expr</td>")
+           mainTable$expr.plot <- paste0("<a href=\"htmlFiles/",shortNameGeneList,"-expr.plot.html\">","PLOT","</a><br>",
+                                         "<a href=\"htmlFiles/",shortNameGeneList,"-expr.table.html\">","TABLE","</a>")
+           titleLine <- paste0(titleLine,"<th>expr</th>")
          }
          if(with.TX){
-           mainTable$expr.plot.TX <- paste0("<a href=\"htmlFiles/",gene.list,"-expr-withTX.plot.html\">","PLOT","</a><br>",
-                                         "<a href=\"htmlFiles/",gene.list,"-expr.table.html\">","TABLE","</a>")
-           titleLine <- paste0(titleLine,"<td>exprTX</td>")
+           mainTable$expr.plot.TX <- paste0("<a href=\"htmlFiles/",shortNameGeneList,"-expr-withTX.plot.html\">","PLOT","</a><br>",
+                                         "<a href=\"htmlFiles/",shortNameGeneList,"-expr.table.html\">","TABLE","</a>")
+           titleLine <- paste0(titleLine,"<th>exprTX</th>")
          }
        }
        if(normCounts.plot){
          if(without.TX){
-         mainTable$normCt.plot <- paste0("<a href=\"htmlFiles/",gene.list,"-normCounts.plot.html\">","PLOT","</a><br>",
-                                         "<a href=\"htmlFiles/",gene.list,"-normCounts.table.html\">","TABLE","</a>")
-         titleLine <- paste0(titleLine,"<td>normCt</td>")
+         mainTable$normCt.plot <- paste0("<a href=\"htmlFiles/",shortNameGeneList,"-normCounts.plot.html\">","PLOT","</a><br>",
+                                         "<a href=\"htmlFiles/",shortNameGeneList,"-normCounts.table.html\">","TABLE","</a>")
+         titleLine <- paste0(titleLine,"<th>normCt</th>")
          }
          if(with.TX){
-         mainTable$normCt.plot.TX <- paste0("<a href=\"htmlFiles/",gene.list,"-normCounts-withTX.plot.html\">","PLOT","</a><br>",
-                                         "<a href=\"htmlFiles/",gene.list,"-normCounts.table.html\">","TABLE","</a>")
-         titleLine <- paste0(titleLine,"<td>normCtTX</td>")
+         mainTable$normCt.plot.TX <- paste0("<a href=\"htmlFiles/",shortNameGeneList,"-normCounts-withTX.plot.html\">","PLOT","</a><br>",
+                                         "<a href=\"htmlFiles/",shortNameGeneList,"-normCounts.table.html\">","TABLE","</a>")
+         titleLine <- paste0(titleLine,"<th>normCtTX</th>")
          }
        }
        if(rExpr.plot){
          if(without.TX){
-         mainTable$rExpr.plot <- paste0("<a href=\"htmlFiles/",gene.list,"-rExpr.plot.html\">","PLOT","</a><br>",
-                                       "<a href=\"htmlFiles/",gene.list,"-rExpr.table.html\">","TABLE","</a>")
-         titleLine <- paste0(titleLine,"<td>relExpr</td>")
+         mainTable$rExpr.plot <- paste0("<a href=\"htmlFiles/",shortNameGeneList,"-rExpr.plot.html\">","PLOT","</a><br>",
+                                       "<a href=\"htmlFiles/",shortNameGeneList,"-rExpr.table.html\">","TABLE","</a>")
+         titleLine <- paste0(titleLine,"<th>relExpr</th>")
          }
          if(with.TX){
-         mainTable$rExpr.plot.TX <- paste0("<a href=\"htmlFiles/",gene.list,"-rExpr-withTX.plot.html\">","PLOT","</a><br>",
-                                       "<a href=\"htmlFiles/",gene.list,"-rExpr.table.html\">","TABLE","</a>")
-         titleLine <- paste0(titleLine,"<td>relExprTX</td>")
+         mainTable$rExpr.plot.TX <- paste0("<a href=\"htmlFiles/",shortNameGeneList,"-rExpr-withTX.plot.html\">","PLOT","</a><br>",
+                                       "<a href=\"htmlFiles/",shortNameGeneList,"-rExpr.table.html\">","TABLE","</a>")
+         titleLine <- paste0(titleLine,"<th>relExprTX</th>")
          }
        }
        if(rawCounts.plot){
          if(without.TX){
-         mainTable$rawCounts.plot <- paste0("<a href=\"htmlFiles/",gene.list,"-rawCounts.plot.html\">","PLOT","</a><br>",
-                                       "<a href=\"htmlFiles/",gene.list,"-rawCounts.table.html\">","TABLE","</a>")
-         titleLine <- paste0(titleLine,"<td>rawCt</td>")
+         mainTable$rawCounts.plot <- paste0("<a href=\"htmlFiles/",shortNameGeneList,"-rawCounts.plot.html\">","PLOT","</a><br>",
+                                       "<a href=\"htmlFiles/",shortNameGeneList,"-rawCounts.table.html\">","TABLE","</a>")
+         titleLine <- paste0(titleLine,"<th>rawCt</th>")
          }
          if(with.TX){
-         mainTable$rawCounts.plot.TX <- paste0("<a href=\"htmlFiles/",gene.list,"-rawCounts-withTX.plot.html\">","PLOT","</a><br>",
-                                       "<a href=\"htmlFiles/",gene.list,"-rawCounts.table.html\">","TABLE","</a>")
-         titleLine <- paste0(titleLine,"<td>rawCtTX</td>")
+         mainTable$rawCounts.plot.TX <- paste0("<a href=\"htmlFiles/",shortNameGeneList,"-rawCounts-withTX.plot.html\">","PLOT","</a><br>",
+                                       "<a href=\"htmlFiles/",shortNameGeneList,"-rawCounts.table.html\">","TABLE","</a>")
+         titleLine <- paste0(titleLine,"<th>rawCtTX</th>")
          }
        }
        titleLines <- paste0(titleLine,"</tr>")
-
-
 
        if(verbose) message("   Writing data table. ",date())
        writeLines("<table BORDER=1>",pf)
        writeLines(titleLine,pf)
        for(i in 1:nrow(mainTable)){
          writeLines("   <tr>", pf)
-           line <- paste0("<td>", paste0( as.character(mainTable[i,]), collapse=" </td><td> " ) ,"</td> </tr>" )
+           line <- paste0("<td class=\"wrapping\">", paste0( as.character(mainTable[i,]), collapse=" </td><td class=\"wrapping\"> " ) ,"</td> </tr>" )
          writeLines(line,pf)
        }
        writeLines("</table>",pf)
@@ -347,19 +370,25 @@ JunctionSeqHTML <- function(jscs,
    if(verbose) message("   Writing pages. ",date())
        for(i in 1:length(gene.list)){
 
+         first.g = shortNameGeneList[1]
+         last.g = shortNameGeneList[length(gene.list)]
          if(i == 1){
            prev.g <- NULL
          } else {
-           prev.g <- paste0(gene.list[i - 1])
+           #prev.g <- paste0(gene.list[i - 1])
+           prev.g <- paste0(shortNameGeneList[i - 1])
          }
          if(i == length(gene.list)){
            next.g <- NULL;  
          } else {
-           next.g <- paste0(gene.list[i + 1])
+           #next.g <- paste0(gene.list[i + 1])
+           next.g <- paste0(shortNameGeneList[i + 1])
          }
-         g <- gene.list[i]
+         g <- gene.list[i];
+         shortg <- shortNameGeneList[i];
 
-         navTable <- makeNavTable(g, expr.plot=expr.plot, normCounts.plot=normCounts.plot, rExpr.plot=rExpr.plot, rawCounts.plot=rawCounts.plot, with.TX = with.TX, without.TX = without.TX, mainFile = mainFile)
+         navTable <- makeNavTable(shortg, expr.plot=expr.plot, normCounts.plot=normCounts.plot, rExpr.plot=rExpr.plot, rawCounts.plot=rawCounts.plot, with.TX = with.TX, without.TX = without.TX, 
+                                  mainFile = mainFile)
          #taken from func buildAllPlotsForGene
 
           transcripts <- sapply(sapply(flat.gff.data$transcripts[which(flat.gff.data$gene_id==g & flat.gff.data$featureType == "exonic_part")],
@@ -384,7 +413,7 @@ JunctionSeqHTML <- function(jscs,
             }
           }
 
-         makeAllPlotPages(g = g, prev.g = prev.g, next.g = next.g, first.g = gene.list[1], last.g = gene.list[length(gene.list)],
+         makeAllPlotPages(g = g, shortg = shortg, prev.g = prev.g, next.g = next.g, first.g = first.g, last.g = last.g,
                           gene.number = number.plots[i],
                           navTable = navTable,
                           outfile.dir = outfile.dir, jscs = jscs,
@@ -403,6 +432,9 @@ JunctionSeqHTML <- function(jscs,
                           css.path = css.path.SUB,
                           compare.analysis.list = compare.analysis.list,
                           minimalImageFilenames = minimalImageFilenames,
+                          baseTitleLine = baseTitleLine,
+                          baseMainTable = baseMainTable[i,],
+                          imgGeneName = imgGeneName[i],
                           verbose = verbose, debug.mode = debug.mode)
        }
 
@@ -422,6 +454,8 @@ formatArray <- function( fmt, a){
 makeGeneWiseTable <- function(jscs, gene.list, FDR.threshold = 0.05, verbose = TRUE, debug.mode = FALSE){
        if(verbose) message("   Compiling data table. ",date())
        
+
+       
        mainTable <- data.frame(geneID = as.character(gene.list), stringsAsFactors=FALSE)
        row.names(mainTable) <- gene.list
        mainTable <- AnnotatedDataFrame(mainTable)
@@ -432,23 +466,25 @@ makeGeneWiseTable <- function(jscs, gene.list, FDR.threshold = 0.05, verbose = T
        if(! noGenes){
          geneAnno <- as.data.frame(t(sapply(gene.list, function(g){
            geneRows <- which(fData(jscs)$geneID == g)
-           c(as.character(fData(jscs)$chr[geneRows[1]]), 
+           c(jscs@flatGffGeneData$gene_name[jscs@flatGffGeneData$geneID == g],
+             as.character(fData(jscs)$chr[geneRows[1]]), 
              as.numeric(min(fData(jscs)$start[geneRows])), 
              as.numeric(max(fData(jscs)$end[geneRows])),
              as.character(fData(jscs)$strand[geneRows[1]])
            )
          })))
-         colnames(geneAnno) <- c("chr","start","end","strand")
+         colnames(geneAnno) <- c("geneName","chr","start","end","strand");
        } else {
-         geneAnno <- data.frame(chr = character(), start = numeric(), end = numeric(), strand = character())
+         geneAnno <- data.frame(geneName = character(), chr = character(), start = numeric(), end = numeric(), strand = character())
        }
-       
+       mainTable$geneName <- as.character(geneAnno$geneName);
        mainTable$chr <- as.character(geneAnno$chr)
        mainTable$start <- geneAnno$start
        mainTable$end <- geneAnno$end
        mainTable$strand <- geneAnno$strand
-       varMetadata(mainTable)[c("chr","start","end","strand"), "labelDescription"] <- 
-                              c("Gene chromosome",
+       varMetadata(mainTable)[c("geneName","chr","start","end","strand"), "labelDescription"] <- 
+                              c("Gene Name (If Available)",
+                                "Gene chromosome",
                                 "Gene start",
                                 "Gene end",
                                 "Gene strand")
@@ -516,7 +552,8 @@ makeGeneWiseTable <- function(jscs, gene.list, FDR.threshold = 0.05, verbose = T
        return(mainTable)
 }
 
-makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
+makeAllPlotPages <- function(g, shortg, prev.g, next.g, first.g, last.g, gene.number,
+                            imgGeneName,
                             navTable,
                             outfile.dir,
                             jscs, 
@@ -536,6 +573,8 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
                             css.path = NULL,
                             compare.analysis.list = NULL,
                             minimalImageFilenames = TRUE,
+                          baseTitleLine = NULL,
+                          baseMainTable = NULL,
                             verbose = TRUE, debug.mode = FALSE
                               ){
   geneRows <- which(fData(jscs)$geneID == g);    
@@ -634,40 +673,35 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
     pages.idx <- pages.idx[ ! grepl(IMAGE.NAME.MAP[["rawCounts"]],names(pages.idx), fixed=TRUE) ]
   }
   
-  if(minimalImageFilenames){
-    imgGeneName <- ""
-  } else {
-    imgGeneName <- paste0(g,"-");
-  }
   
   if(expr.plot){
      if(without.TX){
        html.suffix <- "-expr.plot.html"
        makePlotPage(plotfile = paste0(dirPath[1],gene.number,imgGeneName,"expr",plotting.device.ext),
                   pageTitle = paste0(g, " expression"),
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-expr.plot.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-expr.plot.html"),
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   width = floor(base.html.height * width.multiplier),
                   height = floor(base.html.height),
                   base.html.height.units = base.html.height.units,
                   html.fixed.dim = html.fixed.dim,
                   html.width = html.width, html.width.units = html.width.units,
-                  css.path = css.path)
+                  css.path = css.path, baseTitleLine = baseTitleLine, baseMainTableLine = baseMainTable)
      }
      if(with.TX){
        html.suffix <-  "-expr-withTX.plot.html"
        makePlotPage(plotfile = paste0(dirPath[2],gene.number,imgGeneName,"expr-TX",plotting.device.ext),
                   pageTitle = paste0(g, " expression (with TX)"),
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-expr-withTX.plot.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-expr-withTX.plot.html"),
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   width = floor(base.html.height * width.multiplier),
                   height = floor(base.html.height * withTxPlot.height.multiplier),
                   base.html.height.units = base.html.height.units,
                   html.fixed.dim = html.fixed.dim,
                   html.width = html.width, html.width.units = html.width.units,
-                  css.path = css.path)
+                  css.path = css.path, baseTitleLine = baseTitleLine, baseMainTableLine = baseMainTable)
      }
      
      
@@ -685,10 +719,10 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      html.suffix <- "-expr.table.html"
      makeTablePage(pvals = pval.numeric, isTestable = isTestable, td = td,
                   titleline = titleline,
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-expr.table.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-expr.table.html"),
                   pageTitle = paste0("Feature Coverage/Expression Table (",g,")"),
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   css.path = css.path,
                   FDR.threshold = FDR.threshold)
   }
@@ -697,29 +731,29 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      html.suffix <-  "-normCounts.plot.html"
      makePlotPage(plotfile = paste0(dirPath[3],gene.number,imgGeneName,"normCts",plotting.device.ext),
                   pageTitle = paste0(g, " norm counts"),
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-normCounts.plot.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-normCounts.plot.html"),
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   width = floor(base.html.height * width.multiplier),
                   height = floor(base.html.height)  ,
                   base.html.height.units = base.html.height.units,
                   html.fixed.dim = html.fixed.dim,
                   html.width = html.width, html.width.units = html.width.units,
-                  css.path = css.path)
+                  css.path = css.path, baseTitleLine = baseTitleLine, baseMainTableLine = baseMainTable)
      }
      if(with.TX){
      html.suffix <-  "-normCounts-withTX.plot.html"
      makePlotPage(plotfile = paste0(dirPath[4],gene.number,imgGeneName,"normCts-TX",plotting.device.ext),
                   pageTitle = paste0(g, " norm counts"),
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-normCounts-withTX.plot.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-normCounts-withTX.plot.html"),
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   width = floor(base.html.height * width.multiplier),
                   height = floor(base.html.height  * withTxPlot.height.multiplier)  ,
                   base.html.height.units = base.html.height.units,
                   html.fixed.dim = html.fixed.dim,
                   html.width = html.width, html.width.units = html.width.units,
-                  css.path = css.path)
+                  css.path = css.path, baseTitleLine = baseTitleLine, baseMainTableLine = baseMainTable)
      }
      td <- formatArray("%.1f",jscs@plottingEstimates[["normCounts"]][geneRows,, drop=FALSE])
      td <- td[,1:(ncol(td)/2), drop = FALSE]
@@ -730,11 +764,11 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      td <- cbind(td.base, td)
      html.suffix <- "-normCounts.table.html"
      makeTablePage(pvals = pval.numeric, isTestable = isTestable, td = td,
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-normCounts.table.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-normCounts.table.html"),
                   pageTitle = paste0("Normalized Counts Table (",g,")"),
                   titleline = titleline,
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   css.path = css.path,
                   FDR.threshold = FDR.threshold)
   }
@@ -742,30 +776,30 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      if(without.TX){
      html.suffix <-  "-rExpr.plot.html"
      makePlotPage(plotfile = paste0(dirPath[5],gene.number,imgGeneName,"rExpr",plotting.device.ext),
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rExpr.plot.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-rExpr.plot.html"),
                   pageTitle = paste0(g, " relative expression"),
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   width = floor(base.html.height * width.multiplier),
                   height = floor(base.html.height) ,
                   base.html.height.units = base.html.height.units,
                   html.fixed.dim = html.fixed.dim,
                   html.width = html.width, html.width.units = html.width.units,
-                  css.path = css.path )
+                  css.path = css.path , baseTitleLine = baseTitleLine, baseMainTableLine = baseMainTable)
      }
      if(with.TX){
      html.suffix <-  "-rExpr-withTX.plot.html"
      makePlotPage(plotfile = paste0(dirPath[6],gene.number,imgGeneName,"rExpr-TX",plotting.device.ext),
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rExpr-withTX.plot.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-rExpr-withTX.plot.html"),
                   pageTitle = paste0(g, " relative expression (with TX)"),
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   width = floor(base.html.height * width.multiplier),
                   height = floor(base.html.height * withTxPlot.height.multiplier) ,
                   base.html.height.units = base.html.height.units,
                   html.fixed.dim = html.fixed.dim,
                   html.width = html.width, html.width.units = html.width.units,
-                  css.path = css.path )
+                  css.path = css.path , baseTitleLine = baseTitleLine, baseMainTableLine = baseMainTable)
      }
      td <- formatArray("%.1f",jscs@plottingEstimates[["relExprEstimate"]][geneRows,, drop=FALSE])
      colnames(td) <- sub("relExpr_","", colnames(td),fixed=TRUE)
@@ -775,11 +809,11 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      td <- cbind(td.base, td)
      html.suffix <- "-rExpr.table.html"
      makeTablePage(pvals = pval.numeric, isTestable = isTestable, td = td,
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rExpr.table.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-rExpr.table.html"),
                   pageTitle = paste0("Relative Coverage Table, relative to gene-wide expression (",g,")"),
                   titleline = titleline,
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   css.path = css.path,
                   FDR.threshold = FDR.threshold)
   }
@@ -788,30 +822,30 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      if(without.TX){
      html.suffix <- "-rawCounts.plot.html"
      makePlotPage(plotfile = paste0(dirPath[7],gene.number,imgGeneName,"rawCts",plotting.device.ext),
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rawCounts.plot.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-rawCounts.plot.html"),
                   pageTitle = paste0(g, " Raw Counts"),
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   width = floor(base.html.height * width.multiplier),
                   height = floor(base.html.height) ,
                   base.html.height.units = base.html.height.units,
                   html.fixed.dim = html.fixed.dim,
                   html.width = html.width, html.width.units = html.width.units,
-                  css.path = css.path )
+                  css.path = css.path , baseTitleLine = baseTitleLine, baseMainTableLine = baseMainTable)
      }
      if(with.TX){
      html.suffix <- "-rawCounts-withTX.plot.html"
      makePlotPage(plotfile = paste0(dirPath[8],gene.number,imgGeneName,"rawCts-TX",plotting.device.ext),
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rawCounts-withTX.plot.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-rawCounts-withTX.plot.html"),
                   pageTitle = paste0(g, " Raw Counts (with TX)"),
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   width = floor(base.html.height * width.multiplier),
                   height = floor(base.html.height * withTxPlot.height.multiplier) ,
                   base.html.height.units = base.html.height.units,
                   html.fixed.dim = html.fixed.dim,
                   html.width = html.width, html.width.units = html.width.units,
-                  css.path = css.path )
+                  css.path = css.path , baseTitleLine = baseTitleLine, baseMainTableLine = baseMainTable)
      }
      td <- formatArray("%.1f",counts(jscs)[geneRows,, drop=FALSE])
      titleline <- paste0(titleline.base,
@@ -820,11 +854,11 @@ makeAllPlotPages <- function(g, prev.g, next.g, first.g, last.g, gene.number,
      td <- cbind(td.base, td)
      html.suffix <- "-rawCounts.table.html"
      makeTablePage(pvals = pval.numeric, isTestable = isTestable, td = td,
-                  htmlfile = paste0(outfile.dir,"/htmlFiles/",g,"-rawCounts.table.html"),
+                  htmlfile = paste0(outfile.dir,"/htmlFiles/",shortg,"-rawCounts.table.html"),
                   pageTitle = paste0("Raw Counts Table (",g,")"),
                   titleline = titleline,
                   navTable = navTable,
-                  geneNavTable = makeGeneNavTable(g,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
+                  geneNavTable = makeGeneNavTable(shortg,prev.g,next.g, first.g, last.g,mainFile,prefix="./",suffix=html.suffix, compare.analysis.list = compare.analysis.list),
                   css.path = css.path,
                   FDR.threshold = FDR.threshold);     
   }
@@ -1031,7 +1065,8 @@ makeNavTable <- function(g, expr.plot, normCounts.plot, rExpr.plot, rawCounts.pl
 
 makePlotPage <- function(plotfile, pageTitle = "", htmlfile, navTable, geneNavTable, width, height, css.path = NULL, 
                          base.html.height.units = "vh", 
-                         html.fixed.dim = "height", html.width = 90, html.width.units = "vw"){
+                         html.fixed.dim = "height", html.width = 90, html.width.units = "vw",
+                         baseTitleLine = NULL, baseMainTableLine = NULL){
   f <- file(htmlfile, "w")
   
      writeLines(paste0("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">"), f)
@@ -1058,6 +1093,18 @@ makePlotPage <- function(plotfile, pageTitle = "", htmlfile, navTable, geneNavTa
   
   writeLines("<br>",f)
   writeLines(navTable,f)
+  
+  writeLines("<br>",f)
+  
+  if((!is.null(baseTitleLine)) && (!is.null(baseMainTableLine))){
+       writeLines("<table BORDER=1 style=\"margin-left:auto;margin-right:auto;\">",f)
+       writeLines(baseTitleLine,f)
+         writeLines("   <tr>", f)
+         line <- paste0("<td class=\"wrapping\">", paste0( as.character(baseMainTableLine), collapse=" </td><td class=\"wrapping\"> " ) ,"</td> </tr>" )
+         writeLines(line,f)
+       writeLines("</table>",f)
+  }
+  writeLines(paste0("<br><br><br><br><br><br><br>"), f)
   writeLines(paste0("</body></html>"), f)
   close(f)
 }

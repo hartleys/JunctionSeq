@@ -32,6 +32,8 @@ echo "#############################################"
 
 #Selects my environment vars and stuff:
 source ~/setallsl6.sh
+#source ~/setall.sh
+
 
 Rscript --no-save --no-restore $1 $2 $3 $4 $5 $6 $7 $8 $9
 

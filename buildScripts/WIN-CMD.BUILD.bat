@@ -42,11 +42,11 @@ echo ----- R CMD CHECK COMPLETE (%TIME%, %DATE%) -----
 :: Perform BiocChecks (3.2.2):
 echo Starting BiocCheck (DEVEL):
 echo ----- R CMD BiocCheck STARTING (%TIME%, %DATE%) ----- 
-echo ----- R CMD BiocCheck STARTING (%TIME%, %DATE%) -----  >   ../../checks/R-CMD-BiocCheck-WIN64-RDEVEL-v2015.11.12.log
-C:/PROGRA~1/R/R-3.2.2/bin/x64/R --version                     >>  ../../checks/R-CMD-BiocCheck-WIN64-RDEVEL-v2015.11.12.log 2>&1
-echo --------------------------------------------------------------------        >>  ../../checks/R-CMD-BiocCheck-WIN64-RDEVEL-v2015.11.12.log
+echo ----- R CMD BiocCheck STARTING (%TIME%, %DATE%) -----  >   ../checks/R-CMD-BiocCheck-WIN64_built-R-v3.2.2.log
+C:/PROGRA~1/R/R-3.2.2/bin/x64/R --version                     >>  ../checks/R-CMD-BiocCheck-WIN64_built-R-v3.2.2.log
+echo --------------------------------------------------------------------        >>  ../checks/R-CMD-BiocCheck-WIN64_built-R-v3.2.2.log
 C:/PROGRA~1/R/R-3.2.2/bin/x64/Rscript ../../buildScripts/WIN-BiocCheck.R altBuilds/JunctionSeq_%VER%.tar.gz %~dp0 ../checks/R-CMD-BiocCheck-WIN64_built-R-v3.2.2.log
-echo ----- R CMD BiocCheck COMPLETE (%TIME%, %DATE%) -----  >>  ../../checks/R-CMD-BiocCheck-WIN64-RDEVEL-v2015.11.12.log
+echo ----- R CMD BiocCheck COMPLETE (%TIME%, %DATE%) -----  >>  ../checks/R-CMD-BiocCheck-WIN64_built-R-v3.2.2.log
 echo ----- R CMD BiocCheck COMPLETE (%TIME%, %DATE%) ----- 
 
 GOTO End

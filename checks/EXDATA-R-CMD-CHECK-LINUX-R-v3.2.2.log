@@ -1,4 +1,4 @@
------ R CMD build (Fri Feb 19 15:19:52 EST 2016)          -----
+----- R CMD build (Tue Mar  1 10:10:41 EST 2016)          -----
 R version 3.2.3 (2015-12-10) -- "Wooden Christmas-Tree"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
@@ -9,14 +9,14 @@ GNU General Public License versions 2 or 3.
 For more information about these matters see
 http://www.gnu.org/licenses/.
 
------ R CMD build STARTING (Fri Feb 19 15:19:52 EST 2016) -----
-* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.1.10/JctSeqData.Rcheck'
+----- R CMD build STARTING (Tue Mar  1 10:10:41 EST 2016) -----
+* using log directory '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.1.16/JctSeqData.Rcheck'
 * using R version 3.2.3 (2015-12-10)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: ASCII
 * using option '--no-build-vignettes'
 * checking for file 'JctSeqData/DESCRIPTION' ... OK
-* this is package 'JctSeqData' version '1.1.10'
+* this is package 'JctSeqData' version '1.1.16'
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
@@ -27,10 +27,10 @@ http://www.gnu.org/licenses/.
 * checking for sufficient/correct file permissions ... OK
 * checking whether package 'JctSeqData' can be installed ... OK
 * checking installed package size ... NOTE
-  installed size is 47.0Mb
+  installed size is 46.9Mb
   sub-directories of 1Mb or more:
     data     22.3Mb
-    extdata  23.6Mb
+    extdata  23.5Mb
 * checking package directory ... OK
 * checking 'build' directory ... OK
 * checking DESCRIPTION meta-information ... OK
@@ -51,8 +51,7 @@ http://www.gnu.org/licenses/.
 * checking for code/documentation mismatches ... OK
 * checking Rd \usage sections ... OK
 * checking Rd contents ... OK
-* checking for unstated dependencies in examples ... WARNING
-'library' or 'require' call not declared from: 'JunctionSeq'
+* checking for unstated dependencies in examples ... OK
 * checking contents of 'data' directory ... OK
 * checking data for non-ASCII characters ... OK
 * checking data for ASCII and uncompressed saves ... OK
@@ -68,10 +67,10 @@ http://www.gnu.org/licenses/.
 * checking PDF version of manual ... OK
 * DONE
 
-Status: 1 WARNING, 1 NOTE
+Status: 1 NOTE
 See
-  '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.1.10/JctSeqData.Rcheck/00check.log'
+  '/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.1.16/JctSeqData.Rcheck/00check.log'
 for details.
 
 
------ R CMD build COMPLETE (Fri Feb 19 15:21:16 EST 2016) -----
+----- R CMD build COMPLETE (Tue Mar  1 10:11:55 EST 2016) -----

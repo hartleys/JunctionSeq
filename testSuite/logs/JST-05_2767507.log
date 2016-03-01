@@ -1,0 +1,16 @@
+/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.1.16/v1.1.16/testSuite
+#############################################
+### 
+### USER:     hartleys
+### JOB_ID:   2767507
+### JOB_NAME: JST-05
+### HOSTNAME: kcompute15.gc.nih.gov
+### 
+### STARTING @ Tue Mar  1 10:09:21 EST 2016
+#############################################
+STARTING JunctionSeq Post-Build Test (test-05) (Tue Mar  1 10:09:25 2016)
+NULL
+FINISHED JunctionSeq Post-Build Tests... (Tue Mar  1 10:10:23 2016)
+#############################################
+### DONE     @ Tue Mar  1 10:10:23 EST 2016
+#############################################

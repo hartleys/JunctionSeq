@@ -37,6 +37,14 @@ td {
         border-left: dotted 1px #ccc;
 	padding: 0.2em;
 }
+td.wrapping {
+	vertical-align: top;
+	border-right: dotted 1px #ccc;
+	border-left: dotted 1px #ccc;
+	padding: 0.2em;
+	word-wrap:break-words;
+	white-space:pre-wrap;
+}
 th {
 	font-weight: bold;
 	text-align: left;

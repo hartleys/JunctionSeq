@@ -1,17 +1,28 @@
-citHeader("To cite package SpliceSeq in publications use:")
+
+#citHeader("To cite package JunctionSeq in publications use:")
 
 year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
 vers <- paste("R package version", meta$Version)
 
-citEntry(entry = "Manual",
-         title = "JunctionSeq: Utility for Detection of Differential Splice-Junction Usage",
-         author = personList(as.person("Stephen Hartley")),
-         year = year,
-         note = vers,
+bibentry(bibtype="Article",
+         title = "Detection and Visualization of Differential Splicing in RNA-Seq Data with JunctionSeq",
+         author = c( person("Stephen","Hartley","William"),
+                     person("James","Mullikin","C")),
+         year = 2015,
+         journal = "arXiv preprint arXiv:1512.06038",
+         url = "http://arxiv.org/abs/1512.06038",
+         textVersion = 
+         paste("Hartley SW, Mullikin JC. (2015) Detection and Visualization of Differential Splicing in RNA-Seq Data with JunctionSeq. arXiv preprint arXiv:1512.06038" ) )
 
-         textVersion =
-         paste0("Stephen Hartley,",
-                "(",
-                year,
-                "). JunctionSeq: Utility for Detection of Differential Splice-Junction Usage. ",
-                vers, "."))
+#bibentry(bibtype = "Manual",
+#         title = "JunctionSeq Package User Manual",
+#         author = c(person("Stephen", "Hartley", middle = "William")),
+#         year = year,
+#         note = vers,
+#         url = "http://hartleys.github.io/JunctionSeq/doc/JunctionSeq.pdf",
+#         textVersion =
+#         paste0("Stephen Hartley,",
+#                "(",
+#                year,
+#                "). JunctionSeq Package User Manual ",
+#                vers, "."))
