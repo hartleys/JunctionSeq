@@ -41,7 +41,8 @@ readJunctionSeqCounts(countfiles, countdata,
     gene.names,
     verbose = TRUE,
     method.countVectors = c("geneLevelCounts","sumOfAllBinsForGene",
-                            "sumOfAllBinsOfSameTypeForGene")
+                            "sumOfAllBinsOfSameTypeForGene"),
+    noDESeqMatrix = FALSE
 )
 </pre>
 
@@ -171,7 +172,13 @@ The gene names will be used in the plots and figures.
 of the gene minus the counts for the specific feature. Alternatively, the sum of all other features on the gene can be used, like in DEXSeq. The advantage to the default JunctionSeq
 behavior is that no read or read-pair is ever counted more than once in any model. Under DEXSeq, some reads may cover many exonic segments and thus be counted repeatedly.
 </p>
-</td></tr>  
+</td></tr>
+<tr valign="top"><td><code>noDESeqMatrix</code></td>
+<td>
+
+<p>Suppresses the internal generation of a DESeq2 object. Depending on the options used this will break many downstream steps, and is for advanced usage only.
+</p>
+</td></tr>
 </table>
 
 
@@ -211,10 +218,10 @@ jscs = readJunctionSeqCounts(countfiles = countFiles,
 );
 </code></pre>
 
-<pre><code>## -&gt; STARTING readJunctionSeqCounts (Tue Mar  1 10:13:11 2016)
+<pre><code>## -&gt; STARTING readJunctionSeqCounts (Wed May 18 17:21:10 2016)
 </code></pre>
 
-<pre><code>## ---&gt; RJSC; (v1.1.16)
+<pre><code>## ---&gt; RJSC; (v1.3.4)
 </code></pre>
 
 <pre><code>## ---&gt; RJSC: samplenames: SAMP1,SAMP2,SAMP3,SAMP4,SAMP5,SAMP6
@@ -277,30 +284,30 @@ jscs = readJunctionSeqCounts(countfiles = countFiles,
 <pre><code>## -----&gt; creating jscs...
 </code></pre>
 
-<pre><code>## -----&gt; generating count vectors... (Tue Mar  1 10:13:12 2016)
+<pre><code>## -----&gt; generating count vectors... (Wed May 18 17:21:11 2016)
 </code></pre>
 
 <pre><code>## &gt; Using single-core execution.
 </code></pre>
 
-<pre><code>##     getAllJunctionSeqCountVectors: dim(counts) = 1516,6 (Tue Mar  1 10:13:12 2016)
+<pre><code>##     getAllJunctionSeqCountVectors: dim(counts) = 1516,6 (Wed May 18 17:21:11 2016)
 </code></pre>
 
 <pre><code>##     getAllJunctionSeqCountVectors: dim(gct) = 120,6
 </code></pre>
 
-<pre><code>##     getAllJunctionSeqCountVectors: out generated. dim = 1516,12 (Tue Mar  1 10:13:12 2016)
+<pre><code>##     getAllJunctionSeqCountVectors: out generated. dim = 1516,12 (Wed May 18 17:21:11 2016)
 </code></pre>
 
-<pre><code>## -----&gt; count vectors generated (Tue Mar  1 10:13:12 2016)
+<pre><code>## -----&gt; count vectors generated (Wed May 18 17:21:11 2016)
 </code></pre>
 
-<pre><code>## -----&gt; generating DESeqDataSet... (Tue Mar  1 10:13:12 2016)
+<pre><code>## -----&gt; generating DESeqDataSet... (Wed May 18 17:21:11 2016)
 </code></pre>
 
-<pre><code>## -----&gt; DESeqDataSet generated (Tue Mar  1 10:13:12 2016)
+<pre><code>## -----&gt; DESeqDataSet generated (Wed May 18 17:21:11 2016)
 </code></pre>
 
 
-<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 1.1.16 <a href="00Index.html">Index</a>]</div>
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 1.3.4 <a href="00Index.html">Index</a>]</div>
 </body></html>

@@ -1,4 +1,4 @@
-    > v1.1.16 (Revised Mon Feb 29 17:10:12 EST 2016)
+    > v1.3.4 (Revised Wed May 18 17:03:38 EDT 2016)
 
 [JunctionSeq](http://hartleys.github.io/JunctionSeq/) is a [Bioconductor](https://www.bioconductor.org/) package for detection and visualization of differential usage of 
 exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -21,13 +21,14 @@ can use the installation instructions below to install the most recent version o
 
 ##HELP AND DOCUMENTATION:
 
-* [The JunctionSeq user manual](doc/JunctionSeq.pdf): An introduction to differential usage analysis with JunctionSeq.
+* [The JunctionSeq user manual/vignette](doc/JunctionSeq.pdf): An introduction to analysis with JunctionSeq. Read this first.
 * [The online reference documentation](Rhtml/index.html): The complete JunctionSeq R documentation.
-* [A comprehensive walkthrough](doc/example-walkthrough.pdf): describes the entire analysis pipeline from aligned reads through analysis. This includes analysis with other tools such as DESeq2, edgeR, and DEXSeq, as well as the creation of plots and browser tracks.
-* [Example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip): used with the walkthrough so you can follow along (~280mb download). The [example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip) are separate (~1gb download).
-* [An example results report](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/exampleResults/testForDU.html): An example of the plots and html files produced by JunctionSeq (created using the example dataset).
+* [An example results report](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/exampleResults/testForDU.html): An example of the plots and html files produced by JunctionSeq (created using the example dataset, see below).
 * An example set of browser tracks from this same dataset is available 
 [here](https://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=stephen.hartley&hgS_otherUserSessionName=rn6_pipelineWalkthrough_finalTracks). The trackhub used to generate this session can be found [here](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/trackHub/index.html)
+* For Advanced Users: [A comprehensive walkthrough](doc/example-walkthrough.pdf) describing the entire analysis pipeline from aligned reads through analysis. This includes analysis with other tools such as DESeq2, edgeR, and DEXSeq, as well as the creation of plots and browser tracks.
+* The [Example dataset](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip) used with the walkthrough, so you can follow along (~280mb download). 
+* The [example bam files](https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip) are separate (~1gb download).
 * [Frequently Asked Questions](faq.html): If you still have questions, check here.
 
 Note: *The example dataset and results are for testing and demonstration purposes only.* The samples and annotation have been heavily modified and down-sampled 

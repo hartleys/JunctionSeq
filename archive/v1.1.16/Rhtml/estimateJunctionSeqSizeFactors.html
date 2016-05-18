@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Estimate Size Factors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/languages/r.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head><body>
+
+<table width="100%" summary="page for estimateJunctionSeqSizeFactors {JunctionSeq}"><tr><td>estimateJunctionSeqSizeFactors {JunctionSeq}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Estimate Size Factors
+</h2>
+
+<h3>Description</h3>
+
+<p>Estimate size factors, which are scaling factors used as &quot;offsets&quot; 
+by the statistical model to make the different samples comparable.
+This is necessary because the different samples may have been
+sequenced to slightly different depths. Additionally, the presence
+of differentially expressed genes may cause the apparent depth of
+many genes to appear different.
+</p>
+<p>This function uses the &quot;geometric&quot; size factor normalization method,
+which is identical to the one used by DESeq, DESeq2, DEXSeq, and 
+the default method used by CuffDiff.
+</p>
+<p>This function is called internally by the <code><a href="runJunctionSeqAnalyses.html">runJunctionSeqAnalyses</a></code> 
+function, and thus for most purposes users should not need to call this
+function directly. It may be useful to advanced users performing non-standard
+analyses.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  estimateJunctionSeqSizeFactors(jscs, 
+          method.sizeFactors = c("byGenes","byCountbins"), 
+          replicateDEXSeqBehavior.useRawBaseMean = FALSE, 
+          calcAltSF = TRUE, 
+          verbose = FALSE);
+  
+  writeSizeFactors(jscs, file);
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>jscs</code></td>
+<td>
+
+<p>A <code>JunctionSeqCountSet</code>. Usually initially created by 
+<code><a href="readJunctionSeqCounts.html">readJunctionSeqCounts</a></code>. Size factors must be
+set, usually using functions <code><a href="../../BiocGenerics/html/dge.html">estimateSizeFactors</a></code> and 
+<code><a href="estimateJunctionSeqDispersions.html">estimateJunctionSeqDispersions</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>method.sizeFactors</code></td>
+<td>
+
+<p>Character string. Can be used to apply alternative methodologies or implementations. Intended for advanced users who have strong opinions about the underlying statistical methodologies.
+</p>
+<p>Determines the method used to calculate normalization size factors. By default JunctionSeq uses gene-level expression. As an alternative, feature-level counts can be used as
+they are in DEXSeq. In practice the difference is almost always negligible.
+</p>
+</td></tr>
+<tr valign="top"><td><code>replicateDEXSeqBehavior.useRawBaseMean</code></td>
+<td>
+
+<p>USED ONLY FOR INTERNAL TESTING! NOT INTENDED FOR ACTUAL USE! 
+</p>
+<p>This variable activates an alternative mode in which a (very minor) bug in DEXSeq v1.14.0 and earlier is replicated. If <code>TRUE</code>, the 
+baseMean and baseVar variables will be computed using raw counts rather than normalized counts. 
+This is used for internal tests in which DEXSeq functionality is replicated precisely and the results are compared against equivalent DEXSeq results.
+Without this option the results would differ slightly (generally by less than 1 hundreth of a percent). 
+</p>
+<p>USED ONLY FOR INTERNAL TESTING! NOT INTENDED FOR ACTUAL USE! 
+</p>
+</td></tr>
+<tr valign="top"><td><code>calcAltSF</code></td>
+<td>
+
+<p>Logical. Determines whether both types of size factor calculations should be generated, and placed in the <code>jscs@altSizeFactors</code> slot.
+</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>if <code>TRUE</code>, send debugging and progress messages to the console / stdout.</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+
+<p>A file path to write the size factor table.
+</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>If using the (depreciated) estimateSizeFactors command, use the same syntax as above.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A JunctionSeqCountSet, with size factors included.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre><code class="r">data(exampleDataSet,package=&quot;JctSeqData&quot;);
+jscs &lt;- estimateJunctionSeqSizeFactors(jscs);
+
+## Not run: 
+##D ########################################
+##D #Set up example data:
+##D decoder.file &lt;- system.file(
+##D                   &quot;extdata/annoFiles/decoder.bySample.txt&quot;,
+##D                   package=&quot;JctSeqData&quot;);
+##D decoder &lt;- read.table(decoder.file,
+##D                   header=TRUE,
+##D                   stringsAsFactors=FALSE);
+##D gff.file &lt;- system.file(
+##D             &quot;extdata/cts/withNovel.forJunctionSeq.gff.gz&quot;,
+##D             package=&quot;JctSeqData&quot;);
+##D countFiles &lt;- system.file(paste0(&quot;extdata/cts/&quot;,
+##D      decoder$sample.ID,
+##D      &quot;/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz&quot;),
+##D      package=&quot;JctSeqData&quot;);
+##D ########################################
+##D #Advanced Analysis:
+##D 
+##D #Make a &quot;design&quot; dataframe:
+##D design &lt;- data.frame(condition = factor(decoder$group.ID));
+##D #Read the QoRTs counts.
+##D jscs = readJunctionSeqCounts(countfiles = countFiles,
+##D            samplenames = decoder$sample.ID,
+##D            design = design,
+##D            flat.gff.file = gff.file
+##D );
+##D #Generate the size factors and load them into the JunctionSeqCountSet:
+##D jscs &lt;- estimateJunctionSeqSizeFactors(jscs);
+##D #Estimate feature-specific dispersions:
+##D jscs &lt;- estimateJunctionSeqDispersions(jscs);
+##D #Fit dispersion function and estimate MAP dispersion:
+##D jscs &lt;- fitJunctionSeqDispersionFunction(jscs);
+##D #Test for differential usage:
+##D jscs &lt;- testForDiffUsage(jscs);
+##D #Estimate effect sizes and expression estimates:
+##D jscs &lt;- estimateEffectSizes( jscs);
+##D 
+## End(Not run)
+</code></pre>
+
+
+<hr /><div style="text-align: center;">[Package <em>JunctionSeq</em> version 1.1.16 <a href="00Index.html">Index</a>]</div>
+</body></html>
