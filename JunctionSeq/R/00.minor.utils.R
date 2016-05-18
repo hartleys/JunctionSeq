@@ -42,6 +42,17 @@ simpleDeparse <- function(d){
   paste0(deparse(d),collapse="")
 }
 
+
+loadAndCleanJSCS <- function(infile){
+  load(infile);
+  jscs@DESeqDataSet <- new("DESeqDataSet");
+  jscs@fittedMu <- matrix();
+  jscs@countVectors <- matrix();
+  return(jscs);
+}
+
+
+
 truncateAggregateGene <- function(g){
   truncAG <- function(x){
     if(! grepl("+",x,fixed=TRUE)){

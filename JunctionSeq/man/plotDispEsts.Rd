@@ -22,7 +22,7 @@
                plot.junction.results = TRUE, 
                anno.lwd = 2,
                mar = c(4.1,4.1,3.1,1.1),
-               show.legends = TRUE,
+               show.legends = TRUE, 
                verbose = TRUE, debug.mode = FALSE,
                ... )
 }
@@ -107,9 +107,9 @@
   \item{show.legends}{
     Logical. If \code{TRUE}, display legends.
   }
-  
-  \item{verbose}{if TRUE, send debugging and progress messages to the console / stdout.}
-  \item{debug.mode}{if TRUE, send even more debugging and progress messages to the console / stdout.}
+
+  \item{verbose}{if \code{TRUE}, send debugging and progress messages to the console / stdout.}
+  \item{debug.mode}{if \code{TRUE}, send even more debugging and progress messages to the console / stdout.}
   
   \item{...}{Additional options to pass to plotting functions, particularly graphical parameters.}
 

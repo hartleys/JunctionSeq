@@ -285,9 +285,11 @@ writeCompleteResults <- function(jscs, outfile.prefix,
        if(isTRUE(verbose)) message("> wcr: Zero Significant Features! (at adjusted-p-value threshold ",FDR.threshold,")")
      } #else {
        
-       try({
+       tryCatch({
          genewiseTable <- makeGeneWiseTable(jscs, gene.list, FDR.threshold = FDR.threshold, verbose = verbose)
          write.simple.table.gz(pData(genewiseTable),file=paste0(outfile.prefix,"sigGenes.genewiseResults.txt"),      use.gzip=gzip.output,row.names=FALSE,col.names=TRUE,quote=FALSE, sep = '\t')
+       }, error = function(e){
+         warning("   Warning! Caught error while attempting to compile optional genewise table.\n   Error text:",e,"");
        })
        
        if(isTRUE(verbose)) message("> wcr: Writing results for ", length(gene.list), " genes with 1 or more significant junctions (at adjusted-p-value threshold ", FDR.threshold,")")
@@ -296,9 +298,11 @@ writeCompleteResults <- function(jscs, outfile.prefix,
        if(isTRUE(verbose)) message("> wcr:     Found ", length(sig.rows), " counting bins belonging to those genes.")
        
        
-                    write.simple.table.gz(expression.data[sig.rows,, drop=FALSE],     file=paste0(outfile.prefix,"sigGenes.expression.data.txt"),      use.gzip=gzip.output,row.names=FALSE,col.names=TRUE,quote=FALSE, sep = '\t')
+       if(isTRUE(verbose)) message("> wcr:     Writing sigGenes.expression.data.txt")
+                            write.simple.table.gz(expression.data[sig.rows,, drop=FALSE],     file=paste0(outfile.prefix,"sigGenes.expression.data.txt"),      use.gzip=gzip.output,row.names=FALSE,col.names=TRUE,quote=FALSE, sep = '\t')
        if(isTRUE(save.VST)) write.simple.table.gz(expression.data.vst[sig.rows,, drop=FALSE], file=paste0(outfile.prefix,"sigGenes.expression.data.VST.txt"),  use.gzip=gzip.output,row.names=FALSE,col.names=TRUE,quote=FALSE, sep = '\t')
-                    write.table.gz(fData(jscs)[sig.rows,, drop=FALSE],         file=paste0(outfile.prefix,"sigGenes.results.txt"), use.gzip=gzip.output,row.names="featureID",col.names=TRUE,quote=FALSE)
+       if(isTRUE(verbose)) message("> wcr:     Writing sigGenes.results.txt")
+                            write.table.gz(fData(jscs)[sig.rows,, drop=FALSE],         file=paste0(outfile.prefix,"sigGenes.results.txt"), use.gzip=gzip.output,row.names="featureID",col.names=TRUE,quote=FALSE)
      #}
    }
    
@@ -307,6 +311,7 @@ writeCompleteResults <- function(jscs, outfile.prefix,
    } else {
      bedFileExt <- ".bed"
    }
+   if(isTRUE(verbose)) message("> wcr:     Writing bed tracks.")
    
    if(isTRUE(save.bedTracks)){
      if(isTRUE(save.allGenes)){
@@ -534,7 +539,8 @@ readJunctionSeqCounts <- function(countfiles = NULL, countdata = NULL,
                                   use.multigene.aggregates = FALSE,
                                   gene.names = NULL,
                                   verbose = TRUE,
-                                  method.countVectors = c("geneLevelCounts","sumOfAllBinsForGene","sumOfAllBinsOfSameTypeForGene"))
+                                  method.countVectors = c("geneLevelCounts","sumOfAllBinsForGene","sumOfAllBinsOfSameTypeForGene"),
+                                  noDESeqMatrix = FALSE)
 {
    method.countVectors <- match.arg(method.countVectors)
    
@@ -708,7 +714,8 @@ readJunctionSeqCounts <- function(countfiles = NULL, countdata = NULL,
       if(isTRUE(verbose)) message("-> FINISHED readJunctionSeqCounts (",date(),")"); 
       message("Warning: flat gff annotation not set (via parameter flat.gff.file)! While technically optional, running without the annotation data may make interpretation of the data difficult. Much of the plotting functionality will not work!")
       warning("Warning: flat gff annotation not set (via parameter flat.gff.file)! While technically optional, running without the annotation data may make interpretation of the data difficult. Much of the plotting functionality will not work!")
-      jscs <- newJunctionSeqCountSet(countData=dcounts, design=design, geneIDs=genesrle, countbinIDs=exons)
+      jscs <- newJunctionSeqCountSet(countData=dcounts, geneCountData = geneCountTable, design=design, geneIDs=genesrle, countbinIDs=exons);
+      
    }
    attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.countVectors = method.countVectors)
    attr(jscs,"CallStack") <- list(deparse(match.call()))
@@ -722,13 +729,14 @@ readJunctionSeqCounts <- function(countfiles = NULL, countdata = NULL,
    jscs@countVectors <- getAllJunctionSeqCountVectors(jscs, nCores = nCores, method.countVectors); #use.alternate.method = use.alternate.method)
    if(isTRUE(verbose)) message("-----> count vectors generated (",date(),")");   
    
-   if(isTRUE(verbose)) message("-----> generating DESeqDataSet... (",date(),")")
-   jscs <- makeDESeqDataSetFromJSCS(jscs, test.formula1 = test.formula1)
-   if(isTRUE(verbose)) message("-----> DESeqDataSet generated (",date(),")")
-   
-   fData(jscs)[["allZero"]] <- (rowSums(counts(jscs)) == 0) | 
-                               (rowSums(counts(jscs@DESeqDataSet)[, colData(jscs@DESeqDataSet)$countbin == "others"]) ==0)
-   mcols(jscs@DESeqDataSet)$allZero <- fData(jscs)[["allZero"]]
+   if(! noDESeqMatrix){
+     if(isTRUE(verbose)) message("-----> generating DESeqDataSet... (",date(),")")
+     jscs <- makeDESeqDataSetFromJSCS(jscs, test.formula1 = test.formula1)
+     if(isTRUE(verbose)) message("-----> DESeqDataSet generated (",date(),")")
+     fData(jscs)[["allZero"]] <- (rowSums(counts(jscs)) == 0) | 
+                                 (rowSums(counts(jscs@DESeqDataSet)[, colData(jscs@DESeqDataSet)$countbin == "others"]) ==0)
+     mcols(jscs@DESeqDataSet)$allZero <- fData(jscs)[["allZero"]]
+   }
    
    return(jscs)
    if(isTRUE(verbose)) message("-> FINISHED readJunctionSeqCounts (",date(),")");  
@@ -761,13 +769,14 @@ mapGeneNames <- function(jscs, gene.names = NULL, gene.name.separator = "+", gen
                                                        gene.name.separator = gene.name.separator,
                                                        gene.multimap.separator = gene.multimap.separator)
   
+  #For adding future functionality. Currently not used for anything.
   if(ncol(gene.names) > 2){
     for(i in 3:ncol(gene.names)){
        jscs@flatGffGeneData[[names(gene.names)[i]]] <- mapGeneNamesToList(jscs@flatGffGeneData$geneID, 
                                                        gene.names = gene.names,
                                                        gene.name.separator = gene.name.separator,
                                                        gene.multimap.separator = gene.multimap.separator,
-                                                       newID.column = 1, oldID.column = i);
+                                                       oldID.column = 1, newID.column = i);
     }
   }
   

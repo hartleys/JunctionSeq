@@ -594,3 +594,37 @@ testFeatureForDJU.fromCountVector <- function(formula1, mm0,mm1,disp, keepCoefs 
   
   return(list(coefficient = coefficient, logFC = logFC, pval = pval, disp = disp, countVector = countVector, fit = list(fitH0 = fit0, fitH1 = fit1) ))
 }
+
+
+testFeatureForDJU.fromRow.simpleNormDist <- function(formula1, ecs, i, modelFrame, mm0, mm1, disp = NA, keepCoefs = ncol(mm1)){
+  #note: disp is NONFUNCTIONAL!
+  stopifnot( inherits( ecs, "JunctionSeqCountSet" ) )
+  geneID <- geneIDs(ecs)[i]
+  countbinID <- countbinIDs(ecs)[i]
+  if( all( is.na( sizeFactors( ecs )) ) ){
+    stop("Please calculate size factors first\n")
+  }
+  countVector <- ecs@countVectors[i,]
+  
+  conditionLevels <- levels(modelFrame[["condition"]])
+  
+  fitB <- try( {
+      fit0 <- glm.fit( mm0,  countVector, offset = log( modelFrame$sizeFactor ) )
+      fit1 <- glm.fit( mm1,  countVector, offset = log( modelFrame$sizeFactor ) )
+      list(fit0,fit1)
+  })
+  if( any(inherits( fitB, "try-error" ) )) {
+     warning( sprintf("glm.fit failed for %s:%s\n", as.character( geneID ), countbinID) )
+     return(list(coefficient = rep(NA,length(keepCoefs)), logFC = rep(NA, length(conditionLevels) - 1),pval = NA, disp = NA, countVector = countVector, fit = list(fitH0 = NA, fitH1 = NA) ))
+  }
+  fit0 <- fitB[[1]]
+  fit1 <- fitB[[2]]
+
+  coefficient <- fit1$coefficients[keepCoefs]
+  
+  pval <- pchisq( deviance( fit0 ) - deviance( fit1 ), ncol( mm1 ) - ncol( mm0 ), lower.tail=FALSE )
+  
+  logFC <- getLogFoldChangeFromModel(formula1, modelFrame, mm1, fit1)
+  
+  return(list(coefficient = coefficient, logFC = logFC, pval = pval, disp = disp, countVector = countVector, fit = list(fitH0 = fit0, fitH1 = fit1) ))
+}

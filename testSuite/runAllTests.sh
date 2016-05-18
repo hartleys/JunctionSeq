@@ -17,7 +17,7 @@ mkdir status
 while read TID warnExpected
 do
   #Run on an SL6 node:
-  qsub -q low6.q -P SL6 -l mem_free=1G,h_vmem=1G -j yes -N JST-$TID qsub.wrapper.Rscript.sh runTest.R test-$TID $warnExpected
+  qsub -l mem_free=1G,h_vmem=1G -j yes -N JST-$TID qsub.wrapper.Rscript.sh runTest.R test-$TID $warnExpected
   
   #Run on a older node:
   #qsub -l mem_free=1G,h_vmem=1G -j yes -N JST-$TID qsub.wrapper.Rscript.sh runTest.R test-$TID $warnExpected

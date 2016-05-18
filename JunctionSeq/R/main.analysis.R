@@ -768,6 +768,107 @@ testForDiffUsage <- function( jscs,
 ######### 
 ##############################################################################################################################################################################################################################
 
+#Work-in-progress, currently nonfunctional:
+testForDiffUsage.simpleNormDist <- function( jscs,
+                                test.formula0 = formula(~ sample + countbin), 
+                                test.formula1 = formula(~ sample + countbin + condition : countbin),
+                                #method.GLM = c(c("advanced","DESeq2-style"), c("simpleML","DEXSeq-v1.8.0-style")),
+                                dispColumn="dispersion", nCores=1 , 
+                                keep.hypothesisTest.fit = FALSE,
+                                meanCountTestableThreshold = "auto",
+                                optimizeFilteringForAlpha = 0.01,
+                                method.cooksFilter = TRUE, cooksCutoff,
+                                pAdjustMethod = "BH",
+                                verbose = TRUE){
+  #method.GLM <- match.arg(method.GLM)
+  #attr(jscs,"AltMethods") <- c(attr(jscs,"AltMethods"), method.GLM.HTEST = method.GLM)
+  #attr(jscs,"CallStack") <- c(attr(jscs,"CallStack"), list(deparse(match.call())))
+  
+  keep.debug.model.data <- TRUE
+  stopifnot( inherits( jscs, "JunctionSeqCountSet" ) )
+   if( all( is.na( sizeFactors( jscs )))) {
+     stop("Please calculate size factors before estimating dispersions\n")
+   } 
+   #if( all( is.na( fData(jscs)[,dispColumn] ) ) ){
+   #  stop("Please estimate dispersions before calling this function\n")
+   #}
+   myApply <- getMyApply(nCores)
+   
+   jscs@formulas[["test.formula0"]] <- deparse(test.formula0)
+   jscs@formulas[["test.formula1"]] <- deparse(test.formula1)
+   rows <- seq_len(nrow(jscs))
+   modelFrame <- constructModelFrame( jscs )
+   mm0 <- rmDepCols( model.matrix( test.formula0, modelFrame ) )
+   mm1 <- rmDepCols( model.matrix( test.formula1, modelFrame ) )
+   
+#########################################
+   fitExpToVar <- "condition"
+   keepCoefs <- which(attr(mm1,"assign") == length( attr(terms(test.formula1),"term.labels"))  )
+   keepCoefNames <- paste0("HtestCoef(",colnames(mm1)[keepCoefs],")")
+   conditionLevels <- levels(modelFrame[[fitExpToVar]])
+#########################################
+   
+   
+   if(verbose && INTERNALDEBUGMODE) simpleReportMem()
+     mdl.out <- myApply( rows,
+       function(i) {
+         if( verbose && i %% 1000 == 0 ){
+           message(paste0("-------> testJunctionsForDiffUsage: (testing for DJU on feature ",i," of ",nrow(jscs),")","(",date(),")"))
+         }
+
+         if( fData(jscs)$testable[i] ) {
+            out <- testFeatureForDJU.fromRow.simpleNormDist(test.formula1, jscs, i=i, modelFrame=modelFrame, mm0=mm0, mm1=mm1, keepCoefs = keepCoefs)
+            if(! keep.hypothesisTest.fit) out[["fit"]] <- list(fitH0 = "FIT_NOT_SAVED", fitH1 = "FIT_NOT_SAVED") 
+            out
+         } else {
+           return(list(coefficient = rep(NA,length(keepCoefs)), 
+                       logFC = rep(NA, length(conditionLevels) - 1),
+                       pval = NA, 
+                       disp = NA, 
+                       countVector = jscs@countVectors[i,], 
+                       fit = list(fitH0 = NA, fitH1 = NA)
+                  ))
+         }
+       })
+
+      pvals <- sapply(mdl.out, "[[", "pval")
+      coefficient <- do.call(rbind.data.frame, lapply(mdl.out,"[[", "coefficient"))
+      logFC <- do.call(rbind.data.frame, lapply(mdl.out,"[[", "logFC"))
+
+      modelFits <- lapply(mdl.out, "[[", "fit"); #Usually nonfunctional, unless keep.hypothesisTest.fit is TRUE
+      names(modelFits) <- featureNames( jscs )
+      jscs@modelFitForHypothesisTest <- modelFits
+
+      message("dim(coefficient) = ",paste0(dim(coefficient),collapse=","))
+      message("dim(logFC) = ",paste0(dim(logFC),collapse=","))
+
+      colnames(coefficient) <- keepCoefNames
+      conditionLevels <- levels(pData(jscs)[["condition"]])
+      colnames(logFC) <- paste0("logFC(",conditionLevels[-1],"/",conditionLevels[1],")")
+
+      for(CN in colnames(coefficient)){
+        fData(jscs)[[CN]] <- coefficient[[CN]]
+      }
+
+      fData(jscs)$pvalue <- pvals
+      fData(jscs)$simple_padjust <- p.adjust( fData(jscs)$pvalue, method=pAdjustMethod )
+      
+      fData(jscs)$padjust <- p.adjust( fData(jscs)$pvalue, method=pAdjustMethod )
+      
+      if(meanCountTestableThreshold == "auto"){
+         warning("Automatic threshold selection is NOT compatible with simpleML mode!")
+         meanCountTestableThreshold <- -1
+      }
+      attr(jscs, "filterThreshold") <- meanCountTestableThreshold
+      attr(jscs, "filterNumRej") <- sum( fData(jscs)$padjust < optimizeFilteringForAlpha, na.rm = TRUE)
+
+      return(jscs)
+}
+
+##############################################################################################################################################################################################################################
+######### 
+##############################################################################################################################################################################################################################
+
 
 get.filtered.padjust <- function(jscs, optimizeFilteringForAlpha = 0.01, 
                                  method.cooksFilter = TRUE,

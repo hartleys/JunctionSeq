@@ -32,7 +32,8 @@ plotDispEsts <- function( jscs, ylim, xlim,
   plot.junction.results = TRUE, 
   anno.lwd = 2,
   mar = c(4.1,4.1,3.1,1.1),
-  show.legends = TRUE,
+  show.legends = TRUE, 
+  #plot.poisson = FALSE, plot.poisson.lty = 3, plot.poisson.col = "gray",
   verbose = TRUE, debug.mode = FALSE,
   ... )
 {
@@ -112,12 +113,27 @@ plotDispEsts <- function( jscs, ylim, xlim,
     axis(4, at = decade.at, labels = FALSE, tcl = -0.5, las = 1, lwd = anno.lwd, lwd.ticks = anno.lwd, ...)
     if(miniTicks) axis(4, at = ticks.at, labels = FALSE, tcl = -0.25, lwd = anno.lwd, lwd.ticks = anno.lwd / 2, ...)
     
+    #if(plot.poisson){
+    #  pois.px <- (((0:10000) / 10000) * abs(10^xlim[2] - 10^xlim[1])) + 10^xlim[1];
+    #  pois.py <- 1 / pois.px;
+    #  lines(log10(pois.px),log10(pois.py),col = plot.poisson.col, lty = plot.poisson.lty, lwd=lwd.fitted, cex = lines.cex, ...);
+    #}
+    
     if(show.legends){
+      L.legend <- c("Exons","Junctions");
+      L.linecol <- linecol;
       if((! is.null(jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]]))  && jscs@dispFunctionType[["fitDispersionsForExonsAndJunctionsSeparately"]]){
            #Exon / Junction Labels (only if both exons and junctions are found and tested:
-           legend("bottomright",legend=c("Exons","Junctions"),text.col=linecol, bg="transparent", box.col="transparent")
+           legend("bottomright",legend=L.legend,text.col=L.linecol, bg="transparent", box.col="transparent",...)
       }
       legend.pt.cex <- if(pch.MLE == 46){points.cex * 5} else {points.cex}
+      
+      #legend.lty <- c(NA);
+      #legend.lwd <- c(NA);
+      #legend.pch <- pch.MLE;
+      #legend.ptcex <- legend.pt.cex;
+      #legend.legend <- "MLE";
+      
       if( (! is.null(jscs@dispFunctionType[["finalDispersionMethod"]]))  &&  jscs@dispFunctionType[["finalDispersionMethod"]] == "shrink"){
          legend("topright", bg="transparent", box.col="transparent", seg.len=1, cex = text.cex,
                   legend=c("MLE","Fitted","MAP"),

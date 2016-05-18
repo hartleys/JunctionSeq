@@ -26,7 +26,8 @@ readJunctionSeqCounts(countfiles, countdata,
     gene.names,
     verbose = TRUE,
     method.countVectors = c("geneLevelCounts","sumOfAllBinsForGene",
-                            "sumOfAllBinsOfSameTypeForGene")
+                            "sumOfAllBinsOfSameTypeForGene"),
+    noDESeqMatrix = FALSE
 )
 }
 
@@ -111,7 +112,10 @@ readJunctionSeqCounts(countfiles, countdata,
     Determines the type of count vectors to be used in the model framework. By default JunctionSeq compares the counts for a specific feature against the counts across the rest 
     of the gene minus the counts for the specific feature. Alternatively, the sum of all other features on the gene can be used, like in DEXSeq. The advantage to the default JunctionSeq
     behavior is that no read or read-pair is ever counted more than once in any model. Under DEXSeq, some reads may cover many exonic segments and thus be counted repeatedly.
-  }  
+  }
+  \item{noDESeqMatrix}{
+    Suppresses the internal generation of a DESeq2 object. Depending on the options used this will break many downstream steps, and is for advanced usage only.
+  }
 }
 \value{
   A JunctionSeqCountSet.
