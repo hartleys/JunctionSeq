@@ -1,3 +1,12 @@
+v1.3.4: 
+Minor bugfixes:
+
+  * Manual updated to reflect changes in the most recent version of QoRTs: the mergeNovelSplices function now automatically calculates size factors, if size factors are not set explicitly.
+  * Fixed typos in the manual.
+  * Bugfix: Basic functionality now works without a GFF file being specified (as per specification)
+  * Iterated version number to match Bioconductor versioning.
+  * Added the ability to suppress the creation of a DESeq2 count container object (for advanced users).
+
 v1.1.14: 
 Minor bugfixes: (thanks to Warren McGee)
   * When making html summary files with "use.multigene.aggregates" genes set to TRUE,
@@ -79,5 +88,3 @@ v0.6.8:
  * Fixed other output-compatibility issues with the legacy "simpleML" mode.
  * Tested all sorts of combinations of method modes. Added warnings to at least some of the incompatible combinations.
  * Reduced extraneous messages in debug mode.
-
-
