@@ -1,0 +1,257 @@
+STARTING JunctionSeq Post-Build Test (test-09) (Wed May 25 15:51:54 2016)
+#############################################################################################
+### Loading packages (Wed May 25 15:51:54 2016)
+#############################################################################################
+Loading required package: methods
+Loading required package: SummarizedExperiment
+Loading required package: GenomicRanges
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: 'BiocGenerics'
+
+The following objects are masked from 'package:parallel':
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from 'package:stats':
+
+    IQR, mad, xtabs
+
+The following objects are masked from 'package:base':
+
+    Filter, Find, Map, Position, Reduce, anyDuplicated, append,
+    as.data.frame, cbind, colnames, do.call, duplicated, eval, evalq,
+    get, grep, grepl, intersect, is.unsorted, lapply, lengths, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int, rank,
+    rbind, rownames, sapply, setdiff, sort, table, tapply, union,
+    unique, unsplit
+
+Loading required package: S4Vectors
+Loading required package: stats4
+
+Attaching package: 'S4Vectors'
+
+The following objects are masked from 'package:base':
+
+    colMeans, colSums, expand.grid, rowMeans, rowSums
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+#############################################################################################
+### Loading data (Wed May 25 15:52:11 2016)
+#############################################################################################
+#############################################################################################
+### Loading Functions (Wed May 25 15:52:11 2016)
+#############################################################################################
+#############################################################################################
+### Loading Complete (Wed May 25 15:52:11 2016)
+### For test: test-09
+#############################################################################################
+> STARTING runJunctionSeqAnalyses (v1.2.2) (Wed May 25 15:52:11 2016)
+> rJSA: sample.files:  /home/hartleys/software-SL6/R/R3.3.0/lib/JctSeqData/extdata/tiny/SAMP1/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.3.0/lib/JctSeqData/extdata/tiny/SAMP2/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.3.0/lib/JctSeqData/extdata/tiny/SAMP3/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.3.0/lib/JctSeqData/extdata/tiny/SAMP4/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.3.0/lib/JctSeqData/extdata/tiny/SAMP5/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.3.0/lib/JctSeqData/extdata/tiny/SAMP6/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz
+> rJSA: sample.names:  SAMP1, SAMP2, SAMP3, SAMP4, SAMP5, SAMP6
+> rJSA: condition:  CASE, CASE, CASE, CTRL, CTRL, CTRL
+> rJSA: analysis.type:  junctionsAndExons
+> rJSA: use.junctions:  TRUE
+> rJSA: use.novel.junctions:  TRUE
+> rJSA: use.exons:  TRUE
+> rJSA: nCores:  1
+> rJSA: use.covars:  
+> rJSA: test.formula0:  ~ sample + countbin
+> rJSA: test.formula1:  ~ sample + countbin + condition:countbin
+> rJSA: use.multigene.aggregates:  FALSE
+> rJSA: Reading Count files... Wed May 25 15:52:11 2016.
+-> STARTING readJunctionSeqCounts (Wed May 25 15:52:11 2016)
+---> RJSC; (v1.2.2)
+---> RJSC: samplenames: SAMP1,SAMP2,SAMP3,SAMP4,SAMP5,SAMP6
+---> RJSC: flat.gff.file: /home/hartleys/software-SL6/R/R3.3.0/lib/JctSeqData/extdata/tiny/withNovel.forJunctionSeq.gff.gz
+---> RJSC: use.exons:TRUE
+---> RJSC: use.junctions:TRUE
+---> RJSC: use.novel.junctions:TRUE
+---> File read complete.
+---> Extracted counts. Found 1785 features so far.
+---> Extracted gene-level counts. Found: 120 genes and aggregate-genes.
+---> Removed gene features. Found: 1665 features to be included so far.
+---> Note: 149 counting bins from overlapping genes
+--->          There are 3 multigene aggregates.
+--->          There are 8 genes that are part of an aggregate.
+---> Removed multigene-aggregate features. Found: 1516 features to be included so far.
+---> Final feature count: 1516 features to be included in the analysis.
+---> Extracted feature counts.
+---> counts complete.
+-----> reading annotation...
+-----> formatting annotation...
+-----> initial generation...
+-----> creating jscs...
+-----> generating count vectors... (Wed May 25 15:52:12 2016)
+> Using single-core execution.
+    getAllJunctionSeqCountVectors: dim(counts) = 1516,6 (Wed May 25 15:52:12 2016)
+    getAllJunctionSeqCountVectors: dim(gct) = 120,6
+    getAllJunctionSeqCountVectors: out generated. dim = 1516,12 (Wed May 25 15:52:12 2016)
+-----> count vectors generated (Wed May 25 15:52:12 2016)
+-----> generating DESeqDataSet... (Wed May 25 15:52:12 2016)
+-----> DESeqDataSet generated (Wed May 25 15:52:12 2016)
+> rJSA: Count files read. Wed May 25 15:52:12 2016.
+> rJSA: Estimating Size Factors... Wed May 25 15:52:12 2016.
+> rJSA: Size Factors Done. Size Factors are:.
+> rJSA: SAMP1,SAMP2,SAMP3,SAMP4,SAMP5,SAMP6
+> rJSA: 1.03314276312174,0.976723179655397,0.975727885927982,0.949619905979833,1.1414745469557,0.985415615635112
+> rJSA: Estimating Dispersions... Wed May 25 15:52:13 2016.
+---> STARTING estimateJunctionSeqDispersions: (v1.2.2) (Wed May 25 15:52:13 2016)
+-----> ejsd: 1153 counting bins are marked 'testable'. across 60 genes.
+             (626 exonic regions, 514 known junctions, 13 novel junctions)
+---------> Executing DESeq2 call: estimateUnsharedDispersions
+using supplied model matrix
+---------> Finished with DESeq2 call.
+-----> ejsd: Dispersion estimation failed for 0 out of 1153 'testable' counting bins. Setting these features to be 'untestable'
+---> FINISHED estimateJunctionSeqDispersions (Wed May 25 15:52:36 2016)
+> rJSA: Dispersions estimated. Wed May 25 15:52:36 2016.
+> rJSA: Fitting Dispersion Fcn... Wed May 25 15:52:36 2016.
+> fitDispersionFunction() Starting (Wed May 25 15:52:36 2016)
+>   (fitType = parametric)
+>   (finalDispersionMethod = shrink)
+>   (fitDispersionsForExonsAndJunctionsSeparately = TRUE)
+min(means[useForFit], na.rm=T)=0.146009972023612
+>    fdf: Fitting dispersions:
+>       (Iteration 1) Parametric Dispersion Coefs: [0.00441189552160434,0.237603951553483]
+>       (Iteration 2) Parametric Dispersion Coefs: [0.00241977307061897,0.248572808620447]
+>       (FINAL) Parametric Dispersion Coefs: [0.00241963664724781,0.248577200191974]
+>    fdf: Fitting dispersions of exons and junctions to separate fitted trends.
+>    fdf: Fitting exon dispersions:
+>       (Iteration 1) Parametric Dispersion Coefs: [0.00443931330338847,0.301567751069054]
+>       (Iteration 2) Parametric Dispersion Coefs: [0.00187057883263155,0.312567414793713]
+>       (Iteration 3) Parametric Dispersion Coefs: [0.00180490984699392,0.3012933607212]
+>       (FINAL) Parametric Dispersion Coefs: [0.00180524951767682,0.301276852835087]
+>    fdf: Fitting splice-junction dispersions:
+>       (Iteration 1) Parametric Dispersion Coefs: [0.00360192864934201,0.197201296535236]
+>       (Iteration 2) Parametric Dispersion Coefs: [0.00347934994710248,0.198435795775576]
+>       (FINAL) Parametric Dispersion Coefs: [0.00347895676016001,0.198443617544781]
+> fdf(): 'Shrinking' fitted and feature-specific dispersion estimates.
+> fdf() Dispersion estimate failed for 0 out of 1153 features.
+> fitDispersionFunction() Done. (Wed May 25 15:52:38 2016)
+> rJSA: Dispersions Fcn Fitted. Wed May 25 15:52:38 2016.
+> rJSA: Testing for DEU... Wed May 25 15:52:38 2016.
+> Using single-core execution.
+-------> testJunctionsForDiffUsage: Starting hypothesis test iteration. (Wed May 25 15:52:38 2016)
+using supplied model matrix
+-------> testJunctionsForDiffUsage: Finished hypothesis test iteration. (Wed May 25 15:52:40 2016)
+-------> testJunctionsForDiffUsage: Finished compiling hypothesis test results. (Wed May 25 15:52:40 2016)
+---> tJfDU(): No non-NA maxCooks values. Ignoring cooks.
+> Performing final p.adjust filtering.
+>      No cook's cutoffs found.
+>      Automatically selecting a filtering threshold of 23.9980795748756 to optimize results at the alpha < 0.01 significance level.
+>         (Filtering 671 out of 1153 "testable" features, using baseMean < 23.9980795748756)
+>         (Rejected H0 for 13 out of 482 features at alpha < 0.01)
+> Final p.adjust filtering complete.
+> rJSA: DEU tests complete. Wed May 25 15:52:40 2016.
+> rJSA: Estimating effect sizes using effects models... Wed May 25 15:52:40 2016.
+> Using single-core execution.
+-------> estimateEffectSizes: (Calculating effect size and predicted values for feature 1000 of 1516)(Wed May 25 15:52:43 2016)
+-------> estimateEffectSizes: Estimating gene-level expression.
+-------> estimateEffectSizes: (Calculating gene-level effect size and predicted values for gene 100 of 120)(Wed May 25 15:52:45 2016)
+-------> estimateEffectSizes: Starting gene-wise p-adjust. (Wed May 25 15:52:45 2016)
+-------> estimateEffectSizes: Finished gene-wise p-adjust. (Wed May 25 15:52:45 2016)
+> rJSA: Effect Sizes estimated..
+> rJSA: Generating results table... Wed May 25 15:52:45 2016.
+> FINISHED runJunctionSeqAnalyses (Wed May 25 15:52:45 2016)
+> buildAllPlots: Found 1 genes to plot.
+> buildAllPlots: Starting plotting...
+> buildAllPlots: Generating Dispersion Plot
+Starting device: Cairo::CairoPNG (out/test-09.0001.CairoPNG/dispersion-plot.png)
+     abundance ranges from 0.146009972023612 to 5452.18841073905
+     dispersion ranges from 1.94121697570967e-06 to 12
+     Plotting dispersions from 2.71367228072472e-05 to 12
+> buildAllPlots: Generating MA-Plot (log2FC(CTRL/CASE))
+Starting device: Cairo::CairoPNG (out/test-09.0001.CairoPNG/ma-plot-log2FC(CTRLvsCASE).png)
+> buildAllPlots: Writing HTML results index.
+   Copying default css stylesheet.
+   Writing html index. Wed May 25 15:52:50 2016
+   Writing formula data. Wed May 25 15:52:50 2016
+   Writing methods data. Wed May 25 15:52:50 2016
+   Writing sample data. Wed May 25 15:52:50 2016
+   Writing dispersion data. Wed May 25 15:52:50 2016
+   Writing summary plots. Wed May 25 15:52:50 2016
+   Compiling data table. Wed May 25 15:52:50 2016
+   Writing data table. Wed May 25 15:52:50 2016
+   Html index complete. Wed May 25 15:52:50 2016
+   Writing pages. Wed May 25 15:52:50 2016
+   Finished all html files. Wed May 25 15:52:50 2016
+> buildAllPlots: Finished writing HTML results index.
+> buildAllPlots: starting geneID: ENSRNOG00000056944 (1 of 1)
+starting buildAllPlotsForGene() for geneID: ENSRNOG00000056944
+Starting nested heights...
+Starting device: Cairo::CairoPNG (out/test-09.0001.CairoPNG//exprTX/1-expr-TX.png)
+> pJSRfG(): ENSRNOG00000056944, plot.type: expr (with TX)
+Starting device: Cairo::CairoPNG (out/test-09.0001.CairoPNG//expr/1-expr.png)
+> pJSRfG(): ENSRNOG00000056944, plot.type: expr
+Starting device: Cairo::CairoPNG (out/test-09.0001.CairoPNG//normCountsTX/1-normCts-TX.png)
+> pJSRfG(): ENSRNOG00000056944, plot.type: normCounts (with TX)
+Starting device: Cairo::CairoPNG (out/test-09.0001.CairoPNG//normCounts/1-normCts.png)
+> pJSRfG(): ENSRNOG00000056944, plot.type: normCounts
+Starting device: Cairo::CairoPNG (out/test-09.0001.CairoPNG//rExprTX/1-rExpr-TX.png)
+> pJSRfG(): ENSRNOG00000056944, plot.type: rExpr (with TX)
+Starting device: Cairo::CairoPNG (out/test-09.0001.CairoPNG//rExpr/1-rExpr.png)
+> pJSRfG(): ENSRNOG00000056944, plot.type: rExpr
+> buildAllPlots: Plotting complete.
+> buildAllPlots: Plotting and data writing complete.
+> buildAllPlots: Found 1 genes to plot.
+> buildAllPlots: Starting plotting...
+> buildAllPlots: Generating Dispersion Plot
+Starting device: svg (out/test-09.0002.svg/dispersion-plot.svg)
+     abundance ranges from 0.146009972023612 to 5452.18841073905
+     dispersion ranges from 1.94121697570967e-06 to 12
+     Plotting dispersions from 2.71367228072472e-05 to 12
+> buildAllPlots: Generating MA-Plot (log2FC(CTRL/CASE))
+Starting device: svg (out/test-09.0002.svg/ma-plot-log2FC(CTRLvsCASE).svg)
+> buildAllPlots: Writing HTML results index.
+   Copying default css stylesheet.
+   Writing html index. Wed May 25 15:52:56 2016
+   Writing formula data. Wed May 25 15:52:56 2016
+   Writing methods data. Wed May 25 15:52:56 2016
+   Writing sample data. Wed May 25 15:52:56 2016
+   Writing dispersion data. Wed May 25 15:52:56 2016
+   Writing summary plots. Wed May 25 15:52:56 2016
+   Compiling data table. Wed May 25 15:52:56 2016
+   Writing data table. Wed May 25 15:52:56 2016
+   Html index complete. Wed May 25 15:52:56 2016
+   Writing pages. Wed May 25 15:52:56 2016
+   Finished all html files. Wed May 25 15:52:56 2016
+> buildAllPlots: Finished writing HTML results index.
+> buildAllPlots: starting geneID: ENSRNOG00000056944 (1 of 1)
+starting buildAllPlotsForGene() for geneID: ENSRNOG00000056944
+Starting nested heights...
+Starting device: svg (out/test-09.0002.svg//exprTX/1-expr-TX.svg)
+> pJSRfG(): ENSRNOG00000056944, plot.type: expr (with TX)
+Starting device: svg (out/test-09.0002.svg//expr/1-expr.svg)
+> pJSRfG(): ENSRNOG00000056944, plot.type: expr
+Starting device: svg (out/test-09.0002.svg//normCountsTX/1-normCts-TX.svg)
+> pJSRfG(): ENSRNOG00000056944, plot.type: normCounts (with TX)
+Starting device: svg (out/test-09.0002.svg//normCounts/1-normCts.svg)
+> pJSRfG(): ENSRNOG00000056944, plot.type: normCounts
+Starting device: svg (out/test-09.0002.svg//rExprTX/1-rExpr-TX.svg)
+> pJSRfG(): ENSRNOG00000056944, plot.type: rExpr (with TX)
+Starting device: svg (out/test-09.0002.svg//rExpr/1-rExpr.svg)
+> pJSRfG(): ENSRNOG00000056944, plot.type: rExpr
+> buildAllPlots: Plotting complete.
+> buildAllPlots: Plotting and data writing complete.
+starting buildAllPlotsForGene() for geneID: ENSRNOG00000056944
+Starting nested heights...
+Starting device: tiff (out/test-09.0003.tiff.ENSRNOG00000056944-normCts-TX.tiff)
+> pJSRfG(): ENSRNOG00000056944, plot.type: normCounts (with TX)
+starting buildAllPlotsForGene() for geneID: ENSRNOG00000056944
+Starting nested heights...
+Starting device: cairo_ps (out/test-09.0004.cairo_ps.ENSRNOG00000056944-normCts-TX.ps)
+> pJSRfG(): ENSRNOG00000056944, plot.type: normCounts (with TX)
+----------------------
+----------------------
+FINISHED JunctionSeq Post-Build Tests... (Wed May 25 15:53:00 2016)

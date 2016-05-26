@@ -1,0 +1,136 @@
+a:link {
+	text-decoration: none;
+	color: #0092e8;
+}
+a:visited {
+	text-decoration: none;
+	color: #0092e8;
+}
+a:hover {
+	text-decoration: underline;
+	color: #0092e8;
+}
+span, code, pre {
+	font-family: Monaco, "Lucida Console", "Courier New", Courier, monospace;
+}
+body, td, th {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Arial, sans-serif;
+	font-size: 14px;
+}
+body {
+	color: #000;
+	background: #fff;
+	margin: 0;
+	padding: 0;
+}
+table {
+	border: solid 1px #ccc;
+	border-collapse: collapse;
+}
+tr {
+	border-bottom: dotted 1px #ccc;
+        border-right: dotted 1px #ccc;
+}
+td {
+	vertical-align: top;
+        border-right: dotted 1px #ccc;
+        border-left: dotted 1px #ccc;
+	padding: 0.2em;
+}
+td.wrapping {
+	vertical-align: top;
+	border-right: dotted 1px #ccc;
+	border-left: dotted 1px #ccc;
+	padding: 0.2em;
+	word-wrap:break-words;
+	white-space:pre-wrap;
+}
+th {
+	font-weight: bold;
+	text-align: left;
+	padding: 0.2em;
+	border-bottom: solid 1px #ccc;
+        border-right: dotted 1px #ccc;
+        border-left: dotted 1px #ccc;
+}
+
+#wrap {
+  text-align: left;
+  padding: 0 5px; 
+  margin: 0 auto; 
+  width: 80%;
+  max-width: 60em; 
+}
+
+hr {
+	margin: 1em 0;
+	color: #C7C7C7;
+	background: #C7C7C7;
+	border-color: #C7C7C7;
+	border-style: none;
+	height: 1px;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-family: Verdana, Geneva, "Trebuchet MS", arial, sans-serif;
+	font-weight: bold;
+}
+p {
+    text-align: justify;
+}
+
+.dataTable {
+   text-align: right;
+   font-family: Monaco, "Lucida Console", "Courier New", Courier, monospace;
+}
+
+.dataTable tr {
+   text-align: right;
+   font-family: Monaco, "Lucida Console", "Courier New", Courier, monospace;
+}
+
+.dataTable td {
+   text-align: right;
+   font-family: Monaco, "Lucida Console", "Courier New", Courier, monospace;
+}
+
+.dataTable td {
+   text-align: right;
+   font-family: Monaco, "Lucida Console", "Courier New", Courier, monospace;
+}
+
+.centered {
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.autofittedImg {
+  display:block; 
+  margin-left:auto; 
+  margin-right:auto; 
+  max-height: 98vh; 
+  max-width:98vw;
+}
+
+.indent {
+  margin: 25px;
+}
+
+.untestable  {
+  color: #909090;
+}
+.sigNo  {
+  
+}
+.sig1  {
+  color: #FF8000;
+}
+.sig2  {
+  color: #FF4D00;
+}
+.sig3  {
+  color: #FF2A00;
+}
+.sig4  {
+  color: #FF0000;
+}
+
