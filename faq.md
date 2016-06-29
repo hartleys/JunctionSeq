@@ -36,9 +36,10 @@ command:
 
 ##HOW DO I CITE JUNCTIONSEQ?
 
-You can currently cite the JunctionSeq methodology preprint paper as:
+You can cite the JunctionSeq methods paper, now published in Nucleic Acids Research:
 
-Hartley SW, Mullikin JC. [Detection and Visualization of Differential Exon and Splice Junction Usage in RNA-Seq Data with JunctionSeq.](http://arxiv.org/abs/1512.06038) [arXiv](http://arxiv.org) preprint [arXiv:1512.06038](http://arxiv.org/abs/1512.06038). 2015 Dec 18.
+Hartley SW, Mullikin JC. [Detection and visualization of differential splicing in RNA-Seq data with JunctionSeq](http://nar.oxfordjournals.org/content/early/2016/06/07/nar.gkw501.full). 
+[Nucleic Acids Research](http://nar.oxfordjournals.org/). 2016 Jun 1. pii: gkw501. doi: [10.1093/nar/gkw501](http://dx.doi.org/10.1093/nar/gkw501). PubMed PMID: [27257077](http://www.ncbi.nlm.nih.gov/pubmed/27257077).
 
 ##BASIC INSTALLATION (from source):
 JunctionSeq can be installed automatically from source using the R commands:

@@ -52,9 +52,10 @@ command: </p>
 
 <h2>CITING JUNCTIONSEQ:</h2>
 
-<p>You can currently cite the JunctionSeq methods paper preprint as:</p>
+<p>You can cite the JunctionSeq methods paper, now published in Nucleic Acids Research:</p>
 
-<p>Hartley SW, Mullikin JC. <a href="http://arxiv.org/abs/1512.06038">Detection and Visualization of Differential Exon and Splice Junction Usage in RNA-Seq Data with JunctionSeq.</a> <a href="http://arxiv.org">arXiv</a> preprint <a href="http://arxiv.org/abs/1512.06038">arXiv:1512.06038</a>. 2015 Dec 18.</p>
+<p>Hartley SW, Mullikin JC. <a href="http://nar.oxfordjournals.org/content/early/2016/06/07/nar.gkw501.full">Detection and visualization of differential splicing in RNA-Seq data with JunctionSeq</a>. 
+<a href="http://nar.oxfordjournals.org/">Nucleic Acids Research</a>. 2016 Jun 1. pii: gkw501. doi: <a href="http://dx.doi.org/10.1093/nar/gkw501">10.1093/nar/gkw501</a>. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/27257077">27257077</a>.</p>
 
 <h2>INSTALLATION:</h2>
 
@@ -71,11 +72,20 @@ using the QoRTs software package, available <a href="http://hartleys.github.io/Q
 
 <h2>BIOCONDUCTOR INSTALLATION:</h2>
 
-<p>If you are using the devel version of bioconductor (v3.3), then you can install the <a href="http://bioconductor.org/packages/JunctionSeq/">Bioconductor version of JunctionSeq</a>:</p>
+<p>If you are using the newest bioconductor release (v3.3), then you can install the <a href="http://bioconductor.org/packages/JunctionSeq/">Bioconductor version of JunctionSeq</a>:</p>
 
 <pre><code>source("https://bioconductor.org/biocLite.R")
 biocLite("JunctionSeq")
 </code></pre>
+
+<p>The bioconductor version differs from the GitHub version in that the post-release patches to 
+a given bioconductor release will never add new features (although bugfixes may be added). This is 
+intended to maintain replicability, but also means that the Bioconductor version will lag behind the github version.</p>
+
+<p>In addition, the GitHub version is currently compatible with R versions 3.2 and 3.3, whereas the Bioconductor version requires v3.3.</p>
+
+<p>Note that unless the "major" version number changes (ie, v2.0.0+), all future versions of JunctionSeq (here or on Bioconductor) will ALWAYS 
+maintain full backwards-compatible functionality with all versions 1.0.0 and up.</p>
 
 <h2>EXAMPLE DATA:</h2>
 
