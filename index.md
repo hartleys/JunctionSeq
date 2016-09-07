@@ -1,4 +1,4 @@
-    > v1.3.4 (Revised Wed May 18 17:03:38 EDT 2016)
+    > v1.3.5 (Revised Wed Sep  7 11:22:17 EDT 2016)
 
 [JunctionSeq](http://hartleys.github.io/JunctionSeq/) is a [Bioconductor](https://www.bioconductor.org/) package for detection and visualization of differential usage of 
 exons and splice junctions in High-Throughput, Next-Generation RNA-Seq datasets. 
@@ -15,7 +15,7 @@ Issues, bug reports, or feature requests can be posted to the
 [github issues page](https://github.com/hartleys/JunctionSeq/issues).
 The developers can be contacted at JunctionSeq-Contact (at) list.nih.gov.
 
-**JunctionSeq is now part of [Bioconductor](https://www.bioconductor.org/), and will be included in the next release (3.3).** 
+**JunctionSeq is now part of [Bioconductor](https://www.bioconductor.org/), and is available in the current release (3.3).** 
 You can install JunctionSeq using the devel branch of Bioconductor at the [JunctionSeq bioconductor page](http://bioconductor.org/packages/JunctionSeq/). Alternatively, you 
 can use the installation instructions below to install the most recent version of JunctionSeq onto the current Bioconductor release (3.2).
 
