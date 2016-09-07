@@ -111,7 +111,8 @@ buildAllPlots(jscs,
     passed to \code{\link{plotJunctionSeqResultsForGene}}.
   }
   \item{subdirectories.by.type}{
-    Logical value. If \code{TRUE}, then subdirectories will be created in the outfile.prefix directory, containing each plot type.
+    Logical value. If \code{TRUE}, then subdirectories will be created for each plot type using outfile.prefix as a parent directory. 
+    Note that \code{FALSE} is not compatible with some functionality, including HTML generation. For advanced users only.
   }
 
   \item{ma.plot}{if TRUE, generate and save a MA plot. A MA-plot is a plot of fold change versus base mean normalized counts.}

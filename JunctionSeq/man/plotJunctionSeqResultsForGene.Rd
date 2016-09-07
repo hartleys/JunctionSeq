@@ -76,7 +76,7 @@ plotJunctionSeqResultsForGene(geneID, jscs,
   }
   
   \item{displayTranscripts}{Logical. If true, then the full set of annotated transcripts will be displayed below the expression plot (to a maximum of 42 different TX).}
-  \item{colorList}{A named list of R colors, setting the colors used for various things. See \code{link{junctionSeqColors}} for more information.}
+  \item{colorList}{A named list of R colors, setting the colors used for various things. See \code{\link{junctionSeqColors}} for more information.}
 
   \item{use.vst}{Logical. If TRUE, all plots will be scaled via a variance stabilizing transform.}
   \item{use.log}{Logical. If TRUE, all plots will be log-scaled.}

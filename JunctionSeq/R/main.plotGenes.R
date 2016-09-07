@@ -144,11 +144,13 @@ buildAllPlots <- function(jscs,
       geneNum.strings <- rep("",total.gene.ct)
     }
     
+    if(! file.exists(dirname(outfile.prefix))){
+      stop("Fatal error: parent directory ", dirname(outfile.prefix), " does not exist!");
+    }
+    if(! file.exists(outfile.prefix)){
+      dir.create(outfile.prefix);
+    }
     if(subdirectories.by.type){
-      if(! file.exists(outfile.prefix)){
-        dir.create(outfile.prefix)
-      }
-      
       if(expr.plot && with.TX          && (! file.exists(paste0(outfile.prefix,"/exprTX"))))       dir.create(paste0(outfile.prefix,"/exprTX"))
       if(expr.plot && without.TX       && (! file.exists(paste0(outfile.prefix,"/expr"))))         dir.create(paste0(outfile.prefix,"/expr"))
       if(normCounts.plot && with.TX    && (! file.exists(paste0(outfile.prefix,"/normCountsTX")))) dir.create(paste0(outfile.prefix,"/normCountsTX"))
@@ -158,6 +160,7 @@ buildAllPlots <- function(jscs,
       if(rawCounts.plot && with.TX     && (! file.exists(paste0(outfile.prefix,"/rawCountsTX"))))  dir.create(paste0(outfile.prefix,"/rawCountsTX"))
       if(rawCounts.plot && without.TX  && (! file.exists(paste0(outfile.prefix,"/rawCounts"))))    dir.create(paste0(outfile.prefix,"/rawCounts"))
     }
+    
     
     if(variance.plot){
       if(verbose) message("> buildAllPlots: Generating Dispersion Plot")
@@ -340,6 +343,25 @@ buildAllPlotsForGene <- function(geneID,jscs,
     message(paste("starting buildAllPlotsForGene() for geneID:",geneID))
     condition <- jscs@phenoData$condition
     flat.gff.data <- jscs@flatGffData
+    
+    if(length(outfile.prefix) == 1){
+      if(substring(outfile.prefix,nchar(outfile.prefix)) == "/" || substring(outfile.prefix,nchar(outfile.prefix)) == "\\"){
+        if(! file.exists(dirname(outfile.prefix))){
+          stop("Fatal error: parent directory ", dirname(outfile.prefix), " does not exist!");
+        }
+        if(! file.exists(outfile.prefix)){
+          dir.create(outfile.prefix)
+        }
+      } else {
+        outfile.dir <- dirname(outfile.prefix);
+        if(! file.exists(dirname(outfile.dir))){
+          stop("Fatal error: parent directory ", dirname(outfile.dir), " does not exist!");
+        }
+        if(! file.exists(outfile.dir)){
+          dir.create(outfile.dir);
+        }
+      }
+    }
     
     sequencing.type <- match.arg(sequencing.type)
     use.plotting.device <- match.arg(use.plotting.device)

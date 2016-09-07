@@ -229,6 +229,8 @@ estimateEffectSizes <- function(jscs,
                             keep.estimation.fit = keep.estimation.fit,
                             verbose = verbose)
   }
+  #if(verbose) message("   Note: dim(mdl.out) = [",paste0(dim(mdl.out),collapse=","),"]");
+  if(verbose) message("   Note: length(mdl.out) = ",length(mdl.out));
   
   logFCs <- do.call( rbind.data.frame , lapply(mdl.out, "[[", "logFCs") )
   logFCvst <- do.call( rbind.data.frame , lapply(mdl.out, "[[", "logFCvst") )

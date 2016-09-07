@@ -71,7 +71,11 @@ buildAllPlotsForGene(geneID, jscs,
     estimates must be created via \code{\link{estimateEffectSizes}}.
   }
   \item{outfile.prefix}{
-    Character string or vector. Sets the prefix file path where image files should be saved. Optionally it can be a vector of strings, assigning a different file prefix to each plot.
+    Character string or vector. Sets the prefix file path where image files should be saved. 
+    If the destination directory does not exist then JunctionSeq will automatically create it.
+    If the parent directory does not exist then JunctionSeq will throw an error.   
+    Optionally, \code{outfile.prefix} can be a vector of strings, assigning a different file prefix to each plot. 
+    This alternative is primarily intended for internal use by \code{\link{buildAllPlots}}.
   }
 
   \item{use.plotting.device}{The plotting device to use.}

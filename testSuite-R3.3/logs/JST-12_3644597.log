@@ -1,0 +1,22 @@
+/home/hartleys/UTILS/R/JSBuildRelease/JunctionSeq_1.3.5/v1.3.5/testSuite-R3.3
+#############################################
+### 
+### USER:     hartleys
+### JOB_ID:   3644597
+### JOB_NAME: JST-12
+### HOSTNAME: kcompute10.gc.nih.gov
+### 
+### STARTING @ Wed Sep  7 12:04:39 EDT 2016
+#############################################
+STARTING JunctionSeq Post-Build Test (test-12) (Wed Sep  7 12:04:39 2016)
+Warning messages:
+1: In readJunctionSeqCounts(countfiles = as.character(sample.files),  ... :
+  Warning: flat gff annotation not set (via parameter flat.gff.file)! While technically optional, running without the annotation data may make interpretation of the data difficult. Much of the plotting functionality will not work!
+2: In value[[3L]](cond) :
+     Warning! Caught error while attempting to compile optional genewise table.
+   Error text:Error in `colnames<-`(`*tmp*`, value = c("geneName", "chr", "start", "end", : 'names' attribute [5] must be the same length as the vector [4]
+
+FINISHED JunctionSeq Post-Build Tests... (Wed Sep  7 12:05:22 2016)
+#############################################
+### DONE     @ Wed Sep  7 12:05:22 EDT 2016
+#############################################
