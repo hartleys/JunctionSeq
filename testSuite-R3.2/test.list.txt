@@ -10,4 +10,3 @@ test.ID	expect.warnings
 08	FALSE
 09	FALSE
 10	FALSE
-12	TRUE

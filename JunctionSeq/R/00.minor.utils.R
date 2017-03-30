@@ -318,51 +318,11 @@ getPlottingDeviceFileExtension <- function(d = c("png","x11","current","CairoPNG
   }
 }
 
-posText <- function(x = c("topleft","topright","bottomleft","bottomright","top","bottom","left","right","center"),labels,cex=1, buffer = c(1,1),...){
-  x <- match.arg(x);
-  u <- par("usr");
-  strht <- strheight("X",cex=cex);
-  strwd <- strwidth("X",cex=cex);
-  u[1] <- u[1] + strwd * buffer[1];
-  u[2] <- u[2] - strwd * buffer[1];
-  u[3] <- u[3] + strht * buffer[2];
-  u[4] <- u[4] - strht * buffer[2];
-  k <- c(mean(u[1:2]),mean(u[3:4]));
-
-  xy <- if(x == "topleft") c(u[1],u[4]) else
-  if(x == "topright")      c(u[2],u[4]) else
-  if(x == "bottomleft")    c(u[1],u[3]) else
-  if(x == "bottomright")   c(u[2],u[3]) else
-  if(x == "top")           c(k[1],u[4]) else
-  if(x == "bottom")        c(k[1],u[3]) else
-  if(x == "left")          c(u[1],k[2]) else
-  if(x == "right")         c(u[2],k[2]) else
-  if(x == "center")        c(k[1],k[4]) else
-  c(NA,NA);
-  
-  adj<- if(x == "topleft") c(0,1) else
-  if(x == "topright")      c(1,1) else
-  if(x == "bottomleft")    c(0,0) else
-  if(x == "bottomright")   c(1,0) else
-  if(x == "top")           c(0.5,1) else
-  if(x == "bottom")        c(0.5,0) else
-  if(x == "left")          c(0,0.5) else
-  if(x == "right")         c(1,0.5) else
-  if(x == "center")        c(0.5,0.5) else
-  c(NA,NA);
-  
-  text(xy[1],xy[2],labels=labels,cex=cex,adj=adj,...);
-
-}
-
 strStartsWith <- function(s, prefix){
   substr(s,1,nchar(prefix)) == prefix
 }
 f.na <- function(x){
   ifelse(is.na(x), FALSE,x)
-}
-x.nan <- function(x,val=0){
-  ifelse(is.na(x),val,ifelse(is.nan(x),val,x))
 }
 
 

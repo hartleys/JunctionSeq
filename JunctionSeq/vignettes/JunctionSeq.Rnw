@@ -123,8 +123,8 @@ differentials may not result in strong observed differentials in the individual 
 JunctionSeq is \emph{not} designed to detect changes in overall gene expression. Gene-level differential expression is best detected with tools designed specifically for that purpose such as DESeq2\cite{DESeq2} or edgeR\cite{edgeR}.
 
 Additional help and documentation is \href{http://hartleys.github.io/JunctionSeq/index.html}{available online}. There is also a \href{http://hartleys.github.io/JunctionSeq/doc/example-walkthrough.pdf}{comprehensive walkthrough} of 
-the entire analysis pipeline, along with a full \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip}{example dataset} with 
-\href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip}{example bam files}.
+the entire analysis pipeline, along with a full \href{ftp://nhgriftp.nhgri.nih.gov/pub/outgoing/mullikin/QoRTsExample/QoRTsPipelineWalkthrough.zip}{example dataset}. Note that the raw 
+\href{ftp://nhgriftp.nhgri.nih.gov/pub/outgoing/mullikin/QoRTsExample/QoRTsPipelineWalkthroughData.zip}{example bam and fastq files} are in a separate download.
 
 You can cite JunctionSeq by citing the preprint on arxiv.org:
 
@@ -217,7 +217,7 @@ To allow users to test JunctionSeq and experiment with its functionality, an exa
 install.packages("http://hartleys.github.io/JunctionSeq/install/JctSeqData_LATEST.tar.gz", repos=FALSE, type = "source");
 @
 
-A more complete walkthrough using this same dataset is available \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/QoRTsPipelineWalkthrough.zip}{here}. The bam files are available \href{https://dl.dropboxusercontent.com/u/103621176/pipelineWalkthrough/bamfiles.zip}{here}.
+A more complete walkthrough using this same dataset is available \href{ftp://nhgriftp.nhgri.nih.gov/pub/outgoing/mullikin/QoRTsExample/QoRTsPipelineWalkthrough.zip}{here}. The bam and fastq files are available \href{ftp://nhgriftp.nhgri.nih.gov/pub/outgoing/mullikin/QoRTsExample/QoRTsPipelineWalkthroughData.zip}{here}.
 
 The example dataset was taken from rat pineal glands. Sequence data from six samples (aka "biological replicates") are included, three harvested during the day, three at night. To reduce the file sizes to a more managable level, this dataset used only 3 out of the 6 sequencing lanes, and only the reads aligning to chromosome 14 were included. This yielded roughly 750,000 reads per sample. The example dataset, including aligned reads, QC data, example scripts, splice junction counts, and JunctionSeq results, is available online (see the JunctionSeq github page). Information on the original dataset from which the example data was derived is described elsewhere\cite{ratPineal}.
 
@@ -294,7 +294,7 @@ java -jar /path/to/jarfile/QoRTs.jar QC \
                    inputData/annoFiles/anno.gtf.gz \
                    rawCts/SHAM1_RG1/
 \end{verbatim}  \end{framed}
-Note that the \verb|--stranded| option is required because this example dataset is strand-specific. Also note that QoRTs uses the original gtf annotation file, NOT the flattened gff file produced in section \ref{sec:flatAnno}. More information on this command and on the available options can be found online \href{https://dl.dropboxusercontent.com/u/103621176/QoRTs/helpDocs/jarHtml/index.html}{here}.
+Note that the \verb|--stranded| option is required because this example dataset is strand-specific. Also note that QoRTs uses the original gtf annotation file, NOT the flattened gff file produced in section \ref{sec:flatAnno}. More information on this command and on the available options can be found online \href{http://hartleys.github.io/QoRTs/jarHtml/index.html}{here}.
 
 For more information about the quality control metrics provided by QoRTs and how to visualize, organize, and view them, see the QoRTs github page and documentation, available online \href{http://hartleys.github.io/QoRTs/index.html}{here}.
 

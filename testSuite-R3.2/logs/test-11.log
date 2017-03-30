@@ -1,6 +1,6 @@
-STARTING JunctionSeq Post-Build Test (test-11) (Wed Sep  7 11:59:20 2016)
+STARTING JunctionSeq Post-Build Test (test-11) (Thu Mar 30 18:08:46 2017)
 #############################################################################################
-### Loading packages (Wed Sep  7 11:59:20 2016)
+### Loading packages (Thu Mar 30 18:08:46 2017)
 #############################################################################################
 Loading required package: methods
 Loading required package: SummarizedExperiment
@@ -41,16 +41,16 @@ Welcome to Bioconductor
     'citation("Biobase")', and for packages 'citation("pkgname")'.
 
 #############################################################################################
-### Loading data (Wed Sep  7 11:59:30 2016)
+### Loading data (Thu Mar 30 18:09:13 2017)
 #############################################################################################
 #############################################################################################
-### Loading Functions (Wed Sep  7 11:59:30 2016)
+### Loading Functions (Thu Mar 30 18:09:13 2017)
 #############################################################################################
 #############################################################################################
-### Loading Complete (Wed Sep  7 11:59:30 2016)
+### Loading Complete (Thu Mar 30 18:09:13 2017)
 ### For test: test-11
 #############################################################################################
-> STARTING runJunctionSeqAnalyses (v1.3.5) (Wed Sep  7 11:59:30 2016)
+> STARTING runJunctionSeqAnalyses (v1.5.4) (Thu Mar 30 18:09:13 2017)
 > rJSA: sample.files:  /home/hartleys/software-SL6/R/R3.2.3/lib/JctSeqData/extdata/tiny/SAMP1/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.2.3/lib/JctSeqData/extdata/tiny/SAMP2/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.2.3/lib/JctSeqData/extdata/tiny/SAMP3/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.2.3/lib/JctSeqData/extdata/tiny/SAMP4/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.2.3/lib/JctSeqData/extdata/tiny/SAMP5/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz, /home/hartleys/software-SL6/R/R3.2.3/lib/JctSeqData/extdata/tiny/SAMP6/QC.spliceJunctionAndExonCounts.withNovel.forJunctionSeq.txt.gz
 > rJSA: sample.names:  SAMP1, SAMP2, SAMP3, SAMP4, SAMP5, SAMP6
 > rJSA: condition:  CASE, CASE, CASE, CTRL, CTRL, CTRL
@@ -63,9 +63,9 @@ Welcome to Bioconductor
 > rJSA: test.formula0:  ~ sample + countbin
 > rJSA: test.formula1:  ~ sample + countbin + condition:countbin
 > rJSA: use.multigene.aggregates:  TRUE
-> rJSA: Reading Count files... Wed Sep  7 11:59:30 2016.
--> STARTING readJunctionSeqCounts (Wed Sep  7 11:59:30 2016)
----> RJSC; (v1.3.5)
+> rJSA: Reading Count files... Thu Mar 30 18:09:13 2017.
+-> STARTING readJunctionSeqCounts (Thu Mar 30 18:09:13 2017)
+---> RJSC; (v1.5.4)
 ---> RJSC: samplenames: SAMP1,SAMP2,SAMP3,SAMP4,SAMP5,SAMP6
 ---> RJSC: flat.gff.file: /home/hartleys/software-SL6/R/R3.2.3/lib/JctSeqData/extdata/tiny/withNovel.forJunctionSeq.gff.gz
 ---> RJSC: use.exons:TRUE
@@ -87,31 +87,31 @@ Welcome to Bioconductor
 -----> creating jscs...
        (Assuming "ENS_GENEID" column is geneID)
        (Assuming "geneSymbol" column is gene_name)
------> generating count vectors... (Wed Sep  7 11:59:30 2016)
+-----> generating count vectors... (Thu Mar 30 18:09:13 2017)
 > Using single-core execution.
-    getAllJunctionSeqCountVectors: dim(counts) = 1665,6 (Wed Sep  7 11:59:30 2016)
+    getAllJunctionSeqCountVectors: dim(counts) = 1665,6 (Thu Mar 30 18:09:13 2017)
     getAllJunctionSeqCountVectors: dim(gct) = 120,6
-    getAllJunctionSeqCountVectors: out generated. dim = 1665,12 (Wed Sep  7 11:59:30 2016)
------> count vectors generated (Wed Sep  7 11:59:30 2016)
------> generating DESeqDataSet... (Wed Sep  7 11:59:30 2016)
------> DESeqDataSet generated (Wed Sep  7 11:59:31 2016)
-> rJSA: Count files read. Wed Sep  7 11:59:31 2016.
-> rJSA: Estimating Size Factors... Wed Sep  7 11:59:31 2016.
+    getAllJunctionSeqCountVectors: out generated. dim = 1665,12 (Thu Mar 30 18:09:13 2017)
+-----> count vectors generated (Thu Mar 30 18:09:13 2017)
+-----> generating DESeqDataSet... (Thu Mar 30 18:09:13 2017)
+-----> DESeqDataSet generated (Thu Mar 30 18:09:14 2017)
+> rJSA: Count files read. Thu Mar 30 18:09:14 2017.
+> rJSA: Estimating Size Factors... Thu Mar 30 18:09:14 2017.
 > rJSA: Size Factors Done. Size Factors are:.
 > rJSA: SAMP1,SAMP2,SAMP3,SAMP4,SAMP5,SAMP6
 > rJSA: 1.03314276312174,0.976723179655397,0.975727885927982,0.949619905979833,1.1414745469557,0.985415615635112
-> rJSA: Estimating Dispersions... Wed Sep  7 11:59:31 2016.
----> STARTING estimateJunctionSeqDispersions: (v1.3.5) (Wed Sep  7 11:59:31 2016)
+> rJSA: Estimating Dispersions... Thu Mar 30 18:09:14 2017.
+---> STARTING estimateJunctionSeqDispersions: (v1.5.4) (Thu Mar 30 18:09:14 2017)
 -----> ejsd: 1280 counting bins are marked 'testable'. across 63 genes.
              (701 exonic regions, 566 known junctions, 13 novel junctions)
 ---------> Executing DESeq2 call: estimateUnsharedDispersions
 using supplied model matrix
 ---------> Finished with DESeq2 call.
 -----> ejsd: Dispersion estimation failed for 0 out of 1280 'testable' counting bins. Setting these features to be 'untestable'
----> FINISHED estimateJunctionSeqDispersions (Wed Sep  7 11:59:54 2016)
-> rJSA: Dispersions estimated. Wed Sep  7 11:59:54 2016.
-> rJSA: Fitting Dispersion Fcn... Wed Sep  7 11:59:54 2016.
-> fitDispersionFunction() Starting (Wed Sep  7 11:59:54 2016)
+---> FINISHED estimateJunctionSeqDispersions (Thu Mar 30 18:09:39 2017)
+> rJSA: Dispersions estimated. Thu Mar 30 18:09:39 2017.
+> rJSA: Fitting Dispersion Fcn... Thu Mar 30 18:09:39 2017.
+> fitDispersionFunction() Starting (Thu Mar 30 18:09:39 2017)
 >   (fitType = parametric)
 >   (finalDispersionMethod = shrink)
 >   (fitDispersionsForExonsAndJunctionsSeparately = TRUE)
@@ -133,14 +133,14 @@ min(means[useForFit], na.rm=T)=0.146009972023612
 >       (FINAL) Parametric Dispersion Coefs: [0.00359941891238635,0.190031436372942]
 > fdf(): 'Shrinking' fitted and feature-specific dispersion estimates.
 > fdf() Dispersion estimate failed for 0 out of 1280 features.
-> fitDispersionFunction() Done. (Wed Sep  7 11:59:56 2016)
-> rJSA: Dispersions Fcn Fitted. Wed Sep  7 11:59:56 2016.
-> rJSA: Testing for DEU... Wed Sep  7 11:59:56 2016.
+> fitDispersionFunction() Done. (Thu Mar 30 18:09:41 2017)
+> rJSA: Dispersions Fcn Fitted. Thu Mar 30 18:09:41 2017.
+> rJSA: Testing for DEU... Thu Mar 30 18:09:41 2017.
 > Using single-core execution.
--------> testJunctionsForDiffUsage: Starting hypothesis test iteration. (Wed Sep  7 11:59:56 2016)
+-------> testJunctionsForDiffUsage: Starting hypothesis test iteration. (Thu Mar 30 18:09:41 2017)
 using supplied model matrix
--------> testJunctionsForDiffUsage: Finished hypothesis test iteration. (Wed Sep  7 11:59:58 2016)
--------> testJunctionsForDiffUsage: Finished compiling hypothesis test results. (Wed Sep  7 11:59:58 2016)
+-------> testJunctionsForDiffUsage: Finished hypothesis test iteration. (Thu Mar 30 18:09:43 2017)
+-------> testJunctionsForDiffUsage: Finished compiling hypothesis test results. (Thu Mar 30 18:09:43 2017)
 ---> tJfDU(): No non-NA maxCooks values. Ignoring cooks.
 > Performing final p.adjust filtering.
 >      No cook's cutoffs found.
@@ -148,18 +148,18 @@ using supplied model matrix
 >         (Filtering 364 out of 1280 "testable" features, using baseMean < 5.06529362310027)
 >         (Rejected H0 for 27 out of 916 features at alpha < 0.01)
 > Final p.adjust filtering complete.
-> rJSA: DEU tests complete. Wed Sep  7 11:59:58 2016.
-> rJSA: Estimating effect sizes using effects models... Wed Sep  7 11:59:58 2016.
+> rJSA: DEU tests complete. Thu Mar 30 18:09:43 2017.
+> rJSA: Estimating effect sizes using effects models... Thu Mar 30 18:09:43 2017.
 > Using single-core execution.
--------> estimateEffectSizes: (Calculating effect size and predicted values for feature 1000 of 1665)(Wed Sep  7 12:00:03 2016)
+-------> estimateEffectSizes: (Calculating effect size and predicted values for feature 1000 of 1665)(Thu Mar 30 18:09:48 2017)
    Note: length(mdl.out) = 1665
 -------> estimateEffectSizes: Estimating gene-level expression.
--------> estimateEffectSizes: (Calculating gene-level effect size and predicted values for gene 100 of 120)(Wed Sep  7 12:00:06 2016)
--------> estimateEffectSizes: Starting gene-wise p-adjust. (Wed Sep  7 12:00:06 2016)
--------> estimateEffectSizes: Finished gene-wise p-adjust. (Wed Sep  7 12:00:06 2016)
+-------> estimateEffectSizes: (Calculating gene-level effect size and predicted values for gene 100 of 120)(Thu Mar 30 18:09:51 2017)
+-------> estimateEffectSizes: Starting gene-wise p-adjust. (Thu Mar 30 18:09:51 2017)
+-------> estimateEffectSizes: Finished gene-wise p-adjust. (Thu Mar 30 18:09:52 2017)
 > rJSA: Effect Sizes estimated..
-> rJSA: Generating results table... Wed Sep  7 12:00:06 2016.
-> FINISHED runJunctionSeqAnalyses (Wed Sep  7 12:00:06 2016)
+> rJSA: Generating results table... Thu Mar 30 18:09:52 2017.
+> FINISHED runJunctionSeqAnalyses (Thu Mar 30 18:09:52 2017)
 > buildAllPlots: Found 8 genes with at least one significant exon, at adjusted-p-value threshold 0.01
 > buildAllPlots: Starting plotting...
 > buildAllPlots: Generating Dispersion Plot
@@ -171,17 +171,17 @@ Starting device: png (out/test-11.0001.FTT/dispersion-plot.png)
 Starting device: png (out/test-11.0001.FTT/ma-plot-log2FC(CTRLvsCASE).png)
 > buildAllPlots: Writing HTML results index.
    Copying default css stylesheet.
-   Writing html index. Wed Sep  7 12:00:08 2016
-   Writing formula data. Wed Sep  7 12:00:08 2016
-   Writing methods data. Wed Sep  7 12:00:08 2016
-   Writing sample data. Wed Sep  7 12:00:08 2016
-   Writing dispersion data. Wed Sep  7 12:00:08 2016
-   Writing summary plots. Wed Sep  7 12:00:08 2016
-   Compiling data table. Wed Sep  7 12:00:08 2016
-   Writing data table. Wed Sep  7 12:00:08 2016
-   Html index complete. Wed Sep  7 12:00:08 2016
-   Writing pages. Wed Sep  7 12:00:08 2016
-   Finished all html files. Wed Sep  7 12:00:08 2016
+   Writing html index. Thu Mar 30 18:09:54 2017
+   Writing formula data. Thu Mar 30 18:09:54 2017
+   Writing methods data. Thu Mar 30 18:09:54 2017
+   Writing sample data. Thu Mar 30 18:09:54 2017
+   Writing dispersion data. Thu Mar 30 18:09:54 2017
+   Writing summary plots. Thu Mar 30 18:09:54 2017
+   Compiling data table. Thu Mar 30 18:09:54 2017
+   Writing data table. Thu Mar 30 18:09:54 2017
+   Html index complete. Thu Mar 30 18:09:54 2017
+   Writing pages. Thu Mar 30 18:09:54 2017
+   Finished all html files. Thu Mar 30 18:09:54 2017
 > buildAllPlots: Finished writing HTML results index.
 > buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 8)
 starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
@@ -236,17 +236,17 @@ Starting device: png (out/test-11.0002.TTT/dispersion-plot.png)
 Starting device: png (out/test-11.0002.TTT/ma-plot-log2FC(CTRLvsCASE).png)
 > buildAllPlots: Writing HTML results index.
    Copying default css stylesheet.
-   Writing html index. Wed Sep  7 12:00:11 2016
-   Writing formula data. Wed Sep  7 12:00:11 2016
-   Writing methods data. Wed Sep  7 12:00:11 2016
-   Writing sample data. Wed Sep  7 12:00:11 2016
-   Writing dispersion data. Wed Sep  7 12:00:11 2016
-   Writing summary plots. Wed Sep  7 12:00:11 2016
-   Compiling data table. Wed Sep  7 12:00:11 2016
-   Writing data table. Wed Sep  7 12:00:11 2016
-   Html index complete. Wed Sep  7 12:00:11 2016
-   Writing pages. Wed Sep  7 12:00:11 2016
-   Finished all html files. Wed Sep  7 12:00:12 2016
+   Writing html index. Thu Mar 30 18:09:57 2017
+   Writing formula data. Thu Mar 30 18:09:57 2017
+   Writing methods data. Thu Mar 30 18:09:57 2017
+   Writing sample data. Thu Mar 30 18:09:57 2017
+   Writing dispersion data. Thu Mar 30 18:09:57 2017
+   Writing summary plots. Thu Mar 30 18:09:57 2017
+   Compiling data table. Thu Mar 30 18:09:57 2017
+   Writing data table. Thu Mar 30 18:09:58 2017
+   Html index complete. Thu Mar 30 18:09:58 2017
+   Writing pages. Thu Mar 30 18:09:58 2017
+   Finished all html files. Thu Mar 30 18:09:58 2017
 > buildAllPlots: Finished writing HTML results index.
 > buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 8)
 starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
@@ -301,17 +301,17 @@ Starting device: png (out/test-11.0003.TFT/dispersion-plot.png)
 Starting device: png (out/test-11.0003.TFT/ma-plot-log2FC(CTRLvsCASE).png)
 > buildAllPlots: Writing HTML results index.
    Copying default css stylesheet.
-   Writing html index. Wed Sep  7 12:00:15 2016
-   Writing formula data. Wed Sep  7 12:00:15 2016
-   Writing methods data. Wed Sep  7 12:00:15 2016
-   Writing sample data. Wed Sep  7 12:00:15 2016
-   Writing dispersion data. Wed Sep  7 12:00:15 2016
-   Writing summary plots. Wed Sep  7 12:00:15 2016
-   Compiling data table. Wed Sep  7 12:00:15 2016
-   Writing data table. Wed Sep  7 12:00:15 2016
-   Html index complete. Wed Sep  7 12:00:15 2016
-   Writing pages. Wed Sep  7 12:00:15 2016
-   Finished all html files. Wed Sep  7 12:00:15 2016
+   Writing html index. Thu Mar 30 18:10:02 2017
+   Writing formula data. Thu Mar 30 18:10:02 2017
+   Writing methods data. Thu Mar 30 18:10:02 2017
+   Writing sample data. Thu Mar 30 18:10:02 2017
+   Writing dispersion data. Thu Mar 30 18:10:02 2017
+   Writing summary plots. Thu Mar 30 18:10:02 2017
+   Compiling data table. Thu Mar 30 18:10:02 2017
+   Writing data table. Thu Mar 30 18:10:02 2017
+   Html index complete. Thu Mar 30 18:10:02 2017
+   Writing pages. Thu Mar 30 18:10:02 2017
+   Finished all html files. Thu Mar 30 18:10:02 2017
 > buildAllPlots: Finished writing HTML results index.
 > buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 8)
 starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
@@ -366,17 +366,17 @@ Starting device: png (out/test-11.0004.FFT/dispersion-plot.png)
 Starting device: png (out/test-11.0004.FFT/ma-plot-log2FC(CTRLvsCASE).png)
 > buildAllPlots: Writing HTML results index.
    Copying default css stylesheet.
-   Writing html index. Wed Sep  7 12:00:17 2016
-   Writing formula data. Wed Sep  7 12:00:17 2016
-   Writing methods data. Wed Sep  7 12:00:17 2016
-   Writing sample data. Wed Sep  7 12:00:17 2016
-   Writing dispersion data. Wed Sep  7 12:00:17 2016
-   Writing summary plots. Wed Sep  7 12:00:17 2016
-   Compiling data table. Wed Sep  7 12:00:17 2016
-   Writing data table. Wed Sep  7 12:00:17 2016
-   Html index complete. Wed Sep  7 12:00:17 2016
-   Writing pages. Wed Sep  7 12:00:17 2016
-   Finished all html files. Wed Sep  7 12:00:18 2016
+   Writing html index. Thu Mar 30 18:10:05 2017
+   Writing formula data. Thu Mar 30 18:10:05 2017
+   Writing methods data. Thu Mar 30 18:10:05 2017
+   Writing sample data. Thu Mar 30 18:10:05 2017
+   Writing dispersion data. Thu Mar 30 18:10:05 2017
+   Writing summary plots. Thu Mar 30 18:10:05 2017
+   Compiling data table. Thu Mar 30 18:10:05 2017
+   Writing data table. Thu Mar 30 18:10:05 2017
+   Html index complete. Thu Mar 30 18:10:05 2017
+   Writing pages. Thu Mar 30 18:10:05 2017
+   Finished all html files. Thu Mar 30 18:10:05 2017
 > buildAllPlots: Finished writing HTML results index.
 > buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 8)
 starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
@@ -431,17 +431,17 @@ Starting device: png (out/test-11.0005.FTF/dispersion-plot.png)
 Starting device: png (out/test-11.0005.FTF/ma-plot-log2FC(CTRLvsCASE).png)
 > buildAllPlots: Writing HTML results index.
    Copying default css stylesheet.
-   Writing html index. Wed Sep  7 12:00:20 2016
-   Writing formula data. Wed Sep  7 12:00:20 2016
-   Writing methods data. Wed Sep  7 12:00:20 2016
-   Writing sample data. Wed Sep  7 12:00:20 2016
-   Writing dispersion data. Wed Sep  7 12:00:20 2016
-   Writing summary plots. Wed Sep  7 12:00:20 2016
-   Compiling data table. Wed Sep  7 12:00:20 2016
-   Writing data table. Wed Sep  7 12:00:20 2016
-   Html index complete. Wed Sep  7 12:00:20 2016
-   Writing pages. Wed Sep  7 12:00:20 2016
-   Finished all html files. Wed Sep  7 12:00:21 2016
+   Writing html index. Thu Mar 30 18:10:08 2017
+   Writing formula data. Thu Mar 30 18:10:08 2017
+   Writing methods data. Thu Mar 30 18:10:08 2017
+   Writing sample data. Thu Mar 30 18:10:08 2017
+   Writing dispersion data. Thu Mar 30 18:10:08 2017
+   Writing summary plots. Thu Mar 30 18:10:08 2017
+   Compiling data table. Thu Mar 30 18:10:08 2017
+   Writing data table. Thu Mar 30 18:10:08 2017
+   Html index complete. Thu Mar 30 18:10:08 2017
+   Writing pages. Thu Mar 30 18:10:08 2017
+   Finished all html files. Thu Mar 30 18:10:08 2017
 > buildAllPlots: Finished writing HTML results index.
 > buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 8)
 starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
@@ -496,17 +496,17 @@ Starting device: png (out/test-11.0006.TTF/dispersion-plot.png)
 Starting device: png (out/test-11.0006.TTF/ma-plot-log2FC(CTRLvsCASE).png)
 > buildAllPlots: Writing HTML results index.
    Copying default css stylesheet.
-   Writing html index. Wed Sep  7 12:00:24 2016
-   Writing formula data. Wed Sep  7 12:00:24 2016
-   Writing methods data. Wed Sep  7 12:00:24 2016
-   Writing sample data. Wed Sep  7 12:00:24 2016
-   Writing dispersion data. Wed Sep  7 12:00:24 2016
-   Writing summary plots. Wed Sep  7 12:00:24 2016
-   Compiling data table. Wed Sep  7 12:00:24 2016
-   Writing data table. Wed Sep  7 12:00:24 2016
-   Html index complete. Wed Sep  7 12:00:24 2016
-   Writing pages. Wed Sep  7 12:00:24 2016
-   Finished all html files. Wed Sep  7 12:00:24 2016
+   Writing html index. Thu Mar 30 18:10:12 2017
+   Writing formula data. Thu Mar 30 18:10:12 2017
+   Writing methods data. Thu Mar 30 18:10:12 2017
+   Writing sample data. Thu Mar 30 18:10:12 2017
+   Writing dispersion data. Thu Mar 30 18:10:12 2017
+   Writing summary plots. Thu Mar 30 18:10:12 2017
+   Compiling data table. Thu Mar 30 18:10:12 2017
+   Writing data table. Thu Mar 30 18:10:12 2017
+   Html index complete. Thu Mar 30 18:10:12 2017
+   Writing pages. Thu Mar 30 18:10:12 2017
+   Finished all html files. Thu Mar 30 18:10:12 2017
 > buildAllPlots: Finished writing HTML results index.
 > buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 8)
 starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
@@ -561,17 +561,17 @@ Starting device: png (out/test-11.0007.TFF/dispersion-plot.png)
 Starting device: png (out/test-11.0007.TFF/ma-plot-log2FC(CTRLvsCASE).png)
 > buildAllPlots: Writing HTML results index.
    Copying default css stylesheet.
-   Writing html index. Wed Sep  7 12:00:27 2016
-   Writing formula data. Wed Sep  7 12:00:27 2016
-   Writing methods data. Wed Sep  7 12:00:27 2016
-   Writing sample data. Wed Sep  7 12:00:27 2016
-   Writing dispersion data. Wed Sep  7 12:00:27 2016
-   Writing summary plots. Wed Sep  7 12:00:27 2016
-   Compiling data table. Wed Sep  7 12:00:27 2016
-   Writing data table. Wed Sep  7 12:00:27 2016
-   Html index complete. Wed Sep  7 12:00:27 2016
-   Writing pages. Wed Sep  7 12:00:27 2016
-   Finished all html files. Wed Sep  7 12:00:27 2016
+   Writing html index. Thu Mar 30 18:10:15 2017
+   Writing formula data. Thu Mar 30 18:10:15 2017
+   Writing methods data. Thu Mar 30 18:10:15 2017
+   Writing sample data. Thu Mar 30 18:10:15 2017
+   Writing dispersion data. Thu Mar 30 18:10:15 2017
+   Writing summary plots. Thu Mar 30 18:10:15 2017
+   Compiling data table. Thu Mar 30 18:10:15 2017
+   Writing data table. Thu Mar 30 18:10:15 2017
+   Html index complete. Thu Mar 30 18:10:15 2017
+   Writing pages. Thu Mar 30 18:10:15 2017
+   Finished all html files. Thu Mar 30 18:10:15 2017
 > buildAllPlots: Finished writing HTML results index.
 > buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 8)
 starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
@@ -626,17 +626,17 @@ Starting device: png (out/test-11.0008.FFF/dispersion-plot.png)
 Starting device: png (out/test-11.0008.FFF/ma-plot-log2FC(CTRLvsCASE).png)
 > buildAllPlots: Writing HTML results index.
    Copying default css stylesheet.
-   Writing html index. Wed Sep  7 12:00:29 2016
-   Writing formula data. Wed Sep  7 12:00:29 2016
-   Writing methods data. Wed Sep  7 12:00:29 2016
-   Writing sample data. Wed Sep  7 12:00:29 2016
-   Writing dispersion data. Wed Sep  7 12:00:29 2016
-   Writing summary plots. Wed Sep  7 12:00:29 2016
-   Compiling data table. Wed Sep  7 12:00:29 2016
-   Writing data table. Wed Sep  7 12:00:30 2016
-   Html index complete. Wed Sep  7 12:00:30 2016
-   Writing pages. Wed Sep  7 12:00:30 2016
-   Finished all html files. Wed Sep  7 12:00:30 2016
+   Writing html index. Thu Mar 30 18:10:18 2017
+   Writing formula data. Thu Mar 30 18:10:18 2017
+   Writing methods data. Thu Mar 30 18:10:18 2017
+   Writing sample data. Thu Mar 30 18:10:18 2017
+   Writing dispersion data. Thu Mar 30 18:10:18 2017
+   Writing summary plots. Thu Mar 30 18:10:18 2017
+   Compiling data table. Thu Mar 30 18:10:18 2017
+   Writing data table. Thu Mar 30 18:10:18 2017
+   Html index complete. Thu Mar 30 18:10:18 2017
+   Writing pages. Thu Mar 30 18:10:18 2017
+   Finished all html files. Thu Mar 30 18:10:18 2017
 > buildAllPlots: Finished writing HTML results index.
 > buildAllPlots: starting geneID: ENSRNOG00000008079 (1 of 8)
 starting buildAllPlotsForGene() for geneID: ENSRNOG00000008079
@@ -682,4 +682,4 @@ Starting device: png (out/test-11.0008.FFF//normCountsTX/Hsd17b11-normCts-TX.png
 > buildAllPlots: Plotting and data writing complete.
 ----------------------
 ----------------------
-FINISHED JunctionSeq Post-Build Tests... (Wed Sep  7 12:00:32 2016)
+FINISHED JunctionSeq Post-Build Tests... (Thu Mar 30 18:10:20 2017)
