@@ -1,0 +1,26 @@
+Package: JunctionSeq
+Version: 1.3.5
+Title: JunctionSeq: A Utility for Detection of Differential Exon and
+        Splice-Junction Usage in RNA-Seq data
+Authors@R: c(person("Stephen", "Hartley", role = c("aut", "cre"),
+           email = "JunctionSeq-contact@list.nih.gov", comment = "PhD"),
+           person("Simon","Anders", role=c("cph"),email="sanders@fs.tum.de"),
+           person("Alejandro","Reyes", role=c("cph"),email="alejandro.reyes@embl.de"))
+Depends: R (>= 3.2.2), methods, SummarizedExperiment (>= 0.2.0)
+Imports: DESeq2 (>= 1.10.0), statmod, Hmisc, plotrix, stringr, Biobase
+        (>= 2.30.0), locfit, BiocGenerics (>= 0.7.5), BiocParallel,
+        genefilter, geneplotter, S4Vectors, IRanges, GenomicRanges
+Suggests: MASS, knitr, JctSeqData, BiocStyle
+Enhances: Cairo, pryr
+Description: A Utility for Detection and Visualization of Differential Exon or Splice-Junction Usage in RNA-Seq data.
+License: file LICENSE
+VignetteBuilder: knitr
+NeedsCompilation: no
+biocViews: Sequencing, RNASeq, DifferentialExpression
+URL: http://hartleys.github.io/JunctionSeq/index.html
+BugReports: https://github.com/hartleys/JunctionSeq/issues
+Packaged: 2016-09-07 15:27:15 UTC; hartleys
+Author: Stephen Hartley [aut, cre] (PhD),
+  Simon Anders [cph],
+  Alejandro Reyes [cph]
+Maintainer: Stephen Hartley <JunctionSeq-contact@list.nih.gov>
