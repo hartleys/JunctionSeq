@@ -608,7 +608,7 @@ readJunctionSeqCounts <- function(countfiles = NULL, countdata = NULL,
      lf <- countdata
    }
    
-   if( !all( sapply( lf[-1], function(x) all( x$V1 == lf[1]$V1 ) ) ) )
+   if( !all( sapply( lf[-1], function(x) all( x$V1 == lf[[1]]$V1 ) ) ) )
       stop( "Count files have differing gene ID column." )
    if(isTRUE(verbose)) message("---> File read complete.");  
 
